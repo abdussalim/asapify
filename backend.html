@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>API ASAPify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+
+  :root {
+    --font-display: 'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, sans-serif;
+    --font-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+    --bg: #f2f4ef; --surface: #ffffff; --surface-2: #e7ebe3; --line: #c9d0c4;
+    --ink: #1b2520; --ink-dim: #58655d;
+    --moss: #3c6a4c; --moss-soft: #dbe8dd;
+    --sat: #2c628c; --sat-soft: #dde9f3;
+    --amber: #a86f00; --amber-soft: #fbeccc;
+    --ember: #c2410c; --ember-soft: #fbe1d4;
+    --risk1: #e3ecd9; --risk2: #f3e2a6; --risk3: #efb57a; --risk4: #d9714a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #121815; --surface: #1a221e; --surface-2: #222c27; --line: #36433c;
+      --ink: #e4ebe5; --ink-dim: #9aa89f;
+      --moss: #7fbf93; --moss-soft: #22382a; --sat: #7fb3dc; --sat-soft: #1c2f3e;
+      --amber: #f0b23e; --amber-soft: #3a2e14; --ember: #fb8a5c; --ember-soft: #3e2217;
+      --risk1: #26352b; --risk2: #4a4222; --risk3: #6a4424; --risk4: #8a3a22;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121815; --surface: #1a221e; --surface-2: #222c27; --line: #36433c;
+    --ink: #e4ebe5; --ink-dim: #9aa89f;
+    --moss: #7fbf93; --moss-soft: #22382a; --sat: #7fb3dc; --sat-soft: #1c2f3e;
+    --amber: #f0b23e; --amber-soft: #3a2e14; --ember: #fb8a5c; --ember-soft: #3e2217;
+    --risk1: #26352b; --risk2: #4a4222; --risk3: #6a4424; --risk4: #8a3a22;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--font-body);
+    font-size: 15px; line-height: 1.6; padding-inline: 20px; padding-block: 40px 64px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 56px; }
+  section { scroll-margin-top: 16px; min-width: 0; }
+  h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+  h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -0.5px; }
+  h2 { font-size: 25px; font-weight: 600; }
+  h3 { font-size: 18px; font-weight: 600; }
+  h4 { font-size: 15px; font-weight: 600; }
+  p { margin: 0; }
+  code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+  :focus-visible { outline: 2px solid var(--sat); outline-offset: 2px; border-radius: 3px; }
+  a { color: var(--sat); }
+  .eyebrow { font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-dim); }
+  .section-head { display: grid; gap: 6px; margin-bottom: 20px; }
+  .section-head p { color: var(--ink-dim); max-width: 72ch; }
+  .note { font-size: 13.5px; color: var(--ink-dim); margin-top: 12px; max-width: 82ch; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px 20px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .card p, .card li { font-size: 14px; }
+  .card ul, .card ol { margin: 0; padding-left: 20px; display: grid; gap: 5px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+
+  /* header */
+  header { display: grid; gap: 14px; }
+  .lede { font-size: 17px; max-width: 68ch; color: var(--ink-dim); }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .dates { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .date { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; display: grid; gap: 0; min-width: 0; }
+  .date b { font-family: var(--font-display); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .date span { font-size: 12.5px; color: var(--ink-dim); }
+  .date.hot { border-color: var(--ember); }
+  .date.hot b { color: var(--ember); }
+  .toc { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 8px; padding: 0; list-style: none; }
+  .toc a { display: inline-block; font-family: var(--font-mono); font-size: 12px; color: var(--ink); text-decoration: none; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+  .toc a:hover { border-color: var(--sat); color: var(--sat); }
+  .toc a span { color: var(--ink-dim); margin-right: 6px; }
+
+  /* pills */
+  .pill { display: inline-flex; align-items: center; gap: 6px; justify-self: start; font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .pill.grey { background: var(--surface-2); color: var(--ink-dim); }
+  .pill.waspada { background: var(--amber-soft); color: var(--amber); }
+  .pill.siaga { background: var(--ember-soft); color: var(--ember); }
+  .pill.awas { background: var(--ember); color: #fff; }
+  .pill.awas::before { background: #fff; }
+  .pill.ok { background: var(--moss-soft); color: var(--moss); }
+  .pill.ai { background: var(--sat-soft); color: var(--sat); }
+
+  /* concept */
+  .concept { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px 24px; display: grid; gap: 18px; }
+  .concept > p { font-size: 18px; max-width: 76ch; }
+  .layers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) 28px minmax(0, 1fr); gap: 12px; align-items: stretch; }
+  .layer { border-radius: 8px; padding: 14px 14px 16px; background: var(--surface-2); display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .layer h4 { font-size: 16px; }
+  .layer p { font-size: 13.5px; color: var(--ink-dim); }
+  .layer.l1 { background: var(--moss-soft); } .layer.l2 { background: var(--amber-soft); } .layer.l3 { background: var(--ember-soft); }
+  .layer.ai { background: var(--sat-soft); }
+  .arrow-cell { display: grid; place-items: center; color: var(--ink-dim); font-size: 22px; }
+
+  /* rules / scoring */
+  .weights { display: grid; gap: 10px; }
+  .w-row { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) 48px; gap: 12px; align-items: center; font-size: 14px; }
+  .w-bar { height: 12px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+  .w-bar i { display: block; height: 100%; background: var(--sat); border-radius: 6px; }
+  .w-row b { font-family: var(--font-mono); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+  .must { display: grid; gap: 8px; }
+  .must div { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 14px; }
+  .must div::before { content: "✓"; color: var(--moss); font-weight: 700; }
+
+  /* change columns */
+  .change h3 { display: flex; align-items: center; gap: 8px; }
+  .change .x { color: var(--ember); } .change .k { color: var(--moss); } .change .n { color: var(--sat); }
+  .change li { font-size: 14px; }
+  .change li span { color: var(--ink-dim); }
+
+  /* diagrams */
+  .diagram-box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-block: 8px; }
+  .diagram-box svg { display: block; width: 100%; height: auto; max-width: 980px; min-width: 720px; margin: 0 auto; }
+  .scroll-hint { display: none; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); margin-top: 8px; }
+  svg .fc rect, svg .fc polygon { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; }
+  svg .fc.dec polygon { fill: var(--surface); stroke: var(--ink-dim); stroke-width: 1.4; }
+  svg .fc.term rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.4; }
+  svg .fc.rule rect { fill: var(--amber-soft); stroke: var(--amber); }
+  svg .fc.ver rect { fill: var(--moss-soft); stroke: var(--moss); }
+  svg .fc.ai rect { fill: var(--sat-soft); stroke: var(--sat); }
+  svg .fc.send rect { fill: var(--ember-soft); stroke: var(--ember); }
+  svg .fc.side rect { fill: var(--surface); stroke: var(--line); stroke-dasharray: 5 4; }
+  svg .fc .t { font-family: var(--font-body); font-weight: 600; font-size: 14px; fill: var(--ink); }
+  svg .fc .s { font-family: var(--font-mono); font-size: 11.5px; fill: var(--ink-dim); }
+  svg .fc .dt { font-family: var(--font-body); font-weight: 600; font-size: 13.5px; fill: var(--ink); }
+  svg .fc.side .t { font-weight: 500; font-size: 13px; }
+  svg .edge { stroke: var(--ink-dim); stroke-width: 1.5; fill: none; }
+  svg .edge.no { stroke-dasharray: 4 4; }
+  svg .yn { font-family: var(--font-mono); font-size: 12px; fill: var(--ink-dim); }
+  svg .head-dim { fill: var(--ink-dim); }
+  svg .stg line { stroke: var(--line); stroke-width: 2; }
+  svg .stg .k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; fill: var(--ink-dim); }
+  svg .stg .v { font-family: var(--font-display); font-weight: 600; font-size: 14px; fill: var(--ink); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 12px; font-size: 13px; color: var(--ink-dim); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .box { width: 16px; height: 12px; display: inline-block; border-radius: 2px; border: 1.2px solid; }
+  .box.r { border-color: var(--amber); background: var(--amber-soft); }
+  .box.v { border-color: var(--moss); background: var(--moss-soft); }
+  .box.a { border-color: var(--sat); background: var(--sat-soft); }
+  .box.s { border-color: var(--ember); background: var(--ember-soft); }
+  .box.d { border-color: var(--ink-dim); border-style: dashed; background: transparent; }
+
+  /* tables */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  table.wide { min-width: 760px; }
+  caption { text-align: left; padding: 10px 14px; font-size: 13px; color: var(--ink-dim); caption-side: bottom; border-top: 1px solid var(--line); }
+  th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  thead th { font-family: var(--font-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); background: var(--surface-2); }
+  tbody tr:last-child td, tbody tr:last-child th { border-bottom: none; }
+  tbody th { font-weight: 600; }
+  td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.sub td { background: var(--bg); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-dim); padding: 7px 14px; }
+
+  /* formula */
+  .formula { font-family: var(--font-mono); font-size: 13.5px; background: var(--surface-2); border-radius: 8px; padding: 12px 14px; overflow-x: auto; white-space: pre; line-height: 1.7; }
+  .risk-scale { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .risk-scale div { border-radius: 6px; padding: 8px 10px; font-size: 13px; display: grid; gap: 0; min-width: 0; }
+  .risk-scale b { font-family: var(--font-display); font-size: 15px; }
+  .risk-scale span { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); }
+  .rs1 { background: var(--risk1); } .rs2 { background: var(--risk2); } .rs3 { background: var(--risk3); } .rs4 { background: var(--risk4); }
+  .rs4 b, .rs4 span { color: var(--ink); }
+
+  /* code */
+  .code { border-radius: 8px; background: var(--surface-2); overflow: hidden; min-width: 0; }
+  .code-head { display: flex; justify-content: space-between; gap: 10px; padding: 7px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); border-bottom: 1px solid var(--line); }
+  .code pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.55; }
+  .code pre .c { color: var(--ink-dim); }
+
+  /* agent */
+  .agent-flow { display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1.35fr) 28px minmax(0, 0.9fr); gap: 10px; align-items: stretch; }
+  .agent-flow .code pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+  .tool { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-2); border-radius: 6px; padding: 6px 10px; display: grid; gap: 1px; }
+  .tool small { font-family: var(--font-body); font-size: 12px; color: var(--ink-dim); }
+  .guard { border-left: 3px solid var(--sat); padding: 2px 0 2px 12px; }
+  .guard li { font-size: 14px; }
+
+  /* architecture */
+  .arch { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+  .comp { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .comp .svc { font-family: var(--font-mono); font-size: 12px; color: var(--sat); }
+  .comp p { font-size: 13.5px; color: var(--ink-dim); }
+  .comp .num { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--ink-dim); line-height: 1; }
+
+  /* wireframes */
+  .screens { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 16px; }
+  .screen { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
+  .screen-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); gap: 8px; }
+  .screen-body { padding: 12px; display: grid; gap: 10px; align-content: start; }
+  .screen-cap { padding: 10px 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-dim); }
+  .screen svg { display: block; width: 100%; height: auto; border-radius: 6px; }
+  .mini { font-size: 12.5px; display: grid; gap: 4px; }
+  .mini b { font-family: var(--font-display); font-size: 15px; }
+  .mini .row { display: flex; justify-content: space-between; gap: 8px; color: var(--ink-dim); }
+  .thumb { height: 64px; border-radius: 6px;
+    background:
+      radial-gradient(circle at 58% 48%, color-mix(in srgb, var(--ember) 80%, transparent) 0 7%, transparent 9%),
+      radial-gradient(circle at 64% 52%, color-mix(in srgb, var(--amber) 70%, transparent) 0 5%, transparent 7%),
+      radial-gradient(ellipse at 72% 30%, color-mix(in srgb, var(--sat) 35%, transparent) 0 22%, transparent 36%),
+      linear-gradient(135deg, color-mix(in srgb, var(--moss) 60%, var(--surface)), color-mix(in srgb, var(--moss) 30%, var(--amber-soft))); }
+  .btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .btn { font-family: var(--font-mono); font-size: 11.5px; border-radius: 6px; padding: 5px 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .btn.primary { background: var(--moss); border-color: var(--moss); color: var(--surface); }
+  .queue-item { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: grid; gap: 4px; font-size: 12.5px; }
+
+  /* timeline */
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .timeline > li { display: grid; grid-template-columns: 150px 28px minmax(0, 1fr); gap: 14px; }
+  .t-date { text-align: right; padding-top: 14px; display: grid; gap: 2px; align-content: start; }
+  .t-date b { font-family: var(--font-display); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .t-date span { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); }
+  .t-rail { position: relative; }
+  .t-rail::before { content: ""; position: absolute; left: 13px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+  .t-rail i { position: absolute; left: 6px; top: 18px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 3px solid var(--moss); }
+  .timeline > li.hot .t-rail i { border-color: var(--ember); }
+  .t-body { padding-block: 10px; }
+  .t-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
+  .t-card ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; font-size: 14px; }
+  .done { font-size: 13px; color: var(--moss); border-top: 1px dashed var(--line); padding-top: 8px; }
+  .done b { font-weight: 600; }
+
+  /* script */
+  .script { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+  .script > div { display: grid; grid-template-columns: 110px minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .script > div:last-child { border-bottom: none; }
+  .script .tc { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+  .script .say { color: var(--ink-dim); font-style: italic; }
+  .script .head { background: var(--surface-2); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); padding-block: 8px; }
+  .script .head .say { font-style: normal; }
+
+  /* checklist */
+  .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .check li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 14px; }
+  .check li::before { content: ""; width: 14px; height: 14px; border: 1.5px solid var(--ink-dim); border-radius: 3px; margin-top: 4px; }
+
+  /* glossary */
+  .gloss { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; margin: 0; }
+  .gloss div { padding: 10px 0; border-top: 1px solid var(--line); min-width: 0; }
+  .gloss dt { font-weight: 600; font-family: var(--font-display); font-size: 15.5px; }
+  .gloss dd { margin: 2px 0 0; font-size: 14px; color: var(--ink-dim); }
+
+  .decide { border: 1.5px dashed var(--amber); background: var(--amber-soft); border-radius: 10px; padding: 16px 20px; display: grid; gap: 8px; }
+  .decide ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14.5px; }
+
+  footer { font-size: 12.5px; color: var(--ink-dim); border-top: 1px solid var(--line); padding-top: 16px; }
+
+  @media (max-width: 960px) {
+    .arch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .screens, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .layers { grid-template-columns: minmax(0, 1fr); }
+    .arrow-cell { transform: rotate(90deg); height: 20px; }
+    .agent-flow { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .grid-2, .grid-3, .gloss { grid-template-columns: minmax(0, 1fr); }
+    .scroll-hint { display: block; }
+    .script > div { grid-template-columns: 80px minmax(0, 1fr); }
+    .script .say { grid-column: 2; }
+    .w-row { grid-template-columns: minmax(0, 1fr) 48px; }
+    .w-row .w-bar { grid-column: 1 / -1; grid-row: 2; }
+    .risk-scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 520px) {
+    body { padding-inline: 16px; padding-block: 28px 48px; }
+    .arch, .screens, .grid-4 { grid-template-columns: minmax(0, 1fr); }
+    .timeline > li { grid-template-columns: 28px minmax(0, 1fr); }
+    .t-date { grid-column: 2; text-align: left; padding-top: 10px; }
+    .t-rail { grid-row: 1 / span 2; grid-column: 1; }
+    .t-body { grid-column: 2; padding-top: 0; }
+  }
+
+  /* ---------- multi-page additions ---------- */
+  body { padding-block: 0 64px; }
+  .wrap { padding-top: 36px; }
+  .topnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; margin-inline: -20px; padding: 10px 20px;
+    background: color-mix(in srgb, var(--bg) 90%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line); }
+  .topnav-in { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 16px; min-width: 0; }
+  .brand { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--ink); text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+  .brand i { width: 10px; height: 10px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 0 4px var(--ember-soft); }
+  .brand small { font-family: var(--font-mono); font-weight: 400; font-size: 11px; color: var(--ink-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  .navlinks { display: flex; gap: 4px; overflow-x: auto; margin-left: auto; min-width: 0; scrollbar-width: none; }
+  .navlinks::-webkit-scrollbar { display: none; }
+  .navlinks a { font-size: 14px; font-weight: 500; color: var(--ink-dim); text-decoration: none; padding: 7px 12px; border-radius: 8px; white-space: nowrap; }
+  .navlinks a:hover { color: var(--ink); background: var(--surface-2); }
+  .navlinks a[aria-current="page"] { color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+  .pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 16px; }
+  .pager a { text-decoration: none; display: grid; gap: 2px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); min-width: 0; }
+  .pager a span { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+  .pager a:hover { border-color: var(--sat); }
+
+  /* methods / endpoint */
+  .m { display: inline-block; font-family: var(--font-mono); font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; min-width: 52px; text-align: center; }
+  .m-get { background: var(--moss-soft); color: var(--moss); }
+  .m-post { background: var(--sat-soft); color: var(--sat); }
+  .m-patch { background: var(--amber-soft); color: var(--amber); }
+  .m-job { background: var(--surface-2); color: var(--ink-dim); }
+  td.path code { background: transparent; padding: 0; font-size: 12.5px; white-space: nowrap; }
+  .auth { font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap; }
+  .auth.pub { color: var(--moss); } .auth.op { color: var(--amber); } .auth.int { color: var(--ember); }
+  .kv { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 14px; }
+  .kv dt { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-dim); overflow-wrap: anywhere; }
+  .kv dd { margin: 0; overflow-wrap: anywhere; }
+  .callout { border-left: 3px solid var(--amber); background: var(--amber-soft); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 14px; }
+  .callout.info { border-left-color: var(--sat); background: var(--sat-soft); }
+  .stack { display: grid; gap: 16px; }
+  .code.tall pre { max-height: 460px; }
+
+  /* phones */
+  .phones { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px 20px; }
+  .phone-wrap { display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .phone { border: 1px solid var(--line); border-radius: 26px; background: var(--surface); padding: 10px; max-width: 290px; width: 100%; box-shadow: 0 1px 0 var(--line); }
+  .scr { border-radius: 18px; background: var(--bg); overflow: hidden; height: 470px; display: flex; flex-direction: column; font-size: 12px; position: relative; }
+  .scr-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--surface); border-bottom: 1px solid var(--line); font-weight: 600; font-size: 12.5px; gap: 6px; }
+  .scr-top small { font-family: var(--font-mono); font-weight: 400; font-size: 10px; color: var(--ink-dim); }
+  .scr-body { padding: 10px; display: grid; gap: 8px; align-content: start; overflow: hidden; flex: 1; }
+  .scr .blk { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 4px; }
+  .scr .lbl { font-family: var(--font-mono); font-size: 9.5px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+  .scr .row { display: flex; justify-content: space-between; gap: 6px; color: var(--ink-dim); }
+  .scr .row b { color: var(--ink); font-weight: 600; }
+  .scr ul { margin: 0; padding-left: 14px; display: grid; gap: 2px; }
+  .scr .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); border-radius: 14px 14px 0 0; padding: 8px 10px 10px; display: grid; gap: 6px; }
+  .scr .grab { width: 36px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 2px; }
+  .scr .field { border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; background: var(--surface); color: var(--ink); min-height: 44px; }
+  .scr .tabs { display: flex; gap: 4px; }
+  .scr .tabs span { flex: 1; text-align: center; padding: 5px 0; border-radius: 6px; background: var(--surface-2); font-size: 11px; }
+  .scr .tabs span.on { background: var(--ink); color: var(--surface); }
+  .scr .banner { background: var(--sat-soft); color: var(--sat); font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; }
+  .scr .pill { font-size: 10px; padding: 2px 7px; }
+  .scr .btn { font-size: 10.5px; padding: 4px 8px; }
+  .scr .thumb { height: 70px; }
+  .spec { font-size: 13.5px; }
+  .spec ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+  .flowline { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13.5px; }
+  .flowline span { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; }
+  .flowline b { color: var(--ink-dim); font-weight: 400; }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 6px; border: 1px solid var(--line); }
+
+  @media (max-width: 760px) {
+    .kv { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .kv dd { margin-bottom: 8px; }
+    .brand small { display: none; }
+  }
+  @media (max-width: 520px) {
+    .topnav { margin-inline: -16px; padding-inline: 16px; }
+    .phone { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html">Rencana</a><a href="ui.html">UI</a><a href="backend.html" aria-current="page">Backend &amp; API</a><a href="cloud.html">Konfigurasi Cloud</a></div></div></nav>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">Backend &amp; API · pegangan Peran A, B, C</span>
+    <h1>Satu API, dua job, satu agen</h1>
+    <p class="lede">Backend terdiri dari satu service Cloud Run <code>asapify-api</code> (FastAPI + agen ADK) dan dua Cloud Run job. Semua data disimpan di Firestore dan Cloud Storage. <strong>Browser tidak pernah membaca Firestore langsung</strong>; semuanya lewat API.</p>
+    <ul class="toc" aria-label="Isi halaman">
+      <li><a href="#layanan"><span>01</span>Layanan</a></li>
+      <li><a href="#konvensi"><span>02</span>Konvensi</a></li>
+      <li><a href="#endpoint"><span>03</span>Daftar endpoint</a></li>
+      <li><a href="#contoh"><span>04</span>Contoh</a></li>
+      <li><a href="#model"><span>05</span>Model data</a></li>
+      <li><a href="#agen-adk"><span>06</span>Agen ADK</a></li>
+      <li><a href="#jobs"><span>07</span>Job</a></li>
+      <li><a href="#repo"><span>08</span>Struktur repo</a></li>
+      <li><a href="#galat"><span>09</span>Galat &amp; batas</a></li>
+    </ul>
+  </header>
+
+  <!-- 01 -->
+  <section id="layanan">
+    <div class="section-head">
+      <span class="eyebrow">01 · Layanan</span>
+      <h2>Siapa memanggil siapa</h2>
+    </div>
+    <div class="diagram-box">
+      <svg viewBox="0 0 1000 380" role="img" aria-labelledby="svc-t">
+        <title id="svc-t">Scheduler memicu job ingest dan daily; job menulis ke Firestore dan Storage lalu memanggil endpoint internal API; browser memanggil API lewat Firebase Hosting</title>
+        <defs><marker id="sa" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-dim" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+        <g class="fc term"><rect x="20" y="40" width="170" height="56" rx="28"/><text class="t" x="105" y="66" text-anchor="middle">Cloud Scheduler</text><text class="s" x="105" y="83" text-anchor="middle">:05 tiap jam · 06.00</text></g>
+        <g class="fc rule"><rect x="250" y="20" width="210" height="56" rx="6"/><text class="t" x="355" y="43" text-anchor="middle">job asapify-ingest</text><text class="s" x="355" y="61" text-anchor="middle">FIRMS · insiden · ToPeCAl</text></g>
+        <g class="fc rule"><rect x="250" y="100" width="210" height="56" rx="6"/><text class="t" x="355" y="123" text-anchor="middle">job asapify-daily</text><text class="s" x="355" y="141" text-anchor="middle">grid risiko · sitrep</text></g>
+        <g class="fc"><rect x="530" y="20" width="200" height="56" rx="6"/><text class="t" x="630" y="43" text-anchor="middle">Firestore</text><text class="s" x="630" y="61" text-anchor="middle">incidents · alerts · …</text></g>
+        <g class="fc"><rect x="530" y="100" width="200" height="56" rx="6"/><text class="t" x="630" y="123" text-anchor="middle">Cloud Storage</text><text class="s" x="630" y="141" text-anchor="middle">GeoJSON · thumbnail</text></g>
+        <g class="fc ver"><rect x="250" y="190" width="210" height="50" rx="6"/><text class="t" x="355" y="212" text-anchor="middle">Earth Engine</text><text class="s" x="355" y="229" text-anchor="middle">dipanggil oleh job ingest</text></g>
+        <g class="fc ai"><rect x="530" y="210" width="200" height="72" rx="6"/><text class="t" x="630" y="236" text-anchor="middle">asapify-api</text><text class="s" x="630" y="254" text-anchor="middle">FastAPI + agen ADK</text><text class="s" x="630" y="270" text-anchor="middle">→ Gemini</text></g>
+        <g class="fc send"><rect x="800" y="210" width="180" height="72" rx="6"/><text class="t" x="890" y="236" text-anchor="middle">Browser</text><text class="s" x="890" y="254" text-anchor="middle">Firebase Hosting</text><text class="s" x="890" y="270" text-anchor="middle">/api/** → Cloud Run</text></g>
+        <line class="edge" x1="190" y1="62" x2="248" y2="48" marker-end="url(#sa)"/>
+        <line class="edge" x1="190" y1="74" x2="248" y2="126" marker-end="url(#sa)"/>
+        <line class="edge" x1="460" y1="48" x2="528" y2="48" marker-end="url(#sa)"/>
+        <line class="edge" x1="460" y1="128" x2="528" y2="128" marker-end="url(#sa)"/>
+        <line class="edge" x1="460" y1="60" x2="528" y2="120" marker-end="url(#sa)"/>
+        <path class="edge" d="M250 48 H228 V215 H248" marker-end="url(#sa)"/>
+        <path class="edge no" d="M430 156 V300 H628 V284" marker-end="url(#sa)"/>
+        <text class="yn" x="440" y="318">POST /internal/agent/draft (OIDC)</text>
+        <line class="edge" x1="630" y1="210" x2="630" y2="158" marker-end="url(#sa)"/>
+        <line class="edge" x1="798" y1="246" x2="732" y2="246" marker-end="url(#sa)"/>
+        <text class="yn" x="742" y="238">/api/v1</text>
+      </svg>
+    </div>
+    <div class="grid-3" style="margin-top:16px">
+      <div class="card"><span class="pill ai">service</span><h4><code>asapify-api</code></h4><p>FastAPI. Tiga kelompok endpoint: publik, operator, internal. Agen ADK berjalan di dalam service ini.</p></div>
+      <div class="card"><span class="pill waspada">job · tiap jam</span><h4><code>asapify-ingest</code></h4><p>Tarik FIRMS, kelompokkan insiden, tentukan level, jalankan ToPeCAl, minta draf ke agen.</p></div>
+      <div class="card"><span class="pill waspada">job · 06.00 WIB</span><h4><code>asapify-daily</code></h4><p>Hitung grid risiko, tulis GeoJSON ke bucket publik, minta sitrep ke agen.</p></div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="konvensi">
+    <div class="section-head">
+      <span class="eyebrow">02 · Konvensi</span>
+      <h2>Aturan yang berlaku di semua endpoint</h2>
+    </div>
+    <div class="card">
+      <dl class="kv">
+        <dt>Base path</dt><dd><code>/api/v1</code>. Di produksi lewat Firebase Hosting (satu origin dengan web). Saat pengembangan, pakai URL Cloud Run langsung.</dd>
+        <dt>Format</dt><dd>JSON UTF-8. Data peta dalam GeoJSON (RFC 7946), urutan koordinat <code>[lon, lat]</code>.</dd>
+        <dt>Waktu</dt><dd>ISO 8601 dengan zona. Simpan dalam UTC, tampilkan dalam WIB.</dd>
+        <dt>ID insiden</dt><dd><code>{PROV}-{YYYYMMDD}-{nnn}</code>, contoh <code>KT-20260912-042</code></dd>
+        <dt>Auth publik</dt><dd>tanpa token</dd>
+        <dt>Auth operator</dt><dd><code>Authorization: Bearer &lt;Firebase ID token&gt;</code>, wajib punya custom claim <code>role = "operator"</code></dd>
+        <dt>Auth internal</dt><dd>token OIDC Google dari service account <code>sa-jobs</code>, audience = URL service. Diverifikasi di aplikasi.</dd>
+        <dt>Replay</dt><dd>parameter <code>as_of</code> (ISO 8601) di semua endpoint publik. Respons menyertakan header <code>X-Asapify-As-Of</code>.</dd>
+        <dt>Cache</dt><dd>publik: <code>Cache-Control: public, max-age=300</code>. Operator dan internal: <code>no-store</code>.</dd>
+        <dt>Galat</dt><dd><code>{"error": {"code": "...", "message": "..."}}</code> dengan status HTTP yang sesuai</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="endpoint">
+    <div class="section-head">
+      <span class="eyebrow">03 · Daftar endpoint</span>
+      <h2>Tujuh publik, enam operator, dua internal</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Metode</th><th scope="col">Path (setelah <code>/api/v1</code>)</th><th scope="col">Auth</th><th scope="col">Fungsi</th><th scope="col">Respons</th></tr></thead>
+        <tbody>
+          <tr class="sub"><td colspan="5">Publik</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/health</code></td><td><span class="auth pub">publik</span></td><td>cek hidup untuk uptime check</td><td><code>{"ok": true}</code></td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/meta</code></td><td><span class="auth pub">publik</span></td><td>provinsi, waktu ingest terakhir, status replay</td><td>objek meta</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/incidents?since=24h&amp;level=&amp;as_of=</code></td><td><span class="auth pub">publik</span></td><td>insiden untuk peta</td><td>GeoJSON FeatureCollection</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/incidents/{id}</code></td><td><span class="auth pub">publik</span></td><td>detail insiden + alert yang sudah disetujui + titik deteksi</td><td>objek insiden</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/risk?date=</code></td><td><span class="auth pub">publik</span></td><td>tautan GeoJSON grid risiko untuk tanggal itu</td><td><code>{"date", "url", "generated_at"}</code></td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/alerts?since=24h</code></td><td><span class="auth pub">publik</span></td><td>daftar alert berstatus <code>approved</code></td><td>array alert</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/sitreps/{date}</code></td><td><span class="auth pub">publik</span></td><td>sitrep yang sudah disetujui</td><td>objek sitrep</td></tr>
+          <tr class="sub"><td colspan="5">Operator</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/queue?status=draft</code></td><td><span class="auth op">operator</span></td><td>antrean, urut level lalu waktu</td><td>array ringkasan alert</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts/{id}</code></td><td><span class="auth op">operator</span></td><td>draf lengkap + hasil validator + jejak tools</td><td>objek alert</td></tr>
+          <tr><td><span class="m m-patch">PATCH</span></td><td class="path"><code>/operator/alerts/{id}</code></td><td><span class="auth op">operator</span></td><td>ubah pesan, tindakan, atau level (level wajib dengan <code>override_reason</code>)</td><td>objek alert terbaru</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/approve</code></td><td><span class="auth op">operator</span></td><td>terbitkan ke publik</td><td>objek alert, <code>status: approved</code></td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/reject</code></td><td><span class="auth op">operator</span></td><td>tolak, body <code>{"reason"}</code> wajib</td><td>objek alert, <code>status: rejected</code></td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/regenerate</code></td><td><span class="auth op">operator</span></td><td>jalankan agen lagi untuk insiden yang sama</td><td>objek alert baru</td></tr>
+          <tr class="sub"><td colspan="5">Internal (hanya dari job)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/internal/agent/draft</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"incident_id"}</code>. Agen menyusun draf, validator memeriksa, hasil disimpan</td><td><code>{"alert_id", "status", "attempts"}</code></td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/internal/agent/sitrep</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"date"}</code>. Agen menyusun sitrep harian</td><td><code>{"sitrep_id", "status"}</code></td></tr>
+        </tbody>
+        <caption>Sitrep juga melewati persetujuan operator. Endpoint-nya mengikuti pola alert: <code>/operator/sitreps/{id}/approve</code>.</caption>
+      </table>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section id="contoh">
+    <div class="section-head">
+      <span class="eyebrow">04 · Contoh request dan respons</span>
+      <h2>Bentuk data yang disepakati frontend dan backend</h2>
+      <p>Semua data di bawah adalah contoh fiktif.</p>
+    </div>
+    <div class="grid-2">
+      <div class="code tall">
+        <div class="code-head"><span>GET /api/v1/incidents?since=24h</span><span>200</span></div>
+<pre>{
+  "type": "FeatureCollection",
+  "as_of": "2026-09-12T10:05:00+07:00",
+  "features": [{
+    "type": "Feature",
+    "geometry": { "type": "Point", "coordinates": [113.9217, -2.2104] },
+    "properties": {
+      "id": "KT-20260912-042",
+      "level": "SIAGA",
+      "n_detections": 3,
+      "frp_max_mw": 18.4,
+      "on_peat": true,
+      "khg_name": "KHG contoh",
+      "nearest_village": { "name": "Desa contoh", "km": 3.2 },
+      "verification": { "status": "no_image" },
+      "alert_id": "a_7f3c",
+      "updated_at": "2026-09-12T09:58:00+07:00"
+    }
+  }]
+}</pre>
+      </div>
+      <div class="stack">
+        <div class="code">
+          <div class="code-head"><span>PATCH /api/v1/operator/alerts/a_7f3c</span><span>request</span></div>
+<pre>{
+  "message_id": "Titik api berulang di lahan gambut …",
+  "level": "AWAS",
+  "override_reason": "Laporan warga: asap tebal sejak pagi"
+}</pre>
+        </div>
+        <div class="code">
+          <div class="code-head"><span>POST /api/v1/operator/alerts/a_7f3c/approve</span><span>200</span></div>
+<pre>{
+  "id": "a_7f3c",
+  "status": "approved",
+  "approved_by": "operator@contoh.id",
+  "approved_at": "2026-09-12T10:11:00+07:00",
+  "level": "AWAS",
+  "level_source": "operator_override"
+}</pre>
+        </div>
+        <div class="code">
+          <div class="code-head"><span>Galat · 409</span><span>response</span></div>
+<pre>{ "error": { "code": "ALREADY_DECIDED",
+  "message": "Alert sudah disetujui oleh operator lain." } }</pre>
+        </div>
+      </div>
+    </div>
+    <div class="code" style="margin-top:16px">
+      <div class="code-head"><span>POST /api/v1/internal/agent/draft</span><span>200</span></div>
+<pre>{ "alert_id": "a_7f3c", "status": "draft", "attempts": 1,
+  "validator": { "schema": true, "level_match": true, "numbers_match": true },
+  "tool_calls": ["get_incident", "get_peat_context", "get_weather", "get_verification", "get_nearby_villages", "save_alert_draft"] }</pre>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="model">
+    <div class="section-head">
+      <span class="eyebrow">05 · Model data Firestore</span>
+      <h2>Enam koleksi</h2>
+      <p>Hanya service account backend yang boleh membaca dan menulis. Aturan Firestore menolak semua akses dari browser.</p>
+    </div>
+    <div class="grid-2">
+      <div class="table-wrap">
+        <table>
+          <caption>incidents/{id}</caption>
+          <thead><tr><th scope="col">Field</th><th scope="col">Tipe</th><th scope="col">Isi</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>province</code></th><td>string</td><td><code>KT</code></td></tr>
+            <tr><th scope="row"><code>centroid</code></th><td>geopoint</td><td>titik pusat insiden</td></tr>
+            <tr><th scope="row"><code>detections</code></th><td>array</td><td>{lat, lon, acq_at, sensor, frp, confidence}</td></tr>
+            <tr><th scope="row"><code>n_detections</code></th><td>number</td><td>jumlah dalam 24 jam</td></tr>
+            <tr><th scope="row"><code>on_peat</code>, <code>khg_name</code></th><td>bool, string</td><td>hasil irisan dengan layer gambut</td></tr>
+            <tr><th scope="row"><code>risk_class</code></th><td>string</td><td>kelas risiko sel tempat insiden</td></tr>
+            <tr><th scope="row"><code>nearest_village</code></th><td>map</td><td>{name, km}</td></tr>
+            <tr><th scope="row"><code>level_rule</code></th><td>string</td><td>PANTAU / WASPADA / SIAGA / AWAS</td></tr>
+            <tr><th scope="row"><code>verification</code></th><td>map</td><td>{status, sensor, image_date, class_counts, thumb_url}</td></tr>
+            <tr><th scope="row"><code>alert_id</code></th><td>string</td><td>alert terbaru</td></tr>
+            <tr><th scope="row"><code>first_seen</code>, <code>updated_at</code></th><td>timestamp</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>alerts/{id}</caption>
+          <thead><tr><th scope="col">Field</th><th scope="col">Tipe</th><th scope="col">Isi</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>incident_id</code></th><td>string</td><td></td></tr>
+            <tr><th scope="row"><code>status</code></th><td>string</td><td>draft / needs_review / approved / rejected</td></tr>
+            <tr><th scope="row"><code>level</code>, <code>level_source</code></th><td>string</td><td>rule atau operator_override</td></tr>
+            <tr><th scope="row"><code>title</code>, <code>reasons</code></th><td>string, array</td><td>dari agen</td></tr>
+            <tr><th scope="row"><code>actions</code></th><td>map</td><td>{agency, community, residents}</td></tr>
+            <tr><th scope="row"><code>message_id</code>, <code>message_en</code></th><td>string</td><td>maks. 400 karakter</td></tr>
+            <tr><th scope="row"><code>validator</code></th><td>map</td><td>{schema, level_match, numbers_match, errors[]}</td></tr>
+            <tr><th scope="row"><code>tool_calls</code></th><td>array</td><td>nama tools + ringkasan argumen</td></tr>
+            <tr><th scope="row"><code>model</code>, <code>attempts</code></th><td>string, number</td><td>nama model Gemini, jumlah percobaan</td></tr>
+            <tr><th scope="row"><code>decided_by</code>, <code>decided_at</code>, <code>reason</code></th><td>string, timestamp</td><td>keputusan operator</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="table-wrap" style="margin-top:16px">
+      <table class="wide">
+        <thead><tr><th scope="col">Koleksi lain</th><th scope="col">Isi</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>sitreps/{date}</code></th><td>teks ringkasan, jumlah per level, status persetujuan</td></tr>
+          <tr><th scope="row"><code>risk_days/{date}</code></th><td>URL GeoJSON di bucket publik, jumlah sel per kelas, waktu dibuat</td></tr>
+          <tr><th scope="row"><code>runs/{run_id}</code></th><td>log tiap eksekusi job: mulai, selesai, jumlah hotspot, insiden baru, galat</td></tr>
+          <tr><th scope="row"><code>audit_log/{auto}</code></th><td>setiap aksi operator: siapa, apa, kapan, nilai lama dan baru</td></tr>
+        </tbody>
+        <caption>Indeks komposit: <code>alerts (status ASC, level DESC, created_at DESC)</code> dan <code>incidents (province ASC, updated_at DESC)</code>.</caption>
+      </table>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section id="agen-adk">
+    <div class="section-head">
+      <span class="eyebrow">06 · Agen ADK</span>
+      <h2>Tools, skema, dan validator</h2>
+      <p>Agen tidak memakai <code>output_schema</code>. Sebagai gantinya, agen <strong>wajib memanggil</strong> <code>save_alert_draft</code>. Tool ini memvalidasi draf; kalau gagal, pesan galatnya dikembalikan ke agen supaya bisa memperbaiki sendiri, maksimal dua kali.</p>
+    </div>
+    <div class="grid-2">
+      <div class="code tall">
+        <div class="code-head"><span>Definisi agen</span><span>api/agent/agent.py</span></div>
+<pre>import os
+from google.adk.agents import Agent
+from .tools import (get_incident, get_peat_context, get_weather,
+                    get_verification, get_nearby_villages, save_alert_draft)
+
+INSTRUCTION = """
+You write peatland fire alerts for responders in Indonesia.
+1. Call get_incident first, then the other get_* tools.
+2. Keep the level exactly as returned by get_incident.
+3. Every number you write must come from a tool result.
+   If data is missing, write "not available".
+4. Never say a fire is certain unless verification
+   status is "fire_detected".
+5. Write short, plain sentences. Max 60 words per message.
+6. Finish by calling save_alert_draft. If it returns errors,
+   fix them and call it again.
+"""
+
+alert_agent = Agent(
+    name="asapify_alert_agent",
+    model=os.environ["GEMINI_MODEL"],
+    instruction=INSTRUCTION,
+    tools=[get_incident, get_peat_context, get_weather,
+           get_verification, get_nearby_villages, save_alert_draft],
+)</pre>
+      </div>
+      <div class="code tall">
+        <div class="code-head"><span>Skema dan tools</span><span>api/agent/tools.py</span></div>
+<pre>from typing import Literal
+from pydantic import BaseModel, Field
+
+class Actions(BaseModel):
+    agency: str
+    community: str
+    residents: str
+
+class AlertDraft(BaseModel):
+    incident_id: str
+    level: Literal["WASPADA", "SIAGA", "AWAS"]
+    title: str = Field(max_length=90)
+    reasons: list[str] = Field(min_length=2, max_length=5)
+    verification: str
+    actions: Actions
+    message_id: str = Field(max_length=400)
+    message_en: str = Field(max_length=400)
+
+def get_incident(incident_id: str) -> dict: ...
+def get_peat_context(lat: float, lon: float) -> dict: ...
+def get_weather(lat: float, lon: float) -> dict: ...
+def get_verification(incident_id: str) -> dict: ...
+def get_nearby_villages(lat: float, lon: float,
+                        radius_km: float = 5.0) -> dict: ...
+
+def save_alert_draft(draft: dict) -> dict:
+    """Validate and store the draft. Returns
+    {"ok": true, "alert_id": ...} or {"ok": false, "errors": [...]}"""
+    ...</pre>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:16px">
+      <div class="card"><h4>Validator</h4><ul><li>Lolos skema Pydantic</li><li>Level sama dengan <code>level_rule</code></li><li>Setiap angka di teks ada di hasil tools</li><li>Tidak ada kata "pasti" bila belum terverifikasi</li></ul></div>
+      <div class="card"><h4>Percobaan ulang</h4><ul><li>Maksimal 2 kali panggil <code>save_alert_draft</code> yang gagal</li><li>Setelah itu status <code>needs_review</code></li><li>Timeout agen 60 detik per insiden</li></ul></div>
+      <div class="card"><h4>Model dan setelan</h4><ul><li>Gemini Flash terbaru lewat Vertex AI (nama model di env <code>GEMINI_MODEL</code>)</li><li>temperature 0,2</li><li>Dipanggil hanya untuk insiden baru atau yang naik level</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section id="jobs">
+    <div class="section-head">
+      <span class="eyebrow">07 · Job</span>
+      <h2>Langkah di dalam setiap job</h2>
+      <p>Kedua job menerima argumen <code>--as-of</code> untuk mode replay. Tanpa argumen, job memakai waktu sekarang.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <span class="pill waspada">asapify-ingest · tiap jam</span>
+        <ol>
+          <li>Tarik FIRMS area API untuk kotak provinsi, 1 hari terakhir, dari tiga satelit VIIRS.</li>
+          <li>Buat <code>detection_key</code> = hash(lat, lon, acq_at, sensor). Lewati yang sudah ada.</li>
+          <li>Kelompokkan deteksi 24 jam terakhir dengan DBSCAN (radius 1 km, jarak haversine).</li>
+          <li>Iris dengan layer gambut dan cari desa terdekat.</li>
+          <li>Hitung <code>level_rule</code> dengan fungsi aturan (tabel di halaman Rencana).</li>
+          <li>Untuk insiden Siaga ke atas: cari Landsat ±1 hari, jalankan ToPeCAl, simpan thumbnail.</li>
+          <li>Tulis insiden ke Firestore.</li>
+          <li>Untuk insiden baru atau yang naik level: panggil <code>POST /internal/agent/draft</code>.</li>
+          <li>Tulis ringkasan ke <code>runs</code>.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <span class="pill waspada">asapify-daily · 06.00 WIB</span>
+        <ol>
+          <li>Buat atau muat grid 5 km provinsi.</li>
+          <li>Ambil cuaca Open-Meteo per titik 0,25°: hari tanpa hujan, angin, prakiraan 3 hari.</li>
+          <li>Hitung skor risiko per sel (rumus di halaman Rencana).</li>
+          <li>Tulis <code>risk/{date}.geojson</code> ke bucket publik, catat di <code>risk_days</code>.</li>
+          <li>Panggil <code>POST /internal/agent/sitrep</code>.</li>
+          <li>Tulis ringkasan ke <code>runs</code>.</li>
+        </ol>
+        <div class="callout info" style="margin-top:8px">Fungsi aturan, ToPeCAl, dan skor risiko ditaruh di <code>jobs/lib/</code> sebagai fungsi murni dengan unit test, supaya backtest dan produksi memakai kode yang sama.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section id="repo">
+    <div class="section-head">
+      <span class="eyebrow">08 · Struktur repo</span>
+      <h2>Satu repo untuk semua komponen</h2>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Monorepo</span><span>asapify/</span></div>
+<pre>asapify/
+├─ api/                       <span class="c"># Cloud Run service asapify-api</span>
+│  ├─ main.py                 <span class="c"># FastAPI app, mount /api/v1</span>
+│  ├─ routers/ public.py, operator.py, internal.py
+│  ├─ auth.py                 <span class="c"># verifikasi Firebase ID token + OIDC internal</span>
+│  ├─ agent/ agent.py, tools.py, validator.py
+│  └─ requirements.txt
+├─ jobs/                      <span class="c"># Cloud Run jobs</span>
+│  ├─ ingest.py, daily.py
+│  ├─ lib/ firms.py, cluster.py, rules.py, topecal.py, risk.py, weather.py
+│  ├─ tests/                  <span class="c"># unit test aturan, ToPeCAl, risiko</span>
+│  └─ requirements.txt
+├─ notebooks/ backtest.ipynb
+├─ web/                       <span class="c"># lihat halaman UI</span>
+├─ infra/ firestore.rules, firestore.indexes.json, cors.json, setup.sh
+└─ data/README.md             <span class="c"># sumber dan lisensi layer gambut &amp; desa</span></pre>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section id="galat">
+    <div class="section-head">
+      <span class="eyebrow">09 · Galat &amp; batas</span>
+      <h2>Yang terjadi saat sesuatu gagal</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Kejadian</th><th scope="col">Perilaku sistem</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">FIRMS tidak merespons</th><td>Coba ulang 3 kali dengan jeda bertambah, lalu catat run gagal. Alert monitoring menyala setelah 2 jam tanpa run sukses.</td></tr>
+          <tr><th scope="row">Batas transaksi MAP_KEY FIRMS</th><td>Satu permintaan area per sumber per jam. Jangan memanggil FIRMS dari API.</td></tr>
+          <tr><th scope="row">Earth Engine gagal atau lambat</th><td>Insiden tetap disimpan dengan <code>verification.status = "error"</code>. Level tetap dari aturan.</td></tr>
+          <tr><th scope="row">Gemini gagal atau timeout</th><td>Alert berstatus <code>needs_review</code> tanpa teks agen. Operator bisa menekan Buat ulang.</td></tr>
+          <tr><th scope="row">Dua operator menyetujui bersamaan</th><td>Transaksi Firestore. Yang kedua mendapat 409 <code>ALREADY_DECIDED</code>.</td></tr>
+          <tr><th scope="row">Job terpicu dua kali</th><td>Aman karena <code>detection_key</code> dan ID insiden deterministik.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="Halaman berikutnya">
+    <a href="ui.html"><span>← Sebelumnya</span>Spesifikasi UI</a>
+    <a href="cloud.html"><span>Berikutnya →</span>Konfigurasi Cloud</a>
+  </nav>
+</div>
+
+</body>
+</html>

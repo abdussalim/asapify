@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cloud ASAPify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+
+  :root {
+    --font-display: 'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, sans-serif;
+    --font-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+    --bg: #f2f4ef; --surface: #ffffff; --surface-2: #e7ebe3; --line: #c9d0c4;
+    --ink: #1b2520; --ink-dim: #58655d;
+    --moss: #3c6a4c; --moss-soft: #dbe8dd;
+    --sat: #2c628c; --sat-soft: #dde9f3;
+    --amber: #a86f00; --amber-soft: #fbeccc;
+    --ember: #c2410c; --ember-soft: #fbe1d4;
+    --risk1: #e3ecd9; --risk2: #f3e2a6; --risk3: #efb57a; --risk4: #d9714a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #121815; --surface: #1a221e; --surface-2: #222c27; --line: #36433c;
+      --ink: #e4ebe5; --ink-dim: #9aa89f;
+      --moss: #7fbf93; --moss-soft: #22382a; --sat: #7fb3dc; --sat-soft: #1c2f3e;
+      --amber: #f0b23e; --amber-soft: #3a2e14; --ember: #fb8a5c; --ember-soft: #3e2217;
+      --risk1: #26352b; --risk2: #4a4222; --risk3: #6a4424; --risk4: #8a3a22;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121815; --surface: #1a221e; --surface-2: #222c27; --line: #36433c;
+    --ink: #e4ebe5; --ink-dim: #9aa89f;
+    --moss: #7fbf93; --moss-soft: #22382a; --sat: #7fb3dc; --sat-soft: #1c2f3e;
+    --amber: #f0b23e; --amber-soft: #3a2e14; --ember: #fb8a5c; --ember-soft: #3e2217;
+    --risk1: #26352b; --risk2: #4a4222; --risk3: #6a4424; --risk4: #8a3a22;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--font-body);
+    font-size: 15px; line-height: 1.6; padding-inline: 20px; padding-block: 40px 64px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 56px; }
+  section { scroll-margin-top: 16px; min-width: 0; }
+  h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+  h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -0.5px; }
+  h2 { font-size: 25px; font-weight: 600; }
+  h3 { font-size: 18px; font-weight: 600; }
+  h4 { font-size: 15px; font-weight: 600; }
+  p { margin: 0; }
+  code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+  :focus-visible { outline: 2px solid var(--sat); outline-offset: 2px; border-radius: 3px; }
+  a { color: var(--sat); }
+  .eyebrow { font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-dim); }
+  .section-head { display: grid; gap: 6px; margin-bottom: 20px; }
+  .section-head p { color: var(--ink-dim); max-width: 72ch; }
+  .note { font-size: 13.5px; color: var(--ink-dim); margin-top: 12px; max-width: 82ch; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px 20px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .card p, .card li { font-size: 14px; }
+  .card ul, .card ol { margin: 0; padding-left: 20px; display: grid; gap: 5px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+
+  /* header */
+  header { display: grid; gap: 14px; }
+  .lede { font-size: 17px; max-width: 68ch; color: var(--ink-dim); }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .dates { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .date { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; display: grid; gap: 0; min-width: 0; }
+  .date b { font-family: var(--font-display); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .date span { font-size: 12.5px; color: var(--ink-dim); }
+  .date.hot { border-color: var(--ember); }
+  .date.hot b { color: var(--ember); }
+  .toc { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 8px; padding: 0; list-style: none; }
+  .toc a { display: inline-block; font-family: var(--font-mono); font-size: 12px; color: var(--ink); text-decoration: none; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+  .toc a:hover { border-color: var(--sat); color: var(--sat); }
+  .toc a span { color: var(--ink-dim); margin-right: 6px; }
+
+  /* pills */
+  .pill { display: inline-flex; align-items: center; gap: 6px; justify-self: start; font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .pill.grey { background: var(--surface-2); color: var(--ink-dim); }
+  .pill.waspada { background: var(--amber-soft); color: var(--amber); }
+  .pill.siaga { background: var(--ember-soft); color: var(--ember); }
+  .pill.awas { background: var(--ember); color: #fff; }
+  .pill.awas::before { background: #fff; }
+  .pill.ok { background: var(--moss-soft); color: var(--moss); }
+  .pill.ai { background: var(--sat-soft); color: var(--sat); }
+
+  /* concept */
+  .concept { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px 24px; display: grid; gap: 18px; }
+  .concept > p { font-size: 18px; max-width: 76ch; }
+  .layers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) 28px minmax(0, 1fr); gap: 12px; align-items: stretch; }
+  .layer { border-radius: 8px; padding: 14px 14px 16px; background: var(--surface-2); display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .layer h4 { font-size: 16px; }
+  .layer p { font-size: 13.5px; color: var(--ink-dim); }
+  .layer.l1 { background: var(--moss-soft); } .layer.l2 { background: var(--amber-soft); } .layer.l3 { background: var(--ember-soft); }
+  .layer.ai { background: var(--sat-soft); }
+  .arrow-cell { display: grid; place-items: center; color: var(--ink-dim); font-size: 22px; }
+
+  /* rules / scoring */
+  .weights { display: grid; gap: 10px; }
+  .w-row { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) 48px; gap: 12px; align-items: center; font-size: 14px; }
+  .w-bar { height: 12px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+  .w-bar i { display: block; height: 100%; background: var(--sat); border-radius: 6px; }
+  .w-row b { font-family: var(--font-mono); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+  .must { display: grid; gap: 8px; }
+  .must div { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 14px; }
+  .must div::before { content: "✓"; color: var(--moss); font-weight: 700; }
+
+  /* change columns */
+  .change h3 { display: flex; align-items: center; gap: 8px; }
+  .change .x { color: var(--ember); } .change .k { color: var(--moss); } .change .n { color: var(--sat); }
+  .change li { font-size: 14px; }
+  .change li span { color: var(--ink-dim); }
+
+  /* diagrams */
+  .diagram-box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-block: 8px; }
+  .diagram-box svg { display: block; width: 100%; height: auto; max-width: 980px; min-width: 720px; margin: 0 auto; }
+  .scroll-hint { display: none; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); margin-top: 8px; }
+  svg .fc rect, svg .fc polygon { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; }
+  svg .fc.dec polygon { fill: var(--surface); stroke: var(--ink-dim); stroke-width: 1.4; }
+  svg .fc.term rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.4; }
+  svg .fc.rule rect { fill: var(--amber-soft); stroke: var(--amber); }
+  svg .fc.ver rect { fill: var(--moss-soft); stroke: var(--moss); }
+  svg .fc.ai rect { fill: var(--sat-soft); stroke: var(--sat); }
+  svg .fc.send rect { fill: var(--ember-soft); stroke: var(--ember); }
+  svg .fc.side rect { fill: var(--surface); stroke: var(--line); stroke-dasharray: 5 4; }
+  svg .fc .t { font-family: var(--font-body); font-weight: 600; font-size: 14px; fill: var(--ink); }
+  svg .fc .s { font-family: var(--font-mono); font-size: 11.5px; fill: var(--ink-dim); }
+  svg .fc .dt { font-family: var(--font-body); font-weight: 600; font-size: 13.5px; fill: var(--ink); }
+  svg .fc.side .t { font-weight: 500; font-size: 13px; }
+  svg .edge { stroke: var(--ink-dim); stroke-width: 1.5; fill: none; }
+  svg .edge.no { stroke-dasharray: 4 4; }
+  svg .yn { font-family: var(--font-mono); font-size: 12px; fill: var(--ink-dim); }
+  svg .head-dim { fill: var(--ink-dim); }
+  svg .stg line { stroke: var(--line); stroke-width: 2; }
+  svg .stg .k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; fill: var(--ink-dim); }
+  svg .stg .v { font-family: var(--font-display); font-weight: 600; font-size: 14px; fill: var(--ink); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 12px; font-size: 13px; color: var(--ink-dim); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .box { width: 16px; height: 12px; display: inline-block; border-radius: 2px; border: 1.2px solid; }
+  .box.r { border-color: var(--amber); background: var(--amber-soft); }
+  .box.v { border-color: var(--moss); background: var(--moss-soft); }
+  .box.a { border-color: var(--sat); background: var(--sat-soft); }
+  .box.s { border-color: var(--ember); background: var(--ember-soft); }
+  .box.d { border-color: var(--ink-dim); border-style: dashed; background: transparent; }
+
+  /* tables */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  table.wide { min-width: 760px; }
+  caption { text-align: left; padding: 10px 14px; font-size: 13px; color: var(--ink-dim); caption-side: bottom; border-top: 1px solid var(--line); }
+  th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  thead th { font-family: var(--font-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); background: var(--surface-2); }
+  tbody tr:last-child td, tbody tr:last-child th { border-bottom: none; }
+  tbody th { font-weight: 600; }
+  td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.sub td { background: var(--bg); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-dim); padding: 7px 14px; }
+
+  /* formula */
+  .formula { font-family: var(--font-mono); font-size: 13.5px; background: var(--surface-2); border-radius: 8px; padding: 12px 14px; overflow-x: auto; white-space: pre; line-height: 1.7; }
+  .risk-scale { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .risk-scale div { border-radius: 6px; padding: 8px 10px; font-size: 13px; display: grid; gap: 0; min-width: 0; }
+  .risk-scale b { font-family: var(--font-display); font-size: 15px; }
+  .risk-scale span { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); }
+  .rs1 { background: var(--risk1); } .rs2 { background: var(--risk2); } .rs3 { background: var(--risk3); } .rs4 { background: var(--risk4); }
+  .rs4 b, .rs4 span { color: var(--ink); }
+
+  /* code */
+  .code { border-radius: 8px; background: var(--surface-2); overflow: hidden; min-width: 0; }
+  .code-head { display: flex; justify-content: space-between; gap: 10px; padding: 7px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); border-bottom: 1px solid var(--line); }
+  .code pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.55; }
+  .code pre .c { color: var(--ink-dim); }
+
+  /* agent */
+  .agent-flow { display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1.35fr) 28px minmax(0, 0.9fr); gap: 10px; align-items: stretch; }
+  .agent-flow .code pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+  .tool { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-2); border-radius: 6px; padding: 6px 10px; display: grid; gap: 1px; }
+  .tool small { font-family: var(--font-body); font-size: 12px; color: var(--ink-dim); }
+  .guard { border-left: 3px solid var(--sat); padding: 2px 0 2px 12px; }
+  .guard li { font-size: 14px; }
+
+  /* architecture */
+  .arch { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+  .comp { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .comp .svc { font-family: var(--font-mono); font-size: 12px; color: var(--sat); }
+  .comp p { font-size: 13.5px; color: var(--ink-dim); }
+  .comp .num { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--ink-dim); line-height: 1; }
+
+  /* wireframes */
+  .screens { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 16px; }
+  .screen { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
+  .screen-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); gap: 8px; }
+  .screen-body { padding: 12px; display: grid; gap: 10px; align-content: start; }
+  .screen-cap { padding: 10px 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-dim); }
+  .screen svg { display: block; width: 100%; height: auto; border-radius: 6px; }
+  .mini { font-size: 12.5px; display: grid; gap: 4px; }
+  .mini b { font-family: var(--font-display); font-size: 15px; }
+  .mini .row { display: flex; justify-content: space-between; gap: 8px; color: var(--ink-dim); }
+  .thumb { height: 64px; border-radius: 6px;
+    background:
+      radial-gradient(circle at 58% 48%, color-mix(in srgb, var(--ember) 80%, transparent) 0 7%, transparent 9%),
+      radial-gradient(circle at 64% 52%, color-mix(in srgb, var(--amber) 70%, transparent) 0 5%, transparent 7%),
+      radial-gradient(ellipse at 72% 30%, color-mix(in srgb, var(--sat) 35%, transparent) 0 22%, transparent 36%),
+      linear-gradient(135deg, color-mix(in srgb, var(--moss) 60%, var(--surface)), color-mix(in srgb, var(--moss) 30%, var(--amber-soft))); }
+  .btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .btn { font-family: var(--font-mono); font-size: 11.5px; border-radius: 6px; padding: 5px 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .btn.primary { background: var(--moss); border-color: var(--moss); color: var(--surface); }
+  .queue-item { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: grid; gap: 4px; font-size: 12.5px; }
+
+  /* timeline */
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .timeline > li { display: grid; grid-template-columns: 150px 28px minmax(0, 1fr); gap: 14px; }
+  .t-date { text-align: right; padding-top: 14px; display: grid; gap: 2px; align-content: start; }
+  .t-date b { font-family: var(--font-display); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .t-date span { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); }
+  .t-rail { position: relative; }
+  .t-rail::before { content: ""; position: absolute; left: 13px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+  .t-rail i { position: absolute; left: 6px; top: 18px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 3px solid var(--moss); }
+  .timeline > li.hot .t-rail i { border-color: var(--ember); }
+  .t-body { padding-block: 10px; }
+  .t-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
+  .t-card ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; font-size: 14px; }
+  .done { font-size: 13px; color: var(--moss); border-top: 1px dashed var(--line); padding-top: 8px; }
+  .done b { font-weight: 600; }
+
+  /* script */
+  .script { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+  .script > div { display: grid; grid-template-columns: 110px minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .script > div:last-child { border-bottom: none; }
+  .script .tc { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+  .script .say { color: var(--ink-dim); font-style: italic; }
+  .script .head { background: var(--surface-2); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); padding-block: 8px; }
+  .script .head .say { font-style: normal; }
+
+  /* checklist */
+  .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .check li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 14px; }
+  .check li::before { content: ""; width: 14px; height: 14px; border: 1.5px solid var(--ink-dim); border-radius: 3px; margin-top: 4px; }
+
+  /* glossary */
+  .gloss { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; margin: 0; }
+  .gloss div { padding: 10px 0; border-top: 1px solid var(--line); min-width: 0; }
+  .gloss dt { font-weight: 600; font-family: var(--font-display); font-size: 15.5px; }
+  .gloss dd { margin: 2px 0 0; font-size: 14px; color: var(--ink-dim); }
+
+  .decide { border: 1.5px dashed var(--amber); background: var(--amber-soft); border-radius: 10px; padding: 16px 20px; display: grid; gap: 8px; }
+  .decide ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14.5px; }
+
+  footer { font-size: 12.5px; color: var(--ink-dim); border-top: 1px solid var(--line); padding-top: 16px; }
+
+  @media (max-width: 960px) {
+    .arch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .screens, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .layers { grid-template-columns: minmax(0, 1fr); }
+    .arrow-cell { transform: rotate(90deg); height: 20px; }
+    .agent-flow { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .grid-2, .grid-3, .gloss { grid-template-columns: minmax(0, 1fr); }
+    .scroll-hint { display: block; }
+    .script > div { grid-template-columns: 80px minmax(0, 1fr); }
+    .script .say { grid-column: 2; }
+    .w-row { grid-template-columns: minmax(0, 1fr) 48px; }
+    .w-row .w-bar { grid-column: 1 / -1; grid-row: 2; }
+    .risk-scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 520px) {
+    body { padding-inline: 16px; padding-block: 28px 48px; }
+    .arch, .screens, .grid-4 { grid-template-columns: minmax(0, 1fr); }
+    .timeline > li { grid-template-columns: 28px minmax(0, 1fr); }
+    .t-date { grid-column: 2; text-align: left; padding-top: 10px; }
+    .t-rail { grid-row: 1 / span 2; grid-column: 1; }
+    .t-body { grid-column: 2; padding-top: 0; }
+  }
+
+  /* ---------- multi-page additions ---------- */
+  body { padding-block: 0 64px; }
+  .wrap { padding-top: 36px; }
+  .topnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; margin-inline: -20px; padding: 10px 20px;
+    background: color-mix(in srgb, var(--bg) 90%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line); }
+  .topnav-in { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 16px; min-width: 0; }
+  .brand { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--ink); text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+  .brand i { width: 10px; height: 10px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 0 4px var(--ember-soft); }
+  .brand small { font-family: var(--font-mono); font-weight: 400; font-size: 11px; color: var(--ink-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  .navlinks { display: flex; gap: 4px; overflow-x: auto; margin-left: auto; min-width: 0; scrollbar-width: none; }
+  .navlinks::-webkit-scrollbar { display: none; }
+  .navlinks a { font-size: 14px; font-weight: 500; color: var(--ink-dim); text-decoration: none; padding: 7px 12px; border-radius: 8px; white-space: nowrap; }
+  .navlinks a:hover { color: var(--ink); background: var(--surface-2); }
+  .navlinks a[aria-current="page"] { color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+  .pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 16px; }
+  .pager a { text-decoration: none; display: grid; gap: 2px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); min-width: 0; }
+  .pager a span { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+  .pager a:hover { border-color: var(--sat); }
+
+  /* methods / endpoint */
+  .m { display: inline-block; font-family: var(--font-mono); font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; min-width: 52px; text-align: center; }
+  .m-get { background: var(--moss-soft); color: var(--moss); }
+  .m-post { background: var(--sat-soft); color: var(--sat); }
+  .m-patch { background: var(--amber-soft); color: var(--amber); }
+  .m-job { background: var(--surface-2); color: var(--ink-dim); }
+  td.path code { background: transparent; padding: 0; font-size: 12.5px; white-space: nowrap; }
+  .auth { font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap; }
+  .auth.pub { color: var(--moss); } .auth.op { color: var(--amber); } .auth.int { color: var(--ember); }
+  .kv { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 14px; }
+  .kv dt { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-dim); overflow-wrap: anywhere; }
+  .kv dd { margin: 0; overflow-wrap: anywhere; }
+  .callout { border-left: 3px solid var(--amber); background: var(--amber-soft); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 14px; }
+  .callout.info { border-left-color: var(--sat); background: var(--sat-soft); }
+  .stack { display: grid; gap: 16px; }
+  .code.tall pre { max-height: 460px; }
+
+  /* phones */
+  .phones { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px 20px; }
+  .phone-wrap { display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .phone { border: 1px solid var(--line); border-radius: 26px; background: var(--surface); padding: 10px; max-width: 290px; width: 100%; box-shadow: 0 1px 0 var(--line); }
+  .scr { border-radius: 18px; background: var(--bg); overflow: hidden; height: 470px; display: flex; flex-direction: column; font-size: 12px; position: relative; }
+  .scr-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--surface); border-bottom: 1px solid var(--line); font-weight: 600; font-size: 12.5px; gap: 6px; }
+  .scr-top small { font-family: var(--font-mono); font-weight: 400; font-size: 10px; color: var(--ink-dim); }
+  .scr-body { padding: 10px; display: grid; gap: 8px; align-content: start; overflow: hidden; flex: 1; }
+  .scr .blk { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 4px; }
+  .scr .lbl { font-family: var(--font-mono); font-size: 9.5px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+  .scr .row { display: flex; justify-content: space-between; gap: 6px; color: var(--ink-dim); }
+  .scr .row b { color: var(--ink); font-weight: 600; }
+  .scr ul { margin: 0; padding-left: 14px; display: grid; gap: 2px; }
+  .scr .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); border-radius: 14px 14px 0 0; padding: 8px 10px 10px; display: grid; gap: 6px; }
+  .scr .grab { width: 36px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 2px; }
+  .scr .field { border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; background: var(--surface); color: var(--ink); min-height: 44px; }
+  .scr .tabs { display: flex; gap: 4px; }
+  .scr .tabs span { flex: 1; text-align: center; padding: 5px 0; border-radius: 6px; background: var(--surface-2); font-size: 11px; }
+  .scr .tabs span.on { background: var(--ink); color: var(--surface); }
+  .scr .banner { background: var(--sat-soft); color: var(--sat); font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; }
+  .scr .pill { font-size: 10px; padding: 2px 7px; }
+  .scr .btn { font-size: 10.5px; padding: 4px 8px; }
+  .scr .thumb { height: 70px; }
+  .spec { font-size: 13.5px; }
+  .spec ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+  .flowline { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13.5px; }
+  .flowline span { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; }
+  .flowline b { color: var(--ink-dim); font-weight: 400; }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 6px; border: 1px solid var(--line); }
+
+  @media (max-width: 760px) {
+    .kv { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .kv dd { margin-bottom: 8px; }
+    .brand small { display: none; }
+  }
+  @media (max-width: 520px) {
+    .topnav { margin-inline: -16px; padding-inline: 16px; }
+    .phone { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html">Rencana</a><a href="ui.html">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html" aria-current="page">Konfigurasi Cloud</a></div></div></nav>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">Konfigurasi Cloud · pegangan Peran C</span>
+    <h1>Setelan setiap layanan Google Cloud</h1>
+    <p class="lede">Semua perintah memakai variabel di bagian 01. Jalankan berurutan di Cloud Shell. Nilai ukuran (CPU, memori, instance) adalah titik awal untuk skala satu provinsi, dan bisa diubah setelah uji beban.</p>
+    <ul class="toc" aria-label="Isi halaman">
+      <li><a href="#variabel"><span>01</span>Variabel</a></li>
+      <li><a href="#api-aktif"><span>02</span>API</a></li>
+      <li><a href="#iam"><span>03</span>Service account</a></li>
+      <li><a href="#secret"><span>04</span>Secret</a></li>
+      <li><a href="#firestore"><span>05</span>Firestore</a></li>
+      <li><a href="#storage"><span>06</span>Storage</a></li>
+      <li><a href="#ee"><span>07</span>Earth Engine</a></li>
+      <li><a href="#gemini"><span>08</span>Gemini</a></li>
+      <li><a href="#run-service"><span>09</span>Cloud Run service</a></li>
+      <li><a href="#run-jobs"><span>10</span>Cloud Run job</a></li>
+      <li><a href="#scheduler"><span>11</span>Scheduler</a></li>
+      <li><a href="#firebase"><span>12</span>Firebase</a></li>
+      <li><a href="#monitor"><span>13</span>Monitoring</a></li>
+      <li><a href="#env"><span>14</span>Env var</a></li>
+      <li><a href="#urutan"><span>15</span>Urutan deploy</a></li>
+    </ul>
+  </header>
+
+  <!-- 01 -->
+  <section id="variabel">
+    <div class="section-head">
+      <span class="eyebrow">01 · Variabel dan wilayah</span>
+      <h2>Jakarta untuk data dan layanan, global untuk Gemini</h2>
+      <p>Cloud Run, Firestore, dan bucket di <code>asia-southeast2</code> (Jakarta) supaya dekat dengan pengguna. Gemini dipanggil lewat lokasi <code>global</code>. Kalau model yang dipilih belum tersedia di sana, pakai <code>us-central1</code>.</p>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Jalankan di awal setiap sesi Cloud Shell</span><span>infra/env.sh</span></div>
+<pre>export PROJECT_ID="asapify-hackathon"           <span class="c"># ganti dengan project tim</span>
+export PROJECT_NUMBER="$(gcloud projects describe $PROJECT_ID --format='value(projectNumber)')"
+export REGION="asia-southeast2"
+export GEMINI_LOCATION="global"
+export GEMINI_MODEL="&lt;nama model Gemini Flash terbaru&gt;"   <span class="c"># cek di Model Garden</span>
+export PUBLIC_BUCKET="asapify-public-$PROJECT_ID"
+export DATA_BUCKET="asapify-data-$PROJECT_ID"
+export PROVINCE="KT"                              <span class="c"># KT = Kalteng, KB = Kalbar</span>
+gcloud config set project $PROJECT_ID</pre>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="api-aktif">
+    <div class="section-head">
+      <span class="eyebrow">02 · API yang diaktifkan</span>
+      <h2>Satu perintah untuk semua API</h2>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Aktifkan API</span><span>bash</span></div>
+<pre>gcloud services enable \
+  run.googleapis.com cloudscheduler.googleapis.com cloudbuild.googleapis.com \
+  artifactregistry.googleapis.com firestore.googleapis.com storage.googleapis.com \
+  secretmanager.googleapis.com aiplatform.googleapis.com earthengine.googleapis.com \
+  iamcredentials.googleapis.com logging.googleapis.com monitoring.googleapis.com \
+  firebase.googleapis.com firebasehosting.googleapis.com identitytoolkit.googleapis.com</pre>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="iam">
+    <div class="section-head">
+      <span class="eyebrow">03 · Service account dan IAM</span>
+      <h2>Tiga akun, hak akses seminimal mungkin</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Service account</th><th scope="col">Dipakai oleh</th><th scope="col">Peran</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>sa-api</code></th><td>service <code>asapify-api</code></td><td><code>roles/datastore.user</code>, <code>roles/aiplatform.user</code>, <code>roles/storage.objectViewer</code> (bucket publik)</td></tr>
+          <tr><th scope="row"><code>sa-jobs</code></th><td>job ingest dan daily</td><td><code>roles/datastore.user</code>, <code>roles/storage.objectAdmin</code> (kedua bucket), <code>roles/earthengine.writer</code>, <code>roles/serviceusage.serviceUsageConsumer</code>, <code>roles/secretmanager.secretAccessor</code> (secret FIRMS), <code>roles/run.invoker</code> (pada <code>asapify-api</code>)</td></tr>
+          <tr><th scope="row"><code>sa-scheduler</code></th><td>Cloud Scheduler</td><td><code>roles/run.invoker</code> untuk menjalankan kedua job</td></tr>
+        </tbody>
+        <caption>Earth Engine mensyaratkan Service Usage Consumer agar <code>ee.Initialize(project=...)</code> berhasil. Coba turunkan ke <code>roles/earthengine.viewer</code> bila cukup untuk komputasi ToPeCAl.</caption>
+      </table>
+    </div>
+    <div class="code" style="margin-top:12px">
+      <div class="code-head"><span>Buat akun dan beri peran</span><span>bash</span></div>
+<pre>for SA in sa-api sa-jobs sa-scheduler; do
+  gcloud iam service-accounts create $SA --display-name "$SA"
+done
+API_SA="sa-api@$PROJECT_ID.iam.gserviceaccount.com"
+JOBS_SA="sa-jobs@$PROJECT_ID.iam.gserviceaccount.com"
+SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"
+
+for ROLE in roles/datastore.user roles/aiplatform.user; do
+  gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$API_SA" --role $ROLE
+done
+for ROLE in roles/datastore.user roles/earthengine.writer roles/serviceusage.serviceUsageConsumer; do
+  gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$JOBS_SA" --role $ROLE
+done
+gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SCHED_SA" --role roles/run.invoker
+<span class="c"># peran pada bucket, secret, dan service ditambahkan di bagian 04, 06, 09</span></pre>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section id="secret">
+    <div class="section-head">
+      <span class="eyebrow">04 · Secret Manager</span>
+      <h2>Satu secret: MAP_KEY FIRMS</h2>
+      <p>Minta MAP_KEY gratis di situs NASA FIRMS. Jangan pernah menaruhnya di repo atau di env var biasa.</p>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Simpan dan beri akses</span><span>bash</span></div>
+<pre>printf "%s" "ISI_MAP_KEY_DI_SINI" | gcloud secrets create firms-map-key --data-file=-
+gcloud secrets add-iam-policy-binding firms-map-key \
+  --member "serviceAccount:$JOBS_SA" --role roles/secretmanager.secretAccessor</pre>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="firestore">
+    <div class="section-head">
+      <span class="eyebrow">05 · Firestore</span>
+      <h2>Mode Native, tertutup untuk browser</h2>
+    </div>
+    <div class="grid-2">
+      <div class="code">
+        <div class="code-head"><span>Buat database</span><span>bash</span></div>
+<pre>gcloud firestore databases create \
+  --location=$REGION --type=firestore-native
+
+<span class="c"># aturan dan indeks (Firebase CLI)</span>
+firebase deploy --only firestore:rules,firestore:indexes</pre>
+      </div>
+      <div class="code">
+        <div class="code-head"><span>Tolak semua akses klien</span><span>infra/firestore.rules</span></div>
+<pre>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;  <span class="c">// hanya lewat API</span>
+    }
+  }
+}</pre>
+      </div>
+    </div>
+    <div class="code" style="margin-top:12px">
+      <div class="code-head"><span>Indeks komposit</span><span>infra/firestore.indexes.json</span></div>
+<pre>{ "indexes": [
+  { "collectionGroup": "alerts", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "level_rank", "order": "DESCENDING" },
+      { "fieldPath": "created_at", "order": "DESCENDING" } ] },
+  { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "province", "order": "ASCENDING" },
+      { "fieldPath": "updated_at", "order": "DESCENDING" } ] }
+] }</pre>
+    </div>
+    <p class="note">Simpan level juga sebagai angka <code>level_rank</code> (WASPADA = 1, SIAGA = 2, AWAS = 3) supaya urutan di antrean benar.</p>
+  </section>
+
+  <!-- 06 -->
+  <section id="storage">
+    <div class="section-head">
+      <span class="eyebrow">06 · Cloud Storage</span>
+      <h2>Dua bucket: publik dan privat</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Bucket</th><th scope="col">Isi</th><th scope="col">Akses</th><th scope="col">Lifecycle</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>asapify-public-…</code></th><td><code>risk/{date}.geojson</code>, <code>thumbs/{incident}.png</code>, <code>layers/peat.geojson</code>, <code>layers/villages.geojson</code></td><td>baca publik (<code>allUsers</code>), CORS untuk domain web</td><td>hapus <code>thumbs/</code> dan <code>risk/</code> setelah 180 hari</td></tr>
+          <tr><th scope="row"><code>asapify-data-…</code></th><td>data mentah gambut dan desa, grid 5 km, hasil backtest</td><td>privat, hanya <code>sa-jobs</code></td><td>tidak ada</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="code">
+        <div class="code-head"><span>Buat bucket</span><span>bash</span></div>
+<pre>gcloud storage buckets create gs://$PUBLIC_BUCKET \
+  --location=$REGION --uniform-bucket-level-access
+gcloud storage buckets create gs://$DATA_BUCKET \
+  --location=$REGION --uniform-bucket-level-access
+
+gcloud storage buckets add-iam-policy-binding gs://$PUBLIC_BUCKET \
+  --member=allUsers --role=roles/storage.objectViewer
+for B in $PUBLIC_BUCKET $DATA_BUCKET; do
+  gcloud storage buckets add-iam-policy-binding gs://$B \
+    --member="serviceAccount:$JOBS_SA" --role=roles/storage.objectAdmin
+done
+gcloud storage buckets update gs://$PUBLIC_BUCKET \
+  --cors-file=infra/cors.json --lifecycle-file=infra/lifecycle.json</pre>
+      </div>
+      <div class="stack">
+        <div class="code">
+          <div class="code-head"><span>CORS</span><span>infra/cors.json</span></div>
+<pre>[{ "origin": ["https://&lt;project&gt;.web.app", "http://localhost:5173"],
+   "method": ["GET"], "responseHeader": ["Content-Type"],
+   "maxAgeSeconds": 3600 }]</pre>
+        </div>
+        <div class="code">
+          <div class="code-head"><span>Lifecycle</span><span>infra/lifecycle.json</span></div>
+<pre>{ "rule": [{ "action": { "type": "Delete" },
+  "condition": { "age": 180, "matchesPrefix": ["thumbs/", "risk/"] } }] }</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section id="ee">
+    <div class="section-head">
+      <span class="eyebrow">07 · Earth Engine</span>
+      <h2>Daftarkan project lebih dulu</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <ol>
+          <li>Buka halaman pendaftaran Earth Engine, pilih project tim.</li>
+          <li>Pilih penggunaan <strong>nonkomersial</strong> (prototipe hackathon), isi keterangan singkat.</li>
+          <li>Pastikan API <code>earthengine.googleapis.com</code> aktif (bagian 02).</li>
+          <li>Beri <code>sa-jobs</code> peran Earth Engine dan Service Usage Consumer (bagian 03).</li>
+          <li>Uji dari Cloud Shell dengan skrip ToPeCAl pada satu scene.</li>
+        </ol>
+        <div class="callout" style="margin-top:8px">Lakukan di hari pertama. Kalau persetujuan tertunda, hitung ToPeCAl untuk tanggal demo dari akun pribadi lalu simpan hasilnya ke bucket sebagai cadangan.</div>
+      </div>
+      <div class="code">
+        <div class="code-head"><span>Inisialisasi di job</span><span>jobs/lib/topecal.py</span></div>
+<pre>import os, ee
+
+<span class="c"># Di Cloud Run, kredensial otomatis dari service account job (ADC)</span>
+ee.Initialize(project=os.environ["GOOGLE_CLOUD_PROJECT"])
+
+LANDSAT = (ee.ImageCollection("LANDSAT/LC08/C02/T1_TOA")
+           .merge(ee.ImageCollection("LANDSAT/LC09/C02/T1_TOA")))
+
+<span class="c"># Thumbnail 7-6-4 untuk bukti visual</span>
+thumb_url = img.getThumbURL({
+    "bands": ["B7", "B6", "B4"], "min": 0, "max": 0.6,
+    "region": aoi, "dimensions": 512, "format": "png"})</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section id="gemini">
+    <div class="section-head">
+      <span class="eyebrow">08 · Gemini lewat Vertex AI</span>
+      <h2>ADK memakai kredensial service account, tanpa API key</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <dl class="kv">
+          <dt>GOOGLE_GENAI_USE_ENTERPRISE</dt><dd><code>True</code>. Versi ADK lama memakai <code>GOOGLE_GENAI_USE_VERTEXAI=TRUE</code>; sesuaikan dengan versi yang terpasang.</dd>
+          <dt>GOOGLE_CLOUD_PROJECT</dt><dd><code>$PROJECT_ID</code></dd>
+          <dt>GOOGLE_CLOUD_LOCATION</dt><dd><code>$GEMINI_LOCATION</code></dd>
+          <dt>GEMINI_MODEL</dt><dd>nama model Gemini Flash terbaru dari Model Garden</dd>
+          <dt>Setelan generasi</dt><dd>temperature 0,2, output maksimal 1.024 token</dd>
+          <dt>Kuota</dt><dd>cek kuota request per menit di halaman Quotas. Satu provinsi di musim puncak menghasilkan puluhan panggilan per jam, jauh di bawah batas umum.</dd>
+        </dl>
+      </div>
+      <div class="code">
+        <div class="code-head"><span>Uji cepat dari Cloud Shell</span><span>python</span></div>
+<pre>from google import genai
+client = genai.Client(vertexai=True,
+                      project="asapify-hackathon",
+                      location="global")
+r = client.models.generate_content(
+    model="&lt;GEMINI_MODEL&gt;",
+    contents="Tulis satu kalimat tentang kebakaran gambut.")
+print(r.text)</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section id="run-service">
+    <div class="section-head">
+      <span class="eyebrow">09 · Cloud Run service</span>
+      <h2><code>asapify-api</code></h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <dl class="kv">
+          <dt>CPU / memori</dt><dd>1 vCPU, 1 GiB</dd>
+          <dt>Concurrency</dt><dd>40</dd>
+          <dt>Instance</dt><dd>min 0, max 3. Hari demo dan penjurian: min 1 supaya tidak ada cold start.</dd>
+          <dt>Timeout</dt><dd>120 detik (agen butuh beberapa panggilan tools)</dd>
+          <dt>Ingress</dt><dd>all, <code>--allow-unauthenticated</code>. Endpoint operator dan internal dijaga di kode.</dd>
+          <dt>Service account</dt><dd><code>sa-api</code></dd>
+        </dl>
+      </div>
+      <div class="code">
+        <div class="code-head"><span>Deploy</span><span>bash</span></div>
+<pre>gcloud run deploy asapify-api --source ./api \
+  --region $REGION --service-account $API_SA \
+  --allow-unauthenticated \
+  --cpu 1 --memory 1Gi --concurrency 40 \
+  --min-instances 0 --max-instances 3 --timeout 120 \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,\
+GOOGLE_CLOUD_LOCATION=$GEMINI_LOCATION,\
+GOOGLE_GENAI_USE_ENTERPRISE=True,\
+GEMINI_MODEL=$GEMINI_MODEL,\
+PUBLIC_BUCKET=$PUBLIC_BUCKET,PROVINCE=$PROVINCE,\
+INTERNAL_CALLER=$JOBS_SA"
+
+<span class="c"># izinkan job memanggil endpoint internal</span>
+gcloud run services add-iam-policy-binding asapify-api \
+  --region $REGION --member "serviceAccount:$JOBS_SA" \
+  --role roles/run.invoker</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section id="run-jobs">
+    <div class="section-head">
+      <span class="eyebrow">10 · Cloud Run job</span>
+      <h2><code>asapify-ingest</code> dan <code>asapify-daily</code></h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Setelan</th><th scope="col">asapify-ingest</th><th scope="col">asapify-daily</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">CPU / memori</th><td>1 vCPU, 2 GiB (GeoPandas)</td><td>1 vCPU, 2 GiB</td></tr>
+          <tr><th scope="row">Task timeout</th><td>15 menit</td><td>20 menit</td></tr>
+          <tr><th scope="row">Max retries</th><td>1</td><td>1</td></tr>
+          <tr><th scope="row">Tasks / parallelism</th><td>1 / 1</td><td>1 / 1</td></tr>
+          <tr><th scope="row">Secret</th><td><code>FIRMS_MAP_KEY=firms-map-key:latest</code></td><td>tidak ada</td></tr>
+          <tr><th scope="row">Perintah</th><td><code>python ingest.py</code></td><td><code>python daily.py</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="code" style="margin-top:12px">
+      <div class="code-head"><span>Deploy dan jalankan manual</span><span>bash</span></div>
+<pre>COMMON_ENV="GOOGLE_CLOUD_PROJECT=$PROJECT_ID,PROVINCE=$PROVINCE,\
+PUBLIC_BUCKET=$PUBLIC_BUCKET,DATA_BUCKET=$DATA_BUCKET,\
+API_URL=$(gcloud run services describe asapify-api --region $REGION --format='value(status.url)')"
+
+gcloud run jobs deploy asapify-ingest --source ./jobs --region $REGION \
+  --service-account $JOBS_SA --cpu 1 --memory 2Gi \
+  --task-timeout 15m --max-retries 1 \
+  --command python --args=ingest.py \
+  --set-env-vars "$COMMON_ENV" --set-secrets FIRMS_MAP_KEY=firms-map-key:latest
+
+gcloud run jobs deploy asapify-daily --source ./jobs --region $REGION \
+  --service-account $JOBS_SA --cpu 1 --memory 2Gi \
+  --task-timeout 20m --max-retries 1 \
+  --command python --args=daily.py \
+  --set-env-vars "$COMMON_ENV"
+
+<span class="c"># mode replay untuk demo</span>
+gcloud run jobs execute asapify-ingest --region $REGION \
+  --args=ingest.py,--as-of,2026-09-12T10:00:00+07:00</pre>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section id="scheduler">
+    <div class="section-head">
+      <span class="eyebrow">11 · Cloud Scheduler</span>
+      <h2>Dua jadwal, zona waktu Jakarta</h2>
+      <p>Ingest berjalan pada menit ke-5 setiap jam supaya tidak bertabrakan dengan jadwal lain di menit 0. Scheduler memanggil API Cloud Run Admin dengan token OAuth.</p>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Buat jadwal</span><span>bash</span></div>
+<pre>for JOB in asapify-ingest:"5 * * * *" asapify-daily:"0 6 * * *"; do
+  NAME="${JOB%%:*}"; CRON="${JOB#*:}"
+  gcloud scheduler jobs create http "$NAME-schedule" \
+    --location $REGION --schedule "$CRON" --time-zone "Asia/Jakarta" \
+    --uri "https://run.googleapis.com/v2/projects/$PROJECT_ID/locations/$REGION/jobs/$NAME:run" \
+    --http-method POST \
+    --oauth-service-account-email $SCHED_SA
+done</pre>
+    </div>
+  </section>
+
+  <!-- 12 -->
+  <section id="firebase">
+    <div class="section-head">
+      <span class="eyebrow">12 · Firebase</span>
+      <h2>Hosting untuk web, Auth untuk operator</h2>
+    </div>
+    <div class="grid-2">
+      <div class="code">
+        <div class="code-head"><span>Hosting + rewrite ke Cloud Run</span><span>web/firebase.json</span></div>
+<pre>{
+  "hosting": {
+    "public": "dist",
+    "rewrites": [
+      { "source": "/api/**",
+        "run": { "serviceId": "asapify-api", "region": "asia-southeast2" } },
+      { "source": "**", "destination": "/index.html" }
+    ],
+    "headers": [{ "source": "/assets/**",
+      "headers": [{ "key": "Cache-Control",
+                    "value": "public, max-age=31536000, immutable" }] }]
+  },
+  "firestore": { "rules": "../infra/firestore.rules",
+                 "indexes": "../infra/firestore.indexes.json" }
+}</pre>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h4>Auth</h4>
+          <ul>
+            <li>Aktifkan penyedia Google Sign-In.</li>
+            <li>Tambahkan domain web ke Authorized domains.</li>
+            <li>Beri akun operator custom claim <code>role: "operator"</code> dengan skrip di bawah.</li>
+            <li>Siapkan satu akun operator demo untuk juri.</li>
+          </ul>
+        </div>
+        <div class="code">
+          <div class="code-head"><span>Set peran operator</span><span>infra/set_operator.py</span></div>
+<pre>import sys, firebase_admin
+from firebase_admin import auth
+firebase_admin.initialize_app()
+user = auth.get_user_by_email(sys.argv[1])
+auth.set_custom_user_claims(user.uid, {"role": "operator"})</pre>
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:12px">Pastikan rewrite Hosting ke Cloud Run mendukung region <code>asia-southeast2</code> saat deploy. Kalau tidak didukung, frontend memanggil URL Cloud Run langsung dan API mengaktifkan CORS untuk domain web.</div>
+  </section>
+
+  <!-- 13 -->
+  <section id="monitor">
+    <div class="section-head">
+      <span class="eyebrow">13 · Monitoring dan biaya</span>
+      <h2>Tahu lebih dulu kalau sistem berhenti</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Yang dipantau</th><th scope="col">Cara</th><th scope="col">Kapan memberi tahu</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Job ingest berhenti</th><td>metrik berbasis log dari baris <code>run_success</code></td><td>tidak ada run sukses selama 2 jam</td></tr>
+          <tr><th scope="row">API mati</th><td>uptime check ke <code>/api/v1/health</code> tiap 5 menit</td><td>2 kali gagal berturut-turut</td></tr>
+          <tr><th scope="row">Galat aplikasi</th><td>Error Reporting (otomatis dari log Cloud Run)</td><td>galat jenis baru</td></tr>
+          <tr><th scope="row">Validator agen</th><td>metrik berbasis log <code>validator_failed</code></td><td>lebih dari 20% draf gagal dalam 1 jam</td></tr>
+          <tr><th scope="row">Biaya</th><td>Budget alert di Billing</td><td>50%, 90%, dan 100% dari anggaran yang disepakati tim</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Notifikasi dikirim ke email tim. Untuk menekan biaya: min instance 0 di luar hari demo, Gemini dan Earth Engine hanya dipanggil untuk insiden baru atau yang naik level, lifecycle bucket 180 hari.</p>
+  </section>
+
+  <!-- 14 -->
+  <section id="env">
+    <div class="section-head">
+      <span class="eyebrow">14 · Ringkasan env var</span>
+      <h2>Satu tabel untuk semua layanan</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Variabel</th><th scope="col">api</th><th scope="col">ingest</th><th scope="col">daily</th><th scope="col">Contoh</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_PROJECT</code></th><td>✓</td><td>✓</td><td>✓</td><td><code>asapify-hackathon</code></td></tr>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_LOCATION</code></th><td>✓</td><td></td><td></td><td><code>global</code></td></tr>
+          <tr><th scope="row"><code>GOOGLE_GENAI_USE_ENTERPRISE</code></th><td>✓</td><td></td><td></td><td><code>True</code></td></tr>
+          <tr><th scope="row"><code>GEMINI_MODEL</code></th><td>✓</td><td></td><td></td><td>model Flash terbaru</td></tr>
+          <tr><th scope="row"><code>PROVINCE</code></th><td>✓</td><td>✓</td><td>✓</td><td><code>KT</code></td></tr>
+          <tr><th scope="row"><code>PUBLIC_BUCKET</code></th><td>✓</td><td>✓</td><td>✓</td><td><code>asapify-public-…</code></td></tr>
+          <tr><th scope="row"><code>DATA_BUCKET</code></th><td></td><td>✓</td><td>✓</td><td><code>asapify-data-…</code></td></tr>
+          <tr><th scope="row"><code>API_URL</code></th><td></td><td>✓</td><td>✓</td><td>URL Cloud Run <code>asapify-api</code></td></tr>
+          <tr><th scope="row"><code>INTERNAL_CALLER</code></th><td>✓</td><td></td><td></td><td>email <code>sa-jobs</code></td></tr>
+          <tr><th scope="row"><code>FIRMS_MAP_KEY</code> (secret)</th><td></td><td>✓</td><td></td><td>dari Secret Manager</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 15 -->
+  <section id="urutan">
+    <div class="section-head">
+      <span class="eyebrow">15 · Urutan deploy</span>
+      <h2>Dari project kosong sampai jadwal berjalan</h2>
+    </div>
+    <div class="card">
+      <ol>
+        <li>Buat project, hubungkan billing, jalankan <code>env.sh</code>.</li>
+        <li>Aktifkan API (02) dan daftarkan Earth Engine (07).</li>
+        <li>Buat service account dan peran (03), lalu secret FIRMS (04).</li>
+        <li>Buat Firestore (05) dan kedua bucket (06). Unggah layer gambut dan desa.</li>
+        <li>Deploy <code>asapify-api</code> (09). Cek <code>/api/v1/health</code>.</li>
+        <li>Deploy kedua job (10). Jalankan ingest sekali secara manual dengan <code>--as-of</code> tanggal demo.</li>
+        <li>Buat jadwal Scheduler (11).</li>
+        <li>Deploy web ke Firebase Hosting, aktifkan Auth, set akun operator (12).</li>
+        <li>Pasang monitoring dan budget alert (13).</li>
+      </ol>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="Halaman berikutnya">
+    <a href="backend.html"><span>← Sebelumnya</span>Backend &amp; API</a>
+    <a href="index.html"><span>Kembali →</span>Rencana tim</a>
+  </nav>
+</div>
+
+</body>
+</html>

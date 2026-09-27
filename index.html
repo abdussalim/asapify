@@ -1,0 +1,973 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Rencana Tim EWS Gambut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --font-display: 'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, sans-serif;
+    --font-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+    --bg: #f2f4ef; --surface: #ffffff; --surface-2: #e7ebe3; --line: #c9d0c4;
+    --ink: #1b2520; --ink-dim: #58655d;
+    --moss: #3c6a4c; --moss-soft: #dbe8dd;
+    --sat: #2c628c; --sat-soft: #dde9f3;
+    --amber: #a86f00; --amber-soft: #fbeccc;
+    --ember: #c2410c; --ember-soft: #fbe1d4;
+    --risk1: #e3ecd9; --risk2: #f3e2a6; --risk3: #efb57a; --risk4: #d9714a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #121815; --surface: #1a221e; --surface-2: #222c27; --line: #36433c;
+      --ink: #e4ebe5; --ink-dim: #9aa89f;
+      --moss: #7fbf93; --moss-soft: #22382a; --sat: #7fb3dc; --sat-soft: #1c2f3e;
+      --amber: #f0b23e; --amber-soft: #3a2e14; --ember: #fb8a5c; --ember-soft: #3e2217;
+      --risk1: #26352b; --risk2: #4a4222; --risk3: #6a4424; --risk4: #8a3a22;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121815; --surface: #1a221e; --surface-2: #222c27; --line: #36433c;
+    --ink: #e4ebe5; --ink-dim: #9aa89f;
+    --moss: #7fbf93; --moss-soft: #22382a; --sat: #7fb3dc; --sat-soft: #1c2f3e;
+    --amber: #f0b23e; --amber-soft: #3a2e14; --ember: #fb8a5c; --ember-soft: #3e2217;
+    --risk1: #26352b; --risk2: #4a4222; --risk3: #6a4424; --risk4: #8a3a22;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--font-body);
+    font-size: 15px; line-height: 1.6; padding-inline: 20px; padding-block: 40px 64px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 56px; }
+  section { scroll-margin-top: 16px; min-width: 0; }
+  h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+  h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -0.5px; }
+  h2 { font-size: 25px; font-weight: 600; }
+  h3 { font-size: 18px; font-weight: 600; }
+  h4 { font-size: 15px; font-weight: 600; }
+  p { margin: 0; }
+  code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+  :focus-visible { outline: 2px solid var(--sat); outline-offset: 2px; border-radius: 3px; }
+  a { color: var(--sat); }
+  .eyebrow { font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-dim); }
+  .section-head { display: grid; gap: 6px; margin-bottom: 20px; }
+  .section-head p { color: var(--ink-dim); max-width: 72ch; }
+  .note { font-size: 13.5px; color: var(--ink-dim); margin-top: 12px; max-width: 82ch; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px 20px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .card p, .card li { font-size: 14px; }
+  .card ul, .card ol { margin: 0; padding-left: 20px; display: grid; gap: 5px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+
+  /* header */
+  header { display: grid; gap: 14px; }
+  .lede { font-size: 17px; max-width: 68ch; color: var(--ink-dim); }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .dates { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .date { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; display: grid; gap: 0; min-width: 0; }
+  .date b { font-family: var(--font-display); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .date span { font-size: 12.5px; color: var(--ink-dim); }
+  .date.hot { border-color: var(--ember); }
+  .date.hot b { color: var(--ember); }
+  .toc { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 8px; padding: 0; list-style: none; }
+  .toc a { display: inline-block; font-family: var(--font-mono); font-size: 12px; color: var(--ink); text-decoration: none; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+  .toc a:hover { border-color: var(--sat); color: var(--sat); }
+  .toc a span { color: var(--ink-dim); margin-right: 6px; }
+
+  /* pills */
+  .pill { display: inline-flex; align-items: center; gap: 6px; justify-self: start; font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .pill.grey { background: var(--surface-2); color: var(--ink-dim); }
+  .pill.waspada { background: var(--amber-soft); color: var(--amber); }
+  .pill.siaga { background: var(--ember-soft); color: var(--ember); }
+  .pill.awas { background: var(--ember); color: #fff; }
+  .pill.awas::before { background: #fff; }
+  .pill.ok { background: var(--moss-soft); color: var(--moss); }
+  .pill.ai { background: var(--sat-soft); color: var(--sat); }
+
+  /* concept */
+  .concept { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px 24px; display: grid; gap: 18px; }
+  .concept > p { font-size: 18px; max-width: 76ch; }
+  .layers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) 28px minmax(0, 1fr); gap: 12px; align-items: stretch; }
+  .layer { border-radius: 8px; padding: 14px 14px 16px; background: var(--surface-2); display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .layer h4 { font-size: 16px; }
+  .layer p { font-size: 13.5px; color: var(--ink-dim); }
+  .layer.l1 { background: var(--moss-soft); } .layer.l2 { background: var(--amber-soft); } .layer.l3 { background: var(--ember-soft); }
+  .layer.ai { background: var(--sat-soft); }
+  .arrow-cell { display: grid; place-items: center; color: var(--ink-dim); font-size: 22px; }
+
+  /* rules / scoring */
+  .weights { display: grid; gap: 10px; }
+  .w-row { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) 48px; gap: 12px; align-items: center; font-size: 14px; }
+  .w-bar { height: 12px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+  .w-bar i { display: block; height: 100%; background: var(--sat); border-radius: 6px; }
+  .w-row b { font-family: var(--font-mono); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+  .must { display: grid; gap: 8px; }
+  .must div { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 14px; }
+  .must div::before { content: "✓"; color: var(--moss); font-weight: 700; }
+
+  /* change columns */
+  .change h3 { display: flex; align-items: center; gap: 8px; }
+  .change .x { color: var(--ember); } .change .k { color: var(--moss); } .change .n { color: var(--sat); }
+  .change li { font-size: 14px; }
+  .change li span { color: var(--ink-dim); }
+
+  /* diagrams */
+  .diagram-box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-block: 8px; }
+  .diagram-box svg { display: block; width: 100%; height: auto; max-width: 980px; min-width: 720px; margin: 0 auto; }
+  .scroll-hint { display: none; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); margin-top: 8px; }
+  svg .fc rect, svg .fc polygon { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; }
+  svg .fc.dec polygon { fill: var(--surface); stroke: var(--ink-dim); stroke-width: 1.4; }
+  svg .fc.term rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.4; }
+  svg .fc.rule rect { fill: var(--amber-soft); stroke: var(--amber); }
+  svg .fc.ver rect { fill: var(--moss-soft); stroke: var(--moss); }
+  svg .fc.ai rect { fill: var(--sat-soft); stroke: var(--sat); }
+  svg .fc.send rect { fill: var(--ember-soft); stroke: var(--ember); }
+  svg .fc.side rect { fill: var(--surface); stroke: var(--line); stroke-dasharray: 5 4; }
+  svg .fc .t { font-family: var(--font-body); font-weight: 600; font-size: 14px; fill: var(--ink); }
+  svg .fc .s { font-family: var(--font-mono); font-size: 11.5px; fill: var(--ink-dim); }
+  svg .fc .dt { font-family: var(--font-body); font-weight: 600; font-size: 13.5px; fill: var(--ink); }
+  svg .fc.side .t { font-weight: 500; font-size: 13px; }
+  svg .edge { stroke: var(--ink-dim); stroke-width: 1.5; fill: none; }
+  svg .edge.no { stroke-dasharray: 4 4; }
+  svg .yn { font-family: var(--font-mono); font-size: 12px; fill: var(--ink-dim); }
+  svg .head-dim { fill: var(--ink-dim); }
+  svg .stg line { stroke: var(--line); stroke-width: 2; }
+  svg .stg .k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; fill: var(--ink-dim); }
+  svg .stg .v { font-family: var(--font-display); font-weight: 600; font-size: 14px; fill: var(--ink); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 12px; font-size: 13px; color: var(--ink-dim); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .box { width: 16px; height: 12px; display: inline-block; border-radius: 2px; border: 1.2px solid; }
+  .box.r { border-color: var(--amber); background: var(--amber-soft); }
+  .box.v { border-color: var(--moss); background: var(--moss-soft); }
+  .box.a { border-color: var(--sat); background: var(--sat-soft); }
+  .box.s { border-color: var(--ember); background: var(--ember-soft); }
+  .box.d { border-color: var(--ink-dim); border-style: dashed; background: transparent; }
+
+  /* tables */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  table.wide { min-width: 760px; }
+  caption { text-align: left; padding: 10px 14px; font-size: 13px; color: var(--ink-dim); caption-side: bottom; border-top: 1px solid var(--line); }
+  th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  thead th { font-family: var(--font-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); background: var(--surface-2); }
+  tbody tr:last-child td, tbody tr:last-child th { border-bottom: none; }
+  tbody th { font-weight: 600; }
+  td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.sub td { background: var(--bg); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-dim); padding: 7px 14px; }
+
+  /* formula */
+  .formula { font-family: var(--font-mono); font-size: 13.5px; background: var(--surface-2); border-radius: 8px; padding: 12px 14px; overflow-x: auto; white-space: pre; line-height: 1.7; }
+  .risk-scale { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .risk-scale div { border-radius: 6px; padding: 8px 10px; font-size: 13px; display: grid; gap: 0; min-width: 0; }
+  .risk-scale b { font-family: var(--font-display); font-size: 15px; }
+  .risk-scale span { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); }
+  .rs1 { background: var(--risk1); } .rs2 { background: var(--risk2); } .rs3 { background: var(--risk3); } .rs4 { background: var(--risk4); }
+  .rs4 b, .rs4 span { color: var(--ink); }
+
+  /* code */
+  .code { border-radius: 8px; background: var(--surface-2); overflow: hidden; min-width: 0; }
+  .code-head { display: flex; justify-content: space-between; gap: 10px; padding: 7px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); border-bottom: 1px solid var(--line); }
+  .code pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.55; }
+  .code pre .c { color: var(--ink-dim); }
+
+  /* agent */
+  .agent-flow { display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1.35fr) 28px minmax(0, 0.9fr); gap: 10px; align-items: stretch; }
+  .agent-flow .code pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+  .tool { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-2); border-radius: 6px; padding: 6px 10px; display: grid; gap: 1px; }
+  .tool small { font-family: var(--font-body); font-size: 12px; color: var(--ink-dim); }
+  .guard { border-left: 3px solid var(--sat); padding: 2px 0 2px 12px; }
+  .guard li { font-size: 14px; }
+
+  /* architecture */
+  .arch { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+  .comp { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .comp .svc { font-family: var(--font-mono); font-size: 12px; color: var(--sat); }
+  .comp p { font-size: 13.5px; color: var(--ink-dim); }
+  .comp .num { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--ink-dim); line-height: 1; }
+
+  /* wireframes */
+  .screens { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 16px; }
+  .screen { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
+  .screen-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); gap: 8px; }
+  .screen-body { padding: 12px; display: grid; gap: 10px; align-content: start; }
+  .screen-cap { padding: 10px 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-dim); }
+  .screen svg { display: block; width: 100%; height: auto; border-radius: 6px; }
+  .mini { font-size: 12.5px; display: grid; gap: 4px; }
+  .mini b { font-family: var(--font-display); font-size: 15px; }
+  .mini .row { display: flex; justify-content: space-between; gap: 8px; color: var(--ink-dim); }
+  .thumb { height: 64px; border-radius: 6px;
+    background:
+      radial-gradient(circle at 58% 48%, color-mix(in srgb, var(--ember) 80%, transparent) 0 7%, transparent 9%),
+      radial-gradient(circle at 64% 52%, color-mix(in srgb, var(--amber) 70%, transparent) 0 5%, transparent 7%),
+      radial-gradient(ellipse at 72% 30%, color-mix(in srgb, var(--sat) 35%, transparent) 0 22%, transparent 36%),
+      linear-gradient(135deg, color-mix(in srgb, var(--moss) 60%, var(--surface)), color-mix(in srgb, var(--moss) 30%, var(--amber-soft))); }
+  .btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .btn { font-family: var(--font-mono); font-size: 11.5px; border-radius: 6px; padding: 5px 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .btn.primary { background: var(--moss); border-color: var(--moss); color: var(--surface); }
+  .queue-item { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: grid; gap: 4px; font-size: 12.5px; }
+
+  /* timeline */
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .timeline > li { display: grid; grid-template-columns: 150px 28px minmax(0, 1fr); gap: 14px; }
+  .t-date { text-align: right; padding-top: 14px; display: grid; gap: 2px; align-content: start; }
+  .t-date b { font-family: var(--font-display); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .t-date span { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); }
+  .t-rail { position: relative; }
+  .t-rail::before { content: ""; position: absolute; left: 13px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+  .t-rail i { position: absolute; left: 6px; top: 18px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 3px solid var(--moss); }
+  .timeline > li.hot .t-rail i { border-color: var(--ember); }
+  .t-body { padding-block: 10px; }
+  .t-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
+  .t-card ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; font-size: 14px; }
+  .done { font-size: 13px; color: var(--moss); border-top: 1px dashed var(--line); padding-top: 8px; }
+  .done b { font-weight: 600; }
+
+  /* script */
+  .script { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+  .script > div { display: grid; grid-template-columns: 110px minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .script > div:last-child { border-bottom: none; }
+  .script .tc { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+  .script .say { color: var(--ink-dim); font-style: italic; }
+  .script .head { background: var(--surface-2); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); padding-block: 8px; }
+  .script .head .say { font-style: normal; }
+
+  /* checklist */
+  .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .check li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 14px; }
+  .check li::before { content: ""; width: 14px; height: 14px; border: 1.5px solid var(--ink-dim); border-radius: 3px; margin-top: 4px; }
+
+  /* glossary */
+  .gloss { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; margin: 0; }
+  .gloss div { padding: 10px 0; border-top: 1px solid var(--line); min-width: 0; }
+  .gloss dt { font-weight: 600; font-family: var(--font-display); font-size: 15.5px; }
+  .gloss dd { margin: 2px 0 0; font-size: 14px; color: var(--ink-dim); }
+
+  .decide { border: 1.5px dashed var(--amber); background: var(--amber-soft); border-radius: 10px; padding: 16px 20px; display: grid; gap: 8px; }
+  .decide ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14.5px; }
+
+  footer { font-size: 12.5px; color: var(--ink-dim); border-top: 1px solid var(--line); padding-top: 16px; }
+
+  @media (max-width: 960px) {
+    .arch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .screens, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .layers { grid-template-columns: minmax(0, 1fr); }
+    .arrow-cell { transform: rotate(90deg); height: 20px; }
+    .agent-flow { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .grid-2, .grid-3, .gloss { grid-template-columns: minmax(0, 1fr); }
+    .scroll-hint { display: block; }
+    .script > div { grid-template-columns: 80px minmax(0, 1fr); }
+    .script .say { grid-column: 2; }
+    .w-row { grid-template-columns: minmax(0, 1fr) 48px; }
+    .w-row .w-bar { grid-column: 1 / -1; grid-row: 2; }
+    .risk-scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 520px) {
+    body { padding-inline: 16px; padding-block: 28px 48px; }
+    .arch, .screens, .grid-4 { grid-template-columns: minmax(0, 1fr); }
+    .timeline > li { grid-template-columns: 28px minmax(0, 1fr); }
+    .t-date { grid-column: 2; text-align: left; padding-top: 10px; }
+    .t-rail { grid-row: 1 / span 2; grid-column: 1; }
+    .t-body { grid-column: 2; padding-top: 0; }
+  }
+
+  /* ---------- multi-page additions ---------- */
+  body { padding-block: 0 64px; }
+  .wrap { padding-top: 36px; }
+  .topnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; margin-inline: -20px; padding: 10px 20px;
+    background: color-mix(in srgb, var(--bg) 90%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line); }
+  .topnav-in { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 16px; min-width: 0; }
+  .brand { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--ink); text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+  .brand i { width: 10px; height: 10px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 0 4px var(--ember-soft); }
+  .brand small { font-family: var(--font-mono); font-weight: 400; font-size: 11px; color: var(--ink-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  .navlinks { display: flex; gap: 4px; overflow-x: auto; margin-left: auto; min-width: 0; scrollbar-width: none; }
+  .navlinks::-webkit-scrollbar { display: none; }
+  .navlinks a { font-size: 14px; font-weight: 500; color: var(--ink-dim); text-decoration: none; padding: 7px 12px; border-radius: 8px; white-space: nowrap; }
+  .navlinks a:hover { color: var(--ink); background: var(--surface-2); }
+  .navlinks a[aria-current="page"] { color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+  .pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 16px; }
+  .pager a { text-decoration: none; display: grid; gap: 2px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); min-width: 0; }
+  .pager a span { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+  .pager a:hover { border-color: var(--sat); }
+
+  /* methods / endpoint */
+  .m { display: inline-block; font-family: var(--font-mono); font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; min-width: 52px; text-align: center; }
+  .m-get { background: var(--moss-soft); color: var(--moss); }
+  .m-post { background: var(--sat-soft); color: var(--sat); }
+  .m-patch { background: var(--amber-soft); color: var(--amber); }
+  .m-job { background: var(--surface-2); color: var(--ink-dim); }
+  td.path code { background: transparent; padding: 0; font-size: 12.5px; white-space: nowrap; }
+  .auth { font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap; }
+  .auth.pub { color: var(--moss); } .auth.op { color: var(--amber); } .auth.int { color: var(--ember); }
+  .kv { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 14px; }
+  .kv dt { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-dim); overflow-wrap: anywhere; }
+  .kv dd { margin: 0; overflow-wrap: anywhere; }
+  .callout { border-left: 3px solid var(--amber); background: var(--amber-soft); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 14px; }
+  .callout.info { border-left-color: var(--sat); background: var(--sat-soft); }
+  .stack { display: grid; gap: 16px; }
+  .code.tall pre { max-height: 460px; }
+
+  /* phones */
+  .phones { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px 20px; }
+  .phone-wrap { display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .phone { border: 1px solid var(--line); border-radius: 26px; background: var(--surface); padding: 10px; max-width: 290px; width: 100%; box-shadow: 0 1px 0 var(--line); }
+  .scr { border-radius: 18px; background: var(--bg); overflow: hidden; height: 470px; display: flex; flex-direction: column; font-size: 12px; position: relative; }
+  .scr-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--surface); border-bottom: 1px solid var(--line); font-weight: 600; font-size: 12.5px; gap: 6px; }
+  .scr-top small { font-family: var(--font-mono); font-weight: 400; font-size: 10px; color: var(--ink-dim); }
+  .scr-body { padding: 10px; display: grid; gap: 8px; align-content: start; overflow: hidden; flex: 1; }
+  .scr .blk { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 4px; }
+  .scr .lbl { font-family: var(--font-mono); font-size: 9.5px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+  .scr .row { display: flex; justify-content: space-between; gap: 6px; color: var(--ink-dim); }
+  .scr .row b { color: var(--ink); font-weight: 600; }
+  .scr ul { margin: 0; padding-left: 14px; display: grid; gap: 2px; }
+  .scr .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); border-radius: 14px 14px 0 0; padding: 8px 10px 10px; display: grid; gap: 6px; }
+  .scr .grab { width: 36px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 2px; }
+  .scr .field { border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; background: var(--surface); color: var(--ink); min-height: 44px; }
+  .scr .tabs { display: flex; gap: 4px; }
+  .scr .tabs span { flex: 1; text-align: center; padding: 5px 0; border-radius: 6px; background: var(--surface-2); font-size: 11px; }
+  .scr .tabs span.on { background: var(--ink); color: var(--surface); }
+  .scr .banner { background: var(--sat-soft); color: var(--sat); font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; }
+  .scr .pill { font-size: 10px; padding: 2px 7px; }
+  .scr .btn { font-size: 10.5px; padding: 4px 8px; }
+  .scr .thumb { height: 70px; }
+  .spec { font-size: 13.5px; }
+  .spec ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+  .flowline { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13.5px; }
+  .flowline span { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; }
+  .flowline b { color: var(--ink-dim); font-weight: 400; }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 6px; border: 1px solid var(--line); }
+
+  @media (max-width: 760px) {
+    .kv { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .kv dd { margin-bottom: 8px; }
+    .brand small { display: none; }
+  }
+  @media (max-width: 520px) {
+    .topnav { margin-inline: -16px; padding-inline: 16px; }
+    .phone { max-width: 100%; }
+  }
+</style>
+<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html" aria-current="page">Rencana</a><a href="ui.html">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html">Konfigurasi Cloud</a></div></div></nav>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">Briefing tim · AI Builder Cup 2026 · tema Sustainability &amp; Social Impact</span>
+    <h1>ASAPify: rencana tim EWS karhutla gambut</h1>
+    <p class="lede"><strong>ASAPify</strong> adalah WebGIS ringan untuk <strong>peringatan dini kebakaran lahan gambut</strong>. Sistem memetakan risiko setiap hari, mendeteksi titik api setiap jam, lalu <strong>agen Gemini</strong> menyusun peringatan yang rapi dan mudah dipahami. Peringatan baru terbit setelah disetujui operator.</p>
+    <div class="dates">
+      <div class="date"><b>27 Sep</b><span>mulai kerja</span></div>
+      <div class="date hot"><b>11 Okt</b><span>registrasi tim ditutup</span></div>
+      <div class="date"><b>16 Okt</b><span>fitur dibekukan</span></div>
+      <div class="date hot"><b>18 Okt</b><span>batas submit</span></div>
+      <div class="date"><b>7 Nov</b><span>pengumuman finalis</span></div>
+      <div class="date"><b>4 Des</b><span>final di Singapura</span></div>
+    </div>
+    <ul class="toc" aria-label="Isi halaman">
+      <li><a href="#aturan"><span>01</span>Aturan main</a></li>
+      <li><a href="#konsep"><span>02</span>Konsep</a></li>
+      <li><a href="#alur"><span>03</span>Alur sistem</a></li>
+      <li><a href="#lapisan"><span>04</span>Tiga lapisan</a></li>
+      <li><a href="#agen"><span>05</span>Agen Gemini</a></li>
+      <li><a href="#arsitektur"><span>06</span>Arsitektur</a></li>
+      <li><a href="#tampilan"><span>07</span>Tampilan</a></li>
+      <li><a href="#jadwal"><span>08</span>Jadwal</a></li>
+      <li><a href="#peran"><span>09</span>Peran</a></li>
+      <li><a href="#video"><span>10</span>Video demo</a></li>
+      <li><a href="#risiko"><span>11</span>Risiko</a></li>
+      <li><a href="#submit"><span>12</span>Checklist</a></li>
+      <li><a href="#istilah"><span>13</span>Istilah</a></li>
+    </ul>
+  </header>
+
+  <div class="decide" role="note">
+    <h3>Diputuskan minggu ini (paling lambat 30 Sep)</h3>
+    <p><strong>Sudah diputuskan:</strong> nama produk <strong>ASAPify</strong>. <strong>asap</strong> = smoke dalam bahasa Indonesia, <strong>ASAP</strong> = <em>as soon as possible</em>, dan <strong>-ify</strong> dari <em>notify</em>. Artinya: peringatan soal asap yang sampai secepatnya, dan sudah terverifikasi. Tagline: <em>"In Indonesian, asap means smoke. We make sure responders hear about it ASAP, and know it's real."</em></p>
+    <ol>
+      <li>Anggota tim, 2 sampai 4 orang. Semuanya profesional bekerja dan berusia 21 tahun ke atas.</li>
+      <li>Provinsi percontohan: Kalimantan Tengah (lokasi validasi jurnal ToPeCAl) atau Kalimantan Barat (area terbakar terluas 2026).</li>
+      <li>Satu tanggal demo di Agustus atau September 2026 yang punya citra Landsat cerah di atas insiden nyata.</li>
+    </ol>
+  </div>
+
+  <!-- 01 -->
+  <section id="aturan">
+    <div class="section-head">
+      <span class="eyebrow">01 · Aturan main</span>
+      <h2>Yang wajib ada dan cara juri menilai</h2>
+      <p>Bobot 40% ada di teknik dan pemakaian GenAI. Karena itu Gemini harus menjadi bagian inti sistem, bukan tempelan di akhir.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Wajib</h3>
+        <div class="must">
+          <div>Model Gemini atau Gemma</div>
+          <div>Dibangun dengan Agent Platform (ADK), Antigravity, atau AI Studio</div>
+          <div>Prototipe live di Google Cloud: Cloud Run atau Firebase</div>
+          <div>Deck proposal dalam format PDF</div>
+          <div>Video demo 3 menit (YouTube, Vimeo, atau Google Drive)</div>
+          <div>Semua materi submit dalam bahasa Inggris</div>
+        </div>
+        <p class="note">Halaman dan deck ini untuk tim, jadi berbahasa Indonesia. Deck submit dibuat terpisah dalam bahasa Inggris.</p>
+      </div>
+      <div class="card">
+        <h3>Bobot penilaian</h3>
+        <div class="weights">
+          <div class="w-row"><span>Teknik &amp; implementasi GenAI</span><div class="w-bar"><i style="width:100%"></i></div><b>40%</b></div>
+          <div class="w-row"><span>Kesesuaian masalah &amp; dampak</span><div class="w-bar"><i style="width:62.5%"></i></div><b>25%</b></div>
+          <div class="w-row"><span>Inovasi &amp; kreativitas</span><div class="w-bar"><i style="width:62.5%"></i></div><b>25%</b></div>
+          <div class="w-row"><span>Pengalaman pengguna &amp; desain</span><div class="w-bar"><i style="width:25%"></i></div><b>10%</b></div>
+        </div>
+        <p class="note">Cara menjawab tiap kriteria: agen dengan tools dan output terstruktur (40%), data karhutla 2026 (25%), ToPeCAl dari riset Indonesia ditambah alert yang disetujui manusia (25%), peta yang enak dipakai di HP (10%).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="konsep">
+    <div class="section-head">
+      <span class="eyebrow">02 · Konsep</span>
+      <h2>Satu kalimat yang harus bisa diucapkan semua anggota tim</h2>
+    </div>
+    <div class="concept">
+      <p>"ASAPify memetakan risiko kebakaran gambut setiap hari, mendeteksi titik api setiap jam, memverifikasinya dengan metode riset Indonesia bila citra tersedia, lalu agen Gemini menyusun peringatan Waspada, Siaga, atau Awas yang siap dikirim setelah disetujui operator."</p>
+      <div class="layers">
+        <div class="layer l1"><span class="eyebrow">Lapisan 1 · harian</span><h4>Pencegahan</h4><p>Peta risiko per grid: gambut, hari tanpa hujan, angin, riwayat hotspot. Muncul sebelum ada api.</p></div>
+        <div class="layer l2"><span class="eyebrow">Lapisan 2 · tiap jam</span><h4>Deteksi</h4><p>Hotspot FIRMS dikelompokkan jadi insiden. Aturan memberi level awal.</p></div>
+        <div class="layer l3"><span class="eyebrow">Lapisan 3 · bila ada citra</span><h4>Verifikasi</h4><p>ToPeCAl di Earth Engine membaca kanal SWIR dan termal Landsat.</p></div>
+        <div class="arrow-cell" aria-hidden="true">→</div>
+        <div class="layer ai"><span class="eyebrow">Agen AI + manusia</span><h4>Peringatan</h4><p>Gemini menyusun alasan, tindakan, dan pesan. Operator menyetujui sebelum terbit.</p></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 04 -->
+  <section id="alur">
+    <div class="section-head">
+      <span class="eyebrow">03 · Alur sistem</span>
+      <h2>Yang terjadi setiap jam</h2>
+      <p>Satu job berjalan tiap jam. Jalur putus-putus berarti proses berhenti atau diberi label, tanpa alert. Peta risiko dan sitrep berjalan terpisah sekali sehari.</p>
+    </div>
+    <div class="diagram-box">
+      <svg viewBox="0 0 1000 980" role="img" aria-labelledby="alur-t">
+        <title id="alur-t">Alur tiap jam: pemicu, tarik hotspot, kelompokkan insiden, cek gambut, level aturan, cek Landsat, ToPeCAl, agen Gemini, operator, terbit</title>
+        <defs><marker id="fa" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-dim" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+
+        <g class="stg"><line x1="178" y1="100" x2="178" y2="446"/><line x1="178" y1="100" x2="188" y2="100"/><line x1="178" y1="446" x2="188" y2="446"/>
+          <text class="k" x="20" y="116">LAPISAN 2</text><text class="v" x="20" y="134">Deteksi</text></g>
+        <g class="stg"><line x1="178" y1="470" x2="178" y2="646"/><line x1="178" y1="470" x2="188" y2="470"/><line x1="178" y1="646" x2="188" y2="646"/>
+          <text class="k" x="20" y="486">LAPISAN 3</text><text class="v" x="20" y="504">Verifikasi</text></g>
+        <g class="stg"><line x1="178" y1="680" x2="178" y2="736"/><line x1="178" y1="680" x2="188" y2="680"/><line x1="178" y1="736" x2="188" y2="736"/>
+          <text class="k" x="20" y="696">AGEN AI</text><text class="v" x="20" y="714">Gemini</text></g>
+        <g class="stg"><line x1="178" y1="770" x2="178" y2="956"/><line x1="178" y1="770" x2="188" y2="770"/><line x1="178" y1="956" x2="188" y2="956"/>
+          <text class="k" x="20" y="786">MANUSIA</text><text class="v" x="20" y="804">Operator</text></g>
+
+        <!-- spine -->
+        <line class="edge" x1="390" y1="64" x2="390" y2="98" marker-end="url(#fa)"/>
+        <line class="edge" x1="390" y1="156" x2="390" y2="188" marker-end="url(#fa)"/>
+        <line class="edge" x1="390" y1="246" x2="390" y2="276" marker-end="url(#fa)"/>
+        <line class="edge" x1="390" y1="360" x2="390" y2="388" marker-end="url(#fa)"/>
+        <line class="edge" x1="390" y1="446" x2="390" y2="470" marker-end="url(#fa)"/>
+        <line class="edge" x1="390" y1="554" x2="390" y2="588" marker-end="url(#fa)"/>
+        <line class="edge" x1="390" y1="646" x2="390" y2="678" marker-end="url(#fa)"/>
+        <line class="edge" x1="390" y1="736" x2="390" y2="768" marker-end="url(#fa)"/>
+        <line class="edge" x1="390" y1="852" x2="390" y2="898" marker-end="url(#fa)"/>
+        <text class="yn" x="400" y="380">ya</text>
+        <text class="yn" x="400" y="578">ya</text>
+        <text class="yn" x="400" y="880">ya</text>
+
+        <!-- side -->
+        <line class="edge no" x1="540" y1="318" x2="640" y2="318" marker-end="url(#fa)"/><text class="yn" x="566" y="310">tidak</text>
+        <line class="edge no" x1="540" y1="512" x2="640" y2="512" marker-end="url(#fa)"/><text class="yn" x="566" y="504">tidak</text>
+        <path class="edge no" d="M800 540 V708 H592" marker-end="url(#fa)"/>
+        <line class="edge no" x1="540" y1="810" x2="640" y2="810" marker-end="url(#fa)"/><text class="yn" x="566" y="802">tidak</text>
+
+        <!-- nodes -->
+        <g class="fc term"><rect x="200" y="20" width="380" height="44" rx="22"/><text class="t" x="390" y="47" text-anchor="middle">Cloud Scheduler memicu job (tiap jam)</text></g>
+        <g class="fc"><rect x="200" y="100" width="380" height="56" rx="6"/>
+          <text class="t" x="390" y="123" text-anchor="middle">Tarik hotspot FIRMS untuk 1 provinsi</text>
+          <text class="s" x="390" y="142" text-anchor="middle">VIIRS S-NPP · NOAA-20 · NOAA-21</text></g>
+        <g class="fc"><rect x="200" y="190" width="380" height="56" rx="6"/>
+          <text class="t" x="390" y="213" text-anchor="middle">Kelompokkan jadi insiden</text>
+          <text class="s" x="390" y="232" text-anchor="middle">radius 1 km · jendela 24 jam</text></g>
+        <g class="fc dec"><polygon points="390,278 540,318 390,358 240,318"/>
+          <text class="dt" x="390" y="323" text-anchor="middle">Di lahan gambut?</text></g>
+        <g class="fc side"><rect x="640" y="290" width="320" height="56" rx="6"/>
+          <text class="t" x="800" y="323" text-anchor="middle">Tampil di peta saja, tanpa alert</text></g>
+        <g class="fc rule"><rect x="200" y="390" width="380" height="56" rx="6"/>
+          <text class="t" x="390" y="413" text-anchor="middle">Aturan menentukan level awal</text>
+          <text class="s" x="390" y="432" text-anchor="middle">Waspada · Siaga · Awas (tabel di bagian 04)</text></g>
+        <g class="fc dec"><polygon points="390,472 540,512 390,552 240,512"/>
+          <text class="dt" x="390" y="508" text-anchor="middle">Ada Landsat</text>
+          <text class="dt" x="390" y="526" text-anchor="middle">±1 hari?</text></g>
+        <g class="fc side"><rect x="640" y="484" width="320" height="56" rx="6"/>
+          <text class="t" x="800" y="508" text-anchor="middle">Label "belum terverifikasi citra"</text>
+          <text class="s" x="800" y="526" text-anchor="middle">level tetap dari aturan</text></g>
+        <g class="fc ver"><rect x="200" y="590" width="380" height="56" rx="6"/>
+          <text class="t" x="390" y="613" text-anchor="middle">ToPeCAl di Earth Engine + thumbnail</text>
+          <text class="s" x="390" y="632" text-anchor="middle">SWIR + termal · buffer 1 km</text></g>
+        <g class="fc ai"><rect x="200" y="680" width="380" height="56" rx="6"/>
+          <text class="t" x="390" y="703" text-anchor="middle">Agen Gemini menyusun draf alert</text>
+          <text class="s" x="390" y="722" text-anchor="middle">alasan · tindakan · pesan ID/EN (JSON)</text></g>
+        <g class="fc dec"><polygon points="390,770 540,810 390,850 240,810"/>
+          <text class="dt" x="390" y="815" text-anchor="middle">Operator setuju?</text></g>
+        <g class="fc side"><rect x="640" y="782" width="320" height="56" rx="6"/>
+          <text class="t" x="800" y="806" text-anchor="middle">Edit lalu setujui, atau tolak</text>
+          <text class="s" x="800" y="824" text-anchor="middle">keputusan tercatat untuk evaluasi</text></g>
+        <g class="fc send"><rect x="200" y="900" width="380" height="56" rx="6"/>
+          <text class="t" x="390" y="923" text-anchor="middle">Terbit di WebGIS publik</text>
+          <text class="s" x="390" y="942" text-anchor="middle">kartu insiden · notifikasi web (opsional)</text></g>
+      </svg>
+    </div>
+    <p class="scroll-hint">Geser diagram ke samping bila terpotong.</p>
+    <div class="legend">
+      <span><i class="box r"></i>Aturan (deterministik)</span>
+      <span><i class="box v"></i>Verifikasi citra</span>
+      <span><i class="box a"></i>Agen Gemini</span>
+      <span><i class="box s"></i>Terbit ke publik</span>
+      <span><i class="box d"></i>Berhenti atau diberi label</span>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="lapisan">
+    <div class="section-head">
+      <span class="eyebrow">04 · Tiga lapisan</span>
+      <h2>Aturan yang dipakai, cukup detail untuk mulai ngoding</h2>
+      <p>Semua angka ambang di bawah adalah <strong>titik awal</strong>. Nilai finalnya disesuaikan lewat backtest di minggu pertama, kecuali ambang ToPeCAl yang diambil langsung dari jurnal.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="pill ok">Lapisan 1 · pencegahan</span>
+        <h3>Skor risiko harian per grid 5 km</h3>
+        <div class="formula">risiko (0–100) =
+  40 × di_gambut                     (0 atau 1)
++ 30 × min(hari_tanpa_hujan / 10, 1)
++ 20 × min(hotspot_7_hari_10km / 5, 1)
++ 10 × min(angin_kmj / 30, 1)</div>
+        <div class="risk-scale">
+          <div class="rs1"><b>Rendah</b><span>&lt; 30</span></div>
+          <div class="rs2"><b>Sedang</b><span>30–54</span></div>
+          <div class="rs3"><b>Tinggi</b><span>55–74</span></div>
+          <div class="rs4"><b>Sangat tinggi</b><span>≥ 75</span></div>
+        </div>
+        <p class="note" style="margin-top:0">Cuaca dari Open-Meteo per titik grid 0,25°, lalu dibagikan ke sel 5 km di dalamnya. Dihitung sekali sehari pukul 06.00 WIB.</p>
+      </div>
+
+      <div class="card">
+        <span class="pill waspada">Lapisan 2 · deteksi</span>
+        <h3>Level awal insiden ditentukan aturan</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Level</th><th scope="col">Syarat (semua di lahan gambut)</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><span class="pill grey">Pantau</span></th><td>Hotspot di luar gambut. Tampil di peta, tanpa alert.</td></tr>
+              <tr><th scope="row"><span class="pill waspada">Waspada</span></th><td>1 deteksi di gambut dalam 24 jam.</td></tr>
+              <tr><th scope="row"><span class="pill siaga">Siaga</span></th><td>≥ 2 deteksi dalam 24 jam, <em>atau</em> 1 deteksi di sel berisiko Sangat tinggi.</td></tr>
+              <tr><th scope="row"><span class="pill awas">Awas</span></th><td>Syarat Siaga terpenuhi, ada desa ≤ 5 km, <em>dan</em> ToPeCAl menemukan api dalam 1 km atau ≥ 3 deteksi dalam 24 jam.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note" style="margin-top:0">Gemini tidak boleh mengubah level. Yang boleh mengubah hanya operator, dan perubahannya tercatat.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <span class="pill ok">Lapisan 3 · verifikasi</span>
+      <h3>ToPeCAl: empat ambang dari jurnal Sofan dkk. (2019), Tabel 3</h3>
+      <p>Dihitung di Landsat-8/9 TOA. Kanal yang dipakai: B1 (aerosol, penanda asap), B6 (SWIR-1), B7 (SWIR-2), B10 (suhu kecerahan termal, Kelvin). SICI = B7 ÷ B6. Jurnal melaporkan akurasi 82%, naik jadi 93% setelah area perkotaan di-mask.</p>
+      <div class="table-wrap">
+        <table class="wide">
+          <thead><tr><th scope="col">Kelas api</th><th scope="col">SICI</th><th scope="col">Kondisi (B1)</th><th scope="col">Reflektansi SWIR-2 (B7)</th><th scope="col">Suhu termal (B10)</th></tr></thead>
+          <tbody>
+            <tr class="sub"><td colspan="5">Langit cerah · B1 &lt; 0,27</td></tr>
+            <tr><th scope="row">S · membara (smouldering)</th><td class="num">&gt; 1</td><td>cerah</td><td class="num">0,09 – 0,31</td><td class="num">≥ 297 K</td></tr>
+            <tr><th scope="row">FS · campuran</th><td class="num">&gt; 1</td><td>cerah</td><td class="num">&gt; 0,31</td><td class="num">&gt; 300 K</td></tr>
+            <tr><th scope="row">F · menyala (flaming)</th><td class="num">&gt; 1 atau ≤ 1*</td><td>cerah</td><td class="num">≥ 0,68</td><td class="num">≥ 307 K</td></tr>
+            <tr class="sub"><td colspan="5">Berasap · B1 ≥ 0,27</td></tr>
+            <tr><th scope="row">S · membara</th><td class="num">&gt; 1</td><td>berasap</td><td class="num">0,11 – 0,32</td><td class="num">≥ 297 K</td></tr>
+            <tr><th scope="row">FS · campuran</th><td class="num">&gt; 1</td><td>berasap</td><td class="num">0,32 – 0,47</td><td class="num">&gt; 297 K</td></tr>
+            <tr><th scope="row">F · menyala</th><td class="num">&gt; 1 atau ≤ 1*</td><td>berasap</td><td class="num">≥ 0,47</td><td class="num">≥ 303 K</td></tr>
+          </tbody>
+          <caption>* SICI ≤ 1 terjadi pada piksel yang mendekati jenuh di kedua kanal SWIR. Karena itu kelas F tidak mensyaratkan SICI. Bila kriteria tumpang tindih, prioritasnya F, lalu FS, lalu S.</caption>
+        </table>
+      </div>
+      <div class="code" style="margin-top:8px">
+        <div class="code-head"><span>Sketsa ToPeCAl untuk Earth Engine (Python)</span><span>topecal.py</span></div>
+<pre>import ee
+
+def topecal(img):
+    <span class="c">"""0 = bukan api, 1 = membara (S), 2 = campuran (FS), 3 = menyala (F)."""</span>
+    b1, sw1, sw2, bt = (img.select(b) for b in ['B1', 'B6', 'B7', 'B10'])
+    sici  = sw2.divide(sw1)
+    asap  = b1.gte(0.27)
+    cerah = asap.Not()
+
+    s = sici.gt(1).And(bt.gte(297)).And(
+            cerah.And(sw2.gte(0.09)).And(sw2.lte(0.31))
+            .Or(asap.And(sw2.gte(0.11)).And(sw2.lte(0.32))))
+    fs = sici.gt(1).And(
+            cerah.And(sw2.gt(0.31)).And(bt.gt(300))
+            .Or(asap.And(sw2.gte(0.32)).And(sw2.lte(0.47)).And(bt.gt(297))))
+    f = (cerah.And(sw2.gte(0.68)).And(bt.gte(307))
+            .Or(asap.And(sw2.gte(0.47)).And(bt.gte(303))))
+
+    kelas = ee.Image(0).where(s, 1).where(fs, 2).where(f, 3)
+    <span class="c"># mask area terbangun (sumber alarm palsu menurut jurnal)</span>
+    terbangun = ee.ImageCollection('ESA/WorldCover/v200').first().select('Map').eq(50)
+    return kelas.updateMask(terbangun.Not()).rename('topecal')
+
+def cari_landsat(titik, waktu):
+    <span class="c"># waktu: ee.Date saat insiden terdeteksi</span>
+    koleksi = (ee.ImageCollection('LANDSAT/LC08/C02/T1_TOA')
+               .merge(ee.ImageCollection('LANDSAT/LC09/C02/T1_TOA'))
+               .filterBounds(titik)
+               .filterDate(waktu.advance(-1, 'day'), waktu.advance(1, 'day'))
+               .sort('system:time_start', False))
+    return koleksi  <span class="c"># cek koleksi.size() dulu; 0 berarti "belum terverifikasi citra"</span></pre>
+      </div>
+      <p class="note">Jurnal memakai Landsat-8 Collection 1. Kita memakai Collection 2 TOA, jadi cek hasilnya secara visual pada 1–2 scene dulu sebelum dipercaya. Landsat melintas jarang, sehingga sebagian besar insiden akan berlabel "belum terverifikasi citra". Ini wajar dan perlu dijelaskan terus terang saat pitch.</p>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section id="agen">
+    <div class="section-head">
+      <span class="eyebrow">05 · Agen Gemini</span>
+      <h2>AI menyusun peringatan, aturan dan manusia yang memutuskan</h2>
+      <p>Agen dibangun dengan ADK dan berjalan di Cloud Run. Ada dua tugas utama: draf alert untuk setiap insiden baru atau yang naik level, dan sitrep harian untuk satgas.</p>
+    </div>
+    <div class="agent-flow">
+      <div class="card">
+        <span class="pill ai">Tools yang dipanggil agen</span>
+        <div class="tool">get_incident(id)<small>jumlah deteksi, FRP, level aturan</small></div>
+        <div class="tool">get_peat_context(lat, lon)<small>nama KHG, di gambut atau tidak</small></div>
+        <div class="tool">get_weather(lat, lon)<small>hari tanpa hujan, angin, hujan 3 hari ke depan</small></div>
+        <div class="tool">get_verification(id)<small>hasil ToPeCAl, tanggal citra, URL thumbnail</small></div>
+        <div class="tool">get_nearby_villages(lat, lon, km)<small>desa dan jaraknya</small></div>
+        <div class="tool">save_alert_draft(json)<small>simpan ke Firestore berstatus draft</small></div>
+      </div>
+      <div class="arrow-cell" aria-hidden="true">→</div>
+      <div class="code">
+        <div class="code-head"><span>Contoh keluaran (data fiktif)</span><span>JSON</span></div>
+<pre>{
+  "incident_id": "KT-0912-042",
+  "level": "SIAGA",
+  "judul": "Titik api berulang di lahan gambut",
+  "alasan": [
+    "3 deteksi VIIRS dalam 18 jam",
+    "di dalam KHG contoh",
+    "11 hari tanpa hujan, angin 14 km/jam",
+    "desa terdekat 3,2 km"
+  ],
+  "verifikasi": "belum ada citra Landsat",
+  "tindakan": {
+    "bpbd": "kirim tim cek lapangan",
+    "mpa": "siagakan pompa di desa terdekat",
+    "warga": "hindari membakar, laporkan asap"
+  },
+  "pesan": { "id": "…", "en": "…" },
+  "status": "draft"
+}</pre>
+      </div>
+      <div class="arrow-cell" aria-hidden="true">→</div>
+      <div class="card">
+        <span class="pill ok">Operator</span>
+        <h4>Setujui, edit, atau tolak</h4>
+        <p>Draf muncul di antrean panel operator. Setelah disetujui, statusnya menjadi <code>approved</code> dan kartu insiden tampil di peta publik.</p>
+        <p>Keputusan operator disimpan. Data ini dipakai untuk evaluasi dan tampil di deck.</p>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card guard">
+        <h4>Aturan untuk agen (masuk ke system prompt)</h4>
+        <ul>
+          <li>Level diambil dari aturan dan tidak boleh diubah.</li>
+          <li>Setiap angka harus berasal dari hasil tools. Kalau datanya kosong, tulis "tidak tersedia".</li>
+          <li>Bahasa sederhana, kalimat pendek, maksimal 60 kata per pesan.</li>
+          <li>Tidak menyebut api "pasti" kalau belum ada verifikasi citra.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Validator setelah Gemini menjawab (kode Python biasa)</h4>
+        <ul>
+          <li>JSON sesuai skema (structured output).</li>
+          <li>Level di JSON sama dengan level dari aturan.</li>
+          <li>Setiap angka di teks cocok dengan data tools.</li>
+          <li>Kalau gagal, ulangi sekali. Kalau masih gagal, tandai draf "perlu dicek".</li>
+        </ul>
+        <p class="note" style="margin-top:4px">Jalankan pada 20–30 insiden historis dan catat persentase yang lolos. Angka ini menjadi bukti kualitas GenAI di deck.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section id="arsitektur">
+    <div class="section-head">
+      <span class="eyebrow">06 · Arsitektur</span>
+      <h2>Lima komponen, semuanya di Google Cloud</h2>
+      <p>Satu service Cloud Run (<code>asapify-api</code>) melayani peta publik, aksi operator, dan agen. Browser tidak membaca Firestore langsung. Detail endpoint ada di halaman <a href="backend.html">Backend &amp; API</a>, konfigurasi layanan di <a href="cloud.html">Konfigurasi Cloud</a>.</p>
+    </div>
+    <div class="arch">
+      <div class="comp"><span class="num">1</span><h4>Job ingest (tiap jam)</h4><span class="svc">Cloud Scheduler → Cloud Run job</span><p>Tarik FIRMS, kelompokkan insiden, hitung level, panggil ToPeCAl dan agen untuk insiden baru.</p></div>
+      <div class="comp"><span class="num">2</span><h4>Job harian</h4><span class="svc">Cloud Scheduler → Cloud Run job</span><p>Peta risiko grid 5 km dan sitrep harian lewat agen.</p></div>
+      <div class="comp"><span class="num">3</span><h4>Verifikasi citra</h4><span class="svc">Earth Engine (Python API)</span><p>ToPeCAl dan thumbnail komposit 7-6-4 untuk bukti visual.</p></div>
+      <div class="comp"><span class="num">4</span><h4>API + agen alert</h4><span class="svc">FastAPI + ADK + Gemini · Cloud Run service</span><p>Endpoint publik dan operator, agen dengan tools, validator.</p></div>
+      <div class="comp"><span class="num">5</span><h4>WebGIS</h4><span class="svc">Firebase Hosting · Auth</span><p>MapLibre, peta publik, panel operator. Data lewat API; layer statis dari Cloud Storage.</p></div>
+    </div>
+    <div class="table-wrap" style="margin-top:16px">
+      <table class="wide">
+        <thead><tr><th scope="col">Koleksi Firestore</th><th scope="col">Isi</th><th scope="col">Ditulis oleh</th><th scope="col">Dibaca oleh</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>incidents</code></th><td>titik pusat, jumlah deteksi, FRP maks, di_gambut, desa terdekat + jarak, level aturan, hasil verifikasi</td><td>job ingest</td><td>API, agen</td></tr>
+          <tr><th scope="row"><code>alerts</code></th><td>JSON dari agen, status <code>draft</code> / <code>approved</code> / <code>rejected</code>, siapa yang menyetujui</td><td>agen, API (aksi operator)</td><td>API</td></tr>
+          <tr><th scope="row"><code>risk_days</code></th><td>tanggal + tautan GeoJSON grid risiko di Cloud Storage</td><td>job harian</td><td>API</td></tr>
+          <tr><th scope="row"><code>sitreps</code></th><td>ringkasan harian per provinsi</td><td>job harian (agen)</td><td>API</td></tr>
+        </tbody>
+        <caption>Aturan keamanan: aturan Firestore menolak semua akses dari browser. API hanya mengembalikan alert berstatus <code>approved</code> ke publik, dan hanya akun operator (Firebase Auth) yang bisa mengubah status.</caption>
+      </table>
+    </div>
+    <p class="note"><strong>Mode replay:</strong> semua job menerima parameter tanggal, misalnya <code>--replay 2026-09-12</code>. Dengan ini demo bisa diputar ulang pada hari kebakaran nyata, walaupun saat penjurian hotspot sedang sepi.</p>
+  </section>
+
+  <!-- 08 -->
+  <section id="tampilan">
+    <div class="section-head">
+      <span class="eyebrow">07 · Tampilan WebGIS</span>
+      <h2>Tiga layar saja, dirancang untuk HP</h2>
+      <p>Sketsa kasar sebagai pegangan frontend. Detail visual bisa berubah saat dibangun.</p>
+    </div>
+    <div class="screens">
+      <div class="screen">
+        <div class="screen-bar"><span>Peta publik</span><span>Kalteng · 12 Sep</span></div>
+        <div class="screen-body">
+          <svg viewBox="0 0 300 190" role="img" aria-label="Sketsa peta dengan grid risiko dan titik insiden">
+            <rect width="300" height="190" fill="var(--surface-2)"/>
+            <g>
+              <rect x="20" y="20" width="40" height="40" fill="var(--risk1)"/><rect x="60" y="20" width="40" height="40" fill="var(--risk2)"/><rect x="100" y="20" width="40" height="40" fill="var(--risk2)"/><rect x="140" y="20" width="40" height="40" fill="var(--risk1)"/>
+              <rect x="20" y="60" width="40" height="40" fill="var(--risk2)"/><rect x="60" y="60" width="40" height="40" fill="var(--risk3)"/><rect x="100" y="60" width="40" height="40" fill="var(--risk4)"/><rect x="140" y="60" width="40" height="40" fill="var(--risk3)"/><rect x="180" y="60" width="40" height="40" fill="var(--risk2)"/>
+              <rect x="60" y="100" width="40" height="40" fill="var(--risk2)"/><rect x="100" y="100" width="40" height="40" fill="var(--risk3)"/><rect x="140" y="100" width="40" height="40" fill="var(--risk4)"/><rect x="180" y="100" width="40" height="40" fill="var(--risk3)"/><rect x="220" y="100" width="40" height="40" fill="var(--risk2)"/>
+              <rect x="100" y="140" width="40" height="40" fill="var(--risk1)"/><rect x="140" y="140" width="40" height="40" fill="var(--risk2)"/><rect x="180" y="140" width="40" height="40" fill="var(--risk2)"/>
+            </g>
+            <circle cx="122" cy="82" r="8" fill="var(--ember)" stroke="var(--surface)" stroke-width="2"/>
+            <circle cx="162" cy="118" r="7" fill="var(--ember)" stroke="var(--surface)" stroke-width="2"/>
+            <circle cx="205" cy="80" r="6" fill="var(--amber)" stroke="var(--surface)" stroke-width="2"/>
+            <circle cx="80" cy="40" r="4" fill="var(--ink-dim)" stroke="var(--surface)" stroke-width="1.5"/>
+          </svg>
+          <div class="btns"><span class="btn">Risiko hari ini</span><span class="btn">Insiden 24 jam</span><span class="btn">Batas gambut</span></div>
+        </div>
+        <div class="screen-cap">Grid risiko diwarnai, insiden berwarna sesuai level. Pengguna bisa memilih layer.</div>
+      </div>
+      <div class="screen">
+        <div class="screen-bar"><span>Kartu insiden</span><span class="pill siaga">Siaga</span></div>
+        <div class="screen-body">
+          <div class="thumb" aria-hidden="true"></div>
+          <div class="mini">
+            <b>Titik api berulang di lahan gambut</b>
+            <div class="row"><span>Deteksi 24 jam</span><span>3</span></div>
+            <div class="row"><span>Desa terdekat</span><span>3,2 km</span></div>
+            <div class="row"><span>Tanpa hujan</span><span>11 hari</span></div>
+            <div class="row"><span>Citra</span><span>belum tersedia</span></div>
+          </div>
+        </div>
+        <div class="screen-cap">Alasan, tindakan, dan bukti citra dalam satu kartu. Contoh data fiktif.</div>
+      </div>
+      <div class="screen">
+        <div class="screen-bar"><span>Panel operator</span><span>login</span></div>
+        <div class="screen-body">
+          <div class="queue-item"><span class="pill awas">Awas</span><span>KT-0912-051 · ToPeCAl: menyala</span><div class="btns"><span class="btn primary">Setujui</span><span class="btn">Edit</span><span class="btn">Tolak</span></div></div>
+          <div class="queue-item"><span class="pill siaga">Siaga</span><span>KT-0912-042 · 3 deteksi</span><div class="btns"><span class="btn primary">Setujui</span><span class="btn">Edit</span><span class="btn">Tolak</span></div></div>
+          <div class="queue-item"><span class="pill waspada">Waspada</span><span>KT-0912-060 · 1 deteksi</span></div>
+        </div>
+        <div class="screen-cap">Antrean draf dari agen, diurutkan dari level tertinggi.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section id="jadwal">
+    <div class="section-head">
+      <span class="eyebrow">08 · Jadwal</span>
+      <h2>Enam sprint dalam 21 hari</h2>
+      <p>Setiap sprint punya definisi selesai. Kalau sprint molor, potong fitur di sprint berikutnya, jangan geser tanggal freeze.</p>
+    </div>
+    <ol class="timeline">
+      <li>
+        <div class="t-date"><b>27–28 Sep</b><span>Sprint 0</span></div>
+        <div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Tim dan akun</h4>
+          <ul><li>Daftarkan tim di Hack2Skill</li><li>Project GCP, billing, daftar Earth Engine</li><li>Repo, pilih provinsi dan tanggal demo</li></ul>
+          <div class="done"><b>Selesai jika:</b> semua anggota bisa deploy "hello" ke Cloud Run.</div></div></div>
+      </li>
+      <li>
+        <div class="t-date"><b>29 Sep – 3 Okt</b><span>Sprint 1</span></div>
+        <div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Data dan aturan</h4>
+          <ul><li>Layer gambut dan titik desa untuk 1 provinsi</li><li>Ingest FIRMS, pengelompokan insiden, level aturan</li><li>Grid risiko v0 dan notebook backtest Agustus–September 2026</li></ul>
+          <div class="done"><b>Selesai jika:</b> tabel insiden untuk tanggal demo sudah keluar, lengkap dengan level.</div></div></div>
+      </li>
+      <li>
+        <div class="t-date"><b>4–8 Okt</b><span>Sprint 2</span></div>
+        <div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Verifikasi dan agen</h4>
+          <ul><li>ToPeCAl di Earth Engine dan thumbnail</li><li>Agen ADK: tools, skema JSON, validator</li><li>Simpan ke Firestore</li></ul>
+          <div class="done"><b>Selesai jika:</b> satu insiden nyata menghasilkan draf alert yang lolos validator.</div></div></div>
+      </li>
+      <li class="hot">
+        <div class="t-date"><b>9–13 Okt</b><span>Sprint 3</span></div>
+        <div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>WebGIS dan integrasi</h4>
+          <ul><li>Peta publik, kartu insiden, panel operator</li><li>Scheduler, mode replay, sitrep harian</li><li>Registrasi tim ditutup 11 Okt: pastikan sudah terdaftar</li></ul>
+          <div class="done"><b>Selesai jika:</b> alur lengkap berjalan di URL publik.</div></div></div>
+      </li>
+      <li>
+        <div class="t-date"><b>14–16 Okt</b><span>Sprint 4</span></div>
+        <div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Uji dan freeze</h4>
+          <ul><li>Evaluasi agen pada 20–30 insiden</li><li>Perbaiki bug, rapikan tampilan di HP</li><li>Fitur dibekukan 16 Okt malam</li></ul>
+          <div class="done"><b>Selesai jika:</b> tidak ada error selama tiga kali replay berturut-turut.</div></div></div>
+      </li>
+      <li class="hot">
+        <div class="t-date"><b>17–18 Okt</b><span>Sprint 5</span></div>
+        <div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Submit</h4>
+          <ul><li>Rekam video 3 menit</li><li>Deck PDF bahasa Inggris</li><li>Submit 17 Okt, tanggal 18 sebagai cadangan</li></ul>
+          <div class="done"><b>Selesai jika:</b> konfirmasi submit diterima.</div></div></div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 10 -->
+  <section id="peran">
+    <div class="section-head">
+      <span class="eyebrow">09 · Pembagian peran</span>
+      <h2>Empat peran, bisa dirangkap sesuai jumlah anggota</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Peran</th><th scope="col">Tugas utama</th><th scope="col">Keluaran</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">A · Data &amp; GIS</th><td>Layer gambut, titik desa, ingest FIRMS, pengelompokan insiden, grid risiko, backtest</td><td>Tabel insiden + grid risiko untuk tanggal demo</td></tr>
+          <tr><th scope="row">B · Citra satelit</th><td>ToPeCAl di Earth Engine, pencarian Landsat, thumbnail, cek visual hasil</td><td>Fungsi <code>verify(incident)</code> + contoh gambar</td></tr>
+          <tr><th scope="row">C · Backend &amp; agen AI</th><td>Cloud Run job dan service, Scheduler, ADK + Gemini, validator, Firestore, aturan keamanan</td><td>Draf alert otomatis + sitrep</td></tr>
+          <tr><th scope="row">D · WebGIS &amp; pitch</th><td>MapLibre, tiga layar, Firebase Hosting, video, deck bahasa Inggris</td><td>URL publik, video, deck PDF</td></tr>
+        </tbody>
+        <caption>2 orang: A+B dan C+D. 3 orang: A+B, C, D. 4 orang: satu peran per orang. Semua ikut latihan pitch di Sprint 4.</caption>
+      </table>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section id="video">
+    <div class="section-head">
+      <span class="eyebrow">10 · Naskah video 3 menit</span>
+      <h2>Ceritakan satu insiden dari awal sampai peringatan terbit</h2>
+      <p>Rekam dengan mode replay pada tanggal demo. Tampilkan pemanggilan tools oleh agen di layar, karena bagian itulah yang dinilai 40%.</p>
+    </div>
+    <div class="script">
+      <div class="head"><span>Waktu</span><span>Yang tampil</span><span class="say">Yang diucapkan (inti)</span></div>
+      <div><span class="tc">0:00–0:20</span><span>Angka karhutla 2026</span><span class="say">Musim 2026 parah, dan api di gambut membara di bawah permukaan.</span></div>
+      <div><span class="tc">0:20–0:45</span><span>Peta risiko harian</span><span class="say">Sebelum ada api, kami sudah tahu sel mana yang paling rawan.</span></div>
+      <div><span class="tc">0:45–1:30</span><span>Hotspot → insiden → ToPeCAl → agen memanggil tools</span><span class="say">Aturan menentukan level. Riset Indonesia memverifikasi. Gemini merangkai alasannya.</span></div>
+      <div><span class="tc">1:30–2:00</span><span>Operator menyetujui → kartu muncul di peta publik</span><span class="say">Manusia tetap memegang keputusan akhir.</span></div>
+      <div><span class="tc">2:00–2:30</span><span>Sitrep harian</span><span class="say">Satgas mendapat ringkasan satu halaman setiap pagi.</span></div>
+      <div><span class="tc">2:30–3:00</span><span>Arsitektur + hasil evaluasi</span><span class="say">Lima komponen di Google Cloud dan hasil evaluasi agen.</span></div>
+    </div>
+  </section>
+
+  <!-- 12 -->
+  <section id="risiko">
+    <div class="section-head">
+      <span class="eyebrow">11 · Risiko</span>
+      <h2>Yang bisa menggagalkan kita, dan rencana cadangannya</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Risiko</th><th scope="col">Rencana cadangan</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Tim belum lengkap saat registrasi ditutup 11 Okt</th><td>Selesaikan di Sprint 0. Syaratnya 2–4 orang, profesional, 21+.</td></tr>
+          <tr><th scope="row">Pendaftaran Earth Engine lambat disetujui</th><td>Daftar di hari pertama. Cadangan: hitung ToPeCAl untuk tanggal demo lebih dulu, lalu simpan hasilnya.</td></tr>
+          <tr><th scope="row">Layer gambut sulit didapat</th><td>Cari di hari 1–2 dari sumber resmi atau data terbuka. Catat sumber dan lisensinya.</td></tr>
+          <tr><th scope="row">Tidak ada Landsat cerah di tanggal demo</th><td>Pilih tanggal demo di Sprint 0 justru berdasarkan ketersediaan Landsat.</td></tr>
+          <tr><th scope="row">Hotspot sepi saat penjurian</th><td>Mode replay dengan tanggal kebakaran nyata.</td></tr>
+          <tr><th scope="row">Gemini menulis angka yang salah</th><td>Structured output, validator angka, level terkunci dari aturan.</td></tr>
+          <tr><th scope="row">Biaya atau kuota Gemini</th><td>Agen hanya dipanggil untuk insiden baru atau yang naik level. Simpan hasilnya.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 13 -->
+  <section id="submit">
+    <div class="section-head">
+      <span class="eyebrow">12 · Checklist submit</span>
+      <h2>Sebelum menekan tombol submit</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Materi</h4>
+        <ul class="check">
+          <li>Kategori: Sustainability &amp; Social Impact</li>
+          <li>Deck proposal PDF, bahasa Inggris</li>
+          <li>URL prototipe publik di Cloud Run / Firebase</li>
+          <li>Video 3 menit, bisa diputar tanpa login</li>
+          <li>Semua teks dan UI dalam bahasa Inggris (tambahkan toggle bahasa)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Teknis</h4>
+        <ul class="check">
+          <li>Gemini dipanggil lewat ADK, dan terlihat di video</li>
+          <li>Mode replay berjalan tanpa error</li>
+          <li>Akun demo operator untuk juri, bila diminta</li>
+          <li>Kunci API di Secret Manager, tidak ada di repo</li>
+          <li>Tabel evaluasi agen ada di deck</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 -->
+  <section id="istilah">
+    <div class="section-head">
+      <span class="eyebrow">13 · Istilah</span>
+      <h2>Kamus singkat untuk tim</h2>
+    </div>
+    <dl class="gloss">
+      <div><dt>Hotspot (titik panas)</dt><dd>Piksel satelit yang jauh lebih panas dari sekitarnya. Belum tentu kebakaran.</dd></div>
+      <div><dt>NASA FIRMS</dt><dd>Layanan gratis yang mengirim data hotspot dari satelit VIIRS dan MODIS, beberapa jam setelah satelit lewat.</dd></div>
+      <div><dt>VIIRS</dt><dd>Sensor di tiga satelit (S-NPP, NOAA-20, NOAA-21). Resolusi 375 m, lewat beberapa kali sehari.</dd></div>
+      <div><dt>FRP</dt><dd>Fire Radiative Power, perkiraan besarnya energi api dalam megawatt.</dd></div>
+      <div><dt>KHG</dt><dd>Kesatuan Hidrologis Gambut, satuan wilayah gambut yang dipakai pemerintah.</dd></div>
+      <div><dt>Insiden</dt><dd>Kumpulan hotspot yang berdekatan (1 km) dalam 24 jam, dianggap satu kejadian.</dd></div>
+      <div><dt>Landsat TOA</dt><dd>Citra Landsat yang nilainya sudah dikonversi ke reflektansi di puncak atmosfer. Dipakai langsung oleh ToPeCAl.</dd></div>
+      <div><dt>SWIR dan termal</dt><dd>Kanal inframerah gelombang pendek (peka terhadap api) dan kanal suhu permukaan.</dd></div>
+      <div><dt>ToPeCAl</dt><dd>Tropical Peatland Combustion Algorithm dari Sofan dkk. (2019). Empat ambang untuk mengenali api menyala dan membara.</dd></div>
+      <div><dt>Membara vs menyala</dt><dd>Membara (smouldering) adalah api bersuhu rendah di bawah permukaan gambut. Lebih sulit dilihat satelit.</dd></div>
+      <div><dt>ADK</dt><dd>Agent Development Kit dari Google, kerangka untuk membangun agen Gemini yang bisa memanggil fungsi (tools).</dd></div>
+      <div><dt>Structured output</dt><dd>Gemini dipaksa menjawab dalam JSON sesuai skema, sehingga mudah diperiksa oleh kode.</dd></div>
+      <div><dt>Human-in-the-loop</dt><dd>Keputusan akhir tetap di tangan manusia. Di sistem ini perannya dipegang operator.</dd></div>
+      <div><dt>Sitrep</dt><dd>Situation report, ringkasan kondisi harian untuk satgas.</dd></div>
+      <div><dt>Mode replay</dt><dd>Menjalankan sistem seolah-olah pada tanggal lampau, untuk demo dan pengujian.</dd></div>
+      <div><dt>Cloud Run job vs service</dt><dd>Job berjalan sampai selesai lalu berhenti (cocok untuk tugas tiap jam). Service selalu siap menerima permintaan.</dd></div>
+    </dl>
+  </section>
+
+    <nav class="pager" aria-label="Halaman berikutnya">
+    <a href="ui.html"><span>Berikutnya →</span>Spesifikasi UI</a>
+    <a href="cloud.html"><span>Langsung ke</span>Konfigurasi Cloud</a>
+  </nav>
+
+  <footer>Sumber: aturan AI Builder Cup 2026 (aibuildercup.com); Sofan, P., Bruce, D., Jones, E., &amp; Marsden, J. (2019), <em>Remote Sensing</em> 11(4), 465, <a href="https://doi.org/10.3390/rs11040465">doi.org/10.3390/rs11040465</a>. Semua angka ambang selain ToPeCAl adalah usulan awal yang dikalibrasi lewat backtest.</footer>
+</div>
+
+</body></html>
