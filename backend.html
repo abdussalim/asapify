@@ -359,405 +359,619 @@
     .topnav { margin-inline: -16px; padding-inline: 16px; }
     .phone { max-width: 100%; }
   }
+
+  .grid-3 .code pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+
+  /* Telegram mockup */
+  .scr-body.tg { background: var(--moss-soft); align-content: end; }
+  .tg-msg { background: var(--surface); border-radius: 12px 12px 12px 4px; padding: 6px; display: grid; gap: 5px; max-width: 94%; box-shadow: 0 1px 0 var(--line); }
+  .tg-from { font-weight: 700; font-size: 11px; color: var(--sat); padding: 0 4px; }
+  .tg-img { height: 92px; border-radius: 8px; background: #8FAF93; display: grid; place-items: center; }
+  .tg-img span { width: 44px; height: 34px; border: 2px dashed var(--ember); border-radius: 3px; }
+  .tg-msg p { margin: 0; padding: 0 4px; font-size: 11.5px; line-height: 1.45; }
+  .tg-time { justify-self: end; font-size: 9.5px; color: var(--ink-dim); padding: 0 4px; }
+  .tg-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; max-width: 94%; }
+  .tg-keys span { background: var(--surface); opacity: 0.9; color: var(--ink); border-radius: 8px; text-align: center; font-size: 11px; font-weight: 600; padding: 7px 2px; }
+
+  /* Runbook */
+  .task { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px 20px; display: grid; gap: 12px; min-width: 0; scroll-margin-top: 70px; }
+  .task-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+  .task-head h3 { margin: 0; font-family: var(--font-display); font-size: 19px; }
+  .tid { font-family: var(--font-mono); font-size: 12.5px; font-weight: 500; background: var(--ink); color: var(--surface); padding: 3px 9px; border-radius: 6px; }
+  .task .goal { color: var(--ink-dim); margin: 0; }
+  .task h4 { margin: 0; font-family: var(--font-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); }
+  .task ul, .task ol { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+  .task ol.steps > li { padding-left: 2px; }
+  .task ol.steps > li::marker { font-family: var(--font-mono); font-weight: 500; color: var(--sat); }
+  pre.cmd { margin: 6px 0 0; padding: 10px 12px; background: var(--surface-2); border-radius: 6px; overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.55; white-space: pre; }
+  .task .check { background: var(--moss-soft); border-radius: 8px; padding: 10px 14px; display: grid; gap: 6px; }
+  .task .check h4 { color: var(--moss); }
+  .task .check p { margin: 0; }
+  .task-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 20px; }
+  .sprint-done { border-left: 4px solid var(--sat); background: var(--sat-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; margin-bottom: 16px; }
+  .rb-list { display: grid; gap: 16px; }
+  .rb-list > *, .task > *, .task-grid > div, .task ol.steps > li { min-width: 0; }
+
+  /* skematik bernomor */
+  svg .nb circle { fill: var(--ink); }
+  svg .nb text { fill: var(--surface); font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+  svg .zone { fill: none; stroke: var(--sat); stroke-width: 1.2; stroke-dasharray: 6 5; }
+  svg .zl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; fill: var(--sat); }
+  svg .ch { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; fill: var(--ink-dim); }
+  .diagram-box.wide svg { min-width: 920px; max-width: 1180px; }
+  figure.fig { margin: 0; display: grid; gap: 8px; }
+  figure.fig figcaption { color: var(--ink-dim); font-size: 13.5px; max-width: 80ch; }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); }
+  .legend-row span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-row i { display: inline-block; width: 26px; height: 0; border-top: 2px solid var(--ink-dim); }
+  .legend-row i.dash { border-top-style: dashed; }
+  .legend-row b.n { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--ink); color: var(--surface); font-size: 10.5px; }
+  .legend-row .sw { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--line); }
+  td.nbc { font-family: var(--font-mono); font-weight: 600; text-align: center; }
 </style>
 </head>
 <body>
-<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html">Rencana</a><a href="ui.html">UI</a><a href="backend.html" aria-current="page">Backend &amp; API</a><a href="cloud.html">Konfigurasi Cloud</a></div></div></nav>
+<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html">Rencana</a><a href="ui.html">UI</a><a href="backend.html" aria-current="page">Backend &amp; API</a><a href="cloud.html">Konfigurasi Cloud</a><a href="runbook.html">Runbook</a></div></div></nav>
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Backend &amp; API · pegangan Peran A, B, C</span>
-    <h1>Satu API, dua job, satu agen</h1>
-    <p class="lede">Backend terdiri dari satu service Cloud Run <code>asapify-api</code> (FastAPI + agen ADK) dan dua Cloud Run job. Semua data disimpan di Firestore dan Cloud Storage. <strong>Browser tidak pernah membaca Firestore langsung</strong>; semuanya lewat API.</p>
+    <span class="eyebrow">Backend &amp; API · pegangan Peran A, B, C · 💡 usulan</span>
+    <h1>Dua job deterministik, satu API dengan agen</h1>
+    <p class="lede">Tahap deterministik (ingest, skor anomali, persistensi) berjalan di Cloud Run job. Rekaman panas utama dari Himawari (job ingest tiap 10 menit), sinyal kedua dari VIIRS malam (job FIRMS tiap 30 menit). Agen ADK dan bot Telegram tinggal di service <code>asapify-api</code>; agen <strong>hanya dipanggil saat transisi status</strong>, dan bot hanya mengirim (satu arah) ke grup peringatan setelah keputusan operator. Browser tidak membaca Firestore langsung.</p>
     <ul class="toc" aria-label="Isi halaman">
       <li><a href="#layanan"><span>01</span>Layanan</a></li>
       <li><a href="#konvensi"><span>02</span>Konvensi</a></li>
-      <li><a href="#endpoint"><span>03</span>Daftar endpoint</a></li>
+      <li><a href="#endpoint"><span>03</span>Endpoint</a></li>
       <li><a href="#contoh"><span>04</span>Contoh</a></li>
       <li><a href="#model"><span>05</span>Model data</a></li>
+      <li><a href="#kalimantan"><span>05b</span>Wilayah Kalimantan</a></li>
       <li><a href="#agen-adk"><span>06</span>Agen ADK</a></li>
+      <li><a href="#telegram"><span>06b</span>Bot Telegram</a></li>
       <li><a href="#jobs"><span>07</span>Job</a></li>
-      <li><a href="#repo"><span>08</span>Struktur repo</a></li>
-      <li><a href="#galat"><span>09</span>Galat &amp; batas</a></li>
+      <li><a href="#repo"><span>08</span>Repo</a></li>
+      <li><a href="#galat"><span>09</span>Galat</a></li>
     </ul>
   </header>
 
-  <!-- 01 -->
   <section id="layanan">
     <div class="section-head">
       <span class="eyebrow">01 · Layanan</span>
       <h2>Siapa memanggil siapa</h2>
     </div>
     <div class="diagram-box">
-      <svg viewBox="0 0 1000 380" role="img" aria-labelledby="svc-t">
-        <title id="svc-t">Scheduler memicu job ingest dan daily; job menulis ke Firestore dan Storage lalu memanggil endpoint internal API; browser memanggil API lewat Firebase Hosting</title>
+      <svg viewBox="0 0 1000 400" role="img" aria-labelledby="svc-t">
+        <title id="svc-t">Scheduler memicu job ingest, FIRMS, dan baseline; job FIRMS menarik deteksi VIIRS malam ke Storage; ingest membaca Himawari dari NOAA open data, menulis ke Storage dan Firestore, dan memanggil agen saat transisi; agen memanggil Himawari, Earth Engine, dan FIRMS; browser operator memanggil API; API mengirim pesan satu arah ke Telegram</title>
         <defs><marker id="sa" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-dim" d="M0,0 L10,5 L0,10 z"/></marker></defs>
-        <g class="fc term"><rect x="20" y="40" width="170" height="56" rx="28"/><text class="t" x="105" y="66" text-anchor="middle">Cloud Scheduler</text><text class="s" x="105" y="83" text-anchor="middle">:05 tiap jam · 06.00</text></g>
-        <g class="fc rule"><rect x="250" y="20" width="210" height="56" rx="6"/><text class="t" x="355" y="43" text-anchor="middle">job asapify-ingest</text><text class="s" x="355" y="61" text-anchor="middle">FIRMS · insiden · ToPeCAl</text></g>
-        <g class="fc rule"><rect x="250" y="100" width="210" height="56" rx="6"/><text class="t" x="355" y="123" text-anchor="middle">job asapify-daily</text><text class="s" x="355" y="141" text-anchor="middle">grid risiko · sitrep</text></g>
-        <g class="fc"><rect x="530" y="20" width="200" height="56" rx="6"/><text class="t" x="630" y="43" text-anchor="middle">Firestore</text><text class="s" x="630" y="61" text-anchor="middle">incidents · alerts · …</text></g>
-        <g class="fc"><rect x="530" y="100" width="200" height="56" rx="6"/><text class="t" x="630" y="123" text-anchor="middle">Cloud Storage</text><text class="s" x="630" y="141" text-anchor="middle">GeoJSON · thumbnail</text></g>
-        <g class="fc ver"><rect x="250" y="190" width="210" height="50" rx="6"/><text class="t" x="355" y="212" text-anchor="middle">Earth Engine</text><text class="s" x="355" y="229" text-anchor="middle">dipanggil oleh job ingest</text></g>
-        <g class="fc ai"><rect x="530" y="210" width="200" height="72" rx="6"/><text class="t" x="630" y="236" text-anchor="middle">asapify-api</text><text class="s" x="630" y="254" text-anchor="middle">FastAPI + agen ADK</text><text class="s" x="630" y="270" text-anchor="middle">→ Gemini</text></g>
-        <g class="fc send"><rect x="800" y="210" width="180" height="72" rx="6"/><text class="t" x="890" y="236" text-anchor="middle">Browser</text><text class="s" x="890" y="254" text-anchor="middle">Firebase Hosting</text><text class="s" x="890" y="270" text-anchor="middle">/api/** → Cloud Run</text></g>
-        <line class="edge" x1="190" y1="62" x2="248" y2="48" marker-end="url(#sa)"/>
-        <line class="edge" x1="190" y1="74" x2="248" y2="126" marker-end="url(#sa)"/>
-        <line class="edge" x1="460" y1="48" x2="528" y2="48" marker-end="url(#sa)"/>
-        <line class="edge" x1="460" y1="128" x2="528" y2="128" marker-end="url(#sa)"/>
-        <line class="edge" x1="460" y1="60" x2="528" y2="120" marker-end="url(#sa)"/>
-        <path class="edge" d="M250 48 H228 V215 H248" marker-end="url(#sa)"/>
-        <path class="edge no" d="M430 156 V300 H628 V284" marker-end="url(#sa)"/>
-        <text class="yn" x="440" y="318">POST /internal/agent/draft (OIDC)</text>
-        <line class="edge" x1="630" y1="210" x2="630" y2="158" marker-end="url(#sa)"/>
-        <line class="edge" x1="798" y1="246" x2="732" y2="246" marker-end="url(#sa)"/>
-        <text class="yn" x="742" y="238">/api/v1</text>
+        <g class="fc term"><rect x="20" y="60" width="170" height="56" rx="28"/><text class="t" x="105" y="86" text-anchor="middle">Cloud Scheduler</text><text class="s" x="105" y="103" text-anchor="middle">*/10 menit · harian</text></g>
+        <g class="fc"><rect x="20" y="200" width="170" height="56" rx="6"/><text class="t" x="105" y="223" text-anchor="middle">Himawari-9</text><text class="s" x="105" y="241" text-anchor="middle">NOAA open data</text></g>
+        <g class="fc rule"><rect x="250" y="30" width="220" height="56" rx="6"/><text class="t" x="360" y="53" text-anchor="middle">job asapify-ingest</text><text class="s" x="360" y="71" text-anchor="middle">crop · skor · persistensi</text></g>
+        <g class="fc rule"><rect x="250" y="110" width="220" height="56" rx="6"/><text class="t" x="360" y="133" text-anchor="middle">job asapify-baseline</text><text class="s" x="360" y="151" text-anchor="middle">median/MAD per jam · beku</text></g>
+        <g class="fc"><rect x="540" y="30" width="200" height="56" rx="6"/><text class="t" x="640" y="53" text-anchor="middle">Cloud Storage</text><text class="s" x="640" y="71" text-anchor="middle">deret BT · baseline · crop</text></g>
+        <g class="fc"><rect x="540" y="110" width="200" height="56" rx="6"/><text class="t" x="640" y="133" text-anchor="middle">Firestore</text><text class="s" x="640" y="151" text-anchor="middle">cluster · analisis · alert</text></g>
+        <g class="fc ai"><rect x="540" y="230" width="200" height="72" rx="6"/><text class="t" x="640" y="256" text-anchor="middle">asapify-api</text><text class="s" x="640" y="274" text-anchor="middle">FastAPI + agen ADK</text><text class="s" x="640" y="290" text-anchor="middle">→ Gemini</text></g>
+        <g class="fc ver"><rect x="250" y="250" width="220" height="100" rx="6"/><text class="t" x="360" y="274" text-anchor="middle">Tool verifikasi</text><text class="s" x="360" y="294" text-anchor="middle">Himawari crop (NOAA)</text><text class="s" x="360" y="312" text-anchor="middle">Landsat + ToPeCAl (EE)</text><text class="s" x="360" y="330" text-anchor="middle">FIRMS API</text></g>
+        <g class="fc send"><rect x="800" y="230" width="180" height="72" rx="6"/><text class="t" x="890" y="256" text-anchor="middle">Browser</text><text class="s" x="890" y="274" text-anchor="middle">operator · juri</text><text class="s" x="890" y="290" text-anchor="middle">Firebase Hosting</text></g>
+        <g class="fc rule"><rect x="250" y="186" width="220" height="50" rx="6"/><text class="t" x="360" y="206" text-anchor="middle">job asapify-firms</text><text class="s" x="360" y="224" text-anchor="middle">VIIRS malam · tiap 30 menit</text></g>
+        <g class="fc"><rect x="20" y="290" width="170" height="50" rx="6"/><text class="t" x="105" y="311" text-anchor="middle">FIRMS VIIRS</text><text class="s" x="105" y="328" text-anchor="middle">3 satelit · 375 m</text></g>
+        <path class="edge" d="M190 314 H234 V222 H248" marker-end="url(#sa)"/>
+        <path class="edge" d="M150 116 V150 H240 V200 H248" marker-end="url(#sa)"/>
+        <path class="edge" d="M470 200 H515 V80 H538" marker-end="url(#sa)"/>
+        <line class="edge" x1="190" y1="80" x2="248" y2="60" marker-end="url(#sa)"/>
+        <line class="edge" x1="190" y1="96" x2="248" y2="134" marker-end="url(#sa)"/>
+        <path class="edge" d="M190 222 H220 V66 H248" marker-end="url(#sa)"/>
+        <line class="edge" x1="470" y1="58" x2="538" y2="58" marker-end="url(#sa)"/>
+        <line class="edge" x1="470" y1="66" x2="538" y2="128" marker-end="url(#sa)"/>
+        <line class="edge" x1="470" y1="138" x2="538" y2="66" marker-end="url(#sa)"/>
+        <path class="edge no" d="M500 70 V210 H630 V228" marker-end="url(#sa)"/>
+        <text class="yn" x="648" y="204">POST /internal/agent/analyze</text>
+        <line class="edge" x1="538" y1="290" x2="472" y2="300" marker-end="url(#sa)"/>
+        <line class="edge" x1="640" y1="230" x2="640" y2="168" marker-end="url(#sa)"/>
+        <line class="edge" x1="798" y1="266" x2="742" y2="266" marker-end="url(#sa)"/>
+        <text class="yn" x="744" y="256">/api/v1</text>
+        <g class="fc send"><rect x="800" y="322" width="180" height="64" rx="6"/><text class="t" x="890" y="346" text-anchor="middle">Telegram</text><text class="s" x="890" y="364" text-anchor="middle">grup operator · peringatan</text></g>
+        <path class="edge" d="M742 292 H770 V346 H798" marker-end="url(#sa)"/>
+        <text class="yn" x="762" y="328" text-anchor="end">bot (kirim)</text>
       </svg>
     </div>
-    <div class="grid-3" style="margin-top:16px">
-      <div class="card"><span class="pill ai">service</span><h4><code>asapify-api</code></h4><p>FastAPI. Tiga kelompok endpoint: publik, operator, internal. Agen ADK berjalan di dalam service ini.</p></div>
-      <div class="card"><span class="pill waspada">job · tiap jam</span><h4><code>asapify-ingest</code></h4><p>Tarik FIRMS, kelompokkan insiden, tentukan level, jalankan ToPeCAl, minta draf ke agen.</p></div>
-      <div class="card"><span class="pill waspada">job · 06.00 WIB</span><h4><code>asapify-daily</code></h4><p>Hitung grid risiko, tulis GeoJSON ke bucket publik, minta sitrep ke agen.</p></div>
-    </div>
+    <p class="scroll-hint">Geser diagram ke samping bila terpotong.</p>
   </section>
 
-  <!-- 02 -->
   <section id="konvensi">
     <div class="section-head">
       <span class="eyebrow">02 · Konvensi</span>
-      <h2>Aturan yang berlaku di semua endpoint</h2>
+      <h2>Berlaku di semua endpoint</h2>
     </div>
     <div class="card">
       <dl class="kv">
-        <dt>Base path</dt><dd><code>/api/v1</code>. Di produksi lewat Firebase Hosting (satu origin dengan web). Saat pengembangan, pakai URL Cloud Run langsung.</dd>
-        <dt>Format</dt><dd>JSON UTF-8. Data peta dalam GeoJSON (RFC 7946), urutan koordinat <code>[lon, lat]</code>.</dd>
-        <dt>Waktu</dt><dd>ISO 8601 dengan zona. Simpan dalam UTC, tampilkan dalam WIB.</dd>
-        <dt>ID insiden</dt><dd><code>{PROV}-{YYYYMMDD}-{nnn}</code>, contoh <code>KT-20260912-042</code></dd>
-        <dt>Auth publik</dt><dd>tanpa token</dd>
-        <dt>Auth operator</dt><dd><code>Authorization: Bearer &lt;Firebase ID token&gt;</code>, wajib punya custom claim <code>role = "operator"</code></dd>
-        <dt>Auth internal</dt><dd>token OIDC Google dari service account <code>sa-jobs</code>, audience = URL service. Diverifikasi di aplikasi.</dd>
-        <dt>Replay</dt><dd>parameter <code>as_of</code> (ISO 8601) di semua endpoint publik. Respons menyertakan header <code>X-Asapify-As-Of</code>.</dd>
-        <dt>Cache</dt><dd>publik: <code>Cache-Control: public, max-age=300</code>. Operator dan internal: <code>no-store</code>.</dd>
-        <dt>Galat</dt><dd><code>{"error": {"code": "...", "message": "..."}}</code> dengan status HTTP yang sesuai</dd>
+        <dt>Base path</dt><dd><code>/api/v1</code>, lewat Firebase Hosting (satu origin dengan web)</dd>
+        <dt>Format</dt><dd>JSON UTF-8. Data peta GeoJSON, koordinat <code>[lon, lat]</code>.</dd>
+        <dt>Waktu</dt><dd>ISO 8601. Simpan UTC, tampilkan WIB.</dd>
+        <dt>ID</dt><dd>piksel <code>p{row}_{col}</code> di grid 0,02° Kalimantan (545 × 445, baris 0 di utara); cluster <code>C-{MMDD}-{nnn}</code></dd>
+        <dt>Penerima</dt><dd>Anggota grup Telegram peringatan. Tidak punya akun web; bot tidak menerima input dari mereka.</dd>
+        <dt>Auth operator</dt><dd>Firebase ID token, claim <code>role = "operator"</code></dd>
+        <dt>Auth internal</dt><dd>OIDC dari <code>sa-jobs</code>, diverifikasi di aplikasi</dd>
+        <dt>Replay</dt><dd>parameter <code>as_of</code>; header respons <code>X-Asapify-As-Of</code></dd>
+        <dt>Galat</dt><dd><code>{"error": {"code": "...", "message": "..."}}</code></dd>
       </dl>
     </div>
   </section>
 
-  <!-- 03 -->
   <section id="endpoint">
     <div class="section-head">
-      <span class="eyebrow">03 · Daftar endpoint</span>
-      <h2>Tujuh publik, enam operator, dua internal</h2>
+      <span class="eyebrow">03 · Endpoint</span>
+      <h2>Operator dan internal</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Metode</th><th scope="col">Path (setelah <code>/api/v1</code>)</th><th scope="col">Auth</th><th scope="col">Fungsi</th><th scope="col">Respons</th></tr></thead>
+        <thead><tr><th scope="col">Metode</th><th scope="col">Path (setelah <code>/api/v1</code>)</th><th scope="col">Auth</th><th scope="col">Fungsi</th></tr></thead>
         <tbody>
-          <tr class="sub"><td colspan="5">Publik</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/health</code></td><td><span class="auth pub">publik</span></td><td>cek hidup untuk uptime check</td><td><code>{"ok": true}</code></td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/meta</code></td><td><span class="auth pub">publik</span></td><td>provinsi, waktu ingest terakhir, status replay</td><td>objek meta</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/incidents?since=24h&amp;level=&amp;as_of=</code></td><td><span class="auth pub">publik</span></td><td>insiden untuk peta</td><td>GeoJSON FeatureCollection</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/incidents/{id}</code></td><td><span class="auth pub">publik</span></td><td>detail insiden + alert yang sudah disetujui + titik deteksi</td><td>objek insiden</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/risk?date=</code></td><td><span class="auth pub">publik</span></td><td>tautan GeoJSON grid risiko untuk tanggal itu</td><td><code>{"date", "url", "generated_at"}</code></td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/alerts?since=24h</code></td><td><span class="auth pub">publik</span></td><td>daftar alert berstatus <code>approved</code></td><td>array alert</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/sitreps/{date}</code></td><td><span class="auth pub">publik</span></td><td>sitrep yang sudah disetujui</td><td>objek sitrep</td></tr>
-          <tr class="sub"><td colspan="5">Operator</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/queue?status=draft</code></td><td><span class="auth op">operator</span></td><td>antrean, urut level lalu waktu</td><td>array ringkasan alert</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts/{id}</code></td><td><span class="auth op">operator</span></td><td>draf lengkap + hasil validator + jejak tools</td><td>objek alert</td></tr>
-          <tr><td><span class="m m-patch">PATCH</span></td><td class="path"><code>/operator/alerts/{id}</code></td><td><span class="auth op">operator</span></td><td>ubah pesan, tindakan, atau level (level wajib dengan <code>override_reason</code>)</td><td>objek alert terbaru</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/approve</code></td><td><span class="auth op">operator</span></td><td>terbitkan ke publik</td><td>objek alert, <code>status: approved</code></td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/reject</code></td><td><span class="auth op">operator</span></td><td>tolak, body <code>{"reason"}</code> wajib</td><td>objek alert, <code>status: rejected</code></td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/regenerate</code></td><td><span class="auth op">operator</span></td><td>jalankan agen lagi untuk insiden yang sama</td><td>objek alert baru</td></tr>
-          <tr class="sub"><td colspan="5">Internal (hanya dari job)</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/internal/agent/draft</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"incident_id"}</code>. Agen menyusun draf, validator memeriksa, hasil disimpan</td><td><code>{"alert_id", "status", "attempts"}</code></td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/internal/agent/sitrep</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"date"}</code>. Agen menyusun sitrep harian</td><td><code>{"sitrep_id", "status"}</code></td></tr>
+          <tr class="sub"><td colspan="4">Umum</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/health</code>, <code>/meta</code></td><td><span class="auth pub">publik</span></td><td>cek hidup; waktu scan terakhir, malam/siang, status replay</td></tr>
+                    <tr class="sub"><td colspan="4">Operator</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/grid?as_of=</code></td><td><span class="auth op">operator</span></td><td>status semua piksel gambut (aman, no_observation, watch, anomaly)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters?status=</code></td><td><span class="auth op">operator</span></td><td>daftar cluster aktif</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters/{id}</code></td><td><span class="auth op">operator</span></td><td>deret skor per malam, piksel, analisis terbaru, jejak tools</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/analyze</code></td><td><span class="auth op">operator</span></td><td>jalankan agen lagi (menghormati cooldown kecuali <code>force</code>)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/decision</code></td><td><span class="auth op">operator</span></td><td><code>publish</code> (level + caption; bot mengirim ke grup peringatan wilayah) / <code>keep_watching</code> / <code>reject</code> (alasan wajib)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts?status=</code></td><td><span class="auth op">operator</span></td><td>peringatan terbit + status kirim Telegram</td></tr>
+          <tr><td><span class="m m-patch">PATCH</span></td><td class="path"><code>/operator/alerts/{id}</code></td><td><span class="auth op">operator</span></td><td>ubah caption atau level (alasan wajib); bot mengedit pesan yang sama</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/close</code></td><td><span class="auth op">operator</span></td><td>tutup peringatan; caption diedit jadi DITUTUP</td></tr>
+          <tr class="sub"><td colspan="4">Internal</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/internal/agent/analyze</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"cluster_id", "trigger"}</code>; agen menganalisis dan menyimpan hasil</td></tr>
         </tbody>
-        <caption>Sitrep juga melewati persetujuan operator. Endpoint-nya mengikuti pola alert: <code>/operator/sitreps/{id}/approve</code>.</caption>
       </table>
     </div>
   </section>
 
-  <!-- 04 -->
   <section id="contoh">
     <div class="section-head">
-      <span class="eyebrow">04 · Contoh request dan respons</span>
-      <h2>Bentuk data yang disepakati frontend dan backend</h2>
-      <p>Semua data di bawah adalah contoh fiktif.</p>
+      <span class="eyebrow">04 · Contoh</span>
+      <h2>Bentuk data yang disepakati</h2>
+      <p>Data fiktif.</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
-        <div class="code-head"><span>GET /api/v1/incidents?since=24h</span><span>200</span></div>
+        <div class="code-head"><span>GET /api/v1/operator/clusters/C-0914-007</span><span>200</span></div>
 <pre>{
-  "type": "FeatureCollection",
-  "as_of": "2026-09-12T10:05:00+07:00",
-  "features": [{
-    "type": "Feature",
-    "geometry": { "type": "Point", "coordinates": [113.9217, -2.2104] },
-    "properties": {
-      "id": "KT-20260912-042",
-      "level": "SIAGA",
-      "n_detections": 3,
-      "frp_max_mw": 18.4,
-      "on_peat": true,
-      "khg_name": "KHG contoh",
-      "nearest_village": { "name": "Desa contoh", "km": 3.2 },
-      "verification": { "status": "no_image" },
-      "alert_id": "a_7f3c",
-      "updated_at": "2026-09-12T09:58:00+07:00"
-    }
-  }]
+  "id": "C-0914-007",
+  "status": "anomaly",
+  "centroid": [113.92, -2.21],
+  "pixels": ["p412_388", "p412_389"],
+  "peat_fraction_min": 0.74,
+  "nights": [
+    {"date": "2026-09-11", "z_max": 1.1, "valid": true},
+    {"date": "2026-09-12", "z_max": null, "valid": false},
+    {"date": "2026-09-13", "z_max": 3.8, "valid": true},
+    {"date": "2026-09-14", "z_max": 4.2, "valid": true},
+    {"date": "2026-09-15", "z_max": 4.6, "valid": true}
+  ],
+  "persistent_nights": 3,
+  "baseline_frozen": true,
+  "latest_analysis": {
+    "status": "uncertain",
+    "summary_id": "…",
+    "tool_calls": 6,
+    "at": "2026-09-15T15:14:00Z"
+  },
+  "suggested_level": "WASPADA"
 }</pre>
       </div>
       <div class="stack">
         <div class="code">
-          <div class="code-head"><span>PATCH /api/v1/operator/alerts/a_7f3c</span><span>request</span></div>
+          <div class="code-head"><span>POST …/C-0914-007/decision</span><span>request</span></div>
 <pre>{
-  "message_id": "Titik api berulang di lahan gambut …",
-  "level": "AWAS",
-  "override_reason": "Laporan warga: asap tebal sejak pagi"
+  "action": "publish",
+  "level": "WASPADA",
+  "message_id": "Anomali panas malam hari …",
+  "message_en": "Night-time heat anomaly …",
+  "reason": null
 }</pre>
         </div>
         <div class="code">
-          <div class="code-head"><span>POST /api/v1/operator/alerts/a_7f3c/approve</span><span>200</span></div>
-<pre>{
-  "id": "a_7f3c",
-  "status": "approved",
-  "approved_by": "operator@contoh.id",
-  "approved_at": "2026-09-12T10:11:00+07:00",
-  "level": "AWAS",
-  "level_source": "operator_override"
-}</pre>
+          <div class="code-head"><span>Respons</span><span>201</span></div>
+<pre>{ "alert_id": "A-0915-003", "level": "WASPADA",
+  "level_source": "operator",
+  "published_by": "operator@contoh.id",
+  "published_at": "2026-09-15T15:30:00Z" }</pre>
         </div>
         <div class="code">
           <div class="code-head"><span>Galat · 409</span><span>response</span></div>
-<pre>{ "error": { "code": "ALREADY_DECIDED",
-  "message": "Alert sudah disetujui oleh operator lain." } }</pre>
+<pre>{ "error": { "code": "COOLDOWN_ACTIVE",
+  "message": "Analisis terakhir 2 jam lalu. Gunakan force=true." } }</pre>
         </div>
       </div>
     </div>
-    <div class="code" style="margin-top:16px">
-      <div class="code-head"><span>POST /api/v1/internal/agent/draft</span><span>200</span></div>
-<pre>{ "alert_id": "a_7f3c", "status": "draft", "attempts": 1,
-  "validator": { "schema": true, "level_match": true, "numbers_match": true },
-  "tool_calls": ["get_incident", "get_peat_context", "get_weather", "get_verification", "get_nearby_villages", "save_alert_draft"] }</pre>
-    </div>
   </section>
 
-  <!-- 05 -->
   <section id="model">
     <div class="section-head">
-      <span class="eyebrow">05 · Model data Firestore</span>
-      <h2>Enam koleksi</h2>
-      <p>Hanya service account backend yang boleh membaca dan menulis. Aturan Firestore menolak semua akses dari browser.</p>
+      <span class="eyebrow">05 · Model data</span>
+      <h2>Deret waktu di Storage, keputusan di Firestore</h2>
     </div>
     <div class="grid-2">
       <div class="table-wrap">
         <table>
-          <caption>incidents/{id}</caption>
-          <thead><tr><th scope="col">Field</th><th scope="col">Tipe</th><th scope="col">Isi</th></tr></thead>
+          <caption>Cloud Storage (Parquet)</caption>
+          <thead><tr><th scope="col">Path</th><th scope="col">Isi</th></tr></thead>
           <tbody>
-            <tr><th scope="row"><code>province</code></th><td>string</td><td><code>KT</code></td></tr>
-            <tr><th scope="row"><code>centroid</code></th><td>geopoint</td><td>titik pusat insiden</td></tr>
-            <tr><th scope="row"><code>detections</code></th><td>array</td><td>{lat, lon, acq_at, sensor, frp, confidence}</td></tr>
-            <tr><th scope="row"><code>n_detections</code></th><td>number</td><td>jumlah dalam 24 jam</td></tr>
-            <tr><th scope="row"><code>on_peat</code>, <code>khg_name</code></th><td>bool, string</td><td>hasil irisan dengan layer gambut</td></tr>
-            <tr><th scope="row"><code>risk_class</code></th><td>string</td><td>kelas risiko sel tempat insiden</td></tr>
-            <tr><th scope="row"><code>nearest_village</code></th><td>map</td><td>{name, km}</td></tr>
-            <tr><th scope="row"><code>level_rule</code></th><td>string</td><td>PANTAU / WASPADA / SIAGA / AWAS</td></tr>
-            <tr><th scope="row"><code>verification</code></th><td>map</td><td>{status, sensor, image_date, class_counts, thumb_url}</td></tr>
-            <tr><th scope="row"><code>alert_id</code></th><td>string</td><td>alert terbaru</td></tr>
-            <tr><th scope="row"><code>first_seen</code>, <code>updated_at</code></th><td>timestamp</td><td></td></tr>
+            <tr><th scope="row"><code>peat/pixels.parquet</code></th><td>pixel_id, lat, lon, peat_frac, built_frac, kode_khg, province (61–65)</td></tr>
+            <tr><th scope="row"><code>bt/YYYY/MM/DD/HHMM.parquet</code></th><td>pixel_id, b07, b14, b07_b14, cloud_flag</td></tr>
+            <tr><th scope="row"><code>baseline/MM/HH.parquet</code></th><td>pixel_id, median, mad, n_obs, frozen</td></tr>
+            <tr><th scope="row"><code>score/YYYY/MM/DD/HHMM.parquet</code></th><td>pixel_id, z, z_neigh, status</td></tr>
+            <tr><th scope="row"><code>crops/{cluster}/{time}_{band}.png</code></th><td>crop citra untuk agen dan UI</td></tr>
+            <tr><th scope="row"><code>raw/{source}/…</code> + <code>manifest.json</code></th><td>data mentah untuk replay</td></tr>
           </tbody>
         </table>
       </div>
       <div class="table-wrap">
         <table>
-          <caption>alerts/{id}</caption>
-          <thead><tr><th scope="col">Field</th><th scope="col">Tipe</th><th scope="col">Isi</th></tr></thead>
+          <caption>Firestore</caption>
+          <thead><tr><th scope="col">Koleksi</th><th scope="col">Isi</th></tr></thead>
           <tbody>
-            <tr><th scope="row"><code>incident_id</code></th><td>string</td><td></td></tr>
-            <tr><th scope="row"><code>status</code></th><td>string</td><td>draft / needs_review / approved / rejected</td></tr>
-            <tr><th scope="row"><code>level</code>, <code>level_source</code></th><td>string</td><td>rule atau operator_override</td></tr>
-            <tr><th scope="row"><code>title</code>, <code>reasons</code></th><td>string, array</td><td>dari agen</td></tr>
-            <tr><th scope="row"><code>actions</code></th><td>map</td><td>{agency, community, residents}</td></tr>
-            <tr><th scope="row"><code>message_id</code>, <code>message_en</code></th><td>string</td><td>maks. 400 karakter</td></tr>
-            <tr><th scope="row"><code>validator</code></th><td>map</td><td>{schema, level_match, numbers_match, errors[]}</td></tr>
-            <tr><th scope="row"><code>tool_calls</code></th><td>array</td><td>nama tools + ringkasan argumen</td></tr>
-            <tr><th scope="row"><code>model</code>, <code>attempts</code></th><td>string, number</td><td>nama model Gemini, jumlah percobaan</td></tr>
-            <tr><th scope="row"><code>decided_by</code>, <code>decided_at</code>, <code>reason</code></th><td>string, timestamp</td><td>keputusan operator</td></tr>
+            <tr><th scope="row"><code>clusters</code></th><td>piksel, status, malam persisten, baseline beku, analisis terbaru, cooldown_until</td></tr>
+            <tr><th scope="row"><code>analyses</code></th><td>output agen schema-locked, jejak tools, model</td></tr>
+            <tr><th scope="row"><code>alerts</code></th><td>level, caption ID/EN, level_source, status terbit/tutup, <code>telegram {chat_id, message_id}</code></td></tr>
+            <tr><th scope="row"><code>tg_chats</code></th><td>jenis (operator/peringatan), provinsi Kalimantan, chat_id</td></tr>
+            <tr><th scope="row"><code>runs</code></th><td>log tiap eksekusi job, latensi Himawari</td></tr>
+            <tr><th scope="row"><code>audit_log</code></th><td>setiap aksi operator dan pesan bot</td></tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div class="table-wrap" style="margin-top:16px">
-      <table class="wide">
-        <thead><tr><th scope="col">Koleksi lain</th><th scope="col">Isi</th></tr></thead>
-        <tbody>
-          <tr><th scope="row"><code>sitreps/{date}</code></th><td>teks ringkasan, jumlah per level, status persetujuan</td></tr>
-          <tr><th scope="row"><code>risk_days/{date}</code></th><td>URL GeoJSON di bucket publik, jumlah sel per kelas, waktu dibuat</td></tr>
-          <tr><th scope="row"><code>runs/{run_id}</code></th><td>log tiap eksekusi job: mulai, selesai, jumlah hotspot, insiden baru, galat</td></tr>
-          <tr><th scope="row"><code>audit_log/{auto}</code></th><td>setiap aksi operator: siapa, apa, kapan, nilai lama dan baru</td></tr>
-        </tbody>
-        <caption>Indeks komposit: <code>alerts (status ASC, level DESC, created_at DESC)</code> dan <code>incidents (province ASC, updated_at DESC)</code>.</caption>
-      </table>
+  </section>
+
+  <section id="kalimantan">
+    <div class="section-head">
+      <span class="eyebrow">05b · Wilayah Kalimantan ✅</span>
+      <h2>Satu grid, lima provinsi, hanya piksel gambut</h2>
+      <p>Wilayah dikunci ke gambut Kalimantan (✅ 29 Sep). Semua job, backtest, dan UI memakai konstanta yang sama dari <code>jobs/lib/region.py</code>. Kode di bawah 💡 titik awal; bagian bertanda ⚠️ dicek saat Sprint 0.</p>
+    </div>
+    <div class="grid-2">
+      <div class="code">
+        <div class="code-head"><span>Konstanta wilayah</span><span>jobs/lib/region.py</span></div>
+<pre>from pyresample import create_area_def
+
+<span class="c"># lon_min, lat_min, lon_max, lat_max (WGS84)</span>
+MONITOR_BBOX  = (108.5, -4.4, 119.4, 4.5)   <span class="c"># seluruh Kalimantan</span>
+BACKTEST_BBOX = (113.5, -2.6, 114.3, -1.9)  <span class="c"># contoh sub-area Kalteng</span>
+GRID_DEG = 0.02                             <span class="c"># 545 kolom × 445 baris</span>
+
+PROVINCES = {                               <span class="c"># kode BPS</span>
+    "61": "Kalimantan Barat",   "62": "Kalimantan Tengah",
+    "63": "Kalimantan Selatan", "64": "Kalimantan Timur",
+    "65": "Kalimantan Utara",
+}
+
+AREA = create_area_def("kalimantan_002", "EPSG:4326",
+                       area_extent=MONITOR_BBOX, resolution=GRID_DEG)
+
+def pixel_id(row: int, col: int) -&gt; str:
+    return f"p{row}_{col}"                  <span class="c"># baris 0 = utara</span></pre>
+      </div>
+      <div class="card">
+        <h4>Kenapa bbox saja tidak cukup</h4>
+        <ul>
+          <li>Kotak <code>MONITOR_BBOX</code> ikut mencakup Sarawak, Sabah, Brunei, dan sebagian pantai Sulawesi Barat.</li>
+          <li>KHG hanya berisi Indonesia, jadi Malaysia dan Brunei otomatis keluar. Pantai Sulawesi dikeluarkan dengan <strong>filter provinsi</strong> (kode 61–65).</li>
+          <li>Kolom <code>province</code> per piksel juga dipakai untuk memilih grup Telegram peringatan.</li>
+        </ul>
+        <dl class="kv" style="margin-top:10px">
+          <dt>Grid penuh</dt><dd>545 × 445 = ~242 ribu sel</dd>
+          <dt>Piksel gambut</dt><dd>perkiraan kasar ~10 ribu ⚠️ (hitung setelah peat mask jadi)</dd>
+          <dt>Per scan</dt><dd>Parquet kecil (ratusan KB); 144 scan per hari</dd>
+          <dt>Segmen Himawari</dt><dd>S05 dan S06 dari 10, band 07 dan 14 ⚠️</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:14px">
+      <div class="code tall">
+        <div class="code-head"><span>Peat mask: KHG + provinsi + terbangun</span><span>jobs/build_peat_mask.py</span></div>
+<pre>import geopandas as gpd, numpy as np, requests
+from rasterio import features, transform
+from jobs.lib.region import MONITOR_BBOX, GRID_DEG, AREA, PROVINCES, pixel_id
+
+KHG = ("https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/"
+       "SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/37/query")
+
+def fetch_khg(bbox):
+    feats, off = [], 0
+    while True:                                 <span class="c"># maks 1.000 fitur/request</span>
+        r = requests.get(KHG, timeout=120, params={
+            "where": "1=1", "outFields": "kode_khg", "f": "geojson",
+            "geometry": ",".join(map(str, bbox)),
+            "geometryType": "esriGeometryEnvelope", "inSR": 4326,
+            "outSR": 4326, "resultOffset": off, "resultRecordCount": 1000})
+        page = r.json()["features"]; feats += page
+        if len(page) &lt; 1000: return gpd.GeoDataFrame.from_features(feats, crs=4326)
+        off += 1000
+
+def fraction(gdf, sub=10):                      <span class="c"># fraksi luas per sel 0,02°</span>
+    h, w = AREA.shape
+    t = transform.from_bounds(*MONITOR_BBOX, w * sub, h * sub)
+    fine = features.rasterize(gdf.geometry, (h * sub, w * sub), transform=t)
+    return fine.reshape(h, sub, w, sub).mean(axis=(1, 3))
+
+khg  = fetch_khg(MONITOR_BBOX).make_valid()
+prov = gpd.read_file("data/ref/kalimantan_prov.geojson")   <span class="c"># dari Runbook S0-8, kolom code</span>
+peat_frac  = fraction(khg.clip(prov))                 <span class="c"># hanya 5 provinsi</span>
+built_frac = np.load("data/ref/built_frac_002.npy")   <span class="c"># dari WorldCover/PKTL, grid sama</span>
+
+keep = (peat_frac &gt;= 0.5) &amp; (built_frac &lt; 0.2)
+rows, cols = np.nonzero(keep)
+lon, lat = AREA.get_lonlats()
+df = gpd.GeoDataFrame({
+    "pixel_id": [pixel_id(r, c) for r, c in zip(rows, cols)],
+    "lat": lat[rows, cols], "lon": lon[rows, cols],
+    "peat_frac": peat_frac[rows, cols], "built_frac": built_frac[rows, cols],
+}, geometry=gpd.points_from_xy(lon[rows, cols], lat[rows, cols]), crs=4326)
+df = (df.sjoin(prov[["code", "geometry"]]).drop(columns="index_right")
+        .rename(columns={"code": "province"}))
+df = df.sjoin(khg[["kode_khg", "geometry"]], how="left")
+df.drop(columns=["geometry", "index_right"]).to_parquet(
+    f"gs://{DATA_BUCKET}/peat/pixels.parquet")</pre>
+      </div>
+      <div class="code tall">
+        <div class="code-head"><span>Fraksi terbangun di Earth Engine</span><span>jobs/build_built_frac.py</span></div>
+<pre>import ee, numpy as np, requests, io
+from jobs.lib.region import MONITOR_BBOX, GRID_DEG
+
+ee.Initialize(project=PROJECT_ID)
+built = (ee.ImageCollection("ESA/WorldCover/v200").first()
+         .eq(50)                               <span class="c"># kelas 50 = built-up</span>
+         .reduceResolution(ee.Reducer.mean(), maxPixels=65535)
+         .reproject(crs="EPSG:4326",
+                    crsTransform=[GRID_DEG, 0, MONITOR_BBOX[0],
+                                  0, -GRID_DEG, MONITOR_BBOX[3]]))
+url = built.getDownloadURL({
+    "region": ee.Geometry.Rectangle(list(MONITOR_BBOX)),
+    "crs": "EPSG:4326", "format": "NPY",
+    "crsTransform": [GRID_DEG, 0, MONITOR_BBOX[0], 0, -GRID_DEG, MONITOR_BBOX[3]]})
+arr = np.load(io.BytesIO(requests.get(url).content))
+np.save("data/ref/built_frac_002.npy", arr["Map"].astype("float32"))  <span class="c"># band WorldCover = "Map"</span>
+<span class="c"># PKTL (SIGAP) bisa menggantikan WorldCover bila unduhannya siap ⚠️</span></pre>
+        <div class="callout info" style="margin-top:8px">Batas provinsi: pakai sumber terbuka dengan kode BPS (mis. geoBoundaries IDN ADM1 atau BIG) ⚠️ cek lisensi dan kolom kode. Simpan di <code>data/ref/</code> bersama sumbernya.</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:14px">
+      <div class="code">
+        <div class="code-head"><span>Baca Himawari ke grid Kalimantan</span><span>jobs/lib/himawari.py</span></div>
+<pre>from satpy import Scene
+from jobs.lib.region import AREA
+
+def read_scan(files):                        <span class="c"># hasil list_scan(ts)</span>
+    scn = Scene(reader="ahi_hsd", filenames=files)   <span class="c"># .DAT.bz2 ⚠️ cek dukungan</span>
+    scn.load(["B07", "B14"], calibration="brightness_temperature")
+    local = scn.resample(AREA, resampler="nearest",
+                         radius_of_influence=5000)
+    b07, b14 = local["B07"].values, local["B14"].values   <span class="c"># 445 × 545, kelvin</span>
+    return b07, b14, b07 - b14
+<span class="c"># lalu ambil hanya baris/kolom peat/pixels.parquet → bt/YYYY/MM/DD/HHMM.parquet</span></pre>
+      </div>
+      <div class="code">
+        <div class="code-head"><span>FIRMS untuk seluruh Kalimantan</span><span>jobs/lib/firms.py</span></div>
+<pre>from jobs.lib.region import MONITOR_BBOX, GRID_DEG
+BASE = "https://firms.modaps.eosdis.nasa.gov/api/area/csv"
+
+def firms_url(source, day_range, date=None):
+    w, s, e, n = MONITOR_BBOX
+    url = f"{BASE}/{MAP_KEY}/{source}/{w},{s},{e},{n}/{day_range}"
+    return f"{url}/{date:%Y-%m-%d}" if date else url
+
+<span class="c"># operasional : VIIRS_SNPP_NRT, VIIRS_NOAA20_NRT, VIIRS_NOAA21_NRT</span>
+<span class="c"># backtest    : VIIRS_SNPP_SP, VIIRS_NOAA20_SP (arsip), potongan 5 hari (day_range maks 5)</span>
+<span class="c"># hanya deteksi malam, hanya sel piksel gambut</span>
+
+def to_pixels(df, peat):
+    df = df[df.daynight == "N"].copy()
+    df["row"] = ((MONITOR_BBOX[3] - df.latitude) // GRID_DEG).astype(int)
+    df["col"] = ((df.longitude - MONITOR_BBOX[0]) // GRID_DEG).astype(int)
+    df["pixel_id"] = "p" + df.row.astype(str) + "_" + df.col.astype(str)
+    df["strong"] = df.confidence.isin(["n", "h"])
+    return df[df.pixel_id.isin(peat.pixel_id)]
+
+KEY = ["satellite", "acq_date", "acq_time", "latitude", "longitude"]  <span class="c"># dedupe</span></pre>
+      </div>
     </div>
   </section>
 
-  <!-- 06 -->
   <section id="agen-adk">
     <div class="section-head">
       <span class="eyebrow">06 · Agen ADK</span>
-      <h2>Tools, skema, dan validator</h2>
-      <p>Agen tidak memakai <code>output_schema</code>. Sebagai gantinya, agen <strong>wajib memanggil</strong> <code>save_alert_draft</code>. Tool ini memvalidasi draf; kalau gagal, pesan galatnya dikembalikan ke agen supaya bisa memperbaiki sendiri, maksimal dua kali.</p>
+      <h2>Built-in loop dengan batas di lapisan tool</h2>
+      <p>✅ Built-in loop ADK. 💡 Output lewat tool <code>save_analysis</code> yang memvalidasi skema; tidak ada field level. Batas iterasi dan cooldown ditegakkan di kode tool, bukan hanya di instruksi.</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
         <div class="code-head"><span>Definisi agen</span><span>api/agent/agent.py</span></div>
-<pre>import os
-from google.adk.agents import Agent
-from .tools import (get_incident, get_peat_context, get_weather,
-                    get_verification, get_nearby_villages, save_alert_draft)
-
-INSTRUCTION = """
-You write peatland fire alerts for responders in Indonesia.
-1. Call get_incident first, then the other get_* tools.
-2. Keep the level exactly as returned by get_incident.
-3. Every number you write must come from a tool result.
-   If data is missing, write "not available".
-4. Never say a fire is certain unless verification
-   status is "fire_detected".
-5. Write short, plain sentences. Max 60 words per message.
-6. Finish by calling save_alert_draft. If it returns errors,
-   fix them and call it again.
+<pre>INSTRUCTION = """
+You verify night-time thermal anomalies on Indonesian peatland.
+1. Call get_anomaly_series first.
+2. Gather evidence: fetch_himawari_crop, find_landsat_scene
+   (then run_topecal if a scene exists), get_firms_nearby.
+3. Look at the image crops yourself. Smouldering smoke is faint,
+   bright and stays near the ground: "no visible smoke" is
+   weak evidence, never proof of no fire.
+4. Report scene_age for any Landsat evidence.
+5. Every number in your summary must come from a tool result.
+6. Finish with save_analysis. Status is one of
+   confirmed, uncertain, negative. You never set alert levels.
 """
 
 alert_agent = Agent(
-    name="asapify_alert_agent",
+    name="asapify_verifier",
     model=os.environ["GEMINI_MODEL"],
     instruction=INSTRUCTION,
-    tools=[get_incident, get_peat_context, get_weather,
-           get_verification, get_nearby_villages, save_alert_draft],
+    tools=[get_anomaly_series, fetch_himawari_crop,
+           find_landsat_scene, run_topecal,
+           get_firms_nearby, save_analysis],
 )</pre>
       </div>
       <div class="code tall">
-        <div class="code-head"><span>Skema dan tools</span><span>api/agent/tools.py</span></div>
-<pre>from typing import Literal
-from pydantic import BaseModel, Field
+        <div class="code-head"><span>Skema dan pagar</span><span>api/agent/tools.py</span></div>
+<pre>class Evidence(BaseModel):
+    source: Literal["anomaly", "himawari_thermal",
+                    "himawari_visible", "landsat_topecal",
+                    "firms"]
+    note: str
+    scene_age_days: float | None = None
 
-class Actions(BaseModel):
-    agency: str
-    community: str
-    residents: str
+class Analysis(BaseModel):
+    cluster_id: str
+    status: Literal["confirmed", "uncertain", "negative"]
+    evidence: list[Evidence] = Field(min_length=1)
+    summary_id: str = Field(max_length=500)
+    summary_en: str = Field(max_length=500)
+    next_check: str | None = None
+    <span class="c"># tidak ada field level</span>
 
-class AlertDraft(BaseModel):
-    incident_id: str
-    level: Literal["WASPADA", "SIAGA", "AWAS"]
-    title: str = Field(max_length=90)
-    reasons: list[str] = Field(min_length=2, max_length=5)
-    verification: str
-    actions: Actions
-    message_id: str = Field(max_length=400)
-    message_en: str = Field(max_length=400)
+MAX_TOOL_CALLS = 8
 
-def get_incident(incident_id: str) -> dict: ...
-def get_peat_context(lat: float, lon: float) -> dict: ...
-def get_weather(lat: float, lon: float) -> dict: ...
-def get_verification(incident_id: str) -> dict: ...
-def get_nearby_villages(lat: float, lon: float,
-                        radius_km: float = 5.0) -> dict: ...
+@limited(per_cluster=MAX_TOOL_CALLS)   <span class="c"># hitung panggilan</span>
+@cached(ttl_hours=6)                    <span class="c"># cooldown per cluster</span>
+def fetch_himawari_crop(cluster_id: str, time_utc: str,
+                        bands: list[str]) -> dict: ...
 
-def save_alert_draft(draft: dict) -> dict:
-    """Validate and store the draft. Returns
-    {"ok": true, "alert_id": ...} or {"ok": false, "errors": [...]}"""
-    ...</pre>
+def save_analysis(result: dict) -> dict:
+    """Validate against Analysis + numbers check.
+    Returns {"ok": true} or {"ok": false, "errors": [...]}"""</pre>
       </div>
-    </div>
-    <div class="grid-3" style="margin-top:16px">
-      <div class="card"><h4>Validator</h4><ul><li>Lolos skema Pydantic</li><li>Level sama dengan <code>level_rule</code></li><li>Setiap angka di teks ada di hasil tools</li><li>Tidak ada kata "pasti" bila belum terverifikasi</li></ul></div>
-      <div class="card"><h4>Percobaan ulang</h4><ul><li>Maksimal 2 kali panggil <code>save_alert_draft</code> yang gagal</li><li>Setelah itu status <code>needs_review</code></li><li>Timeout agen 60 detik per insiden</li></ul></div>
-      <div class="card"><h4>Model dan setelan</h4><ul><li>Gemini Flash terbaru lewat Vertex AI (nama model di env <code>GEMINI_MODEL</code>)</li><li>temperature 0,2</li><li>Dipanggil hanya untuk insiden baru atau yang naik level</li></ul></div>
     </div>
   </section>
 
-  <!-- 07 -->
+  <section id="telegram">
+    <div class="section-head">
+      <span class="eyebrow">06b · Bot Telegram ✅</span>
+      <h2>Kirim sekali, edit sesudahnya, satu arah</h2>
+      <p>Kanal dan sifat satu arah ✅; detail kode 💡. Pakai HTTP langsung ke Bot API (httpx), tanpa framework bot dan tanpa webhook: bot hanya mengirim.</p>
+    </div>
+    <div class="grid-2">
+      <div class="code tall">
+        <div class="code-head"><span>Kirim dan edit pesan</span><span>api/telegram.py</span></div>
+<pre>TG = f"https://api.telegram.org/bot{TOKEN}"
+
+async def send_alert(alert, chat_id, photo_url):
+    r = await http.post(f"{TG}/sendPhoto", json={
+        "chat_id": chat_id,
+        "photo": photo_url,          <span class="c"># signed URL crop Himawari</span>
+        "caption": alert.caption_id, <span class="c"># ≤ 1024 karakter</span>
+        "parse_mode": "HTML"})
+    msg = r.json()["result"]
+    return {"chat_id": chat_id, "message_id": msg["message_id"]}
+
+async def update_alert(alert):         <span class="c"># level naik / ditutup</span>
+    await http.post(f"{TG}/editMessageCaption", json={
+        "chat_id": alert.telegram.chat_id,
+        "message_id": alert.telegram.message_id,
+        "caption": alert.caption_id,
+        "parse_mode": "HTML"})</pre>
+      </div>
+      <div class="code tall">
+        <div class="code-head"><span>Ambil chat_id grup (sekali)</span><span>bash</span></div>
+<pre><span class="c"># 1. tambahkan bot ke grup, kirim pesan apa saja di grup</span>
+<span class="c"># 2. baca chat.id dari update terakhir</span>
+curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
+  | jq '.result[].message.chat | {id, title}'
+
+<span class="c"># 3. simpan ke Firestore</span>
+<span class="c">#    tg_chats/{id}: {jenis: "peringatan",</span>
+<span class="c">#                    wilayah: "Kab. contoh", chat_id: -100…}</span></pre>
+        <div class="callout info" style="margin-top:8px">Tanpa webhook: tidak ada endpoint publik untuk Telegram, tidak ada secret token, dan tidak ada data pengguna Telegram yang tersimpan.</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:12px">Telegram membatasi kiriman bot sekitar 20 pesan per menit per grup. Aman untuk alur ini, karena pesan ke grup peringatan hanya terkirim setelah keputusan operator.</div>
+  </section>
+
   <section id="jobs">
     <div class="section-head">
       <span class="eyebrow">07 · Job</span>
-      <h2>Langkah di dalam setiap job</h2>
-      <p>Kedua job menerima argumen <code>--as-of</code> untuk mode replay. Tanpa argumen, job memakai waktu sekarang.</p>
+      <h2>Langkah di setiap job</h2>
     </div>
     <div class="grid-2">
       <div class="card">
-        <span class="pill waspada">asapify-ingest · tiap jam</span>
+        <span class="pill waspada">asapify-ingest · tiap 10 menit</span>
         <ol>
-          <li>Tarik FIRMS area API untuk kotak provinsi, 1 hari terakhir, dari tiga satelit VIIRS.</li>
-          <li>Buat <code>detection_key</code> = hash(lat, lon, acq_at, sensor). Lewati yang sudah ada.</li>
-          <li>Kelompokkan deteksi 24 jam terakhir dengan DBSCAN (radius 1 km, jarak haversine).</li>
-          <li>Iris dengan layer gambut dan cari desa terdekat.</li>
-          <li>Hitung <code>level_rule</code> dengan fungsi aturan (tabel di halaman Rencana).</li>
-          <li>Untuk insiden Siaga ke atas: cari Landsat ±1 hari, jalankan ToPeCAl, simpan thumbnail.</li>
-          <li>Tulis insiden ke Firestore.</li>
-          <li>Untuk insiden baru atau yang naik level: panggil <code>POST /internal/agent/draft</code>.</li>
-          <li>Tulis ringkasan ke <code>runs</code>.</li>
+          <li>Cari scan full disk terbaru di <code>noaa-himawari9</code>; lewati bila sudah diproses (idempoten per timestamp).</li>
+          <li>Baca hanya segmen yang mencakup Kalimantan; kalibrasi band 7 dan 14 (satpy <code>ahi_hsd</code>). Band visible diambil sesuai permintaan oleh tool agen.</li>
+          <li>Resample ke grid 0,02°, ambil piksel gambut dari peat mask.</li>
+          <li>Tandai awan (<code>b14 &lt; 270 K</code>) → skor NaN.</li>
+          <li>Hitung skor z terhadap baseline dan <code>z_rel</code> terhadap tetangga; tulis <code>bt/</code> dan <code>score/</code>.</li>
+          <li>Pada scan malam: perbarui <code>nights/</code> (<code>n_valid</code>, <code>z_night</code>, deteksi VIIRS dari <code>firms/</code>), evaluasi status dengan aturan gabungan (Rencana 05), kelompokkan piksel anomaly jadi cluster.</li>
+          <li>Status berubah (transisi) dan cooldown habis → <code>POST /internal/agent/analyze</code>. Setelah analisis tersimpan, API mengirim ringkasan ke grup Telegram operator.</li>
+          <li>Catat latensi (waktu scan vs waktu file tersedia) di <code>runs</code>.</li>
         </ol>
       </div>
       <div class="card">
-        <span class="pill waspada">asapify-daily · 06.00 WIB</span>
+        <span class="pill waspada">asapify-firms · menit 5 dan 35 tiap jam</span>
         <ol>
-          <li>Buat atau muat grid 5 km provinsi.</li>
-          <li>Ambil cuaca Open-Meteo per titik 0,25°: hari tanpa hujan, angin, prakiraan 3 hari.</li>
-          <li>Hitung skor risiko per sel (rumus di halaman Rencana).</li>
-          <li>Tulis <code>risk/{date}.geojson</code> ke bucket publik, catat di <code>risk_days</code>.</li>
-          <li>Panggil <code>POST /internal/agent/sitrep</code>.</li>
-          <li>Tulis ringkasan ke <code>runs</code>.</li>
+          <li>Tarik <code>VIIRS_SNPP_NRT</code>, <code>VIIRS_NOAA20_NRT</code>, <code>VIIRS_NOAA21_NRT</code> untuk <code>MONITOR_BBOX</code>, <code>day_range = 1</code>.</li>
+          <li>Buang deteksi siang (<code>daynight = "D"</code>) dan titik di luar sel piksel gambut.</li>
+          <li>Tambahkan ke <code>firms/YYYY/MM/DD.parquet</code>, buang duplikat pada kunci <code>satellite, acq_date, acq_time, latitude, longitude</code>.</li>
+          <li>Catat jumlah baris baru di <code>runs</code>. Rule engine membaca file ini di ingest berikutnya.</li>
         </ol>
-        <div class="callout info" style="margin-top:8px">Fungsi aturan, ToPeCAl, dan skor risiko ditaruh di <code>jobs/lib/</code> sebagai fungsi murni dengan unit test, supaya backtest dan produksi memakai kode yang sama.</div>
+      </div>
+      <div class="card">
+        <span class="pill waspada">asapify-baseline · harian 12.00 WIB</span>
+        <ol>
+          <li>Ambil 30 hari <code>bt/</code> terakhir per piksel per jam.</li>
+          <li>Hitung median dan MAD, abaikan <code>no_observation</code>.</li>
+          <li>Piksel yang sedang ter-flag: pertahankan baseline lama (<code>frozen = true</code>).</li>
+          <li>Tulis <code>baseline/MM/HH.parquet</code>.</li>
+        </ol>
+        <div class="callout info" style="margin-top:8px">Peat mask dibangun sekali lewat <code>build_built_frac.py</code> lalu <code>build_peat_mask.py</code> (bagian 05b): poligon KHG dari REST BIG (layer 37) → fraksi gambut per piksel; tutupan lahan (PKTL atau WorldCover) → fraksi terbangun per piksel. Baseline awal untuk jendela backtest dihitung dari arsip Himawari sebelum jendela itu.</div>
       </div>
     </div>
   </section>
 
-  <!-- 08 -->
   <section id="repo">
     <div class="section-head">
-      <span class="eyebrow">08 · Struktur repo</span>
-      <h2>Satu repo untuk semua komponen</h2>
+      <span class="eyebrow">08 · Repo</span>
+      <h2>Struktur monorepo</h2>
     </div>
     <div class="code">
       <div class="code-head"><span>Monorepo</span><span>asapify/</span></div>
 <pre>asapify/
-├─ api/                       <span class="c"># Cloud Run service asapify-api</span>
-│  ├─ main.py                 <span class="c"># FastAPI app, mount /api/v1</span>
+├─ WORKLOG.md, Dockerfile, .gcloudignore, requirements.lock
+├─ infra/ env.sh, set_role.py, lifecycle.json
+├─ api/                      <span class="c"># Cloud Run service asapify-api</span>
+│  ├─ main.py, auth.py
 │  ├─ routers/ public.py, operator.py, internal.py
-│  ├─ auth.py                 <span class="c"># verifikasi Firebase ID token + OIDC internal</span>
-│  ├─ agent/ agent.py, tools.py, validator.py
-│  └─ requirements.txt
-├─ jobs/                      <span class="c"># Cloud Run jobs</span>
-│  ├─ ingest.py, daily.py
-│  ├─ lib/ firms.py, cluster.py, rules.py, topecal.py, risk.py, weather.py
-│  ├─ tests/                  <span class="c"># unit test aturan, ToPeCAl, risiko</span>
-│  └─ requirements.txt
-├─ notebooks/ backtest.ipynb
-├─ web/                       <span class="c"># lihat halaman UI</span>
-├─ infra/ firestore.rules, firestore.indexes.json, cors.json, setup.sh
-└─ data/README.md             <span class="c"># sumber dan lisensi layer gambut &amp; desa</span></pre>
+│  ├─ telegram.py            <span class="c"># sendPhoto, editMessageCaption (satu arah)</span>
+│  ├─ agent/ agent.py, tools.py, topecal.py, validator.py, run.py, evaluate.py
+│  └─ tests/ test_topecal.py, test_firms_nearby.py
+├─ jobs/                     <span class="c"># Cloud Run jobs, satu image dengan api</span>
+│  ├─ ingest.py, firms_pull.py, baseline.py          <span class="c"># terjadwal</span>
+│  ├─ build_all.py, build_built_frac.py, build_peat_mask.py, build_neighbors.py  <span class="c"># sekali</span>
+│  ├─ backfill.py, replay.py                          <span class="c"># backtest</span>
+│  ├─ lib/ region.py, himawari.py, firms.py, baseline.py, anomaly.py,
+│  │       nights.py, status.py, cluster.py
+│  └─ tests/ test_himawari.py, test_baseline.py, test_anomaly.py,
+│            test_firms.py, test_status.py
+├─ notebooks/ backtest.ipynb   <span class="c"># lead time: deteksi VIIRS pertama − anomali pertama</span>
+├─ scripts/ e2e.sh
+├─ data/ref/                   <span class="c"># KHG, provinsi, built_frac, tg_chats (tanpa rahasia)</span>
+├─ data/local/                 <span class="c"># mentah, tidak di-commit</span>
+├─ docs/                       <span class="c"># bukti selesai: png, csv, log</span>
+└─ web/                        <span class="c"># Vite + TypeScript + MapLibre</span></pre>
     </div>
   </section>
 
-  <!-- 09 -->
   <section id="galat">
     <div class="section-head">
-      <span class="eyebrow">09 · Galat &amp; batas</span>
+      <span class="eyebrow">09 · Galat</span>
       <h2>Yang terjadi saat sesuatu gagal</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Kejadian</th><th scope="col">Perilaku sistem</th></tr></thead>
+        <thead><tr><th scope="col">Kejadian</th><th scope="col">Perilaku</th></tr></thead>
         <tbody>
-          <tr><th scope="row">FIRMS tidak merespons</th><td>Coba ulang 3 kali dengan jeda bertambah, lalu catat run gagal. Alert monitoring menyala setelah 2 jam tanpa run sukses.</td></tr>
-          <tr><th scope="row">Batas transaksi MAP_KEY FIRMS</th><td>Satu permintaan area per sumber per jam. Jangan memanggil FIRMS dari API.</td></tr>
-          <tr><th scope="row">Earth Engine gagal atau lambat</th><td>Insiden tetap disimpan dengan <code>verification.status = "error"</code>. Level tetap dari aturan.</td></tr>
-          <tr><th scope="row">Gemini gagal atau timeout</th><td>Alert berstatus <code>needs_review</code> tanpa teks agen. Operator bisa menekan Buat ulang.</td></tr>
-          <tr><th scope="row">Dua operator menyetujui bersamaan</th><td>Transaksi Firestore. Yang kedua mendapat 409 <code>ALREADY_DECIDED</code>.</td></tr>
-          <tr><th scope="row">Job terpicu dua kali</th><td>Aman karena <code>detection_key</code> dan ID insiden deterministik.</td></tr>
+          <tr><th scope="row">Scan Himawari belum tersedia</th><td>Job selesai tanpa aksi; scan diambil di siklus berikutnya. Latensi tercatat.</td></tr>
+          <tr><th scope="row">Scan hilang atau rusak</th><td>Piksel dicatat <code>no_observation</code> untuk timestamp itu.</td></tr>
+          <tr><th scope="row">Earth Engine gagal</th><td>Tool mengembalikan galat; agen melanjutkan tanpa ToPeCAl dan mencatatnya di bukti.</td></tr>
+          <tr><th scope="row">Gemini gagal atau batas tool tercapai</th><td>Analisis berstatus <code>uncertain</code> dengan catatan; operator bisa menjalankan ulang.</td></tr>
+          <tr><th scope="row">Dua operator memutuskan bersamaan</th><td>Transaksi Firestore; yang kedua mendapat 409.</td></tr>
+          <tr><th scope="row">Kirim Telegram gagal (429 / jaringan)</th><td>Alert tetap tersimpan dengan <code>telegram.status = pending</code>; kirim ulang dengan jeda sesuai <code>retry_after</code>. Operator melihat status kirim di daftar alert.</td></tr>
         </tbody>
       </table>
     </div>
