@@ -408,6 +408,17 @@
   .legend-row b.n { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--ink); color: var(--surface); font-size: 10.5px; }
   .legend-row .sw { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--line); }
   td.nbc { font-family: var(--font-mono); font-weight: 600; text-align: center; }
+
+  /* grid tetangga 3x3 */
+  .nbwrap { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: flex-start; }
+  .nbfig { display: grid; gap: 8px; justify-items: start; max-width: 260px; }
+  .nbfig p { font-size: 13.5px; color: var(--ink-dim); }
+  .nbg { display: inline-grid; grid-template-columns: repeat(3, 38px); gap: 3px; }
+  .nbg span { height: 38px; border-radius: 4px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; background: var(--surface-2); color: var(--ink-dim); border: 1px solid var(--line); }
+  .nbg span.a { background: var(--ember-soft); color: var(--ember); font-weight: 600; border-color: var(--ember); }
+  .nbg span.p { background: var(--ember); color: #fff; font-weight: 700; border-color: var(--ember); }
+  .nbg span.c { background: repeating-linear-gradient(45deg, var(--surface-2) 0 4px, var(--line) 4px 6px); }
+  .formula { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; }
 </style>
 </head>
 <body>
@@ -415,19 +426,19 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Konfigurasi Cloud · pegangan Peran C · 💡 usulan</span>
+    <span class="eyebrow">Konfigurasi Cloud · pegangan Peran C · arsitektur revisi 29 Sep</span>
     <h1>Setelan setiap layanan Google Cloud</h1>
-    <p class="lede">Semua perintah memakai variabel di bagian 01. Jalankan berurutan di Cloud Shell. Ukuran CPU dan memori adalah titik awal untuk wilayah Kalimantan (hanya piksel gambut).</p>
+    <p class="lede">Semua perintah memakai variabel di bagian 01. Jalankan berurutan di Cloud Shell. Satu image Docker dibangun sekali lalu dipakai oleh lima job dan dua service. Ukuran CPU dan memori adalah titik awal 💡.</p>
     <ul class="toc" aria-label="Isi halaman">
       <li><a href="#variabel"><span>01</span>Variabel</a></li>
       <li><a href="#api-aktif"><span>02</span>API</a></li>
       <li><a href="#iam"><span>03</span>Service account</a></li>
       <li><a href="#secret"><span>04</span>Secret</a></li>
       <li><a href="#storage"><span>05</span>Storage &amp; Firestore</a></li>
-      <li><a href="#himawari"><span>06</span>Himawari (NOAA open data)</a></li>
+      <li><a href="#sumber"><span>06</span>Sumber data luar</a></li>
       <li><a href="#ee"><span>07</span>Earth Engine</a></li>
       <li><a href="#gemini"><span>08</span>Gemini</a></li>
-      <li><a href="#run-service"><span>09</span>Cloud Run service</a></li>
+      <li><a href="#run-service"><span>09</span>Image &amp; service</a></li>
       <li><a href="#run-jobs"><span>10</span>Job &amp; Scheduler</a></li>
       <li><a href="#firebase"><span>11</span>Firebase</a></li>
       <li><a href="#monitor"><span>12</span>Monitoring</a></li>
@@ -443,17 +454,20 @@
     </div>
     <div class="code">
       <div class="code-head"><span>Jalankan di awal setiap sesi</span><span>infra/env.sh</span></div>
-<pre>export PROJECT_ID="asapify-hackathon"            <span class="c"># ganti dengan project tim</span>
+<pre>export PROJECT_ID="asapify-&lt;inisial&gt;-2026"       <span class="c"># ganti dengan project tim</span>
 export REGION="asia-southeast2"
 export GEMINI_LOCATION="global"                   <span class="c"># us-central1 bila model belum tersedia</span>
 export GEMINI_MODEL="&lt;nama model Gemini Flash terbaru&gt;"
-export DATA_BUCKET="asapify-data-$PROJECT_ID"      <span class="c"># deret BT, skor, baseline, mentah</span>
-export PUBLIC_BUCKET="asapify-public-$PROJECT_ID"  <span class="c"># peat.geojson, crop citra</span>
-export BBOX="108.5,-4.4,119.4,4.5"                <span class="c"># MONITOR: seluruh Kalimantan, dipotong peat mask KHG</span>
-export BACKTEST_BBOX="113.5,-2.6,114.3,-1.9"      <span class="c"># sub-area backtest (contoh: Kalteng)</span>
+export DATA_BUCKET="asapify-data-$PROJECT_ID"      <span class="c"># fitur, skor, baseline, crop</span>
+export PUBLIC_BUCKET="asapify-public-$PROJECT_ID"  <span class="c"># lapisan peta statis (piksel gambut GeoJSON)</span>
+export BBOX="108.5,-4.4,119.4,4.5"                <span class="c"># seluruh Kalimantan, dipotong peat mask</span>
+export BACKTEST_BBOX="113.5,-2.6,114.3,-1.9"      <span class="c"># sub-area Kalteng</span>
+export WARMUP_START="2023-08-01"; export BACKTEST_START="2023-09-01"; export BACKTEST_END="2023-10-15"
+export IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/asapify/app:latest"
 gcloud config set project $PROJECT_ID
-API_SA="sa-api@$PROJECT_ID.iam.gserviceaccount.com"
 JOBS_SA="sa-jobs@$PROJECT_ID.iam.gserviceaccount.com"
+AGENT_SA="sa-agent@$PROJECT_ID.iam.gserviceaccount.com"
+API_SA="sa-api@$PROJECT_ID.iam.gserviceaccount.com"
 SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
     </div>
   </section>
@@ -469,7 +483,7 @@ SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
   run.googleapis.com cloudscheduler.googleapis.com cloudbuild.googleapis.com \
   artifactregistry.googleapis.com firestore.googleapis.com storage.googleapis.com \
   secretmanager.googleapis.com aiplatform.googleapis.com earthengine.googleapis.com \
-  logging.googleapis.com monitoring.googleapis.com \
+  iamcredentials.googleapis.com logging.googleapis.com monitoring.googleapis.com \
   firebase.googleapis.com firebasehosting.googleapis.com identitytoolkit.googleapis.com</pre>
     </div>
   </section>
@@ -477,28 +491,37 @@ SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
   <section id="iam">
     <div class="section-head">
       <span class="eyebrow">03 · Service account</span>
-      <h2>Agen memanggil tool verifikasi, jadi <code>sa-api</code> butuh Earth Engine</h2>
+      <h2>Empat akun, masing-masing hanya izin yang dipakai</h2>
+      <p>Hanya <code>sa-agent</code> yang bisa memanggil Gemini dan membaca MAP_KEY. Job tidak punya akses Gemini maupun token bot.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
         <thead><tr><th scope="col">Akun</th><th scope="col">Dipakai oleh</th><th scope="col">Peran</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>sa-jobs</code></th><td>ingest, firms, baseline, build</td><td><code>roles/datastore.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/run.invoker</code> (pada <code>asapify-api</code>), <code>roles/earthengine.writer</code> + <code>roles/serviceusage.serviceUsageConsumer</code> (build: WorldCover), <code>roles/secretmanager.secretAccessor</code> (FIRMS)</td></tr>
-          <tr><th scope="row"><code>sa-api</code></th><td><code>asapify-api</code> + tool agen</td><td><code>roles/datastore.user</code>, <code>roles/aiplatform.user</code>, <code>roles/storage.objectAdmin</code> (kedua bucket), <code>roles/earthengine.writer</code>, <code>roles/serviceusage.serviceUsageConsumer</code>, <code>roles/secretmanager.secretAccessor</code> (FIRMS, Telegram), <code>roles/iam.serviceAccountTokenCreator</code> pada dirinya sendiri (signed URL crop)</td></tr>
-          <tr><th scope="row"><code>sa-scheduler</code></th><td>Cloud Scheduler</td><td><code>roles/run.invoker</code></td></tr>
+          <tr><th scope="row"><code>sa-jobs</code></th><td>ingest-himawari, ingest-gk2a, evaluate, environment, build</td><td><code>roles/datastore.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/storage.objectAdmin</code> (public bucket, untuk lapisan peta), <code>roles/earthengine.writer</code> + <code>roles/serviceusage.serviceUsageConsumer</code> (build: WorldCover), <code>roles/run.invoker</code> pada <code>asapify-agent</code></td></tr>
+          <tr><th scope="row"><code>sa-agent</code></th><td><code>asapify-agent</code></td><td><code>roles/datastore.user</code>, <code>roles/aiplatform.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/secretmanager.secretAccessor</code> (FIRMS, Telegram), <code>roles/iam.serviceAccountTokenCreator</code> pada dirinya sendiri (signed URL crop)</td></tr>
+          <tr><th scope="row"><code>sa-api</code></th><td><code>asapify-api</code></td><td><code>roles/datastore.user</code>, <code>roles/storage.objectViewer</code> (data bucket, baca <code>score/</code>), <code>roles/secretmanager.secretAccessor</code> (Telegram), <code>roles/iam.serviceAccountTokenCreator</code> pada dirinya sendiri (signed URL untuk UI), <code>roles/run.invoker</code> pada <code>asapify-agent</code> (verifikasi ulang)</td></tr>
+          <tr><th scope="row"><code>sa-scheduler</code></th><td>Cloud Scheduler</td><td><code>roles/run.invoker</code> (menjalankan job)</td></tr>
         </tbody>
       </table>
     </div>
     <div class="code" style="margin-top:12px">
       <div class="code-head"><span>Buat akun dan peran tingkat project</span><span>bash</span></div>
-<pre>for SA in sa-api sa-jobs sa-scheduler; do gcloud iam service-accounts create $SA; done
-for R in roles/datastore.user roles/aiplatform.user roles/earthengine.writer roles/serviceusage.serviceUsageConsumer; do
-  gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$API_SA" --role $R; done
+<pre>for SA in sa-jobs sa-agent sa-api sa-scheduler; do gcloud iam service-accounts create $SA; done
+
 for R in roles/datastore.user roles/earthengine.writer roles/serviceusage.serviceUsageConsumer; do
   gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$JOBS_SA" --role $R; done
-gcloud iam service-accounts add-iam-policy-binding $API_SA \
-  --member "serviceAccount:$API_SA" --role roles/iam.serviceAccountTokenCreator
-gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SCHED_SA" --role roles/run.invoker</pre>
+for R in roles/datastore.user roles/aiplatform.user; do
+  gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$AGENT_SA" --role $R; done
+gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$API_SA" --role roles/datastore.user
+gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SCHED_SA" --role roles/run.invoker
+
+<span class="c"># signed URL: tiap service menandatangani sebagai dirinya sendiri</span>
+for SA in $AGENT_SA $API_SA; do
+  gcloud iam service-accounts add-iam-policy-binding $SA \
+    --member "serviceAccount:$SA" --role roles/iam.serviceAccountTokenCreator; done
+
+<span class="c"># run.invoker pada asapify-agent diberikan setelah service dibuat (bagian 09)</span></pre>
     </div>
   </section>
 
@@ -509,15 +532,13 @@ gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SCH
     </div>
     <div class="code">
       <div class="code-head"><span>Simpan dan beri akses</span><span>bash</span></div>
-<pre>printf "%s" "ISI_MAP_KEY" | gcloud secrets create firms-map-key --data-file=-
-for M in $API_SA $JOBS_SA; do gcloud secrets add-iam-policy-binding firms-map-key \
-  --member "serviceAccount:$M" --role roles/secretmanager.secretAccessor; done
-
-<span class="c"># token dari @BotFather</span>
-printf "%s" "ISI_TOKEN_BOT" | gcloud secrets create telegram-bot-token --data-file=-
-gcloud secrets add-iam-policy-binding telegram-bot-token \
-  --member "serviceAccount:$API_SA" --role roles/secretmanager.secretAccessor</pre>
+<pre><span class="c"># dibuat di Runbook S0-4 dan S0-5; di sini hanya akses</span>
+gcloud secrets add-iam-policy-binding firms-map-key \
+  --member "serviceAccount:$AGENT_SA" --role roles/secretmanager.secretAccessor
+for M in $AGENT_SA $API_SA; do gcloud secrets add-iam-policy-binding telegram-bot-token \
+  --member "serviceAccount:$M" --role roles/secretmanager.secretAccessor; done</pre>
     </div>
+    <p class="note">Backtest yang memakai FIRMS SP dijalankan dari laptop anggota dengan <code>MAP_KEY</code> di variabel lingkungan lokal, bukan dari job. Job tidak pernah membaca MAP_KEY.</p>
   </section>
 
   <section id="storage">
@@ -534,19 +555,21 @@ gcloud secrets add-iam-policy-binding telegram-bot-token \
 done
 gcloud storage buckets add-iam-policy-binding gs://$PUBLIC_BUCKET \
   --member=allUsers --role=roles/storage.objectViewer
-gcloud storage buckets add-iam-policy-binding gs://$DATA_BUCKET \
+for SA in $JOBS_SA $AGENT_SA; do
+  gcloud storage buckets add-iam-policy-binding gs://$DATA_BUCKET \
+    --member="serviceAccount:$SA" --role=roles/storage.objectAdmin; done
+gcloud storage buckets add-iam-policy-binding gs://$PUBLIC_BUCKET \
   --member="serviceAccount:$JOBS_SA" --role=roles/storage.objectAdmin
-for B in $DATA_BUCKET $PUBLIC_BUCKET; do
-  gcloud storage buckets add-iam-policy-binding gs://$B \
-    --member="serviceAccount:$API_SA" --role=roles/storage.objectAdmin
-done
+gcloud storage buckets add-iam-policy-binding gs://$DATA_BUCKET \
+  --member="serviceAccount:$API_SA" --role=roles/storage.objectViewer
 gcloud storage buckets update gs://$DATA_BUCKET --lifecycle-file=infra/lifecycle.json</pre>
       </div>
       <div class="stack">
         <div class="code">
           <div class="code-head"><span>Lifecycle data bucket</span><span>infra/lifecycle.json</span></div>
 <pre>{ "rule": [{ "action": { "type": "Delete" },
-  "condition": { "age": 120, "matchesPrefix": ["bt/", "score/"] } }] }</pre>
+  "condition": { "age": 150,
+    "matchesPrefix": ["himawari/", "gk2a/", "score/", "raw/firms/"] } }] }</pre>
         </div>
         <div class="code">
           <div class="code-head"><span>Firestore, tertutup untuk browser</span><span>bash</span></div>
@@ -556,116 +579,77 @@ firebase deploy --only firestore:rules,firestore:indexes</pre>
         </div>
       </div>
     </div>
-    <p class="note">Jangan hapus <code>raw/</code> dan <code>baseline/</code> dari jendela backtest: dipakai untuk replay dan angka di deck.</p>
+    <p class="note">Umur 150 hari dihitung dari waktu objek dibuat, jadi data backtest yang di-backfill awal Oktober tetap ada sampai final 4 Desember. <code>peat/</code> dan <code>environment/</code> tidak dihapus.</p>
   </section>
 
-  <section id="himawari">
+  <section id="sumber">
     <div class="section-head">
-      <span class="eyebrow">06 · Himawari (NOAA open data)</span>
-      <h2>Akses anonim, unduh segmen yang perlu saja</h2>
-      <p>Bucket publik <code>noaa-himawari9</code> (us-east-1), full disk tiap 10 menit, arsip sejak Juli 2015. Dibaca anonim, tanpa akun AWS dan tanpa biaya; ini hanya arsip unduhan, bukan infrastruktur kita. Di materi submit sebut "NOAA open data". ⚠️ Cek struktur folder dan nama file di S3 Explorer sebelum menulis parser.</p>
+      <span class="eyebrow">06 · Sumber data luar</span>
+      <h2>Semuanya dibaca tanpa akun, kecuali FIRMS</h2>
+      <p>Bucket NOAA dibaca anonim, tanpa akun AWS dan tanpa biaya; itu arsip unduhan, bukan infrastruktur kita. Di materi submit sebut <strong>"NOAA open data"</strong>.</p>
     </div>
-    <div class="grid-2">
-      <div class="code">
-        <div class="code-head"><span>Daftar file satu scan</span><span>jobs/lib/himawari.py</span></div>
-<pre>import s3fs
-fs = s3fs.S3FileSystem(anon=True)
-
-def list_scan(ts):  <span class="c"># ts: datetime UTC, kelipatan 10 menit</span>
-    prefix = f"noaa-himawari9/AHI-L1b-FLDK/{ts:%Y/%m/%d/%H%M}/"
-    files = fs.ls(prefix)
-    <span class="c"># ingest rutin: band 07 dan 14 saja (visible diambil sesuai permintaan)</span>
-    <span class="c"># Kalimantan ±4,5° dari ekuator: kemungkinan segmen S05 dan S06 ⚠️ cek</span>
-    return [f for f in files
-            if any(b in f for b in ("B07", "B14"))
-            and any(sg in f for sg in ("S0510", "S0610"))]</pre>
-      </div>
-      <div class="card">
-        <dl class="kv">
-          <dt>Pembacaan</dt><dd>satpy reader <code>ahi_hsd</code> 💡, atau pycontrails / earth2studio</dd>
-          <dt>Grid</dt><dd>resample ke lat/lon 0,02°, sama dengan peat mask</dd>
-          <dt>Transfer</dt><dd>data keluar dari us-east-1 ke Jakarta; unduh per segmen untuk menekan ukuran</dd>
-          <dt>Latensi</dt><dd>❓ ukur di Sprint 0 dan catat di <code>runs</code></dd>
-          <dt>Cadangan</dt><dd>GK-2A (<code>noaa-gk2a-pds</code> ⚠️) bila Himawari terlambat</dd>
-        </dl>
-      </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Sumber</th><th scope="col">Alamat</th><th scope="col">Dipakai oleh</th><th scope="col">Catatan</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Himawari-9</th><td><code>s3://noaa-himawari9/AHI-L1b-FLDK/YYYY/MM/DD/HHMM/</code></td><td>ingest-himawari, tool <code>fetch_himawari_image</code></td><td>B07 + B14, segmen S05/S06 ⚠️; <code>.DAT.bz2</code></td></tr>
+          <tr><th scope="row">GK2A</th><td><code>s3://noaa-gk2a-pds/AMI/L1B/FD/YYYYMM/DD/HH/</code></td><td>ingest-gk2a</td><td><code>gk2a_ami_le1b_{sw038,ir105}_fd020ge_YYYYMMDDHHMM.nc</code>, ~30 MB/kanal; arsip mulai 16 Feb 2023</td></tr>
+          <tr><th scope="row">NASA POWER</th><td><code>https://power.larc.nasa.gov/api/temporal/hourly/point</code></td><td>environment</td><td><code>parameters=TS,T2M</code>, <code>time-standard=UTC</code>; latensi ~1,5 hari; jeda 0,2 detik antar request</td></tr>
+          <tr><th scope="row">NASA FIRMS</th><td><code>https://firms.modaps.eosdis.nasa.gov/api/area/csv/…</code></td><td>tool <code>get_latest_viirs</code> (agent)</td><td>MAP_KEY; ≤ 5 hari per request; 5.000 transaksi/10 menit</td></tr>
+          <tr><th scope="row">NASA GIBS</th><td><code>https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi</code></td><td>tool <code>fetch_viirs_image</code> (agent)</td><td>WMS 1.3.0; <code>BBOX=lat_min,lon_min,lat_max,lon_max</code></td></tr>
+          <tr><th scope="row">KHG BIG</th><td>REST <code>…/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/37</code></td><td>build</td><td>1.000 fitur per request</td></tr>
+        </tbody>
+      </table>
     </div>
+    <p class="note">Keluar dari Cloud Run ke internet memakai egress default; tidak perlu NAT. Unduhan GK2A full disk ~60 MB per slot: jangan jalankan backfill besar dari laptop.</p>
   </section>
 
   <section id="ee">
     <div class="section-head">
       <span class="eyebrow">07 · Earth Engine</span>
-      <h2>Hanya untuk ToPeCAl, dipanggil oleh tool agen</h2>
+      <h2>Hanya sekali: fraksi terbangun dari WorldCover</h2>
     </div>
-    <div class="grid-2">
-      <div class="card">
-        <ol>
-          <li>Daftarkan project ke Earth Engine (nonkomersial).</li>
-          <li>Beri <code>sa-api</code> peran Earth Engine dan Service Usage Consumer (bagian 03).</li>
-          <li>Koleksi <code>LANDSAT/LC08/C02/T1_TOA</code> dan <code>LANDSAT/LC09/C02/T1_TOA</code> (band 1, 6, 7, 10).</li>
-          <li>⚠️ Alternatif bila EE terlambat: Planetary Computer atau AWS; pastikan band yang sama tersedia.</li>
-        </ol>
-      </div>
-      <div class="code">
-        <div class="code-head"><span>Inisialisasi</span><span>api/agent/topecal_tool.py</span></div>
-<pre>import os, ee
-ee.Initialize(project=os.environ["GOOGLE_CLOUD_PROJECT"])
-
-def find_landsat_scene(lon, lat, before_utc, max_age_days=16):
-    col = (ee.ImageCollection("LANDSAT/LC08/C02/T1_TOA")
-           .merge(ee.ImageCollection("LANDSAT/LC09/C02/T1_TOA"))
-           .filterBounds(ee.Geometry.Point([lon, lat]))
-           .filterDate(ee.Date(before_utc).advance(-max_age_days, "day"),
-                       ee.Date(before_utc))
-           .sort("system:time_start", False))
-    <span class="c"># kembalikan scene_id, tanggal, scene_age, persen awan</span></pre>
-      </div>
+    <div class="card">
+      <ol>
+        <li>Daftarkan project ke Earth Engine (nonkomersial), Runbook <a href="runbook.html#s0-3">S0-3</a>.</li>
+        <li><code>sa-jobs</code> sudah punya <code>earthengine.writer</code> dan Service Usage Consumer (bagian 03).</li>
+        <li>Dipakai hanya oleh <code>asapify-build</code> (<code>ESA/WorldCover/v200</code>, kelas 50). Tidak ada Landsat, tidak ada panggilan dari agen.</li>
+        <li>Bila pendaftaran ditolak: unduh tile WorldCover untuk bbox Kalimantan dari situs ESA dan hitung fraksi yang sama secara lokal.</li>
+      </ol>
     </div>
   </section>
 
   <section id="gemini">
     <div class="section-head">
       <span class="eyebrow">08 · Gemini lewat Vertex AI</span>
-      <h2>Tanpa API key; kredensial dari <code>sa-api</code></h2>
+      <h2>Tanpa API key; kredensial dari <code>sa-agent</code></h2>
     </div>
     <div class="card">
       <dl class="kv">
-        <dt>GOOGLE_GENAI_USE_ENTERPRISE</dt><dd><code>True</code> (ADK lama: <code>GOOGLE_GENAI_USE_VERTEXAI=TRUE</code>)</dd>
+        <dt>GOOGLE_GENAI_USE_VERTEXAI</dt><dd><code>True</code></dd>
         <dt>GOOGLE_CLOUD_LOCATION</dt><dd><code>$GEMINI_LOCATION</code></dd>
         <dt>GEMINI_MODEL</dt><dd>Gemini Flash terbaru yang mendukung input gambar</dd>
-        <dt>Setelan</dt><dd>temperature 0,2; maksimal 8 panggilan tool per analisis</dd>
+        <dt>Setelan</dt><dd>temperature 0,2; maksimal 8 panggilan tool per verifikasi</dd>
+        <dt>Siapa memanggil</dt><dd>hanya <code>asapify-agent</code>, hanya untuk kelompok AWAS</dd>
       </dl>
     </div>
   </section>
 
   <section id="run-service">
     <div class="section-head">
-      <span class="eyebrow">09 · Cloud Run service</span>
-      <h2><code>asapify-api</code></h2>
+      <span class="eyebrow">09 · Image dan Cloud Run service</span>
+      <h2>Bangun sekali, pakai tujuh kali</h2>
     </div>
-    <div class="code">
-      <div class="code-head"><span>Deploy</span><span>bash</span></div>
-<pre>gcloud run deploy asapify-api --source . --region $REGION \
-  --command uvicorn --args=api.main:app,--host,0.0.0.0,--port,8080 \
-  --service-account $API_SA --allow-unauthenticated \
-  --cpu 1 --memory 2Gi --concurrency 20 \
-  --min-instances 0 --max-instances 3 --timeout 180 \
-  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$GEMINI_LOCATION,\
-GOOGLE_GENAI_USE_ENTERPRISE=True,GEMINI_MODEL=$GEMINI_MODEL,\
-DATA_BUCKET=$DATA_BUCKET,PUBLIC_BUCKET=$PUBLIC_BUCKET,BBOX=$BBOX,INTERNAL_CALLER=$JOBS_SA" \
-  --set-secrets FIRMS_MAP_KEY=firms-map-key:latest,TELEGRAM_BOT_TOKEN=telegram-bot-token:latest
-
-gcloud run services add-iam-policy-binding asapify-api --region $REGION \
-  --member "serviceAccount:$JOBS_SA" --role roles/run.invoker</pre>
-    </div>
-    <div class="grid-2" style="margin-top:12px">
+    <div class="grid-2">
       <div class="code">
-        <div class="code-head"><span>Satu image untuk API dan semua job</span><span>Dockerfile (root repo)</span></div>
+        <div class="code-head"><span>Satu image untuk semua</span><span>Dockerfile (root repo)</span></div>
 <pre>FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.lock .
 RUN pip install --no-cache-dir -r requirements.lock
+COPY shared/ shared/
 COPY jobs/ jobs/
+COPY agent/ agent/
 COPY api/ api/
 ENV PYTHONUNBUFFERED=1</pre>
       </div>
@@ -679,41 +663,61 @@ docs/
 .git/</pre>
       </div>
     </div>
-    <p class="note">API dan job memakai image yang sama, karena tool agen membaca modul <code>jobs/lib</code> (region, FIRMS). ⚠️ Bila <code>requirements.lock</code> dari Mac/Windows gagal dipasang di Linux, buat ulang lock di Cloud Shell. Hari penjurian: <code>--min-instances 1</code>. Endpoint operator dan internal dijaga di kode (token Firebase dan OIDC). Bot Telegram hanya mengirim, jadi tidak ada endpoint yang dipanggil Telegram.</p>
-    <div class="card" style="margin-top:12px">
-      <h4>Menyiapkan grup</h4>
-      <ol>
-        <li>Buat bot di @BotFather, simpan token ke Secret Manager.</li>
-        <li>Buat dua grup: <em>ASAPify Operator</em> dan <em>ASAPify Peringatan (demo)</em>. Tambahkan bot ke keduanya.</li>
-        <li>Kirim pesan apa saja di tiap grup, lalu ambil <code>chat_id</code> lewat <code>getUpdates</code> (lihat Backend 06b). Simpan ke koleksi <code>tg_chats</code>.</li>
-        <li>Untuk penjurian: undang akun juri ke grup peringatan demo, atau tampilkan grup di video.</li>
-      </ol>
+    <div class="code" style="margin-top:12px">
+      <div class="code-head"><span>Bangun image, deploy dua service</span><span>bash</span></div>
+<pre>gcloud artifacts repositories create asapify --repository-format=docker --location=$REGION
+gcloud builds submit --tag $IMAGE .                  <span class="c"># ulangi setiap ada perubahan kode</span>
+
+<span class="c"># 1) asapify-agent: privat, hanya bisa dipanggil sa-jobs dan sa-api</span>
+gcloud run deploy asapify-agent --image $IMAGE --region $REGION \
+  --command uvicorn --args=agent.main:app,--host,0.0.0.0,--port,8080 \
+  --service-account $AGENT_SA --no-allow-unauthenticated \
+  --cpu 1 --memory 2Gi --concurrency 4 --min-instances 0 --max-instances 3 --timeout 300 \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$GEMINI_LOCATION,\
+GOOGLE_GENAI_USE_VERTEXAI=True,GEMINI_MODEL=$GEMINI_MODEL,DATA_BUCKET=$DATA_BUCKET" \
+  --set-secrets FIRMS_MAP_KEY=firms-map-key:latest,TELEGRAM_BOT_TOKEN=telegram-bot-token:latest
+for SA in $JOBS_SA $API_SA; do
+  gcloud run services add-iam-policy-binding asapify-agent --region $REGION \
+    --member "serviceAccount:$SA" --role roles/run.invoker; done
+AGENT_URL=$(gcloud run services describe asapify-agent --region $REGION --format='value(status.url)')
+
+<span class="c"># 2) asapify-api: publik untuk web; endpoint operator dijaga token Firebase di kode</span>
+gcloud run deploy asapify-api --image $IMAGE --region $REGION \
+  --command uvicorn --args=api.main:app,--host,0.0.0.0,--port,8080 \
+  --service-account $API_SA --allow-unauthenticated \
+  --cpu 1 --memory 1Gi --concurrency 40 --min-instances 0 --max-instances 3 --timeout 60 \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,AGENT_URL=$AGENT_URL" \
+  --set-secrets TELEGRAM_BOT_TOKEN=telegram-bot-token:latest</pre>
     </div>
+    <p class="note">⚠️ Bila <code>gcloud builds submit</code> gagal karena izin service account Cloud Build di project baru, beri akun build <code>roles/artifactregistry.writer</code> dan <code>roles/logging.logWriter</code>, lalu ulangi. ⚠️ Bila <code>requirements.lock</code> dari Mac/Windows gagal dipasang di Linux, buat ulang lock di Cloud Shell. Hari penjurian: <code>--min-instances 1</code> untuk kedua service.</p>
   </section>
 
   <section id="run-jobs">
     <div class="section-head">
       <span class="eyebrow">10 · Job dan Scheduler</span>
-      <h2>Empat job: ingest 10 menit, FIRMS 30 menit, baseline harian, build sekali</h2>
+      <h2>Lima job, empat jadwal, semuanya dari image yang sama</h2>
     </div>
     <div class="code">
       <div class="code-head"><span>Deploy job dan jadwal</span><span>bash</span></div>
-<pre>API_URL=$(gcloud run services describe asapify-api --region $REGION --format='value(status.url)')
-ENV="GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,BBOX=$BBOX,API_URL=$API_URL"
-COMMON="--source . --region $REGION --service-account $JOBS_SA --command python --set-env-vars $ENV"
+<pre>ENV="GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,PUBLIC_BUCKET=$PUBLIC_BUCKET,BBOX=$BBOX,AGENT_URL=$AGENT_URL"
+COMMON="--image $IMAGE --region $REGION --service-account $JOBS_SA --command python --set-env-vars $ENV"
 
-gcloud run jobs deploy asapify-ingest   $COMMON --args=-m,jobs.ingest \
-  --cpu 2 --memory 4Gi --task-timeout 8m  --max-retries 0
-gcloud run jobs deploy asapify-firms    $COMMON --args=-m,jobs.firms_pull,--day-range,1 \
-  --cpu 1 --memory 1Gi --task-timeout 5m  --max-retries 1 \
-  --set-secrets FIRMS_MAP_KEY=firms-map-key:latest
-gcloud run jobs deploy asapify-baseline $COMMON --args=-m,jobs.baseline \
+gcloud run jobs deploy asapify-ingest-himawari $COMMON --args=-m,jobs.ingest,--sat,himawari \
+  --cpu 2 --memory 4Gi --task-timeout 8m --max-retries 0
+gcloud run jobs deploy asapify-ingest-gk2a     $COMMON --args=-m,jobs.ingest,--sat,gk2a \
+  --cpu 2 --memory 4Gi --task-timeout 8m --max-retries 0
+gcloud run jobs deploy asapify-evaluate        $COMMON --args=-m,jobs.evaluate \
+  --cpu 2 --memory 4Gi --task-timeout 8m --max-retries 0
+gcloud run jobs deploy asapify-environment     $COMMON --args=-m,jobs.environment \
   --cpu 2 --memory 4Gi --task-timeout 30m --max-retries 1
-gcloud run jobs deploy asapify-build    $COMMON --args=-m,jobs.build_all \
-  --cpu 2 --memory 8Gi --task-timeout 60m --max-retries 0     <span class="c"># sekali: built_frac → peat mask → neighbors</span>
+gcloud run jobs deploy asapify-build           $COMMON --args=-m,jobs.build_all \
+  --cpu 2 --memory 8Gi --task-timeout 60m --max-retries 0
 
-for JOB in asapify-ingest:"*/10 * * * *" asapify-firms:"5,35 * * * *" asapify-baseline:"0 12 * * *"; do
-  NAME="${JOB%%:*}"; CRON="${JOB#*:}"
+for JOB in "asapify-ingest-himawari|*/10 20-23,0-4 * * *" \
+           "asapify-ingest-gk2a|*/10 20-23,0-4 * * *" \
+           "asapify-evaluate|5-59/10 20-23,0-4 * * *" \
+           "asapify-environment|0 12 * * *"; do
+  NAME="${JOB%%|*}"; CRON="${JOB#*|}"
   gcloud scheduler jobs create http "$NAME-schedule" --location $REGION \
     --schedule "$CRON" --time-zone "Asia/Jakarta" \
     --uri "https://run.googleapis.com/v2/projects/$PROJECT_ID/locations/$REGION/jobs/$NAME:run" \
@@ -723,15 +727,15 @@ done
 <span class="c"># sekali setelah deploy</span>
 gcloud run jobs execute asapify-build --region $REGION --wait
 
-<span class="c"># replay satu scan (argumen menggantikan --args bawaan job)</span>
-gcloud run jobs execute asapify-ingest --region $REGION --wait \
-  --args=-m,jobs.ingest,--as-of,2019-09-15T15:00:00Z
+<span class="c"># replay satu slot (AS_OF menggantikan waktu sekarang)</span>
+gcloud run jobs execute asapify-ingest-gk2a --region $REGION --wait \
+  --update-env-vars AS_OF=2023-09-25T15:00:00Z
 
 <span class="c"># backfill paralel: 8 task, tiap task mengambil tanggal dengan CLOUD_RUN_TASK_INDEX</span>
-gcloud run jobs execute asapify-ingest --region $REGION --tasks 8 --task-timeout 3h \
-  --args=-m,jobs.backfill,--start,2019-08-01,--end,2019-09-30,--night-only</pre>
+gcloud run jobs execute asapify-ingest-gk2a --region $REGION --tasks 8 --task-timeout 6h \
+  --args=-m,jobs.backfill,--sat,gk2a,--start,$BACKTEST_START,--end,$BACKTEST_END,--step,10,--night-only</pre>
     </div>
-    <p class="note">Ingest tanpa retry karena siklus berikutnya 10 menit lagi dan job idempoten per timestamp. FIRMS tiap 30 menit karena latensi VIIRS NRT sekitar 3 jam; menarik lebih sering tidak menambah data.</p>
+    <p class="note">Jadwal <code>20-23,0-4</code> WIB mencakup 20.00–04.50; slot setelah 04.00 WIB (21.00 UTC) diabaikan kode. Ingest dan evaluate tanpa retry karena siklus berikutnya 10 menit lagi dan semuanya idempoten per slot. Evaluate berjalan 5 menit setelah ingest supaya file kedua satelit sempat tertulis.</p>
   </section>
 
   <section id="firebase">
@@ -757,21 +761,23 @@ auth.set_custom_user_claims(
     auth.get_user_by_email(email).uid, {"role": role})</pre>
       </div>
     </div>
-    <div class="callout" style="margin-top:12px">⚠️ Pastikan rewrite Hosting ke Cloud Run mendukung <code>asia-southeast2</code>. Bila tidak, frontend memanggil URL Cloud Run langsung dengan CORS.</div>
+    <div class="callout" style="margin-top:12px">⚠️ Pastikan rewrite Hosting ke Cloud Run mendukung <code>asia-southeast2</code>. Bila tidak, frontend memanggil URL <code>asapify-api</code> langsung dengan CORS. <code>asapify-agent</code> tidak pernah dipanggil dari browser.</div>
   </section>
 
   <section id="monitor">
     <div class="section-head">
       <span class="eyebrow">12 · Monitoring</span>
-      <h2>Tahu lebih dulu kalau ingest berhenti</h2>
+      <h2>Tahu lebih dulu kalau observasi berhenti</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
         <thead><tr><th scope="col">Yang dipantau</th><th scope="col">Kapan memberi tahu</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Ingest sukses (log <code>run_success</code>)</th><td>tidak ada selama 30 menit</td></tr>
-          <tr><th scope="row">Latensi Himawari (log <code>scan_latency_min</code>)</th><td>median &gt; 30 menit dalam 2 jam</td></tr>
-          <tr><th scope="row">Analisis agen gagal</th><td>&gt; 2 kali berturut-turut</td></tr>
+          <tr><th scope="row">Ingest sukses per satelit (log <code>run_success</code>, label <code>sat</code>)</th><td>tidak ada selama 30 menit pada jam malam</td></tr>
+          <tr><th scope="row">Latensi per satelit (log <code>scan_latency_min</code>)</th><td>median &gt; 30 menit dalam 2 jam</td></tr>
+          <tr><th scope="row">Evaluate dengan satu satelit (log <code>n_sat</code>)</th><td><code>n_sat = 1</code> pada &gt; 50% slot dalam 2 jam</td></tr>
+          <tr><th scope="row">Environment (log <code>power_cells_ok</code>)</th><td>&lt; 90% sel POWER berhasil</td></tr>
+          <tr><th scope="row">Verifikasi agen gagal</th><td>&gt; 2 kali berturut-turut</td></tr>
           <tr><th scope="row">Uptime <code>/api/v1/health</code></th><td>2 kali gagal berturut-turut</td></tr>
           <tr><th scope="row">Kirim Telegram (log <code>tg_send_failed</code>)</th><td>&gt; 0 dalam 15 menit</td></tr>
           <tr><th scope="row">Biaya</th><td>50%, 90%, 100% anggaran tim</td></tr>
@@ -787,16 +793,15 @@ auth.set_custom_user_claims(
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Variabel</th><th scope="col">api</th><th scope="col">ingest</th><th scope="col">baseline</th></tr></thead>
+        <thead><tr><th scope="col">Variabel</th><th scope="col">agent</th><th scope="col">api</th><th scope="col">job (semua)</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>GOOGLE_CLOUD_PROJECT</code></th><td>✓</td><td>✓</td><td>✓</td></tr>
-          <tr><th scope="row"><code>GOOGLE_CLOUD_LOCATION</code>, <code>GOOGLE_GENAI_USE_ENTERPRISE</code>, <code>GEMINI_MODEL</code></th><td>✓</td><td></td><td></td></tr>
-          <tr><th scope="row"><code>DATA_BUCKET</code>, <code>BBOX</code></th><td>✓</td><td>✓</td><td>✓</td></tr>
-          <tr><th scope="row"><code>PUBLIC_BUCKET</code></th><td>✓</td><td></td><td></td></tr>
-          <tr><th scope="row"><code>API_URL</code></th><td></td><td>✓</td><td></td></tr>
-          <tr><th scope="row"><code>INTERNAL_CALLER</code></th><td>✓</td><td></td><td></td></tr>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_PROJECT</code>, <code>DATA_BUCKET</code></th><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_LOCATION</code>, <code>GOOGLE_GENAI_USE_VERTEXAI</code>, <code>GEMINI_MODEL</code></th><td>✓</td><td></td><td></td></tr>
+          <tr><th scope="row"><code>PUBLIC_BUCKET</code>, <code>BBOX</code></th><td></td><td></td><td>✓</td></tr>
+          <tr><th scope="row"><code>AGENT_URL</code></th><td></td><td>✓</td><td>✓ (evaluate)</td></tr>
+          <tr><th scope="row"><code>AS_OF</code> (opsional, replay)</th><td></td><td></td><td>✓</td></tr>
           <tr><th scope="row"><code>FIRMS_MAP_KEY</code> (secret)</th><td>✓</td><td></td><td></td></tr>
-          <tr><th scope="row"><code>TELEGRAM_BOT_TOKEN</code> (secret)</th><td>✓</td><td></td><td></td></tr>
+          <tr><th scope="row"><code>TELEGRAM_BOT_TOKEN</code> (secret)</th><td>✓</td><td>✓</td><td></td></tr>
         </tbody>
       </table>
     </div>
@@ -809,13 +814,14 @@ auth.set_custom_user_claims(
     </div>
     <div class="card">
       <ol>
-        <li>Project, billing, <code>env.sh</code>, aktifkan API, daftar Earth Engine.</li>
-        <li>Service account dan peran, secret FIRMS dan Telegram.</li>
-        <li>Bucket, Firestore. Unggah peat mask dan data mentah jendela backtest.</li>
-        <li>Jalankan baseline untuk jendela backtest (lokal atau job).</li>
-        <li>Deploy <code>asapify-api</code>, cek <code>/api/v1/health</code>, simpan <code>chat_id</code> grup Telegram.</li>
-        <li>Deploy kedua job, jalankan ingest dengan <code>--as-of</code> di jendela backtest.</li>
-        <li>Buat jadwal Scheduler.</li>
+        <li>Project, billing, <code>env.sh</code>, aktifkan API, daftar Earth Engine (Runbook S0-2, S0-3).</li>
+        <li>Service account dan peran (03), akses secret (04).</li>
+        <li>Bucket dan Firestore (05). Pindahkan <code>tg_chats</code> ke Firestore.</li>
+        <li>Bangun image, deploy <code>asapify-agent</code> lalu <code>asapify-api</code> (09); cek <code>/api/v1/health</code>.</li>
+        <li>Deploy lima job (10); jalankan <code>asapify-build</code> sekali.</li>
+        <li>Backfill Himawari dan GK2A (Agustus – 15 Okt 2023), lalu <code>asapify-environment --as-of</code> per hari jendela backtest.</li>
+        <li>Replay evaluate untuk jendela backtest; cek kelompok muncul di Firestore.</li>
+        <li>Buat empat jadwal Scheduler.</li>
         <li>Deploy web, aktifkan Auth, set akun operator demo.</li>
         <li>Pasang monitoring dan budget alert.</li>
       </ol>

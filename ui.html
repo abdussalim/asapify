@@ -408,6 +408,17 @@
   .legend-row b.n { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--ink); color: var(--surface); font-size: 10.5px; }
   .legend-row .sw { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--line); }
   td.nbc { font-family: var(--font-mono); font-weight: 600; text-align: center; }
+
+  /* grid tetangga 3x3 */
+  .nbwrap { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: flex-start; }
+  .nbfig { display: grid; gap: 8px; justify-items: start; max-width: 260px; }
+  .nbfig p { font-size: 13.5px; color: var(--ink-dim); }
+  .nbg { display: inline-grid; grid-template-columns: repeat(3, 38px); gap: 3px; }
+  .nbg span { height: 38px; border-radius: 4px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; background: var(--surface-2); color: var(--ink-dim); border: 1px solid var(--line); }
+  .nbg span.a { background: var(--ember-soft); color: var(--ember); font-weight: 600; border-color: var(--ember); }
+  .nbg span.p { background: var(--ember); color: #fff; font-weight: 700; border-color: var(--ember); }
+  .nbg span.c { background: repeating-linear-gradient(45deg, var(--surface-2) 0 4px, var(--line) 4px 6px); }
+  .formula { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; }
 </style>
 </head>
 <body>
@@ -415,9 +426,9 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Spesifikasi UI · pegangan Peran D · 💡 usulan</span>
+    <span class="eyebrow">Spesifikasi UI · pegangan Peran D · arsitektur revisi 29 Sep</span>
     <h1>Layar operator dan pesan bot Telegram</h1>
-    <p class="lede">Pengguna utama adalah <strong>operator</strong> yang memantau piksel gambut dan memutuskan peringatan. Peringatan yang sudah diterbitkan dikirim bot ke <strong>grup Telegram</strong>, satu arah: tidak ada tombol atau laporan balik, dan tidak ada petugas lapangan dalam sistem. Semua data web lewat <a href="backend.html">API</a>. Bahasa default Indonesia, dengan tombol ganti ke Inggris untuk juri.</p>
+    <p class="lede">Pengguna utama adalah <strong>operator</strong> yang memantau piksel gambut, membaca <em>kenapa</em> sebuah piksel berstatus <code>AWAS</code> (atribut MAUT dan tetangga), membaca hasil verifikasi agen, lalu <strong>menerbitkan atau menolak</strong>. Pesan yang diterbitkan dikirim bot ke <strong>grup Telegram</strong>, satu arah. Semua data web lewat <a href="backend.html">API</a>. Bahasa default Indonesia, tombol ganti ke Inggris untuk juri.</p>
     <ul class="toc" aria-label="Isi halaman">
       <li><a href="#rute"><span>01</span>Rute</a></li>
       <li><a href="#alur-pengguna"><span>02</span>Alur</a></li>
@@ -442,9 +453,9 @@
         <thead><tr><th scope="col">Rute</th><th scope="col">Halaman</th><th scope="col">Pengguna</th><th scope="col">Isi utama</th><th scope="col">Data dari</th></tr></thead>
         <tbody>
           <tr><th scope="row"><code>/masuk</code></th><td>Login</td><td>operator</td><td>Masuk dengan Google</td><td>Firebase Auth</td></tr>
-          <tr><th scope="row"><code>/</code></th><td>Peta operator</td><td>operator</td><td>Status piksel gambut, daftar cluster, filter status</td><td><code>GET /operator/grid</code>, <code>/operator/clusters</code></td></tr>
-          <tr><th scope="row"><code>/cluster/:id</code></th><td>Detail cluster</td><td>operator</td><td>Grafik anomali per malam, bukti citra, analisis agen, panel keputusan</td><td><code>GET /operator/clusters/{id}</code></td></tr>
-          <tr><th scope="row"><code>/tentang</code></th><td>Tentang &amp; metode</td><td>semua, juri</td><td>Cara kerja, fisika band 7, ToPeCAl, keterbatasan, sumber data ("NOAA open data"; semua pemrosesan di Google Cloud)</td><td>statis</td></tr>
+          <tr><th scope="row"><code>/</code></th><td>Peta operator</td><td>operator</td><td>Status piksel gambut, daftar kelompok AWAS, filter status dan provinsi</td><td><code>GET /operator/grid</code>, <code>/operator/clusters</code></td></tr>
+          <tr><th scope="row"><code>/kelompok/:id</code></th><td>Detail kelompok</td><td>operator</td><td>Grafik utility, batang atribut MAUT, grid tetangga, verifikasi agen, panel keputusan</td><td><code>GET /operator/clusters/{id}</code></td></tr>
+          <tr><th scope="row"><code>/tentang</code></th><td>Tentang &amp; metode</td><td>semua, juri</td><td>Cara kerja, dua satelit, MAUT, "AI is not the detector", keterbatasan, sumber data ("NOAA open data"; semua pemrosesan di Google Cloud)</td><td>statis</td></tr>
         </tbody>
         <caption>Semua path API diawali <code>/api/v1</code>. Penerima peringatan tidak punya rute web; kanalnya grup Telegram (bagian 03b).</caption>
       </table>
@@ -459,12 +470,12 @@
     <div class="grid-2">
       <div class="card">
         <span class="pill waspada">Operator</span>
-        <div class="flowline"><span>Notifikasi cluster baru</span><b>→</b><span>Buka detail</span><b>→</b><span>Lihat grafik 3 malam</span><b>→</b><span>Baca bukti &amp; analisis agen</span><b>→</b><span>Putuskan</span></div>
-        <p class="note" style="margin-top:4px">Pilihan keputusan: terbitkan dengan level, tetap pantau, atau tolak dengan alasan.</p>
+        <div class="flowline"><span>Pesan di grup operator</span><b>→</b><span>Buka detail kelompok</span><b>→</b><span>Lihat atribut MAUT + tetangga</span><b>→</b><span>Baca verifikasi + citra</span><b>→</b><span>Terbitkan / tolak</span></div>
+        <p class="note" style="margin-top:4px">Tidak ada pilihan level. Kelompok tanpa keputusan tetap dipantau.</p>
       </div>
       <div class="card">
-        <span class="pill ok">Grup Telegram</span>
-        <div class="flowline"><span>Operator menerbitkan</span><b>→</b><span>Bot kirim foto + caption</span><b>→</b><span>Level naik: pesan diedit</span><b>→</b><span>Ditutup: caption DITUTUP</span></div>
+        <span class="pill ok">Grup Telegram peringatan</span>
+        <div class="flowline"><span>Operator menerbitkan</span><b>→</b><span>Bot kirim foto + caption</span><b>→</b><span>Kelompok ditutup: caption SELESAI</span></div>
         <p class="note" style="margin-top:4px">Satu arah. Satu pesan per kejadian, diperbarui di tempat.</p>
       </div>
     </div>
@@ -474,104 +485,101 @@
     <div class="section-head">
       <span class="eyebrow">03 · Wireframe</span>
       <h2>Empat layar web operator dan satu pesan Telegram, ukuran HP</h2>
-      <p>Di layar 1024 px ke atas, daftar cluster pindah ke panel kiri 360 px. Data dalam sketsa fiktif.</p>
+      <p>Di layar 1024 px ke atas, daftar kelompok pindah ke panel kiri 360 px. Data dalam sketsa fiktif.</p>
     </div>
     <div class="phones">
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
           <div class="scr-top"><span>ASAPify · Operator</span><small>ID | EN</small></div>
-          <div class="banner">Scan terakhir 14 Sep 22.10 WIB · malam</div>
-          <svg viewBox="0 0 270 250" role="img" aria-label="Sketsa grid piksel gambut dengan status" style="display:block;width:100%;height:auto">
+          <div class="banner">Slot 24 Sep 22.10 WIB · Himawari ✓ · GK2A ✓</div>
+          <svg viewBox="0 0 270 250" role="img" aria-label="Sketsa grid piksel gambut dengan empat status" style="display:block;width:100%;height:auto">
             <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--line)" stroke-width="3"/></pattern></defs>
             <rect width="270" height="250" fill="var(--surface-2)"/>
             <g stroke="var(--surface)" stroke-width="1">
               <rect x="30" y="30" width="30" height="30" fill="var(--moss-soft)"/><rect x="60" y="30" width="30" height="30" fill="var(--moss-soft)"/><rect x="90" y="30" width="30" height="30" fill="url(#hatch)"/><rect x="120" y="30" width="30" height="30" fill="url(#hatch)"/>
-              <rect x="30" y="60" width="30" height="30" fill="var(--moss-soft)"/><rect x="60" y="60" width="30" height="30" fill="var(--amber-soft)"/><rect x="90" y="60" width="30" height="30" fill="var(--moss-soft)"/><rect x="120" y="60" width="30" height="30" fill="var(--moss-soft)"/><rect x="150" y="60" width="30" height="30" fill="var(--moss-soft)"/>
+              <rect x="30" y="60" width="30" height="30" fill="var(--moss-soft)"/><rect x="60" y="60" width="30" height="30" fill="var(--amber-soft)"/><rect x="90" y="60" width="30" height="30" fill="var(--ember)"/><rect x="120" y="60" width="30" height="30" fill="var(--moss-soft)"/><rect x="150" y="60" width="30" height="30" fill="var(--moss-soft)"/>
               <rect x="60" y="90" width="30" height="30" fill="var(--moss-soft)"/><rect x="90" y="90" width="30" height="30" fill="var(--ember)"/><rect x="120" y="90" width="30" height="30" fill="var(--ember)"/><rect x="150" y="90" width="30" height="30" fill="var(--amber-soft)"/><rect x="180" y="90" width="30" height="30" fill="var(--moss-soft)"/>
-              <rect x="60" y="120" width="30" height="30" fill="var(--moss-soft)"/><rect x="90" y="120" width="30" height="30" fill="var(--amber-soft)"/><rect x="120" y="120" width="30" height="30" fill="var(--moss-soft)"/><rect x="150" y="120" width="30" height="30" fill="var(--moss-soft)"/><rect x="180" y="120" width="30" height="30" fill="var(--moss-soft)"/>
+              <rect x="60" y="120" width="30" height="30" fill="var(--moss-soft)"/><rect x="90" y="120" width="30" height="30" fill="var(--amber-soft)"/><rect x="120" y="120" width="30" height="30" fill="var(--ember)"/><rect x="150" y="120" width="30" height="30" fill="var(--moss-soft)"/><rect x="180" y="120" width="30" height="30" fill="var(--amber-soft)"/>
               <rect x="90" y="150" width="30" height="30" fill="var(--moss-soft)"/><rect x="120" y="150" width="30" height="30" fill="var(--moss-soft)"/><rect x="150" y="150" width="30" height="30" fill="url(#hatch)"/>
             </g>
-            <rect x="88" y="88" width="64" height="34" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>
+            <rect x="88" y="58" width="64" height="94" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
           <div class="sheet">
             <div class="grab"></div>
-            <div class="row"><b>2 cluster aktif</b><span>urut status</span></div>
-            <div class="row"><span class="pill siaga">anomaly</span><span>C-007 · malam ke-3</span></div>
-            <div class="row"><span class="pill waspada">watch</span><span>C-011 · malam ke-1</span></div>
+            <div class="row"><b>1 kelompok AWAS</b><span>urut utility</span></div>
+            <div class="row"><span class="pill awas">AWAS</span><span>C-0924-002 · 4 piksel · U 0,73</span></div>
+            <div class="row"><span class="pill ai">Bukti kuat</span><span>belum diputuskan</span></div>
           </div>
         </div></div>
         <div class="spec"><h4>Peta operator <code>/</code></h4>
-          <ul><li>Tampilan awal: seluruh Kalimantan (<code>fitBounds([[108.5,-4.4],[119.4,4.5]])</code>), filter per provinsi</li><li>Grid piksel 2 km berwarna status; awan diarsir</li><li>Cluster diberi garis putus</li><li>Bottom sheet daftar cluster</li><li>Banner waktu scan terakhir, siang/malam</li></ul></div>
+          <ul><li>Tampilan awal: seluruh Kalimantan (<code>fitBounds([[108.5,-4.4],[119.4,4.5]])</code>), filter per provinsi</li><li>Grid piksel 2 km: warna + ikon status; NO_OBSERVATION diarsir</li><li>Kelompok AWAS bergaris putus</li><li>Banner slot terakhir dan satelit yang tersedia</li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
-          <div class="scr-top"><span>← Cluster C-007</span><span class="pill siaga">anomaly</span></div>
+          <div class="scr-top"><span>← C-0924-002</span><span class="pill awas">AWAS</span></div>
           <div class="scr-body">
-            <div class="blk"><span class="lbl">Skor anomali per malam</span>
-              <svg viewBox="0 0 240 90" role="img" aria-label="Grafik batang skor anomali lima malam" style="display:block;width:100%;height:auto">
-                <line x1="10" y1="40" x2="235" y2="40" stroke="var(--ember)" stroke-dasharray="3 3"/><text x="232" y="36" text-anchor="end" font-size="8" fill="var(--ember)" font-family="IBM Plex Mono, monospace">z 3,5</text>
-                <line x1="10" y1="56" x2="235" y2="56" stroke="var(--amber)" stroke-dasharray="3 3"/><text x="232" y="66" text-anchor="end" font-size="8" fill="var(--amber)" font-family="IBM Plex Mono, monospace">z 2,5</text>
-                <rect x="20" y="66" width="26" height="14" fill="var(--surface-2)"/>
-                <rect x="60" y="30" width="26" height="50" fill="url(#hatch)" stroke="var(--line)"/>
-                <rect x="100" y="34" width="26" height="46" fill="var(--ember)"/>
-                <rect x="140" y="28" width="26" height="52" fill="var(--ember)"/>
-                <rect x="180" y="22" width="26" height="58" fill="var(--ember)"/>
-                <line x1="10" y1="80" x2="235" y2="80" stroke="var(--line)"/>
+            <div class="blk"><span class="lbl">Utility 3 malam</span>
+              <svg viewBox="0 0 240 80" role="img" aria-label="Grafik garis utility naik melewati ambang 0,65" style="display:block;width:100%;height:auto">
+                <line x1="10" y1="24" x2="235" y2="24" stroke="var(--ember)" stroke-dasharray="3 3"/><text x="14" y="20" font-size="8" fill="var(--ember)" font-family="IBM Plex Mono, monospace">0,65 AWAS</text>
+                <line x1="10" y1="50" x2="235" y2="50" stroke="var(--amber)" stroke-dasharray="3 3"/><text x="232" y="60" text-anchor="end" font-size="8" fill="var(--amber)" font-family="IBM Plex Mono, monospace">0,30</text>
+                <rect x="80" y="8" width="50" height="64" fill="url(#hatch)" opacity="0.6"/>
+                <polyline points="12,62 40,58 70,52 80,52 130,46 160,40 190,28 210,18 230,16" fill="none" stroke="var(--ink)" stroke-width="2"/>
+                <line x1="10" y1="72" x2="235" y2="72" stroke="var(--line)"/>
               </svg>
-              <span style="color:var(--ink-dim)">11–15 Sep · malam ke-2 berawan (tidak dihitung)</span></div>
-            <div class="blk"><span class="lbl">Analisis agen</span><div class="row"><span class="pill grey">uncertain</span><small>8 tool · 22.14</small></div><span>Anomali 3 malam valid. Asap tidak terlihat (bukti lemah). ToPeCAl: 12 piksel S, scene 4 hari.</span></div>
-            <div class="btns"><span class="btn">Bukti citra</span><span class="btn">ToolTrace</span></div>
+              <span style="color:var(--ink-dim)">22–24 Sep · arsir = NO_OBSERVATION</span></div>
+            <div class="blk"><span class="lbl">Atribut slot pemicu</span>
+              <div class="row"><span>u_H Himawari</span><b>1,00</b></div><div class="row"><span>u_G GK2A</span><b>1,00</b></div><div class="row"><span>u_T · u_LST · u_SAT</span><b>0,67 · 0,50 · 0</b></div><div class="row"><span>u_N tetangga (3/8)</span><b>0,375</b></div></div>
           </div>
         </div></div>
-        <div class="spec"><h4>Detail cluster <code>/cluster/:id</code></h4>
-          <ul><li>Grafik batang skor per malam, garis threshold, malam berawan diarsir</li><li>Kartu analisis agen dengan status bukti</li><li>Tab bukti: Himawari, Landsat/ToPeCAl, FIRMS</li><li>Tombol ke panel keputusan</li></ul></div>
+        <div class="spec"><h4>Detail kelompok <code>/kelompok/:id</code></h4>
+          <ul><li>Grafik utility per slot, garis 0,30 dan 0,65, slot berawan diarsir</li><li>Batang atribut MAUT + bobot; mini-grid 3 × 3 tetangga</li><li>Label "sepakat dua satelit" atau "satu satelit"</li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
-          <div class="scr-top"><span>← Bukti C-007</span><small>3 sumber</small></div>
+          <div class="scr-top"><span>← Verifikasi</span><span class="pill ai">Bukti kuat</span></div>
           <div class="scr-body">
-            <div class="blk"><span class="lbl">Himawari · 14 Sep 22.10</span><div class="thumb" aria-hidden="true"></div><span>Band 7 malam + visible sore</span></div>
-            <div class="blk"><span class="lbl">Landsat 9 · ToPeCAl</span><div class="row"><span>Scene 10 Sep</span><b>umur 4 hari</b></div><div class="row"><span>Membara (S)</span><b>12 piksel</b></div><div class="row"><span>Lintasan berikutnya</span><b>18 Sep</b></div></div>
-            <div class="blk"><span class="lbl">FIRMS 48 jam</span><span>0 hotspot dalam 5 km</span></div>
+            <div class="blk"><span class="lbl">VIIRS true colour · NOAA-20 · 24 Sep</span><div class="thumb" aria-hidden="true"></div><span>Asap tipis ke barat laut · umur 9 jam</span></div>
+            <div class="blk"><span class="lbl">Deteksi VIIRS 48 jam</span><div class="row"><span>NOAA-20 · 01.42 WIB</span><b>1,4 km</b></div></div>
+            <div class="blk"><span class="lbl">Himawari termal · 22.10</span><span>Titik terang di penanda</span></div>
+            <div class="btns"><span class="btn">ToolTrace (5)</span></div>
           </div>
         </div></div>
-        <div class="spec"><h4>Bukti citra</h4>
-          <ul><li>Setiap bukti menampilkan waktu dan umurnya</li><li>Scene Landsat lama diberi label <code>stale</code></li><li>"Tidak ada asap" ditandai bukti lemah</li></ul></div>
+        <div class="spec"><h4>Kartu verifikasi</h4>
+          <ul><li>Setiap bukti menampilkan waktu dan umurnya</li><li>"Tidak terlihat asap" = inkonklusif, bukan negatif</li><li>ToolTrace: nama tool, argumen, durasi (untuk video)</li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
-          <div class="scr-top"><span>Keputusan C-007</span><small>operator</small></div>
+          <div class="scr-top"><span>Keputusan C-0924-002</span><small>operator</small></div>
           <div class="scr-body">
-            <div class="blk"><span class="lbl">Usulan level (bukan dari AI)</span><span>Waspada · anomali persisten, bukti <em>unconfirmed</em></span></div>
-            <span class="lbl">Level yang diterbitkan</span>
-            <div class="tabs"><span class="on">Waspada</span><span>Siaga</span><span>Awas</span></div>
-            <span class="lbl">Caption Telegram (ID) · 180/400</span>
-            <div class="field">Anomali panas malam hari di lahan gambut selama 3 malam, 2 km dari Desa …</div>
-            <div class="btns"><span class="btn primary">Terbitkan ke grup</span><span class="btn">Tetap pantau</span><span class="btn">Tolak</span></div>
+            <div class="blk"><span class="lbl">Ringkasan</span><span>AWAS · U 0,73 · 3/8 tetangga · dua satelit sepakat · Bukti kuat</span></div>
+            <span class="lbl">Caption Telegram (ID) · 412/1024</span>
+            <div class="field">AWAS · Kalimantan Tengah · -2.21, 113.92 · 4 piksel …</div>
+            <div class="btns"><span class="btn primary">Terbitkan ke grup</span><span class="btn">Tolak</span></div>
+            <small style="color:var(--ink-dim)">Tolak wajib dengan alasan. Tanpa keputusan: tetap dipantau.</small>
           </div>
         </div></div>
         <div class="spec"><h4>Panel keputusan</h4>
-          <ul><li>Usulan level dari aturan pemetaan (bagian 06 Rencana)</li><li>Operator bebas memilih level, alasan wajib bila berbeda dari usulan</li><li>Tolak wajib dengan alasan; semua tercatat di audit</li><li>"Terbitkan ke grup" mengirim pesan bot ke grup peringatan wilayah cluster</li></ul></div>
+          <ul><li>Dua tombol saja: Terbitkan, Tolak</li><li>Caption terisi otomatis dari templat 03b, bisa disunting</li><li>"Terbitkan ke grup" mengirim ke grup peringatan provinsi kelompok</li><li>Semua tercatat di <code>audit_log</code></li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
-          <div class="scr-top"><span>ASAPify Peringatan · Kab. contoh</span><small>Telegram</small></div>
+          <div class="scr-top"><span>ASAPify Peringatan · Kalteng</span><small>Telegram</small></div>
           <div class="scr-body tg">
             <div class="tg-msg">
               <span class="tg-from">ASAPify Bot</span>
-              <div class="tg-img" role="img" aria-label="Crop citra Himawari dengan kotak cluster"><span></span></div>
-              <p><b>SIAGA · Dugaan gambut membara</b><br>📍 Kab. contoh · -2.71, 114.23<br>🌙 Anomali panas 3 malam berturut-turut<br>🛰️ ToPeCAl: membara (Landsat 3 hari lalu)<br>🕙 Scan Himawari 14 Sep 22.10 WIB</p>
+              <div class="tg-img" role="img" aria-label="Citra VIIRS dengan penanda koordinat"><span></span></div>
+              <p><b>AWAS · Dugaan gambut membara</b><br>📍 Kalimantan Tengah · -2.21, 113.92 · 4 piksel<br>🛰️ Himawari + GK2A sepakat · utility 0,73 · tetangga 3/8<br>🔎 Bukti kuat: asap terlihat (VIIRS 24 Sep), deteksi VIIRS 1,4 km<br>🕙 Slot 24 Sep 22.10 WIB</p>
               <small class="tg-time">22.31</small>
             </div>
           </div>
         </div></div>
         <div class="spec"><h4>Pesan bot di grup peringatan</h4>
-          <ul><li>Terkirim hanya setelah operator menerbitkan level</li><li>Satu pesan per kejadian; level naik atau ditutup = pesan yang sama diedit</li><li>Satu arah: tanpa tombol, tanpa laporan balik</li></ul></div>
+          <ul><li>Terkirim hanya setelah operator menerbitkan</li><li>Kelompok ditutup = pesan yang sama diedit, diawali SELESAI</li><li>Satu arah: tanpa tombol, tanpa laporan balik</li></ul></div>
       </div>
 
     </div>
@@ -581,33 +589,34 @@
     <div class="section-head">
       <span class="eyebrow">03b · Pesan bot Telegram ✅</span>
       <h2>Dua grup, dua jenis pesan</h2>
-      <p>Kanal peringatan adalah grup Telegram, satu arah (✅ 29 Sep). Detail format di bawah masih 💡 usulan.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Grup</th><th scope="col">Kapan bot mengirim</th><th scope="col">Isi</th><th scope="col">Tautan</th></tr></thead>
+        <thead><tr><th scope="col">Grup</th><th scope="col">Pengirim</th><th scope="col">Kapan bot mengirim</th><th scope="col">Isi</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Operator (internal)</th><td>Otomatis, saat cluster menjadi <code>anomaly</code> dan agen selesai</td><td>ID cluster, skor 3 malam, status agen (label <em>unconfirmed</em> bila perlu), link detail cluster</td><td>link detail (khusus operator)</td></tr>
-          <tr><th scope="row">Peringatan (per wilayah)</th><td>Hanya setelah operator menekan <em>Terbitkan ke grup</em></td><td>Foto crop Himawari + caption: level, lokasi dan koordinat, ringkasan agen, bukti, waktu scan</td><td>Ada asap · Ada api · Tidak ada</td></tr>
-          <tr><th scope="row">Peringatan, pesan yang sama</th><td>Level naik atau alert ditutup</td><td><code>editMessageCaption</code>, baris pertama berubah (mis. <em>AWAS</em> / <em>DITUTUP</em>)</td><td>—</td></tr>
+          <tr><th scope="row">Operator (internal)</th><td><code>asapify-agent</code></td><td>Otomatis, setelah verifikasi kelompok AWAS tersimpan</td><td>ID kelompok, provinsi, utility, tetangga, hasil verifikasi, link detail (khusus operator)</td></tr>
+          <tr><th scope="row">Peringatan (per provinsi)</th><td><code>asapify-api</code></td><td>Hanya setelah operator menekan <em>Terbitkan ke grup</em></td><td>Foto (citra VIIRS bila asap terlihat, selain itu crop termal Himawari) + caption templat di bawah</td></tr>
+          <tr><th scope="row">Peringatan, pesan yang sama</th><td><code>asapify-agent</code> / <code>asapify-api</code></td><td>Kelompok ditutup otomatis / operator menutup</td><td><code>editMessageCaption</code>, baris pertama diawali <strong>SELESAI</strong></td></tr>
         </tbody>
       </table>
     </div>
     <div class="grid-2">
+      <div class="code">
+        <div class="code-head"><span>Templat caption (ID)</span><span>shared/caption.py</span></div>
+<pre>&lt;b&gt;AWAS · Dugaan gambut membara&lt;/b&gt;
+📍 {provinsi} · {lat:.2f}, {lon:.2f} · {n_pixels} piksel
+🛰️ Himawari + GK2A sepakat · utility {U:.2f} · tetangga {n_nbr}/8
+🔎 {"Bukti kuat" | "Inkonklusif"}: {alasan singkat dari evidence}
+🕙 Slot {slot WIB:%d %b %H.%M} WIB
+Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
+      </div>
       <div class="card">
         <h4>Aturan</h4>
         <ul>
-          <li>Caption maksimal 1.024 karakter; teks dari <code>summary_id</code> agen, level dari operator</li>
-          <li>Tanpa emoji di baris level, supaya terbaca jelas di notifikasi HP</li>
-          <li>Bahasa Indonesia; video demo memakai terjemahan Inggris di subtitle</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h4>Yang tidak dilakukan bot</h4>
-        <ul>
-          <li>Tidak mengirim ke grup peringatan tanpa keputusan operator</li>
-          <li>Tidak menerima input: tanpa tombol, perintah, atau webhook</li>
-          <li>Tidak menyimpan data pengguna Telegram</li>
+          <li>Caption maksimal 1.024 karakter; angka dari <code>clusters</code> dan <code>verifications</code>, tidak diketik ulang</li>
+          <li>Tidak pernah menulis "kebakaran terkonfirmasi"</li>
+          <li>Bahasa Indonesia; video demo memakai subtitle Inggris</li>
+          <li>Bot tidak menerima input: tanpa tombol, perintah, atau webhook; tidak menyimpan data pengguna</li>
         </ul>
       </div>
     </div>
@@ -616,17 +625,16 @@
   <section id="layer">
     <div class="section-head">
       <span class="eyebrow">04 · Layer peta</span>
-      <h2>Lima layer MapLibre</h2>
+      <h2>Empat layer MapLibre</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
         <thead><tr><th scope="col">ID layer</th><th scope="col">Sumber</th><th scope="col">Tipe</th><th scope="col">Gaya</th><th scope="col">Zoom</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>pixel-status</code></th><td><code>GET /operator/grid?as_of=</code> (GeoJSON poligon piksel)</td><td>fill</td><td>warna per status, <code>no_observation</code> diarsir</td><td>semua</td></tr>
-          <tr><th scope="row"><code>peat-boundary</code></th><td><code>layers/peat.geojson</code> di bucket publik</td><td>line</td><td>garis putus 1 px</td><td>semua</td></tr>
-          <tr><th scope="row"><code>clusters</code></th><td><code>GET /operator/clusters</code></td><td>line + symbol</td><td>garis putus tebal, label ID cluster</td><td>semua</td></tr>
-          <tr><th scope="row"><code>firms</code></th><td>properti bukti cluster</td><td>circle</td><td>titik kecil, bisa dimatikan</td><td>≥ 9</td></tr>
-          <tr><th scope="row"><code>alerts</code></th><td><code>GET /operator/alerts</code></td><td>circle</td><td>warna per level + label</td><td>semua</td></tr>
+          <tr><th scope="row"><code>pixel-status</code></th><td><code>GET /operator/grid?as_of=</code> (GeoJSON titik → kotak 0,02°)</td><td>fill</td><td>warna per status, NO_OBSERVATION diarsir</td><td>semua</td></tr>
+          <tr><th scope="row"><code>peat-boundary</code></th><td><code>layers/peat_pixels.geojson</code> di bucket publik</td><td>line</td><td>garis putus 1 px</td><td>semua</td></tr>
+          <tr><th scope="row"><code>clusters</code></th><td><code>GET /operator/clusters</code></td><td>line + symbol</td><td>garis putus tebal, label ID kelompok</td><td>semua</td></tr>
+          <tr><th scope="row"><code>viirs</code></th><td>bukti verifikasi kelompok terpilih</td><td>circle</td><td>titik kecil + jarak, bisa dimatikan</td><td>≥ 9</td></tr>
         </tbody>
       </table>
     </div>
@@ -635,30 +643,29 @@
   <section id="token">
     <div class="section-head">
       <span class="eyebrow">05 · Status dan warna</span>
-      <h2>Status selalu berpasangan dengan label</h2>
+      <h2>Status selalu berpasangan dengan label dan ikon</h2>
     </div>
     <div class="grid-2">
       <div class="table-wrap">
         <table>
-          <caption>Status piksel dan cluster (operator)</caption>
+          <caption>Status piksel (rule engine)</caption>
           <thead><tr><th scope="col">Status</th><th scope="col">Label ID / EN</th><th scope="col">Warna</th></tr></thead>
           <tbody>
-            <tr><th scope="row"><code>aman</code></th><td>Aman / Normal</td><td><span class="swatch" style="background:#dbe8dd"></span><code>#DBE8DD</code></td></tr>
-            <tr><th scope="row"><code>no_observation</code></th><td>Tidak teramati / No observation</td><td>arsir abu-abu</td></tr>
-            <tr><th scope="row"><code>watch</code></th><td>Pantau / Watch</td><td><span class="swatch" style="background:#f0c46a"></span><code>#F0C46A</code></td></tr>
-            <tr><th scope="row"><code>anomaly</code></th><td>Anomali / Anomaly</td><td><span class="swatch" style="background:#c2410c"></span><code>#C2410C</code></td></tr>
+            <tr><th scope="row"><code>SAFE</code></th><td>Aman / Safe</td><td><span class="swatch" style="background:#dbe8dd"></span><code>#DBE8DD</code></td></tr>
+            <tr><th scope="row"><code>NO_OBSERVATION</code></th><td>Tidak teramati / No observation</td><td>arsir abu-abu</td></tr>
+            <tr><th scope="row"><code>WATCH</code></th><td>Pantau / Watch</td><td><span class="swatch" style="background:#f0c46a"></span><code>#F0C46A</code></td></tr>
+            <tr><th scope="row"><code>AWAS</code></th><td>Awas / Alert</td><td><span class="swatch" style="background:#c2410c"></span><code>#C2410C</code></td></tr>
           </tbody>
         </table>
       </div>
       <div class="table-wrap">
         <table>
-          <caption>Status bukti (agen) dan level (diterbitkan operator)</caption>
+          <caption>Hasil verifikasi (agen) dan keputusan (operator)</caption>
           <thead><tr><th scope="col">Nilai</th><th scope="col">Label ID / EN</th><th scope="col">Tampilan</th></tr></thead>
           <tbody>
-            <tr><th scope="row"><code>confirmed</code></th><td>Terkonfirmasi / Confirmed</td><td>badge hijau tua</td></tr>
-            <tr><th scope="row"><code>uncertain</code></th><td>Belum pasti / Uncertain</td><td>badge abu-abu, label <em>unconfirmed</em></td></tr>
-            <tr><th scope="row"><code>negative</code></th><td>Tidak mendukung / Negative</td><td>badge abu-abu, label <em>unconfirmed</em></td></tr>
-            <tr><th scope="row">Waspada · Siaga · Awas</th><td>Advisory · Watch · Warning</td><td><code>#A86F00</code> · <code>#E8743B</code> · <code>#C2410C</code></td></tr>
+            <tr><th scope="row"><code>strong_evidence</code></th><td>Bukti kuat / Strong evidence</td><td>badge biru satelit</td></tr>
+            <tr><th scope="row"><code>inconclusive</code></th><td>Inkonklusif / Inconclusive</td><td>badge abu-abu</td></tr>
+            <tr><th scope="row"><code>published</code> · <code>rejected</code> · belum</th><td>Diterbitkan · Ditolak · Belum diputuskan</td><td>teks + ikon, tanpa warna level</td></tr>
           </tbody>
         </table>
       </div>
@@ -675,17 +682,17 @@
       <table class="wide">
         <thead><tr><th scope="col">Komponen</th><th scope="col">Props</th><th scope="col">Catatan</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>StatusBadge</code></th><td><code>status, lang</code></td><td>aman / no_observation / watch / anomaly</td></tr>
-          <tr><th scope="row"><code>EvidenceBadge</code></th><td><code>status</code></td><td>confirmed / uncertain / negative, dua terakhir berlabel <em>unconfirmed</em></td></tr>
-          <tr><th scope="row"><code>LevelBadge</code></th><td><code>level, lang</code></td><td>di panel keputusan dan daftar alert operator</td></tr>
-          <tr><th scope="row"><code>AnomalyChart</code></th><td><code>nights[], thresholds</code></td><td>batang per malam, garis watch dan anomaly, malam berawan diarsir</td></tr>
-          <tr><th scope="row"><code>HimawariCrop</code></th><td><code>url, band, time</code></td><td>termal dan visible berdampingan</td></tr>
-          <tr><th scope="row"><code>LandsatCard</code></th><td><code>scene, sceneAge, classCounts, nextPass</code></td><td>label <code>stale</code> bila umur &gt; 7 hari</td></tr>
-          <tr><th scope="row"><code>FirmsList</code></th><td><code>detections[]</code></td><td>jarak dan waktu dari cluster</td></tr>
-          <tr><th scope="row"><code>AgentSummary</code></th><td><code>analysis, lang</code></td><td>ringkasan + daftar bukti</td></tr>
+          <tr><th scope="row"><code>StatusBadge</code></th><td><code>status, lang</code></td><td>SAFE / NO_OBSERVATION / WATCH / AWAS, dengan ikon</td></tr>
+          <tr><th scope="row"><code>EvidenceBadge</code></th><td><code>result</code></td><td>strong_evidence / inconclusive</td></tr>
+          <tr><th scope="row"><code>UtilityChart</code></th><td><code>series[], thresholds</code></td><td>garis utility per slot, garis 0,30 dan 0,65, slot berawan diarsir</td></tr>
+          <tr><th scope="row"><code>AttributeBars</code></th><td><code>attributes, weights</code></td><td>u_H, u_G, u_LST, u_SAT, u_T, u_N; atribut hilang ditulis "tidak tersedia"</td></tr>
+          <tr><th scope="row"><code>NeighbourGrid</code></th><td><code>center, neighbours[]</code></td><td>3 × 3: tetangga ≥ 0,5, normal, berawan, bukan gambut</td></tr>
+          <tr><th scope="row"><code>SatelliteAgree</code></th><td><code>n_sat, agree</code></td><td>"Himawari + GK2A sepakat" / "satu satelit"</td></tr>
+          <tr><th scope="row"><code>EvidenceImage</code></th><td><code>url, source, observedAt, ageH</code></td><td>citra VIIRS dan Himawari berdampingan</td></tr>
+          <tr><th scope="row"><code>ViirsList</code></th><td><code>detections[]</code></td><td>satelit, waktu WIB, jarak</td></tr>
           <tr><th scope="row"><code>ToolTrace</code></th><td><code>calls[]</code></td><td>urutan tool yang dipanggil agen. Tampilkan di video</td></tr>
-          <tr><th scope="row"><code>DecisionPanel</code></th><td><code>cluster, suggestedLevel</code></td><td>terbitkan / tetap pantau / tolak, alasan wajib bila perlu</td></tr>
-          <tr><th scope="row"><code>DataBanner</code></th><td><code>lastScanAt, isNight, replay</code></td><td>kuning bila scan terakhir &gt; 30 menit, biru untuk replay</td></tr>
+          <tr><th scope="row"><code>DecisionPanel</code></th><td><code>cluster, caption</code></td><td>Terbitkan / Tolak (alasan wajib)</td></tr>
+          <tr><th scope="row"><code>DataBanner</code></th><td><code>lastSlot, sats, isNight, replay</code></td><td>kuning bila satu satelit &gt; 40 menit terlambat, biru untuk replay</td></tr>
         </tbody>
       </table>
     </div>
@@ -694,16 +701,17 @@
   <section id="status">
     <div class="section-head">
       <span class="eyebrow">07 · Keadaan layar</span>
-      <h2>Lima keadaan di setiap layar</h2>
+      <h2>Enam keadaan di setiap layar</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
         <thead><tr><th scope="col">Keadaan</th><th scope="col">Kapan</th><th scope="col">Teks (ID)</th></tr></thead>
         <tbody>
           <tr><th scope="row">Memuat</th><td>request berjalan</td><td>kerangka abu-abu, tanpa teks</td></tr>
-          <tr><th scope="row">Kosong</th><td>tidak ada cluster</td><td>"Tidak ada anomali di piksel gambut pada scan terakhir."</td></tr>
-          <tr><th scope="row">Tertutup awan</th><td>sebagian besar piksel <code>no_observation</code></td><td>"Sebagian besar area tertutup awan. Status aman tidak bisa dipastikan."</td></tr>
-          <tr><th scope="row">Data terlambat</th><td>scan terakhir &gt; 30 menit</td><td>"Scan terakhir {jam}. Data terlambat."</td></tr>
+          <tr><th scope="row">Kosong</th><td>tidak ada kelompok AWAS</td><td>"Tidak ada piksel AWAS pada slot terakhir."</td></tr>
+          <tr><th scope="row">Tertutup awan</th><td>sebagian besar piksel NO_OBSERVATION</td><td>"Sebagian besar area tertutup awan. Status aman tidak bisa dipastikan."</td></tr>
+          <tr><th scope="row">Satu satelit</th><td><code>n_sat = 1</code> pada slot terakhir</td><td>"Data {satelit} terlambat. AWAS membutuhkan dua satelit."</td></tr>
+          <tr><th scope="row">Siang</th><td>di luar 20.00–04.00 WIB</td><td>"Siang hari: menampilkan status slot terakhir malam tadi."</td></tr>
           <tr><th scope="row">Replay</th><td><code>replay = true</code></td><td>"Mode replay: data per {tanggal jam}."</td></tr>
         </tbody>
       </table>
@@ -719,14 +727,14 @@
       <table class="wide">
         <thead><tr><th scope="col">Kunci</th><th scope="col">ID</th><th scope="col">EN</th></tr></thead>
         <tbody>
+          <tr><th scope="row"><code>status.awas</code></th><td>Awas</td><td>Alert</td></tr>
           <tr><th scope="row"><code>status.watch</code></th><td>Pantau</td><td>Watch</td></tr>
-          <tr><th scope="row"><code>status.anomaly</code></th><td>Anomali</td><td>Anomaly</td></tr>
           <tr><th scope="row"><code>status.no_obs</code></th><td>Tidak teramati</td><td>No observation</td></tr>
-          <tr><th scope="row"><code>evidence.unconfirmed</code></th><td>Belum terkonfirmasi</td><td>Unconfirmed</td></tr>
-          <tr><th scope="row"><code>evidence.weak_smoke</code></th><td>Asap tidak terlihat (bukti lemah)</td><td>No visible smoke (weak evidence)</td></tr>
-          <tr><th scope="row"><code>landsat.stale</code></th><td>Scene berumur {n} hari</td><td>Scene is {n} days old</td></tr>
-          <tr><th scope="row"><code>btn.publish</code></th><td>Terbitkan</td><td>Publish</td></tr>
-          <tr><th scope="row"><code>btn.keep_watching</code></th><td>Tetap pantau</td><td>Keep watching</td></tr>
+          <tr><th scope="row"><code>awas.note</code></th><td>AWAS memicu verifikasi; bukan konfirmasi kebakaran</td><td>AWAS triggers verification; it is not a confirmed fire</td></tr>
+          <tr><th scope="row"><code>evidence.strong</code></th><td>Bukti kuat</td><td>Strong evidence</td></tr>
+          <tr><th scope="row"><code>evidence.inconclusive</code></th><td>Inkonklusif</td><td>Inconclusive</td></tr>
+          <tr><th scope="row"><code>sat.agree</code></th><td>Himawari + GK2A sepakat</td><td>Himawari + GK2A agree</td></tr>
+          <tr><th scope="row"><code>btn.publish</code></th><td>Terbitkan ke grup</td><td>Publish to group</td></tr>
           <tr><th scope="row"><code>btn.reject</code></th><td>Tolak</td><td>Reject</td></tr>
         </tbody>
       </table>
@@ -743,9 +751,9 @@
         <dl class="kv">
           <dt>Build</dt><dd>Vite + TypeScript</dd>
           <dt>Peta</dt><dd>MapLibre GL JS</dd>
-          <dt>Grafik</dt><dd>SVG sendiri atau pustaka ringan untuk <code>AnomalyChart</code></dd>
+          <dt>Grafik</dt><dd>SVG sendiri untuk <code>UtilityChart</code> dan <code>AttributeBars</code></dd>
           <dt>Auth</dt><dd>Firebase JS SDK (Auth)</dd>
-          <dt>Hosting</dt><dd>Firebase Hosting, <code>/api/**</code> ke Cloud Run</dd>
+          <dt>Hosting</dt><dd>Firebase Hosting, <code>/api/**</code> ke Cloud Run <code>asapify-api</code></dd>
         </dl>
       </div>
       <div class="code">
@@ -753,7 +761,7 @@
 <pre>web/src/
 ├─ api.ts, auth.ts
 ├─ map/ map.ts, layers.ts
-├─ pages/ Masuk, PetaOperator, Cluster, Tentang
+├─ pages/ Masuk, PetaOperator, Kelompok, Tentang
 ├─ components/   <span class="c"># 11 komponen bagian 06</span>
 └─ i18n/ id.json, en.json</pre>
       </div>
