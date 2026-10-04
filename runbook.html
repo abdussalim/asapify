@@ -466,8 +466,9 @@ export GEMINI_LOCATION=&quot;global&quot;
 export GEMINI_MODEL=&quot;&lt;nama model Gemini Flash terbaru di Vertex AI&gt;&quot;
 export DATA_BUCKET=&quot;asapify-data-$PROJECT_ID&quot;
 export PUBLIC_BUCKET=&quot;asapify-public-$PROJECT_ID&quot;
-export BBOX=&quot;108.5,-4.4,119.4,4.5&quot;                  # seluruh Kalimantan
+export BBOX=&quot;94.9,-6.2,119.4,6.2&quot;                   # Sumatra + Kalimantan
 export BACKTEST_BBOX=&quot;113.5,-2.6,114.3,-1.9&quot;        # sub-area Kalteng (default)
+export BACKTEST_BBOX_SUMSEL=&quot;105.2,-3.7,106.0,-3.0&quot; # OKI, Sumsel (direncanakan)
 export WARMUP_START=&quot;2023-08-01&quot;                    # 30 malam untuk baseline awal
 export BACKTEST_START=&quot;2023-09-01&quot;; export BACKTEST_END=&quot;2023-10-15&quot;
 export IMAGE=&quot;$REGION-docker.pkg.dev/$PROJECT_ID/asapify/app:latest&quot;
@@ -485,7 +486,7 @@ SCHED_SA=&quot;sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com&quot;</pre>
       <h2>Akun dan data lokal</h2>
       <p>Tugas: <a href="#s0-1">S0-1</a> · <a href="#s0-2">S0-2</a> · <a href="#s0-3">S0-3</a> · <a href="#s0-4">S0-4</a> · <a href="#s0-5">S0-5</a> · <a href="#s0-6">S0-6</a> · <a href="#s0-7">S0-7</a> · <a href="#s0-8">S0-8</a> · <a href="#s0-9">S0-9</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Semua akun aktif; satu scan Himawari dan satu scan GK2A terbaca di grid Kalimantan; NASA POWER, FIRMS, dan GIBS teruji.</div>
+    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Semua akun aktif; satu scan Himawari dan satu scan GK2A terbaca di grid gabungan Sumatra + Kalimantan; NASA POWER, FIRMS, dan GIBS teruji.</div>
     <div class="rb-list">
     <article class="task" id="s0-1">
       <div class="task-head"><span class="tid">S0-1</span><span class="pill ai">Peran Semua</span><h3>Registrasi tim di Hack2Skill</h3></div>
@@ -532,7 +533,7 @@ roi = ee.Geometry.Rectangle([113.5, -2.6, 114.3, -1.9])
 wc = ee.ImageCollection(&quot;ESA/WorldCover/v200&quot;).first()
 frac = wc.eq(50).reduceRegion(ee.Reducer.mean(), roi, 100).getInfo()
 print(&quot;fraksi built-up sub-area:&quot;, frac)
-EOF</pre></li><li>Bila pendaftaran ditolak: tulis di log WORKLOG; unduh tile WorldCover dari <code>esa-worldcover.org</code> untuk bbox Kalimantan sebagai gantinya dan beri tahu A.</li></ol></div>
+EOF</pre></li><li>Bila pendaftaran ditolak: tulis di log WORKLOG; unduh tile WorldCover dari <code>esa-worldcover.org</code> untuk bbox Sumatra + Kalimantan sebagai gantinya dan beri tahu A.</li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Skrip mencetak <code>{'Map': 0.0…}</code> (angka kecil, tanpa galat).</p></div>
     </article>
     <article class="task" id="s0-4">
@@ -611,7 +612,7 @@ p = &quot;noaa-gk2a-pds/AMI/L1B/FD/202309/25/15&quot;
 for ch in (&quot;sw038&quot;, &quot;ir105&quot;):
     f = f&quot;{p}/gk2a_ami_le1b_{ch}_fd020ge_202309251500.nc&quot;
     print(ch, round(fs.size(f)/1e6, 1), &quot;MB&quot;); fs.get(f, &quot;data/local/raw/gk2a/&quot;)
-EOF</pre></li><li>Baca keduanya ke grid Kalimantan dan bandingkan.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+EOF</pre></li><li>Baca keduanya ke grid gabungan dan bandingkan (satu area di Sumatra, satu di Kalimantan).<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
 import glob, numpy as np
 from satpy import Scene
 from jobs.lib.region import AREA
@@ -640,32 +641,33 @@ EOF</pre></li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Kedua satelit: <code>NaN &lt; 0.01</code>, min/max 200–340 K, korelasi ≥ 0,8. Bila NaN Himawari ≥ 0,01: tambah segmen S04/S07 di <code>himawari.py</code>.</p><p>Bila satpy gagal membaca <code>.bz2</code>: jalankan <code>bunzip2 -k</code> dulu dan catat di WORKLOG ⚠️.</p><p>Median latensi tiap satelit ditulis di WORKLOG open item 8.</p></div>
     </article>
     <article class="task" id="s0-8">
-      <div class="task-head"><span class="tid">S0-8</span><span class="pill ai">Peran A</span><h3>KHG dan batas provinsi Kalimantan</h3></div>
-      <p class="goal">Bahan peat mask dan filter lima provinsi tersimpan lokal dengan sumbernya.</p>
+      <div class="task-head"><span class="tid">S0-8</span><span class="pill ai">Peran A</span><h3>KHG dan batas provinsi Sumatra + Kalimantan</h3></div>
+      <p class="goal">Bahan peat mask dan filter 15 provinsi tersimpan lokal dengan sumbernya.</p>
       <div class="task-grid">
         <div><h4>Prasyarat</h4><ul><li>S0-6 selesai</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>data/ref/khg_kalimantan.geojson</code> </li><li><code>data/ref/idn_adm1_meta.json</code> (lisensi)</li><li><code>data/ref/kalimantan_prov.geojson</code> (5 baris, kolom code)</li></ul></div>
+        <div><h4>Keluaran</h4><ul><li><code>data/ref/khg_sumkal.geojson</code> </li><li><code>data/ref/idn_adm1_meta.json</code> (lisensi)</li><li><code>data/ref/provinces.geojson</code> (15 baris, kolom code)</li></ul></div>
       </div>
       <div><h4>Langkah</h4><ol class="steps"><li>Tarik KHG untuk seluruh bbox (fungsi <code>fetch_khg</code> dari Backend 05b) dan simpan.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
 from jobs.build_peat_mask import fetch_khg
 from jobs.lib.region import MONITOR_BBOX
 g = fetch_khg(MONITOR_BBOX)
 print(&quot;fitur:&quot;, len(g), &quot;luas km2:&quot;, round(g.to_crs(6933).area.sum()/1e6))
-g.to_file(&quot;data/ref/khg_kalimantan.geojson&quot;, driver=&quot;GeoJSON&quot;)
+g.to_file(&quot;data/ref/khg_sumkal.geojson&quot;, driver=&quot;GeoJSON&quot;)
 EOF</pre></li><li>Unduh batas provinsi geoBoundaries dan catat lisensinya.<pre class="cmd">curl -s https://www.geoboundaries.org/api/current/gbOpen/IDN/ADM1/ &gt; data/ref/idn_adm1_meta.json
 jq -r &#x27;.boundaryLicense, .gjDownloadURL&#x27; data/ref/idn_adm1_meta.json
-curl -L -o data/ref/idn_adm1.geojson &quot;$(jq -r .gjDownloadURL data/ref/idn_adm1_meta.json)&quot;</pre></li><li>Pilih lima provinsi dan beri kode BPS (nama bisa Indonesia atau Inggris).<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+curl -L -o data/ref/idn_adm1.geojson &quot;$(jq -r .gjDownloadURL data/ref/idn_adm1_meta.json)&quot;</pre></li><li>Pilih 15 provinsi dan beri kode BPS (nama bisa Indonesia atau Inggris).<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
 import geopandas as gpd
 g = gpd.read_file(&quot;data/ref/idn_adm1.geojson&quot;)
 print(sorted(g.shapeName.unique()))
-CODE = {&quot;Kalimantan Barat&quot;:&quot;61&quot;,&quot;West Kalimantan&quot;:&quot;61&quot;,&quot;Kalimantan Tengah&quot;:&quot;62&quot;,&quot;Central Kalimantan&quot;:&quot;62&quot;,
-        &quot;Kalimantan Selatan&quot;:&quot;63&quot;,&quot;South Kalimantan&quot;:&quot;63&quot;,&quot;Kalimantan Timur&quot;:&quot;64&quot;,&quot;East Kalimantan&quot;:&quot;64&quot;,
-        &quot;Kalimantan Utara&quot;:&quot;65&quot;,&quot;North Kalimantan&quot;:&quot;65&quot;}
+CODE = {&quot;Aceh&quot;:&quot;11&quot;,&quot;North Sumatra&quot;:&quot;12&quot;,&quot;West Sumatra&quot;:&quot;13&quot;,&quot;Riau&quot;:&quot;14&quot;,&quot;Jambi&quot;:&quot;15&quot;,
+        &quot;South Sumatra&quot;:&quot;16&quot;,&quot;Bengkulu&quot;:&quot;17&quot;,&quot;Lampung&quot;:&quot;18&quot;,&quot;Bangka-Belitung Islands&quot;:&quot;19&quot;,
+        &quot;Riau Islands&quot;:&quot;21&quot;,&quot;West Kalimantan&quot;:&quot;61&quot;,&quot;Central Kalimantan&quot;:&quot;62&quot;,
+        &quot;South Kalimantan&quot;:&quot;63&quot;,&quot;East Kalimantan&quot;:&quot;64&quot;,&quot;North Kalimantan&quot;:&quot;65&quot;}
 k = g[g.shapeName.isin(CODE)].assign(code=lambda d: d.shapeName.map(CODE))
-k[[&quot;shapeName&quot;,&quot;code&quot;,&quot;geometry&quot;]].to_file(&quot;data/ref/kalimantan_prov.geojson&quot;, driver=&quot;GeoJSON&quot;)
+k[[&quot;shapeName&quot;,&quot;code&quot;,&quot;geometry&quot;]].to_file(&quot;data/ref/provinces.geojson&quot;, driver=&quot;GeoJSON&quot;)
 print(k[[&quot;shapeName&quot;,&quot;code&quot;]])
 EOF</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>KHG: jumlah fitur &gt; 0 dan luas tercetak (catat angkanya di log).</p><p>Provinsi: tabel tercetak tepat 5 baris dengan kode 61–65. Bila Kalimantan Utara tidak ada (data lama menggabungkannya ke Kaltim): catat, pakai 4 baris, dan tandai ⚠️.</p><p>Lisensi geoBoundaries tercatat di WORKLOG open item 12.</p></div>
+      <div class="check"><h4>Cek selesai</h4><p>KHG: jumlah fitur &gt; 0 dan luas tercetak (catat angkanya di log).</p><p>Provinsi: tabel tercetak tepat 15 baris dengan kode 11–19, 21, 61–65. Bila Kalimantan Utara atau Kepulauan Riau tidak ada (data lama menggabungkannya ke Kaltim/Riau): catat, pakai baris yang ada, dan tandai ⚠️.</p><p>Lisensi geoBoundaries tercatat di WORKLOG open item 12.</p></div>
     </article>
     <article class="task" id="s0-9">
       <div class="task-head"><span class="tid">S0-9</span><span class="pill ai">Peran B</span><h3>Uji NASA POWER hourly dan GIBS true colour</h3></div>
@@ -713,7 +715,7 @@ print(len(df), df.province.value_counts().to_dict(), &quot;sel POWER:&quot;, df.
 plt.figure(figsize=(8,6)); plt.scatter(df.lon, df.lat, s=0.3, c=df.peat_frac); plt.colorbar()
 plt.savefig(&quot;docs/peat_mask.png&quot;, dpi=150)
 EOF</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Jumlah piksel dan sel POWER tercetak (catat); semua <code>province</code> ∈ {61…65}; <code>peat_frac ≥ 0.5</code> dan <code>built_frac &lt; 0.2</code> untuk semua baris.</p><p><code>docs/peat_mask.png</code> menampilkan konsentrasi di pesisir selatan Kalteng dan Kalbar, tanpa titik di Sarawak/Sabah/Sulawesi. Bila sel POWER &gt; 300: ikuti WORKLOG open item 16.</p></div>
+      <div class="check"><h4>Cek selesai</h4><p>Jumlah piksel dan sel POWER tercetak (catat); semua <code>province</code> ∈ {11…19, 21, 61…65}; <code>peat_frac ≥ 0.5</code> dan <code>built_frac &lt; 0.2</code> untuk semua baris.</p><p><code>docs/peat_mask.png</code> menampilkan konsentrasi di pesisir timur Sumatra (Riau, Jambi, Sumsel) serta pesisir selatan Kalteng dan Kalbar, tanpa titik di Malaysia, Singapura, Brunei, Jawa, atau Sulawesi. Bila sel POWER &gt; 600: ikuti WORKLOG open item 16.</p></div>
     </article>
     <article class="task" id="a2">
       <div class="task-head"><span class="tid">A2</span><span class="pill ai">Peran A</span><h3>asapify-ingest-himawari → himawari/</h3></div>
@@ -879,13 +881,13 @@ gcloud run services list --region $REGION                                       
     <div class="rb-list">
     <article class="task" id="d1">
       <div class="task-head"><span class="tid">D1</span><span class="pill ai">Peran D</span><h3>Peta operator</h3></div>
-      <p class="goal">Operator melihat status semua piksel gambut Kalimantan.</p>
+      <p class="goal">Operator melihat status semua piksel gambut Sumatra dan Kalimantan (15 provinsi).</p>
       <div class="task-grid">
         <div><h4>Prasyarat</h4><ul><li>C3</li></ul></div>
         <div><h4>Keluaran</h4><ul><li><code>web/src/pages/PetaOperator.ts</code> </li></ul></div>
       </div>
       <div><h4>Langkah</h4><ol class="steps"><li>Buat proyek web.<pre class="cmd">npm create vite@latest web -- --template vanilla-ts
-cd web &amp;&amp; npm i maplibre-gl firebase</pre></li><li>Peta dibuka dengan <code>map.fitBounds([[108.5,-4.4],[119.4,4.5]])</code>; layer <code>pixel-status</code> dari <code>GET /operator/grid?as_of=</code>, warna, ikon, dan arsiran persis halaman UI bagian 05; filter provinsi 61–65.</li><li>Login Google (Firebase Auth); hanya klaim <code>role = operator</code> yang bisa masuk (<code>infra/set_role.py</code>).</li></ol></div>
+cd web &amp;&amp; npm i maplibre-gl firebase</pre></li><li>Peta dibuka dengan <code>map.fitBounds([[94.9,-6.1],[119.4,6.0]])</code>; layer <code>pixel-status</code> dari <code>GET /operator/grid?as_of=</code>, warna, ikon, dan arsiran persis halaman UI bagian 05; filter provinsi 11–19, 21, 61–65 (dikelompokkan per pulau).</li><li>Login Google (Firebase Auth); hanya klaim <code>role = operator</code> yang bisa masuk (<code>infra/set_role.py</code>).</li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Dengan <code>?as_of=2023-09-25T16:00Z</code>: empat status tampil dengan ikon + warna, NO_OBSERVATION diarsir, kelompok AWAS bergaris putus.</p></div>
     </article>
     <article class="task" id="d2">

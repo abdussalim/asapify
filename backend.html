@@ -435,7 +435,7 @@
       <li><a href="#endpoint"><span>03</span>Endpoint</a></li>
       <li><a href="#contoh"><span>04</span>Contoh</a></li>
       <li><a href="#model"><span>05</span>Model data</a></li>
-      <li><a href="#kalimantan"><span>05b</span>Wilayah</a></li>
+      <li><a href="#wilayah"><span>05b</span>Wilayah</a></li>
       <li><a href="#observasi"><span>05c</span>Himawari &amp; GK2A</a></li>
       <li><a href="#environment"><span>05d</span>NASA POWER</a></li>
       <li><a href="#maut"><span>05e</span>MAUT</a></li>
@@ -457,7 +457,7 @@
       <table class="wide">
         <thead><tr><th scope="col">Komponen</th><th scope="col">Pemicu</th><th scope="col">Membaca</th><th scope="col">Menulis</th><th scope="col">Memanggil</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>asapify-build</code> (job)</th><td>manual, sekali</td><td>BIG KHG, <code>data/ref/kalimantan_prov.geojson</code>, WorldCover (EE)</td><td><code>peat/pixels.parquet</code>, <code>neighbors8</code>, <code>neighbors_r5</code>, <code>power_cells</code></td><td>Earth Engine</td></tr>
+          <tr><th scope="row"><code>asapify-build</code> (job)</th><td>manual, sekali</td><td>BIG KHG, <code>data/ref/provinces.geojson</code>, WorldCover (EE)</td><td><code>peat/pixels.parquet</code>, <code>neighbors8</code>, <code>neighbors_r5</code>, <code>power_cells</code></td><td>Earth Engine</td></tr>
           <tr><th scope="row"><code>asapify-ingest-himawari</code> (job)</th><td>Scheduler <code>*/10 20-23,0-4</code></td><td>NOAA <code>noaa-himawari9</code>, <code>peat/</code></td><td><code>himawari/…/HHMM.parquet</code>, <code>raw/himawari/manifest/</code>, <code>runs</code></td><td>—</td></tr>
           <tr><th scope="row"><code>asapify-ingest-gk2a</code> (job)</th><td>Scheduler <code>*/10 20-23,0-4</code></td><td>NOAA <code>noaa-gk2a-pds</code>, <code>peat/</code></td><td><code>gk2a/…/HHMM.parquet</code>, <code>raw/gk2a/manifest/</code>, <code>runs</code></td><td>—</td></tr>
           <tr><th scope="row"><code>asapify-environment</code> (job)</th><td>Scheduler <code>0 12 * * *</code></td><td>NASA POWER, <code>himawari/</code>, <code>gk2a/</code>, <code>score/</code> (piksel beku)</td><td><code>environment/power/</code>, <code>environment/thermal/</code>, <code>environment/bias/</code>, <code>raw/power/</code></td><td>—</td></tr>
@@ -479,7 +479,7 @@
         <dt>Base path</dt><dd>API operator: <code>/api/v1</code>, lewat Firebase Hosting (satu origin dengan web). Agen: <code>/verify</code> di URL Cloud Run privat.</dd>
         <dt>Format</dt><dd>JSON UTF-8. Data peta GeoJSON, koordinat <code>[lon, lat]</code>.</dd>
         <dt>Waktu</dt><dd>ISO 8601. Simpan UTC, tampilkan WIB. <code>slot</code> = waktu scan 10 menit UTC.</dd>
-        <dt>ID</dt><dd>piksel <code>p{row}_{col}</code> di grid 0,02° Kalimantan (545 × 445, baris 0 di utara); kelompok <code>C-{MMDD}-{nnn}</code>; verifikasi <code>{cluster_id}_{slot:%Y%m%dT%H%M}</code></dd>
+        <dt>ID</dt><dd>piksel <code>p{row}_{col}</code> di grid 0,02° Sumatra + Kalimantan (1.225 × 620, asal 94,9° BT / 6,2° LU, baris 0 di utara); kelompok <code>C-{MMDD}-{nnn}</code>; verifikasi <code>{cluster_id}_{slot:%Y%m%dT%H%M}</code></dd>
         <dt>Status</dt><dd><code>SAFE</code>, <code>NO_OBSERVATION</code>, <code>WATCH</code>, <code>AWAS</code> (huruf besar, persis)</dd>
         <dt>Auth operator</dt><dd>Firebase ID token, claim <code>role = "operator"</code></dd>
         <dt>Auth internal</dt><dd>OIDC dari <code>sa-jobs</code> atau <code>sa-api</code> ke <code>asapify-agent</code> (Cloud Run IAM <code>run.invoker</code>)</dd>
@@ -529,9 +529,9 @@
   "id": "C-0924-002",
   "state": "active",
   "province": "62",
-  "rep_pixel": "p212_318",
+  "rep_pixel": "p420_950",
   "centroid": [113.92, -2.21],
-  "pixels": ["p212_318", "p212_319", "p213_318", "p211_319"],
+  "pixels": ["p420_950", "p420_951", "p421_950", "p419_951"],
   "trigger_slot": "2023-09-24T15:10:00Z",
   "utility_score": 0.73,
   "neighbour_support": 0.375,
@@ -585,7 +585,7 @@
           <caption>Cloud Storage (Parquet, kecuali disebut lain)</caption>
           <thead><tr><th scope="col">Path</th><th scope="col">Isi</th></tr></thead>
           <tbody>
-            <tr><th scope="row"><code>peat/pixels.parquet</code></th><td>pixel_id, row, col, lat, lon, peat_frac, built_frac, kode_khg, province (61–65), cell_id</td></tr>
+            <tr><th scope="row"><code>peat/pixels.parquet</code></th><td>pixel_id, row, col, lat, lon, peat_frac, built_frac, kode_khg, province (11–19, 21, 61–65), cell_id</td></tr>
             <tr><th scope="row"><code>peat/neighbors8.parquet</code>, <code>neighbors_r5.parquet</code>, <code>power_cells.parquet</code></th><td>pixel_id, neighbor_ids[]; cell_id, lat, lon, n_pixels</td></tr>
             <tr><th scope="row"><code>himawari/YYYY/MM/DD/HHMM.parquet</code></th><td>pixel_id, mir (B07), win (B14), cloud</td></tr>
             <tr><th scope="row"><code>gk2a/YYYY/MM/DD/HHMM.parquet</code></th><td>pixel_id, mir (SW038), win (IR105), cloud</td></tr>
@@ -615,10 +615,10 @@
     </div>
   </section>
 
-  <section id="kalimantan">
+  <section id="wilayah">
     <div class="section-head">
-      <span class="eyebrow">05b · Wilayah Kalimantan ✅</span>
-      <h2>Satu grid, lima provinsi, hanya piksel gambut</h2>
+      <span class="eyebrow">05b · Wilayah Sumatra + Kalimantan ✅</span>
+      <h2>Satu grid, lima belas provinsi, hanya piksel gambut</h2>
       <p>Semua job, backtest, dan UI memakai konstanta yang sama dari <code>jobs/lib/region.py</code>.</p>
     </div>
     <div class="grid-2">
@@ -627,18 +627,23 @@
 <pre>from pyresample import create_area_def
 
 <span class="c"># lon_min, lat_min, lon_max, lat_max (WGS84)</span>
-MONITOR_BBOX  = (108.5, -4.4, 119.4, 4.5)   <span class="c"># seluruh Kalimantan</span>
-BACKTEST_BBOX = (113.5, -2.6, 114.3, -1.9)  <span class="c"># sub-area Kalteng</span>
-GRID_DEG = 0.02                             <span class="c"># 545 kolom × 445 baris</span>
-NIGHT_UTC = range(13, 21)                   <span class="c"># 20.00–04.00 WIB</span>
+MONITOR_BBOX  = (94.9, -6.2, 119.4, 6.2)    <span class="c"># Sumatra + Kalimantan (asal grid 94,9 BT / 6,2 LU)</span>
+BACKTEST_BBOX = (113.5, -2.6, 114.3, -1.9)  <span class="c"># sub-area Kalteng (utama)</span>
+BACKTEST_BBOX_SUMSEL = (105.2, -3.7, 106.0, -3.0)  <span class="c"># OKI, Sumsel (direncanakan)</span>
+GRID_DEG = 0.02                             <span class="c"># 1.225 kolom × 620 baris</span>
+NIGHT_UTC = range(13, 21)                   <span class="c"># 20.00–04.00 WIB (Sumatra juga WIB)</span>
 
 PROVINCES = {                               <span class="c"># kode BPS</span>
+    "11": "Aceh", "12": "Sumatera Utara", "13": "Sumatera Barat",
+    "14": "Riau", "15": "Jambi", "16": "Sumatera Selatan",
+    "17": "Bengkulu", "18": "Lampung",
+    "19": "Kepulauan Bangka Belitung", "21": "Kepulauan Riau",
     "61": "Kalimantan Barat",   "62": "Kalimantan Tengah",
     "63": "Kalimantan Selatan", "64": "Kalimantan Timur",
     "65": "Kalimantan Utara",
 }
 
-AREA = create_area_def("kalimantan_002", "EPSG:4326",
+AREA = create_area_def("sumkal_002", "EPSG:4326",
                        area_extent=MONITOR_BBOX, resolution=GRID_DEG)
 
 def pixel_id(row: int, col: int) -&gt; str:
@@ -647,14 +652,14 @@ def pixel_id(row: int, col: int) -&gt; str:
       <div class="card">
         <h4>Kenapa bbox saja tidak cukup</h4>
         <ul>
-          <li>Kotak <code>MONITOR_BBOX</code> ikut mencakup Sarawak, Sabah, Brunei, dan sebagian pantai Sulawesi Barat.</li>
-          <li>KHG hanya berisi Indonesia, jadi Malaysia dan Brunei otomatis keluar. Pantai Sulawesi dikeluarkan dengan <strong>filter provinsi</strong> (kode 61–65).</li>
-          <li>Kolom <code>province</code> per piksel juga dipakai untuk memilih grup Telegram peringatan.</li>
+          <li>Kotak <code>MONITOR_BBOX</code> ikut mencakup Semenanjung Malaysia, Singapura, Sarawak, Sabah, Brunei, ujung barat Jawa, dan sebagian pantai Sulawesi Barat.</li>
+          <li>KHG hanya berisi Indonesia, jadi Malaysia, Singapura, dan Brunei otomatis keluar. Jawa dan Sulawesi dikeluarkan dengan <strong>filter provinsi</strong> (kode 11–19, 21, 61–65).</li>
+          <li>Kolom <code>province</code> per piksel juga dipakai untuk memilih grup Telegram peringatan (satu grup per provinsi).</li>
         </ul>
         <dl class="kv" style="margin-top:10px">
-          <dt>Grid penuh</dt><dd>545 × 445 = ~242 ribu sel</dd>
-          <dt>Piksel gambut</dt><dd>perkiraan kasar ~10 ribu ⚠️ (hitung di A1)</dd>
-          <dt>Sel NASA POWER</dt><dd>0,5° × 0,625°; perkiraan 100–150 sel berisi gambut ⚠️</dd>
+          <dt>Grid penuh</dt><dd>1.225 × 620 = ~760 ribu sel</dd>
+          <dt>Piksel gambut</dt><dd>perkiraan kasar ~20–25 ribu ⚠️ (hitung di A1)</dd>
+          <dt>Sel NASA POWER</dt><dd>0,5° × 0,625°; perkiraan 250–400 sel berisi gambut ⚠️</dd>
           <dt>Per slot</dt><dd>2 file Parquet kecil (ratusan KB), 1 per satelit</dd>
         </dl>
       </div>
@@ -689,7 +694,7 @@ def fraction(gdf, sub=10):                      <span class="c"># fraksi luas pe
     return fine.reshape(h, sub, w, sub).mean(axis=(1, 3))
 
 khg  = fetch_khg(MONITOR_BBOX).make_valid()
-prov = gpd.read_file("data/ref/kalimantan_prov.geojson")   <span class="c"># Runbook S0-8</span>
+prov = gpd.read_file("data/ref/provinces.geojson")   <span class="c"># 15 provinsi, Runbook S0-8</span>
 peat_frac  = fraction(khg.clip(prov))
 built_frac = np.load("data/ref/built_frac_002.npy")
 

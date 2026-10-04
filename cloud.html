@@ -460,8 +460,9 @@ export GEMINI_LOCATION="global"                   <span class="c"># us-central1 
 export GEMINI_MODEL="&lt;nama model Gemini Flash terbaru&gt;"
 export DATA_BUCKET="asapify-data-$PROJECT_ID"      <span class="c"># fitur, skor, baseline, crop</span>
 export PUBLIC_BUCKET="asapify-public-$PROJECT_ID"  <span class="c"># lapisan peta statis (piksel gambut GeoJSON)</span>
-export BBOX="108.5,-4.4,119.4,4.5"                <span class="c"># seluruh Kalimantan, dipotong peat mask</span>
-export BACKTEST_BBOX="113.5,-2.6,114.3,-1.9"      <span class="c"># sub-area Kalteng</span>
+export BBOX="94.9,-6.2,119.4,6.2"                 <span class="c"># Sumatra + Kalimantan, dipotong peat mask</span>
+export BACKTEST_BBOX="113.5,-2.6,114.3,-1.9"      <span class="c"># sub-area Kalteng (utama)</span>
+export BACKTEST_BBOX_SUMSEL="105.2,-3.7,106.0,-3.0"  <span class="c"># OKI, Sumsel (direncanakan)</span>
 export WARMUP_START="2023-08-01"; export BACKTEST_START="2023-09-01"; export BACKTEST_END="2023-10-15"
 export IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/asapify/app:latest"
 gcloud config set project $PROJECT_ID
@@ -614,7 +615,7 @@ firebase deploy --only firestore:rules,firestore:indexes</pre>
         <li>Daftarkan project ke Earth Engine (nonkomersial), Runbook <a href="runbook.html#s0-3">S0-3</a>.</li>
         <li><code>sa-jobs</code> sudah punya <code>earthengine.writer</code> dan Service Usage Consumer (bagian 03).</li>
         <li>Dipakai hanya oleh <code>asapify-build</code> (<code>ESA/WorldCover/v200</code>, kelas 50). Tidak ada Landsat, tidak ada panggilan dari agen.</li>
-        <li>Bila pendaftaran ditolak: unduh tile WorldCover untuk bbox Kalimantan dari situs ESA dan hitung fraksi yang sama secara lokal.</li>
+        <li>Bila pendaftaran ditolak: unduh tile WorldCover untuk bbox Sumatra + Kalimantan dari situs ESA dan hitung fraksi yang sama secara lokal.</li>
       </ol>
     </div>
   </section>
