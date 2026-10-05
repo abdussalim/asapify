@@ -499,10 +499,10 @@
         <thead><tr><th scope="col">Metode</th><th scope="col">Path</th><th scope="col">Auth</th><th scope="col">Fungsi</th></tr></thead>
         <tbody>
           <tr class="sub"><td colspan="4">asapify-api · umum (setelah <code>/api/v1</code>)</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/health</code>, <code>/meta</code></td><td><span class="auth pub">publik</span></td><td>cek hidup; slot terakhir per satelit, malam/siang, status replay</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/health</code>, <code>/meta</code></td><td><span class="auth pub">publik</span></td><td>cek hidup; slot terakhir per satelit, malam/siang, status replay, rentang malam arsip yang bisa dibuka (<code>nights.first</code>–<code>nights.last</code>)</td></tr>
           <tr class="sub"><td colspan="4">asapify-api · operator</td></tr>
           <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/grid?as_of=</code></td><td><span class="auth op">operator</span></td><td>status semua piksel gambut untuk slot malam terakhir ≤ <code>as_of</code> (GeoJSON titik: status, utility, n_sat)</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters?state=active</code></td><td><span class="auth op">operator</span></td><td>daftar kelompok AWAS + hasil verifikasi terakhir + keputusan</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters?state=active</code>, <code>?night=</code></td><td><span class="auth op">operator</span></td><td>daftar kelompok AWAS + hasil verifikasi terakhir + keputusan. Dengan <code>night=YYYY-MM-DD</code> (malam arsip): kelompok yang AWAS di salah satu slot malam itu, aktif maupun ditutup (<code>first_awas_at</code> ≤ akhir malam dan <code>last_awas_at</code> ≥ awal malam); <code>state</code> diabaikan</td></tr>
           <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters/{id}</code></td><td><span class="auth op">operator</span></td><td>deret utility 3 malam, atribut MAUT slot pemicu, grid tetangga, verifikasi + jejak tool, signed URL citra</td></tr>
           <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/verify</code></td><td><span class="auth op">operator</span></td><td>minta verifikasi ulang; diteruskan ke agen (hormati 6 jam kecuali <code>force=true</code>)</td></tr>
           <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/decision</code></td><td><span class="auth op">operator</span></td><td><code>publish</code> (caption; bot mengirim ke grup peringatan provinsi) / <code>reject</code> (alasan wajib)</td></tr>
@@ -981,7 +981,8 @@ verifier = Agent(
 <pre>class Evidence(BaseModel):
     source: Literal["rule_engine", "viirs_firms",
                     "viirs_image", "himawari_image"]
-    finding: str = Field(max_length=200)
+    finding: str = Field(max_length=200)      <span class="c"># Bahasa Indonesia</span>
+    finding_en: str = Field(max_length=200)   <span class="c"># temuan yang sama untuk UI bahasa Inggris</span>
     observed_at: str | None = None
     age_h: float | None = None
 
