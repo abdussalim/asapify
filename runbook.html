@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Runbook ASAPify</title>
+<title>ASAPify Runbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -419,591 +419,604 @@
   .nbg span.p { background: var(--ember); color: #fff; font-weight: 700; border-color: var(--ember); }
   .nbg span.c { background: repeating-linear-gradient(45deg, var(--surface-2) 0 4px, var(--line) 4px 6px); }
   .formula { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; }
+
+  /* ---------- language switch ---------- */
+  .langs { display: flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; flex-shrink: 0; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; }
+  .langs a, .langs span { padding: 4px 8px; border-radius: 6px; line-height: 1.2; color: var(--ink-dim); text-decoration: none; }
+  .langs a:hover { color: var(--ink); background: var(--surface-2); }
+  .langs [aria-current] { color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
 </style>
 </head>
 <body>
-<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html">Rencana</a><a href="ui.html">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html">Konfigurasi Cloud</a><a href="runbook.html" aria-current="page">Runbook</a></div></div></nav>
+<nav class="topnav" aria-label="Main navigation"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>team plan</small></a><div class="navlinks"><a href="index.html">Plan</a><a href="ui.html">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html">Cloud setup</a><a href="runbook.html" aria-current="page">Runbook</a></div><div class="langs" aria-label="Language"><span aria-current="true">EN</span><a href="id/runbook.html" hreflang="id" lang="id">ID</a></div></div></nav>
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Runbook · langkah yang bisa langsung dijalankan</span>
-    <h1>Runbook ASAPify</h1>
-    <p class="lede">Setiap tugas punya <strong>prasyarat</strong>, <strong>langkah</strong> dengan perintah lengkap, <strong>keluaran</strong> (nama file atau resource), dan <strong>cek selesai</strong> yang bisa dibuktikan. Tugas dianggap selesai hanya bila cek selesai lulus dan buktinya ditulis di log WORKLOG.</p>
-    <ul class="toc" aria-label="Isi halaman"><li><a href="#aturan-pakai"><span>00</span>Aturan pakai</a></li><li><a href="#s0"><span>S0</span>29 Sep – 1 Okt</a></li><li><a href="#s1"><span>S1</span>2–5 Okt</a></li><li><a href="#s2"><span>S2</span>6–9 Okt</a></li><li><a href="#s3"><span>S3</span>10–13 Okt</a></li><li><a href="#s4"><span>S4</span>14–16 Okt</a></li><li><a href="#s5"><span>S5</span>17–18 Okt</a></li></ul>
+    <span class="eyebrow">Runbook · steps you can run as written · web aligned 6 Oct</span>
+    <h1>ASAPify runbook</h1>
+    <p class="lede">Every task has <strong>prerequisites</strong>, <strong>steps</strong> with complete commands, <strong>outputs</strong> (file or resource names) and a <strong>done check</strong> you can prove. A task counts as done only when the done check passes and the evidence is written in the WORKLOG.</p>
+    <ul class="toc" aria-label="Page contents"><li><a href="#aturan-pakai"><span>00</span>How to use</a></li><li><a href="#s0"><span>S0</span>29 Sep – 1 Oct</a></li><li><a href="#s1"><span>S1</span>2–5 Oct</a></li><li><a href="#s2"><span>S2</span>6–9 Oct</a></li><li><a href="#s3"><span>S3</span>10–13 Oct</a></li><li><a href="#s4"><span>S4</span>14–16 Oct</a></li><li><a href="#s5"><span>S5</span>17–18 Oct</a></li></ul>
   </header>
 
   <section id="aturan-pakai">
     <div class="section-head">
-      <span class="eyebrow">00 · Aturan pakai</span>
-      <h2>Sebelum menjalankan perintah apa pun</h2>
+      <span class="eyebrow">00 · How to use</span>
+      <h2>Before running any command</h2>
     </div>
     <div class="grid-2">
       <div class="card">
-        <h4>Konvensi</h4>
+        <h4>Conventions</h4>
         <ul>
-          <li>Semua perintah dijalankan dari <strong>root repo</strong> <code>asapify/</code>, dengan venv aktif (<code>source .venv/bin/activate</code>) dan <code>source infra/env.sh</code>.</li>
-          <li>Semua waktu di kode dan argumen <strong>UTC</strong> (akhiran <code>Z</code>). Malam = 13.00–21.00 UTC = 20.00–04.00 WIB.</li>
-          <li><code>&lt;…&gt;</code> berarti nilai yang harus diganti. Tidak ada placeholder lain.</li>
-          <li>Kode acuan (region, peat mask, Himawari, GK2A, NASA POWER, MAUT, agen, Telegram) ada di <a href="backend.html">Backend &amp; API</a>; perintah gcloud di <a href="cloud.html">Konfigurasi Cloud</a>.</li>
-          <li>⚠️ = belum diverifikasi. Bila hasilnya berbeda dari yang tertulis, catat di WORKLOG log dan beri tahu pemilik tugas berikutnya.</li>
+          <li>Every command runs from the <strong>repo root</strong> <code>asapify/</code>, with the venv active (<code>source .venv/bin/activate</code>) and <code>source infra/env.sh</code>.</li>
+          <li>All times in code and arguments are <strong>UTC</strong> (suffix <code>Z</code>). Night = 13:00–21:00 UTC = 20:00–04:00 WIB.</li>
+          <li><code>&lt;…&gt;</code> marks a value you must replace. There are no other placeholders.</li>
+          <li>Reference code (region, peat mask, Himawari, GK2A, NASA POWER, MAUT, agent, Telegram) is in <a href="backend.html">Backend &amp; API</a>; gcloud commands are in <a href="cloud.html">Cloud setup</a>.</li>
+          <li>⚠️ = not verified yet. If the result differs from what is written, note it in the WORKLOG log and tell the owner of the next task.</li>
         </ul>
       </div>
       <div class="card">
-        <h4>Bukti selesai</h4>
+        <h4>Proof of done</h4>
         <ul>
-          <li>Tulis di WORKLOG bagian 18: <code>Selesai: &lt;ID&gt; — &lt;ringkas&gt; — &lt;bukti&gt;</code>. Bukti = path file, keluaran perintah cek, atau link.</li>
-          <li>Kode masuk lewat PR ke <code>main</code>; unit test di tugas harus lulus di PR.</li>
-          <li>Rahasia (MAP_KEY, token bot) tidak pernah masuk repo, chat, atau screenshot.</li>
+          <li>Write in WORKLOG section 18: <code>Done: &lt;ID&gt; — &lt;summary&gt; — &lt;evidence&gt;</code>. Evidence = a file path, the output of the check command, or a link.</li>
+          <li>Code lands through a PR to <code>main</code>; the task's unit tests must pass in the PR.</li>
+          <li>Secrets (MAP_KEY, bot token) never go into the repo, chat or screenshots.</li>
         </ul>
       </div>
     </div>
     <div class="code" style="margin-top:14px">
-      <div class="code-head"><span>Variabel (buat sekali di S0-2)</span><span>infra/env.sh</span></div>
-<pre># infra/env.sh — jalankan `source infra/env.sh` di awal setiap sesi terminal
-export PROJECT_ID=&quot;asapify-&lt;inisial&gt;-2026&quot;        # huruf kecil, unik global; tetapkan di S0-2
-export REGION=&quot;asia-southeast2&quot;
-export GEMINI_LOCATION=&quot;global&quot;
-export GEMINI_MODEL=&quot;&lt;nama model Gemini Flash terbaru di Vertex AI&gt;&quot;
-export DATA_BUCKET=&quot;asapify-data-$PROJECT_ID&quot;
-export PUBLIC_BUCKET=&quot;asapify-public-$PROJECT_ID&quot;
-export BBOX=&quot;94.9,-6.2,119.4,6.2&quot;                   # Sumatra + Kalimantan
-export BACKTEST_BBOX=&quot;113.5,-2.6,114.3,-1.9&quot;        # sub-area Kalteng (default)
-export BACKTEST_BBOX_SUMSEL=&quot;105.2,-3.7,106.0,-3.0&quot; # OKI, Sumsel (direncanakan)
-export WARMUP_START=&quot;2023-08-01&quot;                    # 30 malam untuk baseline awal
-export BACKTEST_START=&quot;2023-09-01&quot;; export BACKTEST_END=&quot;2023-10-15&quot;
-export IMAGE=&quot;$REGION-docker.pkg.dev/$PROJECT_ID/asapify/app:latest&quot;
+      <div class="code-head"><span>Variables (create once in S0-2)</span><span>infra/env.sh</span></div>
+<pre># infra/env.sh — run `source infra/env.sh` at the start of every terminal session
+export PROJECT_ID="asapify-&lt;initials&gt;-2026"       # lowercase, globally unique; set in S0-2
+export REGION="asia-southeast2"
+export GEMINI_LOCATION="global"
+export GEMINI_MODEL="&lt;latest Gemini Flash model name on Vertex AI&gt;"
+export DATA_BUCKET="asapify-data-$PROJECT_ID"
+export PUBLIC_BUCKET="asapify-public-$PROJECT_ID"
+export BBOX="94.9,-6.2,119.4,6.2"                   # Sumatra + Kalimantan
+export BACKTEST_BBOX="113.5,-2.6,114.3,-1.9"        # Central Kalimantan sub-area (default)
+export BACKTEST_BBOX_SUMSEL="105.2,-3.7,106.0,-3.0" # OKI, South Sumatra (planned)
+export WARMUP_START="2023-08-01"                    # 30 nights for the initial baseline
+export BACKTEST_START="2023-09-01"; export BACKTEST_END="2023-10-15"
+export IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/asapify/app:latest"
 gcloud config set project $PROJECT_ID &gt;/dev/null
-JOBS_SA=&quot;sa-jobs@$PROJECT_ID.iam.gserviceaccount.com&quot;
-AGENT_SA=&quot;sa-agent@$PROJECT_ID.iam.gserviceaccount.com&quot;
-API_SA=&quot;sa-api@$PROJECT_ID.iam.gserviceaccount.com&quot;
-SCHED_SA=&quot;sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com&quot;</pre>
+JOBS_SA="sa-jobs@$PROJECT_ID.iam.gserviceaccount.com"
+AGENT_SA="sa-agent@$PROJECT_ID.iam.gserviceaccount.com"
+API_SA="sa-api@$PROJECT_ID.iam.gserviceaccount.com"
+SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
     </div>
   </section>
 
   <section id="s0">
     <div class="section-head">
-      <span class="eyebrow">Sprint 0 · 29 Sep – 1 Okt</span>
-      <h2>Akun dan data lokal</h2>
-      <p>Tugas: <a href="#s0-1">S0-1</a> · <a href="#s0-2">S0-2</a> · <a href="#s0-3">S0-3</a> · <a href="#s0-4">S0-4</a> · <a href="#s0-5">S0-5</a> · <a href="#s0-6">S0-6</a> · <a href="#s0-7">S0-7</a> · <a href="#s0-8">S0-8</a> · <a href="#s0-9">S0-9</a></p>
+      <span class="eyebrow">Sprint 0 · 29 Sep – 1 Oct</span>
+      <h2>Accounts and local data</h2>
+      <p>Tasks: <a href="#s0-1">S0-1</a> · <a href="#s0-2">S0-2</a> · <a href="#s0-3">S0-3</a> · <a href="#s0-4">S0-4</a> · <a href="#s0-5">S0-5</a> · <a href="#s0-6">S0-6</a> · <a href="#s0-7">S0-7</a> · <a href="#s0-8">S0-8</a> · <a href="#s0-9">S0-9</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Semua akun aktif; satu scan Himawari dan satu scan GK2A terbaca di grid gabungan Sumatra + Kalimantan; NASA POWER, FIRMS, dan GIBS teruji.</div>
+    <div class="sprint-done"><strong>Sprint done when:</strong> All accounts are active; one Himawari scan and one GK2A scan are read onto the combined Sumatra + Kalimantan grid; NASA POWER, FIRMS and GIBS are tested.</div>
     <div class="rb-list">
     <article class="task" id="s0-1">
-      <div class="task-head"><span class="tid">S0-1</span><span class="pill ai">Peran Semua</span><h3>Registrasi tim di Hack2Skill</h3></div>
-      <p class="goal">Tim tercatat resmi sebelum 11 Okt; tanpa ini submit tidak sah.</p>
+      <div class="task-head"><span class="tid">S0-1</span><span class="pill ai">All roles</span><h3>Register the team on Hack2Skill</h3></div>
+      <p class="goal">The team is officially registered before 11 Oct; without this the submission is not valid.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>Email aktif tiap anggota</li><li>Semua anggota profesional bekerja dan berusia ≥ 21 tahun</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Tim ASAPify di dashboard Hack2Skill</li><li><code>docs/registrasi.png</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>An active email for each member</li><li>Every member is a working professional aged ≥ 21</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Team ASAPify on the Hack2Skill dashboard</li><li><code>docs/registrasi.png</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Ketua membuka halaman AI Builder Cup 2026 lewat <code>aibuildercup.com</code>, klik tautan pendaftaran Hack2Skill, lalu masuk dengan akun Google.</li><li>Buat tim bernama <code>ASAPify</code>. Pilih tema <strong>Sustainability &amp; Social Impact</strong>.</li><li>Undang 1–3 anggota lewat email mereka. Setiap anggota membuka email undangan dan menerima.</li><li>Ambil tangkapan layar halaman tim, simpan sebagai <code>docs/registrasi.png</code> di repo.</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Dashboard tim menampilkan 2–4 anggota dengan status aktif. Batas: 1 Okt (keras: 11 Okt).</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>The lead opens the AI Builder Cup 2026 page via <code>aibuildercup.com</code>, clicks the Hack2Skill registration link, and signs in with a Google account.</li><li>Create a team named <code>ASAPify</code>. Choose the <strong>Sustainability &amp; Social Impact</strong> theme.</li><li>Invite 1–3 members by email. Each member opens the invitation email and accepts.</li><li>Take a screenshot of the team page and save it as <code>docs/registrasi.png</code> in the repo.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>The team dashboard shows 2–4 members with active status. Deadline: 1 Oct (hard: 11 Oct).</p></div>
     </article>
     <article class="task" id="s0-2">
-      <div class="task-head"><span class="tid">S0-2</span><span class="pill ai">Peran C</span><h3>Project GCP, billing, budget, API</h3></div>
-      <p class="goal">Satu project untuk semua layanan, dengan budget alert supaya biaya Gemini dan unduhan terkendali.</p>
+      <div class="task-head"><span class="tid">S0-2</span><span class="pill ai">Role C</span><h3>GCP project, billing, budget, APIs</h3></div>
+      <p class="goal">One project for every service, with a budget alert so Gemini and download costs stay under control.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>gcloud CLI terpasang (atau pakai Cloud Shell)</li><li>Akun billing Google Cloud</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Project $PROJECT_ID dengan billing aktif</li><li>Budget alert 50/90/100%</li><li><code>infra/env.sh</code> di repo</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>gcloud CLI installed (or use Cloud Shell)</li><li>A Google Cloud billing account</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Project $PROJECT_ID with billing enabled</li><li>Budget alert at 50/90/100%</li><li><code>infra/env.sh</code> in the repo</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Masuk dan buat project. Ganti <code>&lt;inisial&gt;</code>.<pre class="cmd">gcloud auth login
-export PROJECT_ID=asapify-&lt;inisial&gt;-2026
-gcloud projects create $PROJECT_ID --name=&quot;ASAPify&quot;</pre></li><li>Hubungkan billing. Salin <code>ACCOUNT_ID</code> dari perintah pertama.<pre class="cmd">gcloud billing accounts list
-gcloud billing projects link $PROJECT_ID --billing-account=&lt;ACCOUNT_ID&gt;</pre></li><li>Pasang budget alert (angka 50 USD 💡, sesuaikan).<pre class="cmd">gcloud billing budgets create --billing-account=&lt;ACCOUNT_ID&gt; \
+      <div><h4>Steps</h4><ol class="steps"><li>Sign in and create the project. Replace <code>&lt;initials&gt;</code>.<pre class="cmd">gcloud auth login
+export PROJECT_ID=asapify-&lt;initials&gt;-2026
+gcloud projects create $PROJECT_ID --name="ASAPify"</pre></li><li>Link billing. Copy <code>ACCOUNT_ID</code> from the first command.<pre class="cmd">gcloud billing accounts list
+gcloud billing projects link $PROJECT_ID --billing-account=&lt;ACCOUNT_ID&gt;</pre></li><li>Set a budget alert (50 USD is a 💡 figure, adjust it).<pre class="cmd">gcloud billing budgets create --billing-account=&lt;ACCOUNT_ID&gt; \
   --display-name=asapify-budget --budget-amount=50USD \
-  --threshold-rule=percent=0.5 --threshold-rule=percent=0.9 --threshold-rule=percent=1.0</pre></li><li>Buat <code>infra/env.sh</code> persis seperti blok di bagian "Variabel" halaman ini, lalu muat.<pre class="cmd">source infra/env.sh</pre></li><li>Aktifkan API.<pre class="cmd">gcloud services enable run.googleapis.com cloudscheduler.googleapis.com \
+  --threshold-rule=percent=0.5 --threshold-rule=percent=0.9 --threshold-rule=percent=1.0</pre></li><li>Create <code>infra/env.sh</code> exactly like the block in "Variables" on this page, then load it.<pre class="cmd">source infra/env.sh</pre></li><li>Enable the APIs.<pre class="cmd">gcloud services enable run.googleapis.com cloudscheduler.googleapis.com \
   artifactregistry.googleapis.com cloudbuild.googleapis.com firestore.googleapis.com \
   storage.googleapis.com secretmanager.googleapis.com aiplatform.googleapis.com \
-  earthengine.googleapis.com iamcredentials.googleapis.com firebase.googleapis.com</pre></li><li>Beri akses anggota tim (ulangi per email).<pre class="cmd">gcloud projects add-iam-policy-binding $PROJECT_ID \
+  earthengine.googleapis.com iamcredentials.googleapis.com firebase.googleapis.com</pre></li><li>Give team members access (repeat per email).<pre class="cmd">gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member=user:&lt;EMAIL&gt; --role=roles/editor</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Billing aktif:</p><pre class="cmd">gcloud billing projects describe $PROJECT_ID --format=&#x27;value(billingEnabled)&#x27;   # harus: True</pre><p>Tujuh API utama aktif:</p><pre class="cmd">gcloud services list --enabled --format=&#x27;value(config.name)&#x27; | \
-  grep -cE &#x27;run|cloudscheduler|firestore|secretmanager|aiplatform|earthengine|storage.googleapis&#x27;   # harus: ≥ 7</pre></div>
+      <div class="check"><h4>Done check</h4><p>Billing enabled:</p><pre class="cmd">gcloud billing projects describe $PROJECT_ID --format='value(billingEnabled)'   # must be: True</pre><p>The seven main APIs are enabled:</p><pre class="cmd">gcloud services list --enabled --format='value(config.name)' | \
+  grep -cE 'run|cloudscheduler|firestore|secretmanager|aiplatform|earthengine|storage.googleapis'   # must be: ≥ 7</pre></div>
     </article>
     <article class="task" id="s0-3">
-      <div class="task-head"><span class="tid">S0-3</span><span class="pill ai">Peran C</span><h3>Earth Engine terdaftar, uji WorldCover</h3></div>
-      <p class="goal">Earth Engine hanya dipakai sekali: fraksi terbangun dari WorldCover untuk mask bangunan.</p>
+      <div class="task-head"><span class="tid">S0-3</span><span class="pill ai">Role C</span><h3>Earth Engine registered, WorldCover tested</h3></div>
+      <p class="goal">Earth Engine is used once only: the built-up fraction from WorldCover for the building mask.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-2 selesai</li><li>Python 3.12 dengan earthengine-api (S0-6) atau Cloud Shell</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Project terdaftar di Earth Engine</li><li>Catatan tier di WORKLOG log</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-2 done</li><li>Python 3.12 with earthengine-api (S0-6) or Cloud Shell</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Project registered with Earth Engine</li><li>Tier noted in the WORKLOG log</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Buka <code>https://code.earthengine.google.com/register</code> dengan akun Google yang punya akses ke project. Pilih penggunaan <strong>tanpa bayar / nonkomersial</strong>, pilih project <code>$PROJECT_ID</code>, isi kuesioner: <em>prototipe riset nonkomersial untuk deteksi dini kebakaran gambut, dibuat untuk kompetisi, tidak dijual</em>.</li><li>Autentikasi di mesin kerja.<pre class="cmd">pip install earthengine-api
-earthengine authenticate</pre></li><li>Uji baca WorldCover di sub-area backtest.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+      <div><h4>Steps</h4><ol class="steps"><li>Open <code>https://code.earthengine.google.com/register</code> with a Google account that has access to the project. Choose <strong>unpaid / noncommercial</strong> use, pick project <code>$PROJECT_ID</code>, and answer the questionnaire: <em>noncommercial research prototype for early detection of peat fires, built for a competition, not sold</em>.</li><li>Authenticate on your workstation.<pre class="cmd">pip install earthengine-api
+earthengine authenticate</pre></li><li>Test reading WorldCover over the backtest sub-area.<pre class="cmd">python - &lt;&lt;'EOF'
 import ee, os
-ee.Initialize(project=os.environ[&quot;PROJECT_ID&quot;])
+ee.Initialize(project=os.environ["PROJECT_ID"])
 roi = ee.Geometry.Rectangle([113.5, -2.6, 114.3, -1.9])
-wc = ee.ImageCollection(&quot;ESA/WorldCover/v200&quot;).first()
+wc = ee.ImageCollection("ESA/WorldCover/v200").first()
 frac = wc.eq(50).reduceRegion(ee.Reducer.mean(), roi, 100).getInfo()
-print(&quot;fraksi built-up sub-area:&quot;, frac)
-EOF</pre></li><li>Bila pendaftaran ditolak: tulis di log WORKLOG; unduh tile WorldCover dari <code>esa-worldcover.org</code> untuk bbox Sumatra + Kalimantan sebagai gantinya dan beri tahu A.</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Skrip mencetak <code>{'Map': 0.0…}</code> (angka kecil, tanpa galat).</p></div>
+print("sub-area built-up fraction:", frac)
+EOF</pre></li><li>If registration is refused: note it in the WORKLOG log; download WorldCover tiles from <code>esa-worldcover.org</code> for the Sumatra + Kalimantan bbox instead and tell A.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>The script prints <code>{'Map': 0.0…}</code> (a small number, no error).</p></div>
     </article>
     <article class="task" id="s0-4">
-      <div class="task-head"><span class="tid">S0-4</span><span class="pill ai">Peran B</span><h3>FIRMS MAP_KEY dan uji query area kecil</h3></div>
-      <p class="goal">Akses deteksi VIIRS untuk agen (on-demand) dan untuk validasi backtest.</p>
+      <div class="task-head"><span class="tid">S0-4</span><span class="pill ai">Role B</span><h3>FIRMS MAP_KEY and a small-area query test</h3></div>
+      <p class="goal">Access to VIIRS detections for the agent (on demand) and for backtest validation.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-2 selesai (untuk Secret Manager)</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Secret firms-map-key</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-2 done (for Secret Manager)</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Secret firms-map-key</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Buka <code>https://firms.modaps.eosdis.nasa.gov/api/map_key/</code>, isi email tim, salin MAP_KEY dari email.</li><li>Uji query seperti yang akan dipakai agen: kotak ±0,1° di sekitar satu koordinat, 2 hari, tiga satelit.<pre class="cmd">export MAP_KEY=&lt;key&gt;
+      <div><h4>Steps</h4><ol class="steps"><li>Open <code>https://firms.modaps.eosdis.nasa.gov/api/map_key/</code>, enter the team email, copy the MAP_KEY from the email.</li><li>Test the query the agent will use: a ±0.1° box around one coordinate, 2 days, three satellites.<pre class="cmd">export MAP_KEY=&lt;key&gt;
 for S in VIIRS_SNPP_NRT VIIRS_NOAA20_NRT VIIRS_NOAA21_NRT; do
-  curl -s &quot;https://firms.modaps.eosdis.nasa.gov/api/area/csv/$MAP_KEY/$S/113.82,-2.31,114.02,-2.11/2&quot; | head -2
-done</pre></li><li>Simpan ke Secret Manager.<pre class="cmd">printf &quot;%s&quot; &quot;$MAP_KEY&quot; | gcloud secrets create firms-map-key --data-file=-</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Tiap satelit mencetak header yang diawali <code>latitude,longitude,bright_ti4</code> dan memuat kolom <code>confidence</code> dan <code>daynight</code> (baris data boleh 0).</p><p>Secret terbaca:</p><pre class="cmd">gcloud secrets versions access latest --secret firms-map-key | wc -c   # &gt; 0</pre></div>
+  curl -s "https://firms.modaps.eosdis.nasa.gov/api/area/csv/$MAP_KEY/$S/113.82,-2.31,114.02,-2.11/2" | head -2
+done</pre></li><li>Store it in Secret Manager.<pre class="cmd">printf "%s" "$MAP_KEY" | gcloud secrets create firms-map-key --data-file=-</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Each satellite prints a header that starts with <code>latitude,longitude,bright_ti4</code> and includes the <code>confidence</code> and <code>daynight</code> columns (zero data rows is fine).</p><p>The secret is readable:</p><pre class="cmd">gcloud secrets versions access latest --secret firms-map-key | wc -c   # &gt; 0</pre></div>
     </article>
     <article class="task" id="s0-5">
-      <div class="task-head"><span class="tid">S0-5</span><span class="pill ai">Peran D</span><h3>Bot Telegram, dua grup, chat_id</h3></div>
-      <p class="goal">Kanal kirim satu arah siap dipakai sebelum kode ditulis.</p>
+      <div class="task-head"><span class="tid">S0-5</span><span class="pill ai">Role D</span><h3>Telegram bot, two groups, chat_id</h3></div>
+      <p class="goal">The one-way send channel is ready before any code is written.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>Akun Telegram</li><li>S0-2 selesai (Secret Manager)</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Secret telegram-bot-token</li><li><code>data/ref/tg_chats.json</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A Telegram account</li><li>S0-2 done (Secret Manager)</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Secret telegram-bot-token</li><li><code>data/ref/tg_chats.json</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Di Telegram buka <code>@BotFather</code> → kirim <code>/newbot</code> → nama <code>ASAPify Bot</code> → username diakhiri <code>bot</code>, misalnya <code>asapify_demo_bot</code>. Salin token.</li><li>Simpan token.<pre class="cmd">export TOKEN=&lt;token&gt;
-printf &quot;%s&quot; &quot;$TOKEN&quot; | gcloud secrets create telegram-bot-token --data-file=-</pre></li><li>Buat dua grup: <code>ASAPify Operator</code> dan <code>ASAPify Peringatan Kalteng (demo)</code>. Tambahkan bot ke keduanya.</li><li>Di tiap grup kirim <code>/start@asapify_demo_bot</code>. Bot dalam privacy mode hanya menerima perintah yang menyebut namanya, jadi pesan biasa tidak muncul di getUpdates.</li><li>Ambil <code>chat_id</code> kedua grup (nilai negatif, supergroup diawali <code>-100</code>).<pre class="cmd">curl -s &quot;https://api.telegram.org/bot$TOKEN/getUpdates&quot; | jq &#x27;.result[].message.chat | {id, title}&#x27;</pre></li><li>Uji kirim ke tiap grup.<pre class="cmd">curl -s &quot;https://api.telegram.org/bot$TOKEN/sendMessage&quot; -d chat_id=&lt;CHAT_ID&gt; -d text=&quot;Uji ASAPify&quot;</pre></li><li>Tulis <code>data/ref/tg_chats.json</code>; dipindah ke Firestore <code>tg_chats</code> setelah C1.<pre class="cmd">[
-  {&quot;jenis&quot;: &quot;operator&quot;,   &quot;provinsi&quot;: null, &quot;chat_id&quot;: -100...},
-  {&quot;jenis&quot;: &quot;peringatan&quot;, &quot;provinsi&quot;: &quot;62&quot;, &quot;chat_id&quot;: -100...}
+      <div><h4>Steps</h4><ol class="steps"><li>In Telegram open <code>@BotFather</code> → send <code>/newbot</code> → name <code>ASAPify Bot</code> → a username ending in <code>bot</code>, for example <code>asapify_demo_bot</code>. Copy the token.</li><li>Store the token.<pre class="cmd">export TOKEN=&lt;token&gt;
+printf "%s" "$TOKEN" | gcloud secrets create telegram-bot-token --data-file=-</pre></li><li>Create two groups: <code>ASAPify Operator</code> and <code>ASAPify Peringatan Kalteng (demo)</code>. Add the bot to both. (Group names and alert captions stay in Indonesian: the recipients are Indonesian field teams.)</li><li>In each group send <code>/start@asapify_demo_bot</code>. A bot in privacy mode only receives commands that mention it, so ordinary messages do not appear in getUpdates.</li><li>Get the <code>chat_id</code> of both groups (a negative value; supergroups start with <code>-100</code>).<pre class="cmd">curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" | jq '.result[].message.chat | {id, title}'</pre></li><li>Test sending to each group.<pre class="cmd">curl -s "https://api.telegram.org/bot$TOKEN/sendMessage" -d chat_id=&lt;CHAT_ID&gt; -d text="Uji ASAPify"</pre></li><li>Write <code>data/ref/tg_chats.json</code>; it moves to Firestore <code>tg_chats</code> after C1.<pre class="cmd">[
+  {"jenis": "operator",   "provinsi": null, "chat_id": -100...},
+  {"jenis": "peringatan", "provinsi": "62", "chat_id": -100...}
 ]</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Pesan <em>Uji ASAPify</em> muncul di kedua grup. Bila grup di-upgrade ke supergroup, <code>chat_id</code> berubah: ulangi langkah 5.</p></div>
+      <div class="check"><h4>Done check</h4><p>The message <em>Uji ASAPify</em> appears in both groups. If a group is upgraded to a supergroup, its <code>chat_id</code> changes: repeat step 5.</p></div>
     </article>
     <article class="task" id="s0-6">
-      <div class="task-head"><span class="tid">S0-6</span><span class="pill ai">Peran A</span><h3>Repo, lingkungan Python, cek jendela backtest 2023</h3></div>
-      <p class="goal">Semua anggota memakai struktur dan dependensi yang sama; jendela backtest terbukti punya kejadian.</p>
+      <div class="task-head"><span class="tid">S0-6</span><span class="pill ai">Role A</span><h3>Repo, Python environment, check the 2023 backtest window</h3></div>
+      <p class="goal">Everyone uses the same structure and dependencies; the backtest window is proven to contain events.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-4 selesai (MAP_KEY)</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Repo dengan struktur folder</li><li><code>requirements.lock</code> </li><li><code>data/local/firms_backtest_2023_sp.csv</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-4 done (MAP_KEY)</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Repo with the folder structure</li><li><code>requirements.lock</code> </li><li><code>data/local/firms_backtest_2023_sp.csv</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Buat repo GitHub privat <code>asapify</code>, clone, dan buat folder.<pre class="cmd">git clone &lt;url-repo&gt; asapify &amp;&amp; cd asapify
-mkdir -p jobs/lib jobs/tests agent api/routers shared web infra data/ref data/local notebooks docs scripts</pre></li><li>Lingkungan Python 3.12 dan dependensi.<pre class="cmd">python3.12 -m venv .venv &amp;&amp; source .venv/bin/activate
+      <div><h4>Steps</h4><ol class="steps"><li>Create a private GitHub repo <code>asapify</code>, clone it, and create the folders.<pre class="cmd">git clone &lt;repo-url&gt; asapify &amp;&amp; cd asapify
+mkdir -p jobs/lib jobs/tests agent api/routers shared infra data/ref data/local notebooks docs scripts
+# the operator web app lives in a separate repo, asapify-web</pre></li><li>Python 3.12 environment and dependencies.<pre class="cmd">python3.12 -m venv .venv &amp;&amp; source .venv/bin/activate
 pip install satpy pyresample s3fs xarray netCDF4 numpy pandas pyarrow geopandas rasterio \
   shapely scipy matplotlib pillow httpx earthengine-api google-adk google-genai fastapi uvicorn \
   google-cloud-firestore google-cloud-storage pytest
-pip freeze &gt; requirements.lock</pre></li><li>Salin <code>jobs/lib/region.py</code> dari halaman Backend &amp; API bagian 05b.</li><li>Cek jendela backtest 1 Sep – 15 Okt 2023 punya deteksi VIIRS di sub-area Kalteng. Arsip SP dipotong per 5 hari (batas API). Ini hanya untuk validasi, bukan jalur operasional.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+pip freeze &gt; requirements.lock</pre></li><li>Copy <code>jobs/lib/region.py</code> from Backend &amp; API section 05b.</li><li>Check that the 1 Sep – 15 Oct 2023 backtest window has VIIRS detections in the Central Kalimantan sub-area. The SP archive is fetched in 5-day chunks (API limit). This is for validation only, not the operational path.<pre class="cmd">python - &lt;&lt;'EOF'
 import io, os, httpx, pandas as pd, datetime as dt
-K, B = os.environ[&quot;MAP_KEY&quot;], os.environ[&quot;BACKTEST_BBOX&quot;]
-url = &quot;https://firms.modaps.eosdis.nasa.gov/api/area/csv/{}/{}/{}/5/{}&quot;
+K, B = os.environ["MAP_KEY"], os.environ["BACKTEST_BBOX"]
+url = "https://firms.modaps.eosdis.nasa.gov/api/area/csv/{}/{}/{}/5/{}"
 d0, parts = dt.date(2023, 9, 1), []
 while d0 &lt;= dt.date(2023, 10, 15):
-    for src in (&quot;VIIRS_SNPP_SP&quot;, &quot;VIIRS_NOAA20_SP&quot;):
+    for src in ("VIIRS_SNPP_SP", "VIIRS_NOAA20_SP"):
         parts.append(pd.read_csv(io.StringIO(httpx.get(url.format(K, src, B, d0), timeout=120).text)))
     d0 += dt.timedelta(days=5)
 df = pd.concat(parts).drop_duplicates()
-print(&quot;rentang acq_date:&quot;, df.acq_date.min(), df.acq_date.max())
-print(&quot;deteksi total:&quot;, len(df), &quot;malam:&quot;, (df.daynight == &quot;N&quot;).sum())
-df.to_csv(&quot;data/local/firms_backtest_2023_sp.csv&quot;, index=False)
+print("acq_date range:", df.acq_date.min(), df.acq_date.max())
+print("total detections:", len(df), "night:", (df.daynight == "N").sum())
+df.to_csv("data/local/firms_backtest_2023_sp.csv", index=False)
 EOF</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p><code>rentang acq_date</code> mencakup 2023-09-01 s.d. 2023-10-15. Bila bergeser, parameter tanggal FIRMS berarti tanggal awal atau akhir ⚠️: geser tanggal dan ulangi.</p><p><code>deteksi total ≥ 20</code>. Bila kurang, perluas <code>BACKTEST_BBOX</code> 0,3° ke tiap arah dan catat di WORKLOG open item 11.</p></div>
+      <div class="check"><h4>Done check</h4><p><code>acq_date range</code> covers 2023-09-01 to 2023-10-15. If it is shifted, the FIRMS date parameter is the start or end date ⚠️: shift the dates and repeat.</p><p><code>total detections ≥ 20</code>. If fewer, widen <code>BACKTEST_BBOX</code> by 0.3° in each direction and note it in WORKLOG open item 11.</p></div>
     </article>
     <article class="task" id="s0-7">
-      <div class="task-head"><span class="tid">S0-7</span><span class="pill ai">Peran A</span><h3>Satu scan Himawari dan GK2A: baca, latensi</h3></div>
-      <p class="goal">Memastikan kedua bucket, kanal, dan waktu tunggu data sebelum menulis ingest.</p>
+      <div class="task-head"><span class="tid">S0-7</span><span class="pill ai">Role A</span><h3>One Himawari and one GK2A scan: read, latency</h3></div>
+      <p class="goal">Confirm both buckets, the channels and data wait times before writing ingest.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-6 selesai (venv, region.py)</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>data/local/raw/himawari/</code> (4 file), data/local/raw/gk2a/ (2 file)</li><li><code>data/local/latency.csv</code> (6 baris)</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-6 done (venv, region.py)</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>data/local/raw/himawari/</code> (4 files), data/local/raw/gk2a/ (2 files)</li><li><code>data/local/latency.csv</code> (6 rows)</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Unduh Himawari-9 B07 + B14 segmen S05 dan S06 untuk 25 Sep 2023 15.00 UTC, catat ukurannya.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+      <div><h4>Steps</h4><ol class="steps"><li>Download Himawari-9 B07 + B14 segments S05 and S06 for 25 Sep 2023 15:00 UTC and note their sizes.<pre class="cmd">python - &lt;&lt;'EOF'
 import s3fs
 fs = s3fs.S3FileSystem(anon=True)
-p = &quot;noaa-himawari9/AHI-L1b-FLDK/2023/09/25/1500&quot;
-files = [f for f in fs.ls(p) if any(b in f for b in (&quot;_B07_&quot;, &quot;_B14_&quot;)) and (&quot;S0510&quot; in f or &quot;S0610&quot; in f)]
+p = "noaa-himawari9/AHI-L1b-FLDK/2023/09/25/1500"
+files = [f for f in fs.ls(p) if any(b in f for b in ("_B07_", "_B14_")) and ("S0510" in f or "S0610" in f)]
 for f in files:
-    print(f.split(&quot;/&quot;)[-1], round(fs.size(f)/1e6, 1), &quot;MB&quot;); fs.get(f, &quot;data/local/raw/himawari/&quot;)
-EOF</pre></li><li>Unduh GK2A SW038 + IR105 untuk waktu yang sama.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+    print(f.split("/")[-1], round(fs.size(f)/1e6, 1), "MB"); fs.get(f, "data/local/raw/himawari/")
+EOF</pre></li><li>Download GK2A SW038 + IR105 for the same time.<pre class="cmd">python - &lt;&lt;'EOF'
 import s3fs
 fs = s3fs.S3FileSystem(anon=True)
-p = &quot;noaa-gk2a-pds/AMI/L1B/FD/202309/25/15&quot;
-for ch in (&quot;sw038&quot;, &quot;ir105&quot;):
-    f = f&quot;{p}/gk2a_ami_le1b_{ch}_fd020ge_202309251500.nc&quot;
-    print(ch, round(fs.size(f)/1e6, 1), &quot;MB&quot;); fs.get(f, &quot;data/local/raw/gk2a/&quot;)
-EOF</pre></li><li>Baca keduanya ke grid gabungan dan bandingkan (satu area di Sumatra, satu di Kalimantan).<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+p = "noaa-gk2a-pds/AMI/L1B/FD/202309/25/15"
+for ch in ("sw038", "ir105"):
+    f = f"{p}/gk2a_ami_le1b_{ch}_fd020ge_202309251500.nc"
+    print(ch, round(fs.size(f)/1e6, 1), "MB"); fs.get(f, "data/local/raw/gk2a/")
+EOF</pre></li><li>Read both onto the combined grid and compare (one area in Sumatra, one in Kalimantan).<pre class="cmd">python - &lt;&lt;'EOF'
 import glob, numpy as np
 from satpy import Scene
 from jobs.lib.region import AREA
 def grid(reader, files, ch):
-    s = Scene(reader=reader, filenames=files); s.load([ch], calibration=&quot;brightness_temperature&quot;)
-    return s.resample(AREA, resampler=&quot;nearest&quot;, radius_of_influence=5000)[ch].values
-h = grid(&quot;ahi_hsd&quot;, sorted(glob.glob(&quot;data/local/raw/himawari/*B07*&quot;)), &quot;B07&quot;)
-g = grid(&quot;ami_l1b&quot;, glob.glob(&quot;data/local/raw/gk2a/*sw038*&quot;), &quot;SW038&quot;)
-for n, a in ((&quot;Himawari B07&quot;, h), (&quot;GK2A SW038&quot;, g)):
-    print(n, &quot;NaN:&quot;, round(float(np.isnan(a).mean()), 4), &quot;min/max K:&quot;, np.nanmin(a), np.nanmax(a))
+    s = Scene(reader=reader, filenames=files); s.load([ch], calibration="brightness_temperature")
+    return s.resample(AREA, resampler="nearest", radius_of_influence=5000)[ch].values
+h = grid("ahi_hsd", sorted(glob.glob("data/local/raw/himawari/*B07*")), "B07")
+g = grid("ami_l1b", glob.glob("data/local/raw/gk2a/*sw038*"), "SW038")
+for n, a in (("Himawari B07", h), ("GK2A SW038", g)):
+    print(n, "NaN:", round(float(np.isnan(a).mean()), 4), "min/max K:", np.nanmin(a), np.nanmax(a))
 m = ~np.isnan(h) &amp; ~np.isnan(g)
-print(&quot;korelasi:&quot;, round(float(np.corrcoef(h[m], g[m])[0, 1]), 3))
-EOF</pre></li><li>Ukur latensi kedua bucket 3 kali (sore, malam, dini hari WIB): selisih waktu scan terbaru dan <code>LastModified</code>. Tambahkan ke <code>data/local/latency.csv</code>.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+print("correlation:", round(float(np.corrcoef(h[m], g[m])[0, 1]), 3))
+EOF</pre></li><li>Measure the latency of both buckets 3 times (afternoon, night and early morning WIB): the gap between the latest scan time and <code>LastModified</code>. Append to <code>data/local/latency.csv</code>.<pre class="cmd">python - &lt;&lt;'EOF'
 import s3fs, datetime as dt
 fs = s3fs.S3FileSystem(anon=True); now = dt.datetime.utcnow()
-h = sorted(fs.ls(f&quot;noaa-himawari9/AHI-L1b-FLDK/{now:%Y/%m/%d}&quot;))[-1]
-hf = [x for x in fs.ls(h) if &quot;_B07_&quot; in x and &quot;S0510&quot; in x][0]
-hs = dt.datetime.strptime(h[-15:], &quot;%Y/%m/%d/%H%M&quot;)
-g = sorted(fs.ls(f&quot;noaa-gk2a-pds/AMI/L1B/FD/{now:%Y%m/%d}&quot;))[-1]
-gf = sorted(x for x in fs.ls(g) if &quot;sw038&quot; in x)[-1]
-gs = dt.datetime.strptime(gf[-15:-3], &quot;%Y%m%d%H%M&quot;)
-for n, s, f in ((&quot;himawari&quot;, hs, hf), (&quot;gk2a&quot;, gs, gf)):
-    lm = fs.info(f)[&quot;LastModified&quot;].replace(tzinfo=None)
-    print(f&quot;{n},{s:%Y-%m-%dT%H:%MZ},{(lm - s).total_seconds()/60:.1f}&quot;)
+h = sorted(fs.ls(f"noaa-himawari9/AHI-L1b-FLDK/{now:%Y/%m/%d}"))[-1]
+hf = [x for x in fs.ls(h) if "_B07_" in x and "S0510" in x][0]
+hs = dt.datetime.strptime(h[-15:], "%Y/%m/%d/%H%M")
+g = sorted(fs.ls(f"noaa-gk2a-pds/AMI/L1B/FD/{now:%Y%m/%d}"))[-1]
+gf = sorted(x for x in fs.ls(g) if "sw038" in x)[-1]
+gs = dt.datetime.strptime(gf[-15:-3], "%Y%m%d%H%M")
+for n, s, f in (("himawari", hs, hf), ("gk2a", gs, gf)):
+    lm = fs.info(f)["LastModified"].replace(tzinfo=None)
+    print(f"{n},{s:%Y-%m-%dT%H:%MZ},{(lm - s).total_seconds()/60:.1f}")
 EOF</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Kedua satelit: <code>NaN &lt; 0.01</code>, min/max 200–340 K, korelasi ≥ 0,8. Bila NaN Himawari ≥ 0,01: tambah segmen S04/S07 di <code>himawari.py</code>.</p><p>Bila satpy gagal membaca <code>.bz2</code>: jalankan <code>bunzip2 -k</code> dulu dan catat di WORKLOG ⚠️.</p><p>Median latensi tiap satelit ditulis di WORKLOG open item 8.</p></div>
+      <div class="check"><h4>Done check</h4><p>Both satellites: <code>NaN &lt; 0.01</code>, min/max 200–340 K, correlation ≥ 0.8. If Himawari NaN ≥ 0.01: add segments S04/S07 in <code>himawari.py</code>.</p><p>If satpy cannot read <code>.bz2</code>: run <code>bunzip2 -k</code> first and note it in the WORKLOG ⚠️.</p><p>The median latency per satellite is written in WORKLOG open item 8.</p></div>
     </article>
     <article class="task" id="s0-8">
-      <div class="task-head"><span class="tid">S0-8</span><span class="pill ai">Peran A</span><h3>KHG dan batas provinsi Sumatra + Kalimantan</h3></div>
-      <p class="goal">Bahan peat mask dan filter 15 provinsi tersimpan lokal dengan sumbernya.</p>
+      <div class="task-head"><span class="tid">S0-8</span><span class="pill ai">Role A</span><h3>KHG and province boundaries for Sumatra + Kalimantan</h3></div>
+      <p class="goal">The peat mask inputs and the 15-province filter are stored locally with their sources.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-6 selesai</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>data/ref/khg_sumkal.geojson</code> </li><li><code>data/ref/idn_adm1_meta.json</code> (lisensi)</li><li><code>data/ref/provinces.geojson</code> (15 baris, kolom code)</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-6 done</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>data/ref/khg_sumkal.geojson</code> </li><li><code>data/ref/idn_adm1_meta.json</code> (licence)</li><li><code>data/ref/provinces.geojson</code> (15 rows, code column)</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Tarik KHG untuk seluruh bbox (fungsi <code>fetch_khg</code> dari Backend 05b) dan simpan.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+      <div><h4>Steps</h4><ol class="steps"><li>Pull KHG for the whole bbox (the <code>fetch_khg</code> function from Backend 05b) and save it.<pre class="cmd">python - &lt;&lt;'EOF'
 from jobs.build_peat_mask import fetch_khg
 from jobs.lib.region import MONITOR_BBOX
 g = fetch_khg(MONITOR_BBOX)
-print(&quot;fitur:&quot;, len(g), &quot;luas km2:&quot;, round(g.to_crs(6933).area.sum()/1e6))
-g.to_file(&quot;data/ref/khg_sumkal.geojson&quot;, driver=&quot;GeoJSON&quot;)
-EOF</pre></li><li>Unduh batas provinsi geoBoundaries dan catat lisensinya.<pre class="cmd">curl -s https://www.geoboundaries.org/api/current/gbOpen/IDN/ADM1/ &gt; data/ref/idn_adm1_meta.json
-jq -r &#x27;.boundaryLicense, .gjDownloadURL&#x27; data/ref/idn_adm1_meta.json
-curl -L -o data/ref/idn_adm1.geojson &quot;$(jq -r .gjDownloadURL data/ref/idn_adm1_meta.json)&quot;</pre></li><li>Pilih 15 provinsi dan beri kode BPS (nama bisa Indonesia atau Inggris).<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+print("features:", len(g), "area km2:", round(g.to_crs(6933).area.sum()/1e6))
+g.to_file("data/ref/khg_sumkal.geojson", driver="GeoJSON")
+EOF</pre></li><li>Download geoBoundaries province boundaries and record the licence.<pre class="cmd">curl -s https://www.geoboundaries.org/api/current/gbOpen/IDN/ADM1/ &gt; data/ref/idn_adm1_meta.json
+jq -r '.boundaryLicense, .gjDownloadURL' data/ref/idn_adm1_meta.json
+curl -L -o data/ref/idn_adm1.geojson "$(jq -r .gjDownloadURL data/ref/idn_adm1_meta.json)"</pre></li><li>Select the 15 provinces and add BPS codes (names may be in Indonesian or English).<pre class="cmd">python - &lt;&lt;'EOF'
 import geopandas as gpd
-g = gpd.read_file(&quot;data/ref/idn_adm1.geojson&quot;)
+g = gpd.read_file("data/ref/idn_adm1.geojson")
 print(sorted(g.shapeName.unique()))
-CODE = {&quot;Aceh&quot;:&quot;11&quot;,&quot;North Sumatra&quot;:&quot;12&quot;,&quot;West Sumatra&quot;:&quot;13&quot;,&quot;Riau&quot;:&quot;14&quot;,&quot;Jambi&quot;:&quot;15&quot;,
-        &quot;South Sumatra&quot;:&quot;16&quot;,&quot;Bengkulu&quot;:&quot;17&quot;,&quot;Lampung&quot;:&quot;18&quot;,&quot;Bangka-Belitung Islands&quot;:&quot;19&quot;,
-        &quot;Riau Islands&quot;:&quot;21&quot;,&quot;West Kalimantan&quot;:&quot;61&quot;,&quot;Central Kalimantan&quot;:&quot;62&quot;,
-        &quot;South Kalimantan&quot;:&quot;63&quot;,&quot;East Kalimantan&quot;:&quot;64&quot;,&quot;North Kalimantan&quot;:&quot;65&quot;}
+CODE = {"Aceh":"11","North Sumatra":"12","West Sumatra":"13","Riau":"14","Jambi":"15",
+        "South Sumatra":"16","Bengkulu":"17","Lampung":"18","Bangka-Belitung Islands":"19",
+        "Riau Islands":"21","West Kalimantan":"61","Central Kalimantan":"62",
+        "South Kalimantan":"63","East Kalimantan":"64","North Kalimantan":"65"}
 k = g[g.shapeName.isin(CODE)].assign(code=lambda d: d.shapeName.map(CODE))
-k[[&quot;shapeName&quot;,&quot;code&quot;,&quot;geometry&quot;]].to_file(&quot;data/ref/provinces.geojson&quot;, driver=&quot;GeoJSON&quot;)
-print(k[[&quot;shapeName&quot;,&quot;code&quot;]])
+k[["shapeName","code","geometry"]].to_file("data/ref/provinces.geojson", driver="GeoJSON")
+print(k[["shapeName","code"]])
 EOF</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>KHG: jumlah fitur &gt; 0 dan luas tercetak (catat angkanya di log).</p><p>Provinsi: tabel tercetak tepat 15 baris dengan kode 11–19, 21, 61–65. Bila Kalimantan Utara atau Kepulauan Riau tidak ada (data lama menggabungkannya ke Kaltim/Riau): catat, pakai baris yang ada, dan tandai ⚠️.</p><p>Lisensi geoBoundaries tercatat di WORKLOG open item 12.</p></div>
+      <div class="check"><h4>Done check</h4><p>KHG: feature count &gt; 0 and the area is printed (note the figure in the log).</p><p>Provinces: the printed table has exactly 15 rows with codes 11–19, 21, 61–65. If North Kalimantan or the Riau Islands is missing (older data merges them into East Kalimantan/Riau): note it, use the rows that exist, and mark ⚠️.</p><p>The geoBoundaries licence is recorded in WORKLOG open item 12.</p></div>
     </article>
     <article class="task" id="s0-9">
-      <div class="task-head"><span class="tid">S0-9</span><span class="pill ai">Peran B</span><h3>Uji NASA POWER hourly dan GIBS true colour</h3></div>
-      <p class="goal">Memastikan baseline lingkungan dan citra VIIRS bisa diambil dari Cloud Run tanpa kunci.</p>
+      <div class="task-head"><span class="tid">S0-9</span><span class="pill ai">Role B</span><h3>Test NASA POWER hourly and GIBS true colour</h3></div>
+      <p class="goal">Confirm the environment baseline and VIIRS imagery can be fetched from Cloud Run without a key.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-6 selesai</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Catatan latensi POWER dan koordinat sel di WORKLOG log</li><li><code>docs/gibs_VIIRS_*.jpg</code> (3 file)</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-6 done</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>POWER latency and cell coordinates noted in the WORKLOG log</li><li><code>docs/gibs_VIIRS_*.jpg</code> (3 files)</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Ambil TS dan T2M per jam (UTC) untuk satu titik di Kalteng, 10 hari terakhir, lalu cari jam valid terakhir.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+      <div><h4>Steps</h4><ol class="steps"><li>Fetch hourly TS and T2M (UTC) for one point in Central Kalimantan over the last 10 days, then find the last valid hour.<pre class="cmd">python - &lt;&lt;'EOF'
 import httpx, datetime as dt
 end = dt.date.today(); start = end - dt.timedelta(days=10)
-r = httpx.get(&quot;https://power.larc.nasa.gov/api/temporal/hourly/point&quot;, timeout=120, params=dict(
-    parameters=&quot;TS,T2M&quot;, community=&quot;RE&quot;, longitude=113.9, latitude=-2.2,
-    start=f&quot;{start:%Y%m%d}&quot;, end=f&quot;{end:%Y%m%d}&quot;, format=&quot;JSON&quot;, **{&quot;time-standard&quot;: &quot;UTC&quot;}))
-d = r.json(); p = d[&quot;properties&quot;][&quot;parameter&quot;]
-valid = [k for k, v in p[&quot;TS&quot;].items() if v != -999]
-print(&quot;sumber:&quot;, d[&quot;header&quot;][&quot;sources&quot;], &quot;jam valid terakhir:&quot;, valid[-1], &quot;TS:&quot;, p[&quot;TS&quot;][valid[-1]], &quot;T2M:&quot;, p[&quot;T2M&quot;][valid[-1]])
-print(&quot;koordinat sel:&quot;, d[&quot;geometry&quot;][&quot;coordinates&quot;])
-EOF</pre></li><li>Ambil citra VIIRS true colour dari GIBS untuk sub-area backtest, tiga satelit, 25 Sep 2023.<pre class="cmd">for L in VIIRS_SNPP VIIRS_NOAA20 VIIRS_NOAA21; do
-  curl -s -o docs/gibs_${L}.jpg -w &quot;$L %{http_code} %{size_download}\n&quot; \
-  &quot;https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&amp;REQUEST=GetMap&amp;VERSION=1.3.0&amp;LAYERS=${L}_CorrectedReflectance_TrueColor&amp;CRS=EPSG:4326&amp;BBOX=-2.6,113.5,-1.9,114.3&amp;WIDTH=512&amp;HEIGHT=448&amp;FORMAT=image/jpeg&amp;TIME=2023-09-25&quot;
+r = httpx.get("https://power.larc.nasa.gov/api/temporal/hourly/point", timeout=120, params=dict(
+    parameters="TS,T2M", community="RE", longitude=113.9, latitude=-2.2,
+    start=f"{start:%Y%m%d}", end=f"{end:%Y%m%d}", format="JSON", **{"time-standard": "UTC"}))
+d = r.json(); p = d["properties"]["parameter"]
+valid = [k for k, v in p["TS"].items() if v != -999]
+print("sources:", d["header"]["sources"], "last valid hour:", valid[-1], "TS:", p["TS"][valid[-1]], "T2M:", p["T2M"][valid[-1]])
+print("cell coordinates:", d["geometry"]["coordinates"])
+EOF</pre></li><li>Fetch VIIRS true-colour imagery from GIBS for the backtest sub-area, three satellites, 25 Sep 2023.<pre class="cmd">for L in VIIRS_SNPP VIIRS_NOAA20 VIIRS_NOAA21; do
+  curl -s -o docs/gibs_${L}.jpg -w "$L %{http_code} %{size_download}\n" \
+  "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&amp;REQUEST=GetMap&amp;VERSION=1.3.0&amp;LAYERS=${L}_CorrectedReflectance_TrueColor&amp;CRS=EPSG:4326&amp;BBOX=-2.6,113.5,-1.9,114.3&amp;WIDTH=512&amp;HEIGHT=448&amp;FORMAT=image/jpeg&amp;TIME=2023-09-25"
 done</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>POWER: <code>sumber</code> berisi <code>GEOSIT</code>; jam valid terakhir tercatat (29 Sep 2026: ~1,5 hari di belakang).</p><p>GIBS: tiga baris <code>200</code> dan ukuran &gt; 10 KB; buka JPG dan pastikan area Kalteng terlihat (awan boleh). Perhatikan urutan BBOX WMS 1.3.0 EPSG:4326 = <code>lat_min,lon_min,lat_max,lon_max</code>.</p></div>
+      <div class="check"><h4>Done check</h4><p>POWER: <code>sources</code> contains <code>GEOSIT</code>; the last valid hour is recorded (29 Sep 2026: ~1.5 days behind).</p><p>GIBS: three <code>200</code> lines and sizes &gt; 10 KB; open the JPGs and confirm the Central Kalimantan area is visible (clouds are fine). Mind the WMS 1.3.0 EPSG:4326 BBOX order = <code>lat_min,lon_min,lat_max,lon_max</code>.</p></div>
     </article></div>
   </section>
+
   <section id="s1">
     <div class="section-head">
-      <span class="eyebrow">Sprint 1 · 2–5 Okt</span>
-      <h2>Observasi dan rule engine</h2>
-      <p>Tugas: <a href="#a1">A1</a> · <a href="#a2">A2</a> · <a href="#a3">A3</a> · <a href="#a4">A4</a> · <a href="#a5">A5</a> · <a href="#a6">A6</a> · <a href="#a7">A7</a> · <a href="#c1">C1</a></p>
+      <span class="eyebrow">Sprint 1 · 2–5 Oct</span>
+      <h2>Observation and the rule engine</h2>
+      <p>Tasks: <a href="#a1">A1</a> · <a href="#a2">A2</a> · <a href="#a3">A3</a> · <a href="#a4">A4</a> · <a href="#a5">A5</a> · <a href="#a6">A6</a> · <a href="#a7">A7</a> · <a href="#c1">C1</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Backtest pertama 2023 menghasilkan daftar kelompok AWAS dan tabel lead time terhadap deteksi VIIRS.</div>
+    <div class="sprint-done"><strong>Sprint done when:</strong> The first 2023 backtest produces a list of AWAS clusters and a lead-time table against VIIRS detections.</div>
     <div class="rb-list">
     <article class="task" id="a1">
-      <div class="task-head"><span class="tid">A1</span><span class="pill ai">Peran A</span><h3>Peat mask, indeks tetangga, sel POWER</h3></div>
-      <p class="goal">Daftar piksel yang diproses semua job, tetangganya, dan sel NASA POWER yang menutupinya.</p>
+      <div class="task-head"><span class="tid">A1</span><span class="pill ai">Role A</span><h3>Peat mask, neighbour index, POWER cells</h3></div>
+      <p class="goal">The list of pixels every job processes, their neighbours, and the NASA POWER cells that cover them.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-3, S0-8 selesai</li><li>Kode Backend 05b: region.py, build_built_frac.py, build_peat_mask.py, build_neighbors.py</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>data/ref/built_frac_002.npy</code> </li><li><code>peat/pixels.parquet</code> (dengan cell_id)</li><li><code>peat/neighbors8.parquet,</code> peat/neighbors_r5.parquet</li><li><code>peat/power_cells.parquet</code> </li><li><code>docs/peat_mask.png</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-3, S0-8 done</li><li>Backend 05b code: region.py, build_built_frac.py, build_peat_mask.py, build_neighbors.py</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>data/ref/built_frac_002.npy</code> </li><li><code>peat/pixels.parquet</code> (with cell_id)</li><li><code>peat/neighbors8.parquet,</code> peat/neighbors_r5.parquet</li><li><code>peat/power_cells.parquet</code> </li><li><code>docs/peat_mask.png</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Hitung fraksi terbangun dari WorldCover.<pre class="cmd">python -m jobs.build_built_frac      # → data/ref/built_frac_002.npy (445 × 545)</pre></li><li>Bangun peat mask.<pre class="cmd">python -m jobs.build_peat_mask       # → gs://$DATA_BUCKET/peat/pixels.parquet</pre></li><li>Buat dua indeks tetangga: 8 arah (neighbour support) dan radius 5 sel (skor relatif).<pre class="cmd">python -m jobs.build_neighbors       # → peat/neighbors8.parquet, peat/neighbors_r5.parquet</pre></li><li>Petakan piksel ke sel NASA POWER (lat 0,5°, lon 0,625°): <code>cell_lat = round(lat/0.5)*0.5</code>, <code>cell_lon = round(lon/0.625)*0.625</code>, <code>cell_id = f"c{cell_lat:+.1f}_{cell_lon:.3f}"</code>.<pre class="cmd">python -m jobs.build_power_cells     # → peat/power_cells.parquet (cell_id, lat, lon, n_pixels) + kolom cell_id di pixels</pre></li><li>Buat quicklook.<pre class="cmd">python - &lt;&lt;&#x27;EOF&#x27;
+      <div><h4>Steps</h4><ol class="steps"><li>Compute the built-up fraction from WorldCover.<pre class="cmd">python -m jobs.build_built_frac      # → data/ref/built_frac_002.npy (445 × 545)</pre></li><li>Build the peat mask.<pre class="cmd">python -m jobs.build_peat_mask       # → gs://$DATA_BUCKET/peat/pixels.parquet</pre></li><li>Build two neighbour indexes: 8 directions (neighbour support) and a 5-cell radius (relative score).<pre class="cmd">python -m jobs.build_neighbors       # → peat/neighbors8.parquet, peat/neighbors_r5.parquet</pre></li><li>Map pixels to NASA POWER cells (lat 0.5°, lon 0.625°): <code>cell_lat = round(lat/0.5)*0.5</code>, <code>cell_lon = round(lon/0.625)*0.625</code>, <code>cell_id = f"c{cell_lat:+.1f}_{cell_lon:.3f}"</code>.<pre class="cmd">python -m jobs.build_power_cells     # → peat/power_cells.parquet (cell_id, lat, lon, n_pixels) + cell_id column in pixels</pre></li><li>Make a quicklook.<pre class="cmd">python - &lt;&lt;'EOF'
 import pandas as pd, matplotlib.pyplot as plt, os
-df = pd.read_parquet(f&quot;gs://{os.environ[&#x27;DATA_BUCKET&#x27;]}/peat/pixels.parquet&quot;)
-print(len(df), df.province.value_counts().to_dict(), &quot;sel POWER:&quot;, df.cell_id.nunique())
+df = pd.read_parquet(f"gs://{os.environ['DATA_BUCKET']}/peat/pixels.parquet")
+print(len(df), df.province.value_counts().to_dict(), "POWER cells:", df.cell_id.nunique())
 plt.figure(figsize=(8,6)); plt.scatter(df.lon, df.lat, s=0.3, c=df.peat_frac); plt.colorbar()
-plt.savefig(&quot;docs/peat_mask.png&quot;, dpi=150)
+plt.savefig("docs/peat_mask.png", dpi=150)
 EOF</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Jumlah piksel dan sel POWER tercetak (catat); semua <code>province</code> ∈ {11…19, 21, 61…65}; <code>peat_frac ≥ 0.5</code> dan <code>built_frac &lt; 0.2</code> untuk semua baris.</p><p><code>docs/peat_mask.png</code> menampilkan konsentrasi di pesisir timur Sumatra (Riau, Jambi, Sumsel) serta pesisir selatan Kalteng dan Kalbar, tanpa titik di Malaysia, Singapura, Brunei, Jawa, atau Sulawesi. Bila sel POWER &gt; 600: ikuti WORKLOG open item 16.</p></div>
+      <div class="check"><h4>Done check</h4><p>Pixel and POWER cell counts are printed (note them); every <code>province</code> ∈ {11…19, 21, 61…65}; <code>peat_frac ≥ 0.5</code> and <code>built_frac &lt; 0.2</code> on every row.</p><p><code>docs/peat_mask.png</code> shows concentrations on the east coast of Sumatra (Riau, Jambi, South Sumatra) and the south coasts of Central and West Kalimantan, with no points in Malaysia, Singapore, Brunei, Java or Sulawesi. If POWER cells &gt; 600: follow WORKLOG open item 16.</p></div>
     </article>
     <article class="task" id="a2">
-      <div class="task-head"><span class="tid">A2</span><span class="pill ai">Peran A</span><h3>asapify-ingest-himawari → himawari/</h3></div>
-      <p class="goal">Observasi 1: BT 3,9 µm dan 11,2 µm tiap piksel gambut tiap 10 menit, malam saja.</p>
+      <div class="task-head"><span class="tid">A2</span><span class="pill ai">Role A</span><h3>asapify-ingest-himawari → himawari/</h3></div>
+      <p class="goal">Observation 1: 3.9 µm and 11.2 µm BT for every peat pixel every 10 minutes, at night only.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A1 selesai</li><li>Hasil S0-7</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>jobs/lib/himawari.py,</code> features.py, jobs/ingest.py, jobs/backfill.py</li><li><code>himawari/2023/08/…,</code> himawari/2023/09/…, himawari/2023/10/…</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A1 done</li><li>S0-7 results</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>jobs/lib/himawari.py,</code> features.py, jobs/ingest.py, jobs/backfill.py</li><li><code>himawari/2023/08/…,</code> himawari/2023/09/…, himawari/2023/10/…</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Tulis <code>jobs/lib/himawari.py</code> (Backend 05c): <code>list_scan(slot)</code> → 4 file (B07, B14 × S05, S06) di <code>noaa-himawari9/AHI-L1b-FLDK/YYYY/MM/DD/HHMM/</code>; <code>read_scan(files)</code> → <code>mir, win</code> di grid 0,02°.</li><li>Tulis <code>jobs/lib/features.py</code>: <code>to_features(mir, win, peat)</code> → <code>pixel_id, mir, win, cloud</code>, <code>cloud = win &lt; 270</code>. Dipakai bersama oleh GK2A.</li><li>Tulis <code>jobs/ingest.py --sat himawari --as-of …</code>: ambil slot malam terakhir yang lengkap + isi slot yang belum ada dalam 60 menit terakhir; tulis <code>himawari/YYYY/MM/DD/HHMM.parquet</code> (tulis ulang bila dijalankan lagi) dan <code>raw/himawari/manifest/YYYYMMDD.json</code> (daftar file sumber per slot).<pre class="cmd">python -m jobs.ingest --sat himawari --as-of 2023-09-25T15:00Z</pre></li><li>Backfill: pemanasan Agustus 2023 tiap 20 menit, lalu 1 Sep – 15 Okt 2023 tiap 10 menit, malam saja (13.00–20.50 UTC). Lokal atau Cloud Run job 8 task setelah C4 (tanggal dibagi dengan <code>CLOUD_RUN_TASK_INDEX</code>).<pre class="cmd">python -m jobs.backfill --sat himawari --start $WARMUP_START --end 2023-08-31 --step 20 --night-only
-python -m jobs.backfill --sat himawari --start $BACKTEST_START --end $BACKTEST_END --step 10 --night-only</pre></li><li>Unit test.<pre class="cmd">pytest jobs/tests/test_features.py jobs/tests/test_himawari.py -q</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Satu scan: baris parquet = jumlah piksel A1; median <code>mir</code> malam 285–305 K.</p><p>Backfill: 45 malam × 48 file (Sep–Okt) + 31 malam × 24 file (Agustus). Hitung dengan <code>gcloud storage ls gs://$DATA_BUCKET/himawari/2023/09/** | wc -l</code>; slot hilang tercatat di <code>runs</code>.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Write <code>jobs/lib/himawari.py</code> (Backend 05c): <code>list_scan(slot)</code> → 4 files (B07, B14 × S05, S06) under <code>noaa-himawari9/AHI-L1b-FLDK/YYYY/MM/DD/HHMM/</code>; <code>read_scan(files)</code> → <code>mir, win</code> on the 0.02° grid.</li><li>Write <code>jobs/lib/features.py</code>: <code>to_features(mir, win, peat)</code> → <code>pixel_id, mir, win, cloud</code>, <code>cloud = win &lt; 270</code>. Shared with GK2A.</li><li>Write <code>jobs/ingest.py --sat himawari --as-of …</code>: take the latest complete night slot + fill slots missing in the last 60 minutes; write <code>himawari/YYYY/MM/DD/HHMM.parquet</code> (overwritten on rerun) and <code>raw/himawari/manifest/YYYYMMDD.json</code> (source files per slot).<pre class="cmd">python -m jobs.ingest --sat himawari --as-of 2023-09-25T15:00Z</pre></li><li>Backfill: August 2023 warm-up every 20 minutes, then 1 Sep – 15 Oct 2023 every 10 minutes, nights only (13:00–20:50 UTC). Locally, or as an 8-task Cloud Run job after C4 (dates split by <code>CLOUD_RUN_TASK_INDEX</code>).<pre class="cmd">python -m jobs.backfill --sat himawari --start $WARMUP_START --end 2023-08-31 --step 20 --night-only
+python -m jobs.backfill --sat himawari --start $BACKTEST_START --end $BACKTEST_END --step 10 --night-only</pre></li><li>Unit tests.<pre class="cmd">pytest jobs/tests/test_features.py jobs/tests/test_himawari.py -q</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>One scan: parquet rows = A1 pixel count; night median <code>mir</code> 285–305 K.</p><p>Backfill: 45 nights × 48 files (Sep–Oct) + 31 nights × 24 files (August). Count with <code>gcloud storage ls gs://$DATA_BUCKET/himawari/2023/09/** | wc -l</code>; missing slots are recorded in <code>runs</code>.</p></div>
     </article>
     <article class="task" id="a3">
-      <div class="task-head"><span class="tid">A3</span><span class="pill ai">Peran A</span><h3>asapify-ingest-gk2a → gk2a/</h3></div>
-      <p class="goal">Observasi 2 (independen): BT 3,8 µm dan 10,5 µm dari GK2A dengan format keluaran sama dengan Himawari.</p>
+      <div class="task-head"><span class="tid">A3</span><span class="pill ai">Role A</span><h3>asapify-ingest-gk2a → gk2a/</h3></div>
+      <p class="goal">Observation 2 (independent): 3.8 µm and 10.5 µm BT from GK2A in the same output format as Himawari.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A2 (features.py)</li><li>Hasil S0-7</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>jobs/lib/gk2a.py</code> </li><li><code>gk2a/2023/…</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A2 (features.py)</li><li>S0-7 results</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>jobs/lib/gk2a.py</code> </li><li><code>gk2a/2023/…</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Tulis <code>jobs/lib/gk2a.py</code> (Backend 05c): <code>list_scan(slot)</code> → <code>noaa-gk2a-pds/AMI/L1B/FD/YYYYMM/DD/HH/gk2a_ami_le1b_{sw038,ir105}_fd020ge_YYYYMMDDHHMM.nc</code>; <code>read_scan(files)</code> dengan satpy <code>ami_l1b</code>, kanal <code>SW038</code> dan <code>IR105</code>.</li><li>Pakai <code>to_features</code> yang sama. Keluaran <code>gk2a/YYYY/MM/DD/HHMM.parquet</code> berkolom sama dengan <code>himawari/</code>.<pre class="cmd">python -m jobs.ingest --sat gk2a --as-of 2023-09-25T15:00Z</pre></li><li>Unduh ke <code>/tmp</code> lalu hapus setelah dibaca (file full disk ~30 MB per kanal).</li><li>Backfill dengan jadwal sama seperti A2. Perkiraan unduhan ~175 GB total: jalankan sebagai Cloud Run job 8 task setelah C4, bukan dari laptop.<pre class="cmd">python -m jobs.backfill --sat gk2a --start $WARMUP_START --end 2023-08-31 --step 20 --night-only
-python -m jobs.backfill --sat gk2a --start $BACKTEST_START --end $BACKTEST_END --step 10 --night-only</pre></li><li>Unit test.<pre class="cmd">pytest jobs/tests/test_gk2a.py -q</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Satu scan: baris parquet = jumlah piksel A1; median <code>mir</code> malam 285–305 K; selisih median dengan Himawari pada slot yang sama &lt; 3 K.</p><p>Backfill: jumlah file sama dengan A2 (± slot hilang yang tercatat).</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Write <code>jobs/lib/gk2a.py</code> (Backend 05c): <code>list_scan(slot)</code> → <code>noaa-gk2a-pds/AMI/L1B/FD/YYYYMM/DD/HH/gk2a_ami_le1b_{sw038,ir105}_fd020ge_YYYYMMDDHHMM.nc</code>; <code>read_scan(files)</code> with satpy <code>ami_l1b</code>, channels <code>SW038</code> and <code>IR105</code>.</li><li>Use the same <code>to_features</code>. Output <code>gk2a/YYYY/MM/DD/HHMM.parquet</code> with the same columns as <code>himawari/</code>.<pre class="cmd">python -m jobs.ingest --sat gk2a --as-of 2023-09-25T15:00Z</pre></li><li>Download to <code>/tmp</code> and delete after reading (a full-disk file is ~30 MB per channel).</li><li>Backfill on the same schedule as A2. Estimated download ~175 GB in total: run it as an 8-task Cloud Run job after C4, not from a laptop.<pre class="cmd">python -m jobs.backfill --sat gk2a --start $WARMUP_START --end 2023-08-31 --step 20 --night-only
+python -m jobs.backfill --sat gk2a --start $BACKTEST_START --end $BACKTEST_END --step 10 --night-only</pre></li><li>Unit tests.<pre class="cmd">pytest jobs/tests/test_gk2a.py -q</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>One scan: parquet rows = A1 pixel count; night median <code>mir</code> 285–305 K; median difference from Himawari in the same slot &lt; 3 K.</p><p>Backfill: same file count as A2 (± recorded missing slots).</p></div>
     </article>
     <article class="task" id="a4">
-      <div class="task-head"><span class="tid">A4</span><span class="pill ai">Peran A</span><h3>asapify-environment → environment/</h3></div>
-      <p class="goal">Baseline lingkungan (NASA POWER) dan baseline termal per piksel per satelit.</p>
+      <div class="task-head"><span class="tid">A4</span><span class="pill ai">Role A</span><h3>asapify-environment → environment/</h3></div>
+      <p class="goal">Environment baseline (NASA POWER) and thermal baseline per pixel per satellite.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A1 (power_cells), A2, A3 (backfill Agustus)</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>jobs/lib/power.py,</code> baseline.py, jobs/environment.py</li><li><code>environment/power/20230901.parquet</code> </li><li><code>environment/thermal/himawari|gk2a/20230901.parquet</code> </li><li><code>environment/bias/20230901.parquet</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A1 (power_cells), A2, A3 (August backfill)</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>jobs/lib/power.py,</code> baseline.py, jobs/environment.py</li><li><code>environment/power/20230901.parquet</code> </li><li><code>environment/thermal/himawari|gk2a/20230901.parquet</code> </li><li><code>environment/bias/20230901.parquet</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>jobs/lib/power.py</code>: <code>fetch_cell(lat, lon, start, end)</code> → TS, T2M per jam UTC (Backend 05d); <code>power_baseline(as_of)</code> → per <code>cell_id</code> × <code>hour_utc</code> 13–20: <code>ts_base</code>, <code>t2m_base</code> = median 30 hari yang valid (abaikan -999). Tulis <code>environment/power/YYYYMMDD.parquet</code>.</li><li>Cache mentah per sel di <code>raw/power/{cell_id}.parquet</code>; tiap hari hanya minta hari yang belum ada. Jeda 0,2 detik antar request.</li><li><code>jobs/lib/baseline.py</code>: <code>thermal_baseline(sat, as_of, nights=30)</code> → <code>pixel_id, hour_utc, median, mad, n_obs, frozen</code> dari <code>mir</code> tanpa awan; <code>lst_bias(as_of)</code> → median 30 malam dari <code>win_max − ts_base</code> per piksel per jam. Tulis <code>environment/thermal/{himawari,gk2a}/YYYYMMDD.parquet</code> dan <code>environment/bias/YYYYMMDD.parquet</code>.</li><li>Piksel berstatus <code>WATCH</code>/<code>AWAS</code> di <code>score/</code> malam terakhir memakai baris baseline sebelumnya dengan <code>frozen = true</code>.</li><li>CLI dan test.<pre class="cmd">python -m jobs.environment --as-of 2023-09-01T05:00Z
+      <div><h4>Steps</h4><ol class="steps"><li><code>jobs/lib/power.py</code>: <code>fetch_cell(lat, lon, start, end)</code> → hourly TS, T2M in UTC (Backend 05d); <code>power_baseline(as_of)</code> → per <code>cell_id</code> × <code>hour_utc</code> 13–20: <code>ts_base</code>, <code>t2m_base</code> = median of the valid last 30 days (ignore -999). Write <code>environment/power/YYYYMMDD.parquet</code>.</li><li>Cache raw data per cell in <code>raw/power/{cell_id}.parquet</code>; each day request only the missing days. Pause 0.2 s between requests.</li><li><code>jobs/lib/baseline.py</code>: <code>thermal_baseline(sat, as_of, nights=30)</code> → <code>pixel_id, hour_utc, median, mad, n_obs, frozen</code> from cloud-free <code>mir</code>; <code>lst_bias(as_of)</code> → 30-night median of <code>win_max − ts_base</code> per pixel per hour. Write <code>environment/thermal/{himawari,gk2a}/YYYYMMDD.parquet</code> and <code>environment/bias/YYYYMMDD.parquet</code>.</li><li>Pixels with <code>WATCH</code>/<code>AWAS</code> status in the last night's <code>score/</code> keep the previous baseline row with <code>frozen = true</code>.</li><li>CLI and tests.<pre class="cmd">python -m jobs.environment --as-of 2023-09-01T05:00Z
 pytest jobs/tests/test_power.py jobs/tests/test_baseline.py -q</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p><code>environment/power</code>: semua sel dari A1 × 8 jam, <code>ts_base</code> 295–305 K (22–32 °C).</p><p><code>environment/thermal</code>: ≥ 80% baris <code>n_obs ≥ 10</code> untuk tiap satelit; bila kurang, catat persentasenya di log.</p></div>
+      <div class="check"><h4>Done check</h4><p><code>environment/power</code>: every A1 cell × 8 hours, <code>ts_base</code> 295–305 K (22–32 °C).</p><p><code>environment/thermal</code>: ≥ 80% of rows have <code>n_obs ≥ 10</code> for each satellite; if fewer, note the percentage in the log.</p></div>
     </article>
     <article class="task" id="a5">
-      <div class="task-head"><span class="tid">A5</span><span class="pill ai">Peran A</span><h3>MAUT dan neighbour support (pustaka)</h3></div>
-      <p class="goal">Fungsi murni yang menghitung utility dan status persis Rencana bagian 05.</p>
+      <div class="task-head"><span class="tid">A5</span><span class="pill ai">Role A</span><h3>MAUT and neighbour support (library)</h3></div>
+      <p class="goal">Pure functions that compute utility and status exactly as in Plan section 05.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A4 (bentuk data baseline)</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>jobs/lib/anomaly.py,</code> maut.py, neighbours.py, status.py</li><li><code>jobs/tests/test_maut.py,</code> test_status.py</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A4 (shape of the baseline data)</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>jobs/lib/anomaly.py,</code> maut.py, neighbours.py, status.py</li><li><code>jobs/tests/test_maut.py,</code> test_status.py</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>jobs/lib/anomaly.py</code>: <code>zscore(feat, base, nbr_r5)</code> → <code>z, z_rel</code> per satelit; awan → NaN.</li><li><code>jobs/lib/maut.py</code> (Backend 05e): <code>ramp</code>, <code>WEIGHTS</code>, <code>attributes(...)</code> → <code>u_H, u_G, u_LST, u_SAT, u_T</code>; <code>u0(attrs)</code> dan <code>utility(attrs, u_N)</code> dengan normalisasi bobot atas atribut yang tersedia.</li><li><code>jobs/lib/neighbours.py</code>: <code>support(u0, nbr8)</code> → fraksi tetangga gambut teramati dengan <code>U0 ≥ 0,5</code>.</li><li><code>jobs/lib/status.py</code>: <code>classify(U, u_N, agree, n_sat)</code> → <code>SAFE/NO_OBSERVATION/WATCH/AWAS</code>, ambang dari satu dict <code>THRESHOLDS</code>.</li><li>Unit test tujuh kasus.<pre class="cmd">pytest jobs/tests/test_maut.py jobs/tests/test_status.py -q</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Tujuh kasus lulus: (1) z_rel 4,5 di kedua satelit, 3/8 tetangga, malam pertama → AWAS; (2) sama tetapi 0/8 tetangga → WATCH; (3) hanya Himawari z_rel 4,5 (GK2A cerah, z_rel 0,5) → WATCH; (4) GK2A berawan, Himawari tinggi → WATCH (<code>n_sat = 1</code>); (5) kedua berawan → NO_OBSERVATION; (6) z_rel 1,0 kedua → SAFE; (7) bobot atribut yang hilang dinormalisasi (jumlah bobot efektif = 1).</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li><code>jobs/lib/anomaly.py</code>: <code>zscore(feat, base, nbr_r5)</code> → <code>z, z_rel</code> per satellite; cloud → NaN.</li><li><code>jobs/lib/maut.py</code> (Backend 05e): <code>ramp</code>, <code>WEIGHTS</code>, <code>attributes(...)</code> → <code>u_H, u_G, u_LST, u_SAT, u_T</code>; <code>u0(attrs)</code> and <code>utility(attrs, u_N)</code> with weights renormalised over the available attributes.</li><li><code>jobs/lib/neighbours.py</code>: <code>support(u0, nbr8)</code> → fraction of observed peat neighbours with <code>U0 ≥ 0.5</code>.</li><li><code>jobs/lib/status.py</code>: <code>classify(U, u_N, agree, n_sat)</code> → <code>SAFE/NO_OBSERVATION/WATCH/AWAS</code>, thresholds from a single <code>THRESHOLDS</code> dict.</li><li>Seven-case unit test.<pre class="cmd">pytest jobs/tests/test_maut.py jobs/tests/test_status.py -q</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Seven cases pass: (1) z_rel 4.5 on both satellites, 3/8 neighbours, first night → AWAS; (2) the same with 0/8 neighbours → WATCH; (3) only Himawari z_rel 4.5 (GK2A clear, z_rel 0.5) → WATCH; (4) GK2A cloudy, Himawari high → WATCH (<code>n_sat = 1</code>); (5) both cloudy → NO_OBSERVATION; (6) z_rel 1.0 on both → SAFE; (7) missing attribute weights are renormalised (effective weights sum to 1).</p></div>
     </article>
     <article class="task" id="a6">
-      <div class="task-head"><span class="tid">A6</span><span class="pill ai">Peran A</span><h3>asapify-evaluate → score/ dan kelompok</h3></div>
-      <p class="goal">Rule engine berjalan per slot: status per piksel, kelompok AWAS, pemicu agen.</p>
+      <div class="task-head"><span class="tid">A6</span><span class="pill ai">Role A</span><h3>asapify-evaluate → score/ and clusters</h3></div>
+      <p class="goal">The rule engine runs per slot: status per pixel, AWAS clusters, agent trigger.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A2–A5</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>jobs/evaluate.py,</code> jobs/lib/cluster.py</li><li><code>score/…</code> </li><li>Firestore clusters</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A2–A5</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>jobs/evaluate.py,</code> jobs/lib/cluster.py</li><li><code>score/…</code> </li><li>Firestore clusters</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>jobs/evaluate.py --as-of</code>: pilih slot malam terbaru yang kedua satelitnya ada, atau slot yang sudah &gt; 40 menit (jalan dengan satu satelit). Lewati slot yang sudah tercatat di <code>runs</code>.</li><li>Hitung z → atribut → U0 → u_N → U → status. Tulis <code>score/YYYY/MM/DD/HHMM.parquet</code> dengan kolom persis WORKLOG bagian 7 (score record).</li><li><code>jobs/lib/cluster.py</code>: <code>label(awas_mask, prev)</code> dengan <code>scipy.ndimage.label</code> (struktur 3 × 3); ID <code>C-{MMDD}-{nnn}</code>, pakai ID lama bila tumpang tindih; piksel perwakilan = U tertinggi. Tulis <code>clusters/{id}</code>: <code>pixels, rep_pixel, centroid, province, utility_max, neighbour_support, first_awas_at, last_awas_at, last_verified_at, state (active/closed)</code>.</li><li>Pemicu: kelompok baru, atau aktif dan <code>last_verified_at</code> &gt; 6 jam → <code>POST $AGENT_URL/verify</code> (dimatikan dengan <code>--no-agent</code> sampai C2). Tutup kelompok tanpa AWAS 3 malam valid dan panggil <code>POST $AGENT_URL/cluster-closed</code>.<pre class="cmd">python -m jobs.evaluate --as-of 2023-09-25T15:10Z --no-agent</pre></li><li>Unit test pelabelan dan ID stabil.<pre class="cmd">pytest jobs/tests/test_cluster.py -q</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Satu slot: <code>score/</code> berisi semua piksel gambut; status hanya empat nilai; <code>runs</code> mencatat <code>n_sat</code> dan jumlah per status.</p><p>Test: dua kelompok bersentuhan diagonal = satu kelompok; kelompok malam berikutnya yang tumpang tindih memakai ID lama.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li><code>jobs/evaluate.py --as-of</code>: pick the latest night slot that has both satellites, or a slot older than 40 minutes (run with one satellite). Skip slots already recorded in <code>runs</code>.</li><li>Compute z → attributes → U0 → u_N → U → status. Write <code>score/YYYY/MM/DD/HHMM.parquet</code> with exactly the columns in WORKLOG section 7 (score record).</li><li><code>jobs/lib/cluster.py</code>: <code>label(awas_mask, prev)</code> with <code>scipy.ndimage.label</code> (3 × 3 structure); ID <code>C-{MMDD}-{nnn}</code>, reuse the old ID on overlap; representative pixel = highest U. Write <code>clusters/{id}</code>: <code>pixels, rep_pixel, centroid, province, utility_max, neighbour_support, first_awas_at, last_awas_at, last_verified_at, state (active/closed)</code>.</li><li>Trigger: a new cluster, or an active one with <code>last_verified_at</code> &gt; 6 hours → <code>POST $AGENT_URL/verify</code> (disabled with <code>--no-agent</code> until C2). Close clusters with no AWAS for 3 valid nights and call <code>POST $AGENT_URL/cluster-closed</code>.<pre class="cmd">python -m jobs.evaluate --as-of 2023-09-25T15:10Z --no-agent</pre></li><li>Unit tests for labelling and stable IDs.<pre class="cmd">pytest jobs/tests/test_cluster.py -q</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>One slot: <code>score/</code> holds every peat pixel; status has only four values; <code>runs</code> records <code>n_sat</code> and the count per status.</p><p>Tests: two clusters touching diagonally = one cluster; an overlapping cluster the next night keeps the old ID.</p></div>
     </article>
     <article class="task" id="a7">
-      <div class="task-head"><span class="tid">A7</span><span class="pill ai">Peran A</span><h3>Backtest pertama (2023)</h3></div>
-      <p class="goal">Angka lead time: seberapa awal AWAS muncul dibanding deteksi VIIRS pertama.</p>
+      <div class="task-head"><span class="tid">A7</span><span class="pill ai">Role A</span><h3>First backtest (2023)</h3></div>
+      <p class="goal">The lead-time figure: how early AWAS appears compared with the first VIIRS detection.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A2–A6 selesai untuk Agustus – 15 Okt 2023</li><li>data/local/firms_backtest_2023_sp.csv (S0-6)</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>docs/backtest_2023.csv</code> </li><li><code>docs/backtest_2023.png</code> </li><li><code>docs/d_sat_hist.png</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A2–A6 done for August – 15 Oct 2023</li><li>data/local/firms_backtest_2023_sp.csv (S0-6)</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>docs/backtest_2023.csv</code> </li><li><code>docs/backtest_2023.png</code> </li><li><code>docs/d_sat_hist.png</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Replay evaluasi untuk jendela backtest, tanpa agen.<pre class="cmd">python -m jobs.replay --start $BACKTEST_START --end $BACKTEST_END --bbox $BACKTEST_BBOX --no-agent</pre></li><li>Di <code>notebooks/backtest.ipynb</code>: untuk tiap kelompok hitung <code>first_awas_at</code>, <code>first_viirs_at</code> (deteksi VIIRS SP pertama ≤ 2 km dari piksel kelompok, ±7 hari), <code>lead_h = first_viirs_at − first_awas_at</code>.</li><li>Alarm palsu: kelompok tanpa deteksi VIIRS dalam ±7 hari. Terlewat: kumpulan deteksi VIIRS malam yang tidak pernah didahului AWAS dalam 2 km.</li><li>Simpan tabel dan grafik, termasuk distribusi <code>d_sat</code> untuk WORKLOG open item 15.<pre class="cmd"># docs/backtest_2023.csv: cluster_id, first_awas_at, first_viirs_at, lead_h, false_alarm, utility_max
-# docs/backtest_2023.png: histogram lead_h
-# docs/d_sat_hist.png: d_sat piksel tanpa VIIRS vs dengan VIIRS</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Notebook mencetak: jumlah kelompok, median <code>lead_h</code>, alarm palsu, terlewat, jumlah slot <code>NO_OBSERVATION</code>. Angka ditulis di WORKLOG log apa pun hasilnya.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Replay evaluation over the backtest window, without the agent.<pre class="cmd">python -m jobs.replay --start $BACKTEST_START --end $BACKTEST_END --bbox $BACKTEST_BBOX --no-agent</pre></li><li>In <code>notebooks/backtest.ipynb</code>: for each cluster compute <code>first_awas_at</code>, <code>first_viirs_at</code> (first VIIRS SP detection ≤ 2 km from a cluster pixel, ±7 days), <code>lead_h = first_viirs_at − first_awas_at</code>.</li><li>False alarm: a cluster with no VIIRS detection within ±7 days. Missed: a group of night VIIRS detections never preceded by AWAS within 2 km.</li><li>Save the table and charts, including the <code>d_sat</code> distribution for WORKLOG open item 15.<pre class="cmd"># docs/backtest_2023.csv: cluster_id, first_awas_at, first_viirs_at, lead_h, false_alarm, utility_max
+# docs/backtest_2023.png: lead_h histogram
+# docs/d_sat_hist.png: d_sat for pixels without VIIRS vs with VIIRS</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>The notebook prints: cluster count, median <code>lead_h</code>, false alarms, misses, number of <code>NO_OBSERVATION</code> slots. The figures go into the WORKLOG log whatever they are.</p></div>
     </article>
     <article class="task" id="c1">
-      <div class="task-head"><span class="tid">C1</span><span class="pill ai">Peran C</span><h3>Infrastruktur dasar</h3></div>
-      <p class="goal">Bucket, Firestore, service account, dan izin siap sebelum deploy.</p>
+      <div class="task-head"><span class="tid">C1</span><span class="pill ai">Role C</span><h3>Base infrastructure</h3></div>
+      <p class="goal">Buckets, Firestore, service accounts and permissions ready before deploy.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-2 selesai</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>2 bucket, Firestore (Native), 4 service account, 2 secret, tg_chats</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-2 done</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>2 buckets, Firestore (Native), 4 service accounts, 2 secrets, tg_chats</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Jalankan bagian 03 (IAM), 04 (Secret), 05 (Storage + Firestore) di halaman Konfigurasi Cloud, berurutan.</li><li>Pindahkan <code>data/ref/tg_chats.json</code> ke Firestore koleksi <code>tg_chats</code> (satu dokumen per grup).</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Cek:</p><pre class="cmd">gcloud storage ls                      # 2 bucket asapify-*
+      <div><h4>Steps</h4><ol class="steps"><li>Run sections 03 (IAM), 04 (Secret) and 05 (Storage + Firestore) on the Cloud setup page, in order.</li><li>Move <code>data/ref/tg_chats.json</code> into the Firestore collection <code>tg_chats</code> (one document per group).</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Check:</p><pre class="cmd">gcloud storage ls                      # 2 asapify-* buckets
 gcloud firestore databases list         # (default)
-gcloud iam service-accounts list | grep -c &#x27;sa-&#x27;   # 4</pre></div>
+gcloud iam service-accounts list | grep -c 'sa-'   # 4</pre></div>
     </article></div>
   </section>
   <section id="s2">
     <div class="section-head">
-      <span class="eyebrow">Sprint 2 · 6–9 Okt</span>
-      <h2>Verifikasi dan agen</h2>
-      <p>Tugas: <a href="#b1">B1</a> · <a href="#b2">B2</a> · <a href="#b3">B3</a> · <a href="#c2">C2</a> · <a href="#c3">C3</a> · <a href="#c4">C4</a></p>
+      <span class="eyebrow">Sprint 2 · 6–9 Oct</span>
+      <h2>Verification and the agent</h2>
+      <p>Tasks: <a href="#b1">B1</a> · <a href="#b2">B2</a> · <a href="#b3">B3</a> · <a href="#c2">C2</a> · <a href="#c3">C3</a> · <a href="#c4">C4</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Satu kelompok AWAS backtest diverifikasi agen dan tersimpan di Firestore; semua job dan service berjalan di Cloud Run.</div>
+    <div class="sprint-done"><strong>Sprint done when:</strong> One backtest AWAS cluster is verified by the agent and stored in Firestore; every job and service runs on Cloud Run.</div>
     <div class="rb-list">
     <article class="task" id="b1">
-      <div class="task-head"><span class="tid">B1</span><span class="pill ai">Peran B</span><h3>Tool get_latest_viirs (FIRMS on-demand)</h3></div>
-      <p class="goal">Agen mengambil deteksi VIIRS terbaru di sekitar koordinat AWAS, hanya saat dibutuhkan.</p>
+      <div class="task-head"><span class="tid">B1</span><span class="pill ai">Role B</span><h3>Tool get_latest_viirs (FIRMS on demand)</h3></div>
+      <p class="goal">The agent fetches the latest VIIRS detections around an AWAS coordinate, only when needed.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-4, C1</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>agent/tools/viirs.py</code> </li><li><code>raw/firms/…</code> cache</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-4, C1</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>agent/tools/viirs.py</code> </li><li><code>raw/firms/…</code> cache</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>agent/tools/viirs.py</code>: <code>get_latest_viirs(lat, lon, as_of, radius_km=10, hours=48)</code>. Kotak = koordinat ± <code>radius_km/111</code>°. Sumber: <code>_NRT</code> bila <code>as_of</code> ≤ 7 hari lalu, selain itu <code>_SP</code> dengan parameter tanggal (Backend 06).</li><li>Saring waktu <code>[as_of − 48 jam, as_of]</code> (dari <code>acq_date</code> + <code>acq_time</code> UTC); hitung <code>distance_km</code> (haversine). Kembalikan <code>{detections: [{satellite, time_utc, daynight, confidence, frp, distance_km}], within_2km: n, source}</code> urut jarak.</li><li>Cache hasil 30 menit per kotak di <code>raw/firms/</code> agar replay dan agen memakai data yang sama.</li><li>Unit test dengan CSV sintetis (titik 1 km, 8 km, 12 km; satu di luar jendela waktu).<pre class="cmd">pytest agent/tests/test_viirs.py -q</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Test: titik 1 km dan 8 km masuk, 12 km dan yang di luar 48 jam tidak; <code>within_2km = 1</code>.</p><p>Panggilan nyata untuk koordinat backtest 25 Sep 2023 memakai <code>_SP</code> dan tidak galat.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li><code>agent/tools/viirs.py</code>: <code>get_latest_viirs(lat, lon, as_of, radius_km=10, hours=48)</code>. Box = coordinate ± <code>radius_km/111</code>°. Source: <code>_NRT</code> if <code>as_of</code> ≤ 7 days ago, otherwise <code>_SP</code> with a date parameter (Backend 06).</li><li>Filter time to <code>[as_of − 48 h, as_of]</code> (from <code>acq_date</code> + <code>acq_time</code> UTC); compute <code>distance_km</code> (haversine). Return <code>{detections: [{satellite, time_utc, daynight, confidence, frp, distance_km}], within_2km: n, source}</code> sorted by distance.</li><li>Cache results for 30 minutes per box in <code>raw/firms/</code> so replay and the agent use the same data.</li><li>Unit test with a synthetic CSV (points at 1 km, 8 km, 12 km; one outside the time window).<pre class="cmd">pytest agent/tests/test_viirs.py -q</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Test: the 1 km and 8 km points are in, the 12 km point and the one outside 48 hours are not; <code>within_2km = 1</code>.</p><p>A real call for the 25 Sep 2023 backtest coordinate uses <code>_SP</code> and returns no error.</p></div>
     </article>
     <article class="task" id="b2">
-      <div class="task-head"><span class="tid">B2</span><span class="pill ai">Peran B</span><h3>Tool fetch_viirs_image (GIBS true colour)</h3></div>
-      <p class="goal">Citra VIIRS siang terbaru di sekitar koordinat untuk dibaca Gemini.</p>
+      <div class="task-head"><span class="tid">B2</span><span class="pill ai">Role B</span><h3>Tool fetch_viirs_image (GIBS true colour)</h3></div>
+      <p class="goal">The latest daytime VIIRS image around a coordinate, for Gemini to read.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-9, C1</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>agent/tools/viirs_image.py</code> </li><li><code>crops/{pixel_id}/…_viirs.png</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-9, C1</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>agent/tools/viirs_image.py</code> </li><li><code>crops/{pixel_id}/…_viirs.png</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>agent/tools/viirs_image.py</code>: <code>fetch_viirs_image(lat, lon, as_of, half_deg=0.2)</code>. Coba tanggal WIB <code>as_of</code>, lalu mundur sampai 3 hari; untuk tiap tanggal coba <code>VIIRS_NOAA21</code>, <code>VIIRS_NOAA20</code>, <code>VIIRS_SNPP</code> (<code>_CorrectedReflectance_TrueColor</code>).</li><li>Permintaan WMS 1.3.0, <code>CRS=EPSG:4326</code>, <code>BBOX=lat_min,lon_min,lat_max,lon_max</code>, 512 × 512, JPEG (Backend 06). Tolak gambar hampir seragam (deviasi standar piksel &lt; 3) sebagai "tidak ada data".</li><li>Gambar titik koordinat dan lingkaran 5 km dengan Pillow; simpan <code>crops/{pixel_id}/{timestamp}_viirs.png</code>; kembalikan <code>{path, signed_url (1 jam), layer, date, age_h}</code>. <code>age_h</code> dihitung dari 13.30 waktu lokal tanggal citra.</li><li>Unit test pembentukan URL dan pemilihan tanggal (mock HTTP).<pre class="cmd">pytest agent/tests/test_viirs_image.py -q</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Untuk koordinat backtest 25 Sep 2023 satu PNG terbentuk, terbuka lewat signed URL, dan menampilkan penanda 5 km.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li><code>agent/tools/viirs_image.py</code>: <code>fetch_viirs_image(lat, lon, as_of, half_deg=0.2)</code>. Try the WIB date of <code>as_of</code>, then go back up to 3 days; for each date try <code>VIIRS_NOAA21</code>, <code>VIIRS_NOAA20</code>, <code>VIIRS_SNPP</code> (<code>_CorrectedReflectance_TrueColor</code>).</li><li>WMS 1.3.0 request, <code>CRS=EPSG:4326</code>, <code>BBOX=lat_min,lon_min,lat_max,lon_max</code>, 512 × 512, JPEG (Backend 06). Reject near-uniform images (pixel standard deviation &lt; 3) as "no data".</li><li>Draw the coordinate point and a 5 km circle with Pillow; save <code>crops/{pixel_id}/{timestamp}_viirs.png</code>; return <code>{path, signed_url (1 hour), layer, date, age_h}</code>. <code>age_h</code> counts from 13:30 local time on the image date.</li><li>Unit test URL building and date selection (mocked HTTP).<pre class="cmd">pytest agent/tests/test_viirs_image.py -q</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>For the 25 Sep 2023 backtest coordinate one PNG is created, opens via its signed URL, and shows the 5 km marker.</p></div>
     </article>
     <article class="task" id="b3">
-      <div class="task-head"><span class="tid">B3</span><span class="pill ai">Peran B</span><h3>Tool fetch_himawari_image</h3></div>
-      <p class="goal">Capture pelengkap: citra Himawari pada jam berapa pun AWAS terjadi.</p>
+      <div class="task-head"><span class="tid">B3</span><span class="pill ai">Role B</span><h3>Tool fetch_himawari_image</h3></div>
+      <p class="goal">A complementary capture: Himawari imagery at whatever hour AWAS happens.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A2, C1</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>agent/tools/himawari_image.py</code> </li><li><code>crops/{pixel_id}/…_himawari_*.png</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A2, C1</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>agent/tools/himawari_image.py</code> </li><li><code>crops/{pixel_id}/…_himawari_*.png</code> </li><li><code>crops/{pixel_id}/…_thermal.json</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>agent/tools/himawari_image.py</code>: <code>fetch_himawari_image(lat, lon, as_of, kind)</code>, <code>kind ∈ {thermal_night, visible_day}</code>.</li><li><code>thermal_night</code>: B07 slot <code>as_of</code>, jendela 40 × 40 km, skala warna tetap 280–320 K, penanda koordinat. <code>visible_day</code>: scan 03.00 UTC (10.00 WIB) terdekat sebelum <code>as_of</code>, komposit satpy <code>true_color</code> ⚠️ cek nama komposit, jendela sama.</li><li>Simpan <code>crops/{pixel_id}/{timestamp}_himawari_{kind}.png</code>; kembalikan <code>{path, signed_url, ts, kind}</code>.</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Untuk satu kelompok backtest dua PNG terbentuk; gambar termal menunjukkan titik lebih terang di penanda.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li><code>agent/tools/himawari_image.py</code>: <code>fetch_himawari_image(lat, lon, as_of, kind)</code>, <code>kind ∈ {thermal_night, visible_day}</code>.</li><li><code>thermal_night</code>: B07 at slot <code>as_of</code>, a ±0.2° crop (20 × 20 cells of 0.02°, edges on grid lines), coordinate marker. Fixed hot-channel colour scale 270–340 K (270 K <code>#d8dee4</code> … 316 K <code>#ff6a00</code> … 340 K <code>#ffffff</code>, linear interpolation, no per-crop stretching), exactly the <code>ThermalCrop</code> table in the web app's API Contract tab, so the UI legend and tooltip match. <code>visible_day</code>: the nearest 03:00 UTC (10:00 WIB) scan before <code>as_of</code>, satpy composite <code>true_color</code> ⚠️ check the composite name, same window.</li><li>For <code>thermal_night</code> also write <code>crops/{pixel_id}/{timestamp}_thermal.json</code>: <code>bbox</code>, 20 × 20 cells, channels B07/B14 (Himawari) and SW038/IR105 (GK2A) in kelvin to 1 decimal, <code>null</code> = cloudy. The API serves it as <code>images[].thermal</code>.</li><li>Save <code>crops/{pixel_id}/{timestamp}_himawari_{kind}.png</code>; return <code>{path, signed_url, ts, kind, bbox}</code>.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>For one backtest cluster two PNGs and one JSON are created; the thermal image shows a brighter spot at the marker, and the marker cell in the JSON is hotter than the cells around it.</p></div>
     </article>
     <article class="task" id="c2">
-      <div class="task-head"><span class="tid">C2</span><span class="pill ai">Peran C</span><h3>Agen ADK, validator, service asapify-agent</h3></div>
-      <p class="goal">Gemini memverifikasi kelompok AWAS tanpa bisa mengubah status.</p>
+      <div class="task-head"><span class="tid">C2</span><span class="pill ai">Role C</span><h3>ADK agent, validator, asapify-agent service</h3></div>
+      <p class="goal">Gemini verifies AWAS clusters without being able to change status.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>B1, B2, B3, A6</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>agent/agent.py,</code> schema.py, validator.py, main.py, run.py</li><li>Firestore verifications/{id}</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>B1, B2, B3, A6</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>agent/agent.py,</code> schema.py, validator.py, main.py, run.py</li><li>Firestore verifications/{id}</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Salin kerangka <code>agent/agent.py</code> dan <code>agent/schema.py</code> dari Backend 06; model dari <code>GEMINI_MODEL</code>, lokasi <code>global</code>, <code>GOOGLE_GENAI_USE_VERTEXAI=True</code>.</li><li>Tool <code>get_pixel_context(cluster_id, as_of)</code>: baca <code>clusters/{id}</code> + 3 malam <code>score/</code> piksel perwakilan (utility, atribut, tetangga). Batas: maks 8 panggilan per verifikasi, dihitung di lapisan tool.</li><li><code>agent/validator.py</code>: tolak bila skema tidak cocok, bila <code>viirs_within_2km_48h &gt; 0</code> tetapi hasil <code>inconclusive</code>, atau bila angka di ringkasan tidak ada di hasil tool. Gagal 2× → simpan <code>inconclusive</code> dengan catatan <code>validator_failed</code>.</li><li><code>agent/main.py</code> (FastAPI): <code>POST /verify {cluster_id, trigger_slot}</code> (OIDC <code>sa-jobs</code>) → jalankan agen → simpan <code>verifications/{cluster_id}_{slot}</code> → kirim ringkasan ke grup operator. <code>POST /cluster-closed {cluster_id}</code> (tanpa Gemini): edit pesan grup peringatan jadi SELESAI bila pernah diterbitkan.</li><li>Uji lokal pada satu kelompok backtest.<pre class="cmd">python -m agent.run --cluster &lt;ID dari A7&gt; --as-of 2023-09-25T16:00Z</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Output berisi <code>result</code> ∈ {strong_evidence, inconclusive}, ≥ 1 <code>evidence</code>, ringkasan ID dan EN; jejak tool ≤ 8; validator lulus; tidak ada field status/level.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Copy the <code>agent/agent.py</code> and <code>agent/schema.py</code> skeletons from Backend 06; model from <code>GEMINI_MODEL</code>, location <code>global</code>, <code>GOOGLE_GENAI_USE_VERTEXAI=True</code>.</li><li>Tool <code>get_pixel_context(cluster_id, as_of)</code>: read <code>clusters/{id}</code> + 3 nights of <code>score/</code> for the representative pixel (utility, attributes, neighbours). Limit: at most 8 calls per verification, counted in the tool layer.</li><li><code>agent/validator.py</code>: reject when the schema does not match, when <code>viirs_within_2km_48h &gt; 0</code> but the result is <code>inconclusive</code>, or when a number in the summary is not in the tool results. Fails twice → save <code>inconclusive</code> with the note <code>validator_failed</code>.</li><li><code>agent/main.py</code> (FastAPI): <code>POST /verify {cluster_id, trigger_slot}</code> (OIDC <code>sa-jobs</code>) → run the agent → save <code>verifications/{cluster_id}_{slot}</code> → send a summary to the operator group. <code>POST /cluster-closed {cluster_id}</code> (no Gemini): edit the alert-group message to SELESAI if it was ever published.</li><li>Test locally on one backtest cluster.<pre class="cmd">python -m agent.run --cluster &lt;ID from A7&gt; --as-of 2023-09-25T16:00Z</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>The output has <code>result</code> ∈ {strong_evidence, inconclusive}, ≥ 1 <code>evidence</code>, ID and EN summaries; tool trace ≤ 8; validator passes; no status/level field.</p></div>
     </article>
     <article class="task" id="c3">
-      <div class="task-head"><span class="tid">C3</span><span class="pill ai">Peran C</span><h3>Service asapify-api</h3></div>
-      <p class="goal">Endpoint untuk web operator dan keputusan terbitkan/tolak.</p>
+      <div class="task-head"><span class="tid">C3</span><span class="pill ai">Role C</span><h3>asapify-api service</h3></div>
+      <p class="goal">Endpoints for the operator web app and publish/reject decisions.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>C2</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>api/main.py,</code> api/routers/*.py</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>C2</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>api/main.py,</code> api/routers/*.py</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Implementasi endpoint persis tabel Backend 03 (umum + operator).</li><li>Jalankan lokal. <code>AUTH_DISABLED=1</code> hanya untuk lokal, tidak pernah di Cloud Run.<pre class="cmd">AUTH_DISABLED=1 uvicorn api.main:app --reload --port 8000</pre></li><li>Uji.<pre class="cmd">curl -s localhost:8000/api/v1/health
-curl -s &quot;localhost:8000/api/v1/operator/clusters?as_of=2023-09-25T16:00Z&quot; | jq length</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p><code>/health</code> → <code>{"ok": true}</code>; daftar kelompok untuk <code>as_of</code> backtest tidak kosong.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Implement the endpoints exactly as in the Backend 03 table (public + operator), including <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code> and <code>/operator/basemaps</code>. JSON shapes, examples and error codes follow the web app's API Contract tab (<code>/kontrak-api</code>) exactly; the web app already uses all of them.</li><li>Run locally. <code>AUTH_DISABLED=1</code> is for local use only, never on Cloud Run.<pre class="cmd">AUTH_DISABLED=1 uvicorn api.main:app --reload --port 8000</pre></li><li>Test.<pre class="cmd">curl -s localhost:8000/api/v1/health
+curl -s localhost:8000/api/v1/meta | jq .nights
+curl -s "localhost:8000/api/v1/operator/grid?as_of=2023-09-25T16:00Z&amp;format=compact" | jq '.status | length'
+curl -s "localhost:8000/api/v1/operator/nights?month=2023-09" | jq length
+curl -s "localhost:8000/api/v1/operator/clusters?as_of=2023-09-25T16:00Z" | jq length</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p><code>/health</code> → <code>{"status": "ok", "version": …, "time": …}</code>; <code>/meta</code> includes <code>nights.first</code>; the compact grid <code>status</code> length = A1 pixel count; the September night list and the cluster list for the backtest <code>as_of</code> are not empty.</p></div>
     </article>
     <article class="task" id="c4">
-      <div class="task-head"><span class="tid">C4</span><span class="pill ai">Peran C</span><h3>Deploy job, service, dan Scheduler</h3></div>
-      <p class="goal">Pipeline berjalan otomatis di Cloud Run.</p>
+      <div class="task-head"><span class="tid">C4</span><span class="pill ai">Role C</span><h3>Deploy jobs, services and Scheduler</h3></div>
+      <p class="goal">The pipeline runs automatically on Cloud Run.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A2–A6, C1, C2, C3</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>2 service + 5 job + 4 jadwal Scheduler</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A2–A6, C1, C2, C3</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>2 services + 5 jobs + 4 Scheduler schedules</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Buat <code>Dockerfile</code> dan <code>.gcloudignore</code> di root repo (Konfigurasi Cloud 09), lalu deploy <code>asapify-agent</code> dan <code>asapify-api</code> dengan perintah di bagian yang sama.</li><li>Deploy lima job dan empat jadwal (Konfigurasi Cloud 10): dua ingest <code>*/10 20-23,0-4 * * *</code>, evaluate <code>5-59/10 20-23,0-4 * * *</code>, environment <code>0 12 * * *</code> (semua Asia/Jakarta), build tanpa jadwal.</li><li>Jalankan build, lalu satu siklus replay.<pre class="cmd">gcloud run jobs execute asapify-build --region $REGION --wait
+      <div><h4>Steps</h4><ol class="steps"><li>Create the <code>Dockerfile</code> and <code>.gcloudignore</code> at the repo root (Cloud setup 09), then deploy <code>asapify-agent</code> and <code>asapify-api</code> with the commands in the same section.</li><li>Deploy the five jobs and four schedules (Cloud setup 10): two ingests <code>*/10 20-23,0-4 * * *</code>, evaluate <code>5-59/10 20-23,0-4 * * *</code>, environment <code>0 12 * * *</code> (all Asia/Jakarta), build without a schedule.</li><li>Run build, then one replay cycle.<pre class="cmd">gcloud run jobs execute asapify-build --region $REGION --wait
 for J in asapify-ingest-himawari asapify-ingest-gk2a; do
   gcloud run jobs execute $J --region $REGION --wait --update-env-vars AS_OF=2023-09-25T15:00:00Z
 done
 gcloud run jobs execute asapify-evaluate --region $REGION --wait --update-env-vars AS_OF=2023-09-25T15:10:00Z</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Cek:</p><pre class="cmd">gcloud run jobs executions list --job asapify-evaluate --region $REGION --limit 3   # Succeeded
-gcloud scheduler jobs list --location $REGION                                    # 4 jadwal ENABLED
+      <div class="check"><h4>Done check</h4><p>Check:</p><pre class="cmd">gcloud run jobs executions list --job asapify-evaluate --region $REGION --limit 3   # Succeeded
+gcloud scheduler jobs list --location $REGION                                    # 4 schedules ENABLED
 gcloud run services list --region $REGION                                        # asapify-agent, asapify-api</pre></div>
     </article></div>
   </section>
+
   <section id="s3">
     <div class="section-head">
-      <span class="eyebrow">Sprint 3 · 10–13 Okt</span>
-      <h2>Web dan Telegram</h2>
-      <p>Tugas: <a href="#d1">D1</a> · <a href="#d2">D2</a> · <a href="#d3">D3</a> · <a href="#d4">D4</a> · <a href="#c5">C5</a></p>
+      <span class="eyebrow">Sprint 3 · 10–13 Oct</span>
+      <h2>Web and Telegram</h2>
+      <p>Tasks: <a href="#d1">D1</a> · <a href="#d2">D2</a> · <a href="#d3">D3</a> · <a href="#d4">D4</a> · <a href="#c5">C5</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Alur ujung-ke-ujung di URL publik: replay → AWAS → verifikasi → keputusan operator → pesan Telegram.</div>
+    <div class="sprint-done"><strong>Sprint done when:</strong> The end-to-end flow works at the public URL: replay → AWAS → verification → operator decision → Telegram message.</div>
     <div class="rb-list">
     <article class="task" id="d1">
-      <div class="task-head"><span class="tid">D1</span><span class="pill ai">Peran D</span><h3>Peta operator</h3></div>
-      <p class="goal">Operator melihat status semua piksel gambut Sumatra dan Kalimantan (15 provinsi).</p>
+      <div class="task-head"><span class="tid">D1</span><span class="pill ai">Role D</span><h3>Operator map</h3></div>
+      <p class="goal">The operator sees the status of every peat pixel in Sumatra and Kalimantan (15 provinces).</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>C3</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>web/src/pages/PetaOperator.ts</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>C3</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>asapify-web</code> running in live mode against the API</li><li><code>src/auth.ts</code> using Firebase Auth</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Buat proyek web.<pre class="cmd">npm create vite@latest web -- --template vanilla-ts
-cd web &amp;&amp; npm i maplibre-gl firebase</pre></li><li>Peta dibuka dengan <code>map.fitBounds([[94.9,-6.1],[119.4,6.0]])</code>; layer <code>pixel-status</code> dari <code>GET /operator/grid?as_of=</code>, warna, ikon, dan arsiran persis halaman UI bagian 05; filter provinsi 11–19, 21, 61–65 (dikelompokkan per pulau).</li><li>Login Google (Firebase Auth); hanya klaim <code>role = operator</code> yang bisa masuk (<code>infra/set_role.py</code>).</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Dengan <code>?as_of=2023-09-25T16:00Z</code>: empat status tampil dengan ikon + warna, NO_OBSERVATION diarsir, kelompok AWAS bergaris putus.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>The operator web app is already built in a separate repo, <code>asapify-web</code> (React 19 + Vite + MapLibre 6). Run it in mock mode first (fictional Central Kalimantan backtest data for 24 Sep 2023, no backend).<pre class="cmd">git clone &lt;asapify-web-repo-url&gt; asapify-web &amp;&amp; cd asapify-web
+npm ci
+npm run dev</pre></li><li>Switch to live mode: copy <code>.env.example</code> to <code>.env.local</code> and set <code>VITE_API_MODE=live</code>, <code>VITE_API_BASE=http://localhost:8000</code> (the local C3 API), plus <code>VITE_PEAT_LAYER_URL</code> and <code>VITE_PROVINCES_LAYER_URL</code> (public bucket, Cloud setup 05). The map, slot player and archive calendar call the endpoints in the API Contract tab.</li><li>Replace the mock auth in <code>src/auth.ts</code> with Firebase Auth (Google sign-in); only the <code>role = operator</code> claim may sign in (<code>infra/set_role.py</code>). Send the ID token as <code>Authorization: Bearer</code>.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Live mode, night of 25 Sep 2023 picked from the calendar: four statuses show with icon + colour, NO_OBSERVATION is hatched, AWAS clusters have a dashed outline, and the province boundary is highlighted when one province is selected. API down → an error banner, not a blank screen.</p></div>
     </article>
     <article class="task" id="d2">
-      <div class="task-head"><span class="tid">D2</span><span class="pill ai">Peran D</span><h3>Detail kelompok + ToolTrace</h3></div>
-      <p class="goal">Operator melihat kenapa piksel AWAS (atribut MAUT, tetangga) dan apa kata verifikasi.</p>
+      <div class="task-head"><span class="tid">D2</span><span class="pill ai">Role D</span><h3>Cluster detail + ToolTrace</h3></div>
+      <p class="goal">The operator sees why a pixel is AWAS (MAUT attributes, neighbours) and what the verification says.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>C2, C3, D1</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>web/src/pages/Kelompok.ts,</code> components/*</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>C2, C3, D1</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Data-vs-contract gaps noted in the WORKLOG log (empty if everything matches)</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Grafik garis <code>utility_score</code> per slot 3 malam terakhir dengan garis 0,30 dan 0,65; slot NO_OBSERVATION diarsir.</li><li>Batang atribut slot pemicu: u_H, u_G, u_LST, u_SAT, u_T, u_N beserta bobotnya; mini-grid 3 × 3 tetangga.</li><li>Kartu verifikasi: hasil (Bukti kuat / Inkonklusif), citra VIIRS + Himawari, daftar deteksi VIIRS, ringkasan agen, dan panel <code>ToolTrace</code> (nama tool, argumen, durasi).</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Kelompok backtest menampilkan grafik, batang atribut, grid tetangga, dua citra (atau keterangan "tidak ada citra"), dan ToolTrace ≤ 8 baris.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>The <code>/kelompok/:id</code> page already exists. Open a backtest cluster in live mode and match each panel to its API fields: the 3-night <code>utility_score</code> chart with lines at 0.30 and 0.65 (NO_OBSERVATION slots hatched); attribute bars u_H, u_G, u_LST, u_SAT, u_T, u_N with weights and the table of measured values (<code>attribute_details</code>); the 3 × 3 neighbour grid.</li><li>Verification card: result (Strong evidence / Inconclusive), VIIRS + Himawari images, VIIRS detection list, agent summary, <code>ToolTrace</code> panel. Hover the thermal image: the tooltip shows cell temperatures from <code>images[].thermal</code> with a swatch on the 270–340 K scale.</li><li>Fields that are empty or shaped differently are fixed in the API (C3), not in the web app: the web app follows the API Contract tab.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>A backtest cluster shows the chart, attribute bars + value table, neighbour grid, two images (or a "no image" note) with temperature tooltips on the thermal image, and a ToolTrace of ≤ 8 rows.</p></div>
     </article>
     <article class="task" id="d3">
-      <div class="task-head"><span class="tid">D3</span><span class="pill ai">Peran D</span><h3>Panel keputusan: terbitkan / tolak</h3></div>
-      <p class="goal">Hanya operator yang mengirim ke grup peringatan.</p>
+      <div class="task-head"><span class="tid">D3</span><span class="pill ai">Role D</span><h3>Decision panel: publish / reject</h3></div>
+      <p class="goal">Only an operator sends to the alert group.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>D2</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>web/src/components/DecisionPanel.ts</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>D2</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Real decisions saved through <code>src/components/DecisionPanel.tsx</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Tombol <em>Terbitkan ke grup</em> (caption ≤ 1.024 karakter, terisi otomatis, bisa disunting) dan <em>Tolak</em> (alasan wajib) → <code>POST /operator/clusters/{id}/decision</code>.</li><li>Kelompok tanpa keputusan tetap tampil di daftar dengan label "belum diputuskan".</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Keputusan tersimpan di <code>alerts</code> dan <code>audit_log</code>; keputusan kedua bersamaan mendapat 409.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>The panel already exists: <em>Publish to group</em> (caption ≤ 1,024 characters, prefilled, editable) and <em>Reject</em> (reason required) → <code>POST /operator/clusters/{id}/decision</code>, response <code>DecisionResponse</code>. Test both in live mode.</li><li>Test the 409 path: open the same cluster in two tabs, decide in the first tab and then in the second. The second tab must show the <code>ALREADY_DECIDED</code> message and reload the detail.</li><li>Clusters without a decision stay in the list with the label "undecided".</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>The decision is stored in <code>alerts</code> and <code>audit_log</code>; a second decision gets 409 and the UI shows the existing decision.</p></div>
     </article>
     <article class="task" id="d4">
-      <div class="task-head"><span class="tid">D4</span><span class="pill ai">Peran D</span><h3>Pengirim Telegram</h3></div>
-      <p class="goal">Satu pesan per kejadian ke grup yang benar, satu arah.</p>
+      <div class="task-head"><span class="tid">D4</span><span class="pill ai">Role D</span><h3>Telegram sender</h3></div>
+      <p class="goal">One message per event to the right group, one way.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-5, C1, D3</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>shared/telegram.py</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-5, C1, D3</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>shared/telegram.py</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>shared/telegram.py</code> (Backend 06b): <code>send(chat_id, photo_url, caption)</code> dengan <code>sendPhoto</code>, <code>edit(chat_id, message_id, caption)</code> dengan <code>editMessageCaption</code>. Dipakai <code>asapify-agent</code> (grup operator) dan <code>asapify-api</code> (grup peringatan).</li><li>Caption dari templat UI bagian 07: AWAS, provinsi, koordinat, jumlah piksel, utility, tetangga, "Himawari + GK2A sepakat", hasil verifikasi, waktu WIB. Foto = citra VIIRS bila asap terlihat, selain itu crop termal Himawari.</li><li>Simpan <code>alerts/{id}.telegram = {chat_id, message_id, status}</code>. Gagal kirim → <code>status = pending</code>, ulangi sesuai <code>retry_after</code>. Kelompok ditutup → <code>asapify-agent /cluster-closed</code> mengedit caption dengan awalan <strong>SELESAI</strong>.</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Terbitkan di UI → pesan muncul di grup peringatan demo &lt; 10 detik; tutup kelompok → pesan yang sama berubah (<code>message_id</code> tetap), diawali SELESAI.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li><code>shared/telegram.py</code> (Backend 06b): <code>send(chat_id, photo_url, caption)</code> with <code>sendPhoto</code>, <code>edit(chat_id, message_id, caption)</code> with <code>editMessageCaption</code>. Used by <code>asapify-agent</code> (operator group) and <code>asapify-api</code> (alert group).</li><li>Caption from the template in <a href="ui.html#telegram">UI section 03b</a> (in Indonesian): AWAS, province, coordinates, pixel count, utility, neighbours, "Himawari + GK2A sepakat", verification result, WIB time. Photo = the VIIRS image when smoke is visible, otherwise the Himawari thermal crop.</li><li>Save <code>alerts/{id}.telegram = {chat_id, message_id, status}</code>. Send fails → <code>status = pending</code>, retry after <code>retry_after</code>. Cluster closed → <code>asapify-agent /cluster-closed</code> edits the caption with the prefix <strong>SELESAI</strong>.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Publish in the UI → the message appears in the demo alert group in &lt; 10 seconds; close the cluster → the same message changes (same <code>message_id</code>) and starts with SELESAI.</p></div>
     </article>
     <article class="task" id="c5">
-      <div class="task-head"><span class="tid">C5</span><span class="pill ai">Peran C</span><h3>Uji ujung-ke-ujung</h3></div>
-      <p class="goal">Membuktikan alur lengkap berjalan di URL publik dengan data replay.</p>
+      <div class="task-head"><span class="tid">C5</span><span class="pill ai">Role C</span><h3>End-to-end test</h3></div>
+      <p class="goal">Prove the full flow works at the public URL with replay data.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>C4, D1–D4</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>scripts/e2e.sh</code> </li><li><code>docs/e2e_log.txt</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>C4, D1–D4</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>scripts/e2e.sh</code> </li><li><code>docs/e2e_log.txt</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>scripts/e2e.sh</code>: jalankan ingest + evaluate replay untuk tiga malam kelompok backtest, tunggu verifikasi, lalu panggil <code>decision</code> dengan token operator demo.<pre class="cmd">bash scripts/e2e.sh --cluster &lt;ID&gt; --start 2023-09-23 --end 2023-09-25</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Kelompok muncul di peta publik, verifikasi tersimpan, pesan muncul di grup operator lalu grup peringatan. Log disimpan.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li><code>scripts/e2e.sh</code>: run ingest + evaluate replay for three nights of a backtest cluster, wait for verification, then call <code>decision</code> with the demo operator token.<pre class="cmd">bash scripts/e2e.sh --cluster &lt;ID&gt; --start 2023-09-23 --end 2023-09-25</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>The cluster appears on the public map, the verification is stored, and the message appears in the operator group and then the alert group. The log is saved.</p></div>
     </article></div>
   </section>
   <section id="s4">
     <div class="section-head">
-      <span class="eyebrow">Sprint 4 · 14–16 Okt</span>
-      <h2>Uji dan freeze</h2>
-      <p>Tugas: <a href="#a8">A8</a> · <a href="#c6">C6</a> · <a href="#d5">D5</a></p>
+      <span class="eyebrow">Sprint 4 · 14–16 Oct</span>
+      <h2>Test and freeze</h2>
+      <p>Tasks: <a href="#a8">A8</a> · <a href="#c6">C6</a> · <a href="#d5">D5</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Tiga kali replay tanpa galat; angka final backtest dan evaluasi agen tercatat. Freeze 16 Okt 23.59 WIB.</div>
+    <div class="sprint-done"><strong>Sprint done when:</strong> Three replays run without errors; final backtest and agent-evaluation figures are recorded. Freeze 16 Oct 23:59 WIB.</div>
     <div class="rb-list">
     <article class="task" id="a8">
-      <div class="task-head"><span class="tid">A8</span><span class="pill ai">Peran A</span><h3>Kalibrasi dan angka final backtest</h3></div>
-      <p class="goal">Bobot/ambang MAUT final dan angka yang dipakai di deck dan video.</p>
+      <div class="task-head"><span class="tid">A8</span><span class="pill ai">Role A</span><h3>Calibration and final backtest figures</h3></div>
+      <p class="goal">Final MAUT weights/thresholds and the figures used in the deck and video.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A7</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>docs/calibration.csv</code> </li><li><code>docs/backtest_final.csv,</code> .png</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A7</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>docs/calibration.csv</code> </li><li><code>docs/backtest_final.csv,</code> .png</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Coba paling banyak 6 kombinasi ambang AWAS (0,60/0,65/0,70) × syarat tetangga (0,25/0,375) pada paruh pertama jendela (Sep); pilih yang alarm palsunya terkecil dengan terlewat ≤ A7.<pre class="cmd">python -m jobs.calibrate --start 2023-09-01 --end 2023-09-30 --grid awas=0.60,0.65,0.70 nbr=0.25,0.375</pre></li><li>Uji kombinasi terpilih di 1–15 Okt 2023 (data yang tidak dipakai memilih). Tulis perubahan parameter di WORKLOG bagian 7.</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Angka final (median lead time, alarm palsu, terlewat, slot berawan) dari 1–15 Okt tercatat di WORKLOG dan dikirim ke D.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Try at most 6 combinations of AWAS threshold (0.60/0.65/0.70) × neighbour requirement (0.25/0.375) on the first half of the window (Sep); pick the one with the fewest false alarms and misses ≤ A7.<pre class="cmd">python -m jobs.calibrate --start 2023-09-01 --end 2023-09-30 --grid awas=0.60,0.65,0.70 nbr=0.25,0.375</pre></li><li>Test the chosen combination on 1–15 Oct 2023 (data not used for picking). Write parameter changes in WORKLOG section 7.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Final figures (median lead time, false alarms, misses, cloudy slots) for 1–15 Oct are recorded in the WORKLOG and sent to D.</p></div>
     </article>
     <article class="task" id="c6">
-      <div class="task-head"><span class="tid">C6</span><span class="pill ai">Peran C</span><h3>Evaluasi agen</h3></div>
-      <p class="goal">Menunjukkan agen konsisten dengan bukti.</p>
+      <div class="task-head"><span class="tid">C6</span><span class="pill ai">Role C</span><h3>Agent evaluation</h3></div>
+      <p class="goal">Show the agent is consistent with the evidence.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A8, C2</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>docs/agent_eval.csv</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A8, C2</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>docs/agent_eval.csv</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Jalankan agen di semua kelompok backtest; tabel <code>cluster_id, result, smoke_visible, viirs_within_2km_48h, viirs_image_age_h, tool_calls, validator_ok</code>.<pre class="cmd">python -m agent.evaluate --start $BACKTEST_START --end $BACKTEST_END &gt; docs/agent_eval.csv</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Semua baris <code>validator_ok = true</code> dan <code>tool_calls ≤ 8</code>; persentase strong_evidence/inconclusive dicatat.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Run the agent on every backtest cluster; table <code>cluster_id, result, smoke_visible, viirs_within_2km_48h, viirs_image_age_h, tool_calls, validator_ok</code>.<pre class="cmd">python -m agent.evaluate --start $BACKTEST_START --end $BACKTEST_END &gt; docs/agent_eval.csv</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Every row has <code>validator_ok = true</code> and <code>tool_calls ≤ 8</code>; the strong_evidence/inconclusive percentages are recorded.</p></div>
     </article>
     <article class="task" id="d5">
-      <div class="task-head"><span class="tid">D5</span><span class="pill ai">Peran D</span><h3>UI di layar 360 px dan freeze</h3></div>
-      <p class="goal">Layak ditunjukkan ke juri dari HP.</p>
+      <div class="task-head"><span class="tid">D5</span><span class="pill ai">Role D</span><h3>UI on a 360 px screen and freeze</h3></div>
+      <p class="goal">Ready to show the judges from a phone.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>D1–D4</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>commit freeze bertag v1.0</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>D1–D4</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>freeze commit tagged v1.0 in <code>asapify</code> and <code>asapify-web</code></li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Buka web di Chrome DevTools 360 × 740; perbaiki elemen yang terpotong atau tombol &lt; 44 px. Setelah 16 Okt 23.59 WIB hanya perbaikan bug.</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Tidak ada scroll horizontal di 360 px; tag <code>v1.0</code> ada di repo.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Open the web app in Chrome DevTools at 360 × 740; fix clipped elements or buttons &lt; 44 px. Also check <em>Lite mode</em> (plain map, no motion) and the system <em>reduced motion</em> setting.</li><li>Build in live mode and deploy to Firebase Hosting (Cloud setup 11); this is the URL that gets judged. After 16 Oct 23:59 WIB, bug fixes only.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>No horizontal scroll at 360 px; lite mode and reduced motion move nothing; the Firebase Hosting URL opens in an incognito window; tag <code>v1.0</code> exists in both repos.</p></div>
     </article></div>
   </section>
   <section id="s5">
     <div class="section-head">
-      <span class="eyebrow">Sprint 5 · 17–18 Okt</span>
+      <span class="eyebrow">Sprint 5 · 17–18 Oct</span>
       <h2>Submit</h2>
-      <p>Tugas: <a href="#d6">D6</a> · <a href="#d7">D7</a></p>
+      <p>Tasks: <a href="#d6">D6</a> · <a href="#d7">D7</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Konfirmasi submit diterima dari Hack2Skill.</div>
+    <div class="sprint-done"><strong>Sprint done when:</strong> The submission confirmation from Hack2Skill is received.</div>
     <div class="rb-list">
     <article class="task" id="d6">
-      <div class="task-head"><span class="tid">D6</span><span class="pill ai">Peran D</span><h3>Video 3 menit</h3></div>
-      <p class="goal">Menunjukkan alur, dua satelit, dan Gemini lewat ADK sebagai verifikator.</p>
+      <div class="task-head"><span class="tid">D6</span><span class="pill ai">Role D</span><h3>3-minute video</h3></div>
+      <p class="goal">Show the flow, the two satellites, and Gemini via ADK as the verifier.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>C5, A8</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Link video</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>C5, A8</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Video link</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Rekam mengikuti naskah WORKLOG bagian 16 dengan mode replay; tampilkan batang atribut MAUT dan ToolTrace; narasi dan subtitle bahasa Inggris; sebut sumber "NOAA open data"; ucapkan "AI is not the detector". Unggah ke YouTube (unlisted) atau Drive (akses siapa pun dengan link).</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Durasi ≤ 3:00; bisa diputar di jendela incognito.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Record following the WORKLOG section 16 script in replay mode; show the MAUT attribute bars and ToolTrace; English narration and subtitles; credit the source as "NOAA open data"; say "AI is not the detector". Upload to YouTube (unlisted) or Drive (anyone with the link).</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Duration ≤ 3:00; plays in an incognito window.</p></div>
     </article>
     <article class="task" id="d7">
-      <div class="task-head"><span class="tid">D7</span><span class="pill ai">Peran D</span><h3>Deck submit final dan submit</h3></div>
-      <p class="goal">Materi lengkap terkirim sebelum batas.</p>
+      <div class="task-head"><span class="tid">D7</span><span class="pill ai">Role D</span><h3>Final submission deck and submit</h3></div>
+      <p class="goal">Complete materials are sent before the deadline.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>A8, D6</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>ASAPify_Pitch.pdf</code> final</li><li>Konfirmasi submit</li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>A8, D6</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Final <code>ASAPify_Pitch.pdf</code></li><li>Submission confirmation</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Perbarui deck: tangkapan layar asli, angka backtest final, slide tim, URL prototipe, link video. Ekspor PDF.</li><li>Aktifkan instans minimum selama penjurian.<pre class="cmd">gcloud run services update asapify-api --region $REGION --min-instances 1
-gcloud run services update asapify-agent --region $REGION --min-instances 1</pre></li><li>Submit di Hack2Skill; centang checklist WORKLOG bagian 16.</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Email/halaman konfirmasi submit diterima (target 17 Okt).</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Update the deck: real screenshots, final backtest figures, team slide, prototype URL, video link. Export to PDF.</li><li>Turn on minimum instances for judging.<pre class="cmd">gcloud run services update asapify-api --region $REGION --min-instances 1
+gcloud run services update asapify-agent --region $REGION --min-instances 1</pre></li><li>Submit on Hack2Skill; tick the WORKLOG section 16 checklist.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>The submission confirmation email/page is received (target 17 Oct).</p></div>
     </article></div>
   </section>
 
-  <nav class="pager" aria-label="Halaman berikutnya">
-    <a href="cloud.html"><span>← Sebelumnya</span>Konfigurasi Cloud</a>
-    <a href="index.html"><span>Kembali →</span>Rencana</a>
+  <nav class="pager" aria-label="Next pages">
+    <a href="cloud.html"><span>← Previous</span>Cloud setup</a>
+    <a href="index.html"><span>Back →</span>Plan</a>
   </nav>
 </div>
 

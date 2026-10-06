@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ASAPify UI</title>
+<title>Cloud ASAPify</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -428,412 +428,450 @@
 </style>
 </head>
 <body>
-<nav class="topnav" aria-label="Main navigation"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>team plan</small></a><div class="navlinks"><a href="index.html">Plan</a><a href="ui.html" aria-current="page">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html">Cloud setup</a><a href="runbook.html">Runbook</a></div><div class="langs" aria-label="Language"><span aria-current="true">EN</span><a href="id/ui.html" hreflang="id" lang="id">ID</a></div></div></nav>
+<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html">Rencana</a><a href="ui.html">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html" aria-current="page">Konfigurasi Cloud</a><a href="runbook.html">Runbook</a></div><div class="langs" aria-label="Bahasa"><a href="../cloud.html" hreflang="en" lang="en">EN</a><span aria-current="true">ID</span></div></div></nav>
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">UI specification · reference for role D · aligned with the app 6 Oct</span>
-    <h1>Operator screens and Telegram bot messages</h1>
-    <p class="lede">The main user is the <strong>operator</strong>, who watches peat pixels, reads <em>why</em> a pixel is <code>AWAS</code> (MAUT attributes with their measured numbers, and neighbours), reads the agent's verification, then <strong>publishes or rejects</strong>. Published messages go out through the bot to a <strong>Telegram group</strong>, one way. The operator web app already runs in the <code>asapify-web</code> repo in <strong>mock mode</strong> (fictional data, demo sign-in); in live mode all data comes through the <a href="backend.html">API</a>. Default language is <strong>English</strong>, with an EN/ID switch in the top bar that the device remembers.</p>
-    <ul class="toc" aria-label="Page contents">
-      <li><a href="#rute"><span>01</span>Routes</a></li>
-      <li><a href="#alur-pengguna"><span>02</span>Flows</a></li>
-      <li><a href="#layar"><span>03</span>Wireframes</a></li>
-      <li><a href="#telegram"><span>03b</span>Bot messages</a></li>
-      <li><a href="#layer"><span>04</span>Map layers</a></li>
-      <li><a href="#token"><span>05</span>Status &amp; colour</a></li>
-      <li><a href="#komponen"><span>06</span>Components</a></li>
-      <li><a href="#status"><span>07</span>Screen states</a></li>
-      <li><a href="#teks"><span>08</span>Language &amp; copy</a></li>
-      <li><a href="#stack-fe"><span>09</span>Stack</a></li>
+    <span class="eyebrow">Konfigurasi Cloud · pegangan Peran C · arsitektur revisi 29 Sep · web disamakan 6 Okt</span>
+    <h1>Setelan setiap layanan Google Cloud</h1>
+    <p class="lede">Semua perintah memakai variabel di bagian 01. Jalankan berurutan di Cloud Shell. Satu image Docker dibangun sekali lalu dipakai oleh lima job dan dua service. Ukuran CPU dan memori adalah titik awal 💡.</p>
+    <ul class="toc" aria-label="Isi halaman">
+      <li><a href="#variabel"><span>01</span>Variabel</a></li>
+      <li><a href="#api-aktif"><span>02</span>API</a></li>
+      <li><a href="#iam"><span>03</span>Service account</a></li>
+      <li><a href="#secret"><span>04</span>Secret</a></li>
+      <li><a href="#storage"><span>05</span>Storage &amp; Firestore</a></li>
+      <li><a href="#sumber"><span>06</span>Sumber data luar</a></li>
+      <li><a href="#ee"><span>07</span>Earth Engine</a></li>
+      <li><a href="#gemini"><span>08</span>Gemini</a></li>
+      <li><a href="#run-service"><span>09</span>Image &amp; service</a></li>
+      <li><a href="#run-jobs"><span>10</span>Job &amp; Scheduler</a></li>
+      <li><a href="#firebase"><span>11</span>Firebase</a></li>
+      <li><a href="#monitor"><span>12</span>Monitoring</a></li>
+      <li><a href="#env"><span>13</span>Env var</a></li>
+      <li><a href="#urutan"><span>14</span>Urutan deploy</a></li>
     </ul>
   </header>
 
-  <section id="rute">
+  <section id="variabel">
     <div class="section-head">
-      <span class="eyebrow">01 · Routes</span>
-      <h2>Five routes for operators, judges and the backend team</h2>
+      <span class="eyebrow">01 · Variabel</span>
+      <h2>Jakarta untuk layanan, global untuk Gemini</h2>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Jalankan di awal setiap sesi</span><span>infra/env.sh</span></div>
+<pre>export PROJECT_ID="asapify-&lt;inisial&gt;-2026"       <span class="c"># ganti dengan project tim</span>
+export REGION="asia-southeast2"
+export GEMINI_LOCATION="global"                   <span class="c"># us-central1 bila model belum tersedia</span>
+export GEMINI_MODEL="&lt;nama model Gemini Flash terbaru&gt;"
+export DATA_BUCKET="asapify-data-$PROJECT_ID"      <span class="c"># fitur, skor, baseline, crop</span>
+export PUBLIC_BUCKET="asapify-public-$PROJECT_ID"  <span class="c"># lapisan peta statis (batas gambut, batas provinsi)</span>
+export BBOX="94.9,-6.2,119.4,6.2"                 <span class="c"># Sumatra + Kalimantan, dipotong peat mask</span>
+export BACKTEST_BBOX="113.5,-2.6,114.3,-1.9"      <span class="c"># sub-area Kalteng (utama)</span>
+export BACKTEST_BBOX_SUMSEL="105.2,-3.7,106.0,-3.0"  <span class="c"># OKI, Sumsel (direncanakan)</span>
+export WARMUP_START="2023-08-01"; export BACKTEST_START="2023-09-01"; export BACKTEST_END="2023-10-15"
+export IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/asapify/app:latest"
+gcloud config set project $PROJECT_ID
+JOBS_SA="sa-jobs@$PROJECT_ID.iam.gserviceaccount.com"
+AGENT_SA="sa-agent@$PROJECT_ID.iam.gserviceaccount.com"
+API_SA="sa-api@$PROJECT_ID.iam.gserviceaccount.com"
+SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
+    </div>
+  </section>
+
+  <section id="api-aktif">
+    <div class="section-head">
+      <span class="eyebrow">02 · API yang diaktifkan</span>
+      <h2>Satu perintah</h2>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Aktifkan API</span><span>bash</span></div>
+<pre>gcloud services enable \
+  run.googleapis.com cloudscheduler.googleapis.com cloudbuild.googleapis.com \
+  artifactregistry.googleapis.com firestore.googleapis.com storage.googleapis.com \
+  secretmanager.googleapis.com aiplatform.googleapis.com earthengine.googleapis.com \
+  iamcredentials.googleapis.com logging.googleapis.com monitoring.googleapis.com \
+  firebase.googleapis.com firebasehosting.googleapis.com identitytoolkit.googleapis.com</pre>
+    </div>
+  </section>
+
+  <section id="iam">
+    <div class="section-head">
+      <span class="eyebrow">03 · Service account</span>
+      <h2>Empat akun, masing-masing hanya izin yang dipakai</h2>
+      <p>Hanya <code>sa-agent</code> yang bisa memanggil Gemini dan membaca MAP_KEY. Job tidak punya akses Gemini maupun token bot.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Route</th><th scope="col">Page</th><th scope="col">User</th><th scope="col">Main content</th><th scope="col">Data from</th></tr></thead>
+        <thead><tr><th scope="col">Akun</th><th scope="col">Dipakai oleh</th><th scope="col">Peran</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>/masuk</code></th><td>Sign-in</td><td>operator</td><td>Demo sign-in in mock mode; Firebase Auth (Google) in live mode. The left side explains when a pixel becomes AWAS with a 3 × 3 neighbour grid</td><td>Firebase Auth</td></tr>
-          <tr><th scope="row"><code>/</code></th><td>Operator map</td><td>operator</td><td>Peat pixel status, a sortable AWAS cluster list, search, status and province filters with a province highlight, layer control, slot player with an archive-night calendar, pixel inspector</td><td><code>/meta</code>, <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code>, <code>/operator/clusters</code>, <code>/operator/basemaps</code>, <code>layers/*.geojson</code></td></tr>
-          <tr><th scope="row"><code>/kelompok/:id</code></th><td>Cluster detail</td><td>operator</td><td>3-night utility chart, MAUT parameter table (measured value, u, weight, contribution), neighbour grid, agent verification with temperature tooltips on the images, ToolTrace, decision panel</td><td><code>/operator/clusters/{id}</code></td></tr>
-          <tr><th scope="row"><code>/tentang</code></th><td>About &amp; method</td><td>everyone, judges</td><td>How it works (5 steps), pixel status, MAUT weights, two satellites, limitations, data sources ("NOAA open data"; all processing on Google Cloud)</td><td>static</td></tr>
-          <tr><th scope="row"><code>/kontrak-api</code></th><td>API contract</td><td>backend team, judges</td><td>Conventions, error codes, every endpoint (parameters, body, responses, errors, screens that use it), schemas, static files, internal agent endpoints. JSON examples come from the same mock data as the screens</td><td>static</td></tr>
-        </tbody>
-        <caption>Every API path starts with <code>/api/v1</code>. Alert recipients have no web route; their channel is the Telegram group (section 03b). Deep links such as <code>/kelompok/C-0924-002</code> open directly.</caption>
-      </table>
-    </div>
-  </section>
-
-  <section id="alur-pengguna">
-    <div class="section-head">
-      <span class="eyebrow">02 · Flows</span>
-      <h2>Three flows that must run smoothly in the demo</h2>
-    </div>
-    <div class="grid-3">
-      <div class="card">
-        <span class="pill waspada">Operator</span>
-        <div class="flowline"><span>Message in the operator group</span><b>→</b><span>Open the cluster detail</span><b>→</b><span>Read MAUT parameters + neighbours</span><b>→</b><span>Read verification + images</span><b>→</b><span>Publish / reject</span></div>
-        <p class="note" style="margin-top:4px">There is no level to choose. Clusters without a decision stay monitored.</p>
-      </div>
-      <div class="card">
-        <span class="pill ai">Archive night</span>
-        <div class="flowline"><span>Open the calendar in the slot player</span><b>→</b><span>Pick a date with a dot</span><b>→</b><span>Play that night's 54 slots</span><b>→</b><span>Open that night's cluster</span></div>
-        <p class="note" style="margin-top:4px">The map, cluster outlines and list follow the chosen night.</p>
-      </div>
-      <div class="card">
-        <span class="pill ok">Telegram alert group</span>
-        <div class="flowline"><span>Operator publishes</span><b>→</b><span>Bot sends photo + caption</span><b>→</b><span>Cluster closes: caption SELESAI</span></div>
-        <p class="note" style="margin-top:4px">One way. One message per event, updated in place.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="layar">
-    <div class="section-head">
-      <span class="eyebrow">03 · Wireframes</span>
-      <h2>Five operator web screens and one Telegram message, phone size</h2>
-      <p>From 1024 px up, the cluster list moves to a 360 px left panel; below that, the list becomes a draggable bottom sheet. Sketch data is fictional.</p>
-    </div>
-    <div class="phones">
-
-      <div class="phone-wrap">
-        <div class="phone"><div class="scr">
-          <div class="scr-top"><span>ASAPify · Operator</span><small>EN | ID</small></div>
-          <div class="banner">Slot 24 Sep 22:10 WIB · Himawari ✓ · GK2A ✓</div>
-          <svg viewBox="0 0 270 250" role="img" aria-label="Sketch of the peat pixel grid with four statuses inside the selected province" style="display:block;width:100%;height:auto">
-            <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--line)" stroke-width="3"/></pattern></defs>
-            <rect width="270" height="250" fill="var(--surface-2)"/>
-            <path d="M20 40 L120 18 L230 34 L250 120 L210 220 L90 232 L30 170 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-            <g stroke="var(--surface)" stroke-width="1">
-              <rect x="30" y="30" width="30" height="30" fill="var(--moss-soft)"/><rect x="60" y="30" width="30" height="30" fill="var(--moss-soft)"/><rect x="90" y="30" width="30" height="30" fill="url(#hatch)"/><rect x="120" y="30" width="30" height="30" fill="url(#hatch)"/>
-              <rect x="30" y="60" width="30" height="30" fill="var(--moss-soft)"/><rect x="60" y="60" width="30" height="30" fill="var(--amber-soft)"/><rect x="90" y="60" width="30" height="30" fill="var(--ember)"/><rect x="120" y="60" width="30" height="30" fill="var(--moss-soft)"/><rect x="150" y="60" width="30" height="30" fill="var(--moss-soft)"/>
-              <rect x="60" y="90" width="30" height="30" fill="var(--moss-soft)"/><rect x="90" y="90" width="30" height="30" fill="var(--ember)"/><rect x="120" y="90" width="30" height="30" fill="var(--ember)"/><rect x="150" y="90" width="30" height="30" fill="var(--amber-soft)"/><rect x="180" y="90" width="30" height="30" fill="var(--moss-soft)"/>
-              <rect x="60" y="120" width="30" height="30" fill="var(--moss-soft)"/><rect x="90" y="120" width="30" height="30" fill="var(--amber-soft)"/><rect x="120" y="120" width="30" height="30" fill="var(--ember)"/><rect x="150" y="120" width="30" height="30" fill="var(--moss-soft)"/><rect x="180" y="120" width="30" height="30" fill="var(--amber-soft)"/>
-              <rect x="90" y="150" width="30" height="30" fill="var(--moss-soft)"/><rect x="120" y="150" width="30" height="30" fill="var(--moss-soft)"/><rect x="150" y="150" width="30" height="30" fill="url(#hatch)"/>
-            </g>
-            <rect x="88" y="58" width="64" height="94" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>
-          </svg>
-          <div class="sheet">
-            <div class="grab"></div>
-            <div class="row"><b>AWAS clusters: 1</b><span>Highest utility ▾</span></div>
-            <div class="row"><span class="pill awas">AWAS</span><span>C-0924-002 · 4 pixels · U 0.73</span></div>
-            <div class="row"><span class="pill ai">Strong evidence</span><span>Awaiting decision</span></div>
-          </div>
-        </div></div>
-        <div class="spec"><h4>Operator map <code>/</code></h4>
-          <ul><li>Opens on Sumatra + Kalimantan (<code>fitBounds([[94.9,-6.1],[119.4,6.0]])</code>)</li><li>2 km pixel grid: colour + status icon; NO_OBSERVATION hatched; AWAS clusters dashed</li><li>Search by cluster ID, pixel ID or coordinates; status chips can be switched off</li><li>15-province filter (dropdown by island): the selected province gets a thick outline and a label, and its surroundings are dimmed</li><li>Cluster list sorted by utility or trigger time</li></ul></div>
-      </div>
-
-      <div class="phone-wrap">
-        <div class="phone"><div class="scr">
-          <div class="scr-top"><span>22:10 WIB · latest slot</span><small>▶</small></div>
-          <div class="scr-body">
-            <div class="blk"><span class="lbl">Night ribbon · 54 slots</span>
-              <svg viewBox="0 0 240 46" role="img" aria-label="Night ribbon: a row with the AWAS count per slot and rows for Himawari and GK2A availability" style="display:block;width:100%;height:auto">
-                <g fill="var(--ember)"><rect x="0" y="2" width="8" height="10" opacity="0.35"/><rect x="10" y="2" width="8" height="10" opacity="0.5"/><rect x="20" y="2" width="8" height="10" opacity="0.7"/><rect x="30" y="2" width="8" height="10"/><rect x="40" y="2" width="8" height="10"/></g>
-                <g fill="var(--moss)"><rect x="0" y="18" width="48" height="8"/><rect x="0" y="32" width="48" height="8"/></g>
-                <g fill="var(--surface-2)"><rect x="50" y="2" width="190" height="10"/><rect x="50" y="18" width="190" height="8"/><rect x="50" y="32" width="190" height="8"/></g>
-                <line x1="49" y1="0" x2="49" y2="44" stroke="var(--ink)" stroke-width="2"/>
-              </svg>
-              <span style="color:var(--ink-dim)">▲ AWAS per slot · H Himawari · G GK2A</span></div>
-            <div class="blk"><span class="lbl">Night calendar · September 2023</span>
-              <div class="row"><span>11</span><span>12</span><span>13</span><span>14</span><span><b>15•</b></span><span>16</span><span>17</span></div>
-              <div class="row"><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span><b>23•</b></span><span><b>24•</b></span></div>
-              <span style="color:var(--ink-dim)">• AWAS clusters that night · faded dates: no data</span></div>
-          </div>
-        </div></div>
-        <div class="spec"><h4>Slot player and calendar</h4>
-          <ul><li>Play the 54 night slots (20:00–04:50 WIB); drag, or use the arrow keys on the ribbon</li><li>Month calendar with month and year pickers; ‹ › moves one night; "Go to latest" returns to the replay night</li><li>The archive starts on 16 Feb 2023 (start of the NOAA GK2A archive)</li></ul></div>
-      </div>
-
-      <div class="phone-wrap">
-        <div class="phone"><div class="scr">
-          <div class="scr-top"><span>← C-0924-002</span><span class="pill awas">AWAS</span></div>
-          <div class="scr-body">
-            <div class="blk"><span class="lbl">Utility over 3 nights</span>
-              <svg viewBox="0 0 240 80" role="img" aria-label="Line chart of utility rising past the 0.65 threshold" style="display:block;width:100%;height:auto">
-                <line x1="10" y1="24" x2="235" y2="24" stroke="var(--ember)" stroke-dasharray="3 3"/><text x="14" y="20" font-size="8" fill="var(--ember)" font-family="IBM Plex Mono, monospace">0.65 AWAS</text>
-                <line x1="10" y1="50" x2="235" y2="50" stroke="var(--amber)" stroke-dasharray="3 3"/><text x="232" y="60" text-anchor="end" font-size="8" fill="var(--amber)" font-family="IBM Plex Mono, monospace">0.30</text>
-                <rect x="80" y="8" width="50" height="64" fill="url(#hatch)" opacity="0.6"/>
-                <polyline points="12,62 40,58 70,52 80,52 130,46 160,40 190,28 210,18 230,16" fill="none" stroke="var(--ink)" stroke-width="2"/>
-                <line x1="10" y1="72" x2="235" y2="72" stroke="var(--line)"/>
-              </svg>
-              <span style="color:var(--ink-dim)">22–24 Sep · hatched = no observation</span></div>
-            <div class="blk"><span class="lbl">MAUT parameters at the trigger slot</span>
-              <div class="row"><span>u_H Himawari · +18.6 K</span><b>1.00</b></div><div class="row"><span>u_G GK2A · +16.9 K</span><b>1.00</b></div><div class="row"><span>u_T · 2 of 3 nights</span><b>0.67</b></div><div class="row"><span>u_N · 3/8 neighbours</span><b>0.375</b></div></div>
-          </div>
-        </div></div>
-        <div class="spec"><h4>Cluster detail <code>/kelompok/:id</code></h4>
-          <ul><li>Utility per slot, lines at 0.30 and 0.65, cloudy slots hatched</li><li>Parameter table: measured value, u, weight, contribution w × u, supporting numbers, scale, and the formula <code>U = Σ w·u ÷ Σ w</code></li><li>3 × 3 neighbour mini grid; "both satellites agree" or "one satellite" label</li></ul></div>
-      </div>
-
-
-      <div class="phone-wrap">
-        <div class="phone"><div class="scr">
-          <div class="scr-top"><span>← Verification</span><span class="pill ai">Strong evidence</span></div>
-          <div class="scr-body">
-            <div class="blk"><span class="lbl">VIIRS true colour · NOAA-20 · 24 Sep</span><div class="thumb" aria-hidden="true"></div><span>Thin smoke drifting north-west · 9 h old</span></div>
-            <div class="blk"><span class="lbl">Himawari thermal · 22:10 · tooltip</span><span>p420_950 · B07 45.1 °C · B14 27.3 °C · anomaly +18.6 K (z 4.4) · cluster member</span></div>
-            <div class="blk"><span class="lbl">VIIRS detections, 48 h</span><div class="row"><span>NOAA-20 · 01:42 WIB</span><b>1.4 km</b></div></div>
-            <div class="btns"><span class="btn">Agent steps (5)</span></div>
-          </div>
-        </div></div>
-        <div class="spec"><h4>Verification card</h4>
-          <ul><li>Every piece of evidence shows its time and age; agent text appears in the screen's language</li><li>Tooltip on images: brightness temperature per 0.02° pixel (Himawari B07/B14, GK2A SW038/IR105) and the anomaly against the crop background; on the VIIRS image: coordinates, distance, FIRMS points</li><li>No visible smoke = inconclusive, never negative</li><li>Agent steps (ToolTrace): tool name, arguments, duration (for the video)</li></ul></div>
-      </div>
-
-      <div class="phone-wrap">
-        <div class="phone"><div class="scr">
-          <div class="scr-top"><span>Decision C-0924-002</span><small>operator</small></div>
-          <div class="scr-body">
-            <div class="blk"><span class="lbl">Summary</span><span>AWAS · U 0.73 · 3/8 neighbours · Himawari + GK2A agree · Strong evidence</span></div>
-            <span class="lbl">Telegram message (in Indonesian) · 412/1024</span>
-            <div class="field">AWAS · Kalimantan Tengah · -2.21, 113.92 · 4 piksel …</div>
-            <div class="btns"><span class="btn primary">Publish to group</span><span class="btn">Reject</span></div>
-            <small style="color:var(--ink-dim)">Rejecting needs a reason. Clusters without a decision stay monitored.</small>
-          </div>
-        </div></div>
-        <div class="spec"><h4>Decision panel</h4>
-          <ul><li>Two buttons only: Publish, Reject (reason required); confirmation before sending</li><li>The caption is prefilled from the 03b template, editable, max 1,024 characters</li><li>"Publish to group" posts to the cluster's provincial alert group</li><li>Everything is logged in <code>audit_log</code>; simultaneous decisions → 409, and the saved decision is shown</li></ul></div>
-      </div>
-
-      <div class="phone-wrap">
-        <div class="phone"><div class="scr">
-          <div class="scr-top"><span>ASAPify Peringatan · Kalteng</span><small>Telegram</small></div>
-          <div class="scr-body tg">
-            <div class="tg-msg">
-              <span class="tg-from">ASAPify Bot</span>
-              <div class="tg-img" role="img" aria-label="VIIRS image with a coordinate marker"><span></span></div>
-              <p><b>AWAS · Dugaan gambut membara</b><br>📍 Kalimantan Tengah · -2.21, 113.92 · 4 piksel<br>🛰️ Himawari + GK2A sepakat · utility 0,73 · tetangga 3/8<br>🔎 Bukti kuat: asap terlihat (VIIRS 24 Sep), deteksi VIIRS 1,4 km<br>🕙 Slot 24 Sep 22.10 WIB</p>
-              <small class="tg-time">22.31</small>
-            </div>
-          </div>
-        </div></div>
-        <div class="spec"><h4>Bot message in the alert group</h4>
-          <ul><li>Sent only after an operator publishes</li><li>The message stays in Indonesian for responders in Indonesia</li><li>Cluster closed = the same message is edited to start with SELESAI ("resolved")</li><li>One way: no buttons, no reports back</li></ul></div>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="telegram">
-    <div class="section-head">
-      <span class="eyebrow">03b · Telegram bot messages ✅</span>
-      <h2>Two groups, two kinds of message</h2>
-    </div>
-    <div class="table-wrap">
-      <table class="wide">
-        <thead><tr><th scope="col">Group</th><th scope="col">Sender</th><th scope="col">When the bot posts</th><th scope="col">Content</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Operator (internal)</th><td><code>asapify-agent</code></td><td>Automatically, once an AWAS cluster's verification is saved</td><td>Cluster ID, province, utility, neighbours, verification result, detail link (operators only)</td></tr>
-          <tr><th scope="row">Alert (per province)</th><td><code>asapify-api</code></td><td>Only after an operator presses <em>Publish to group</em></td><td>Photo (VIIRS image if smoke is visible, otherwise the Himawari thermal crop) + the caption template below</td></tr>
-          <tr><th scope="row">Alert, same message</th><td><code>asapify-agent</code> / <code>asapify-api</code></td><td>Cluster closed automatically / operator closes it</td><td><code>editMessageCaption</code>, first line starts with <strong>SELESAI</strong></td></tr>
+          <tr><th scope="row"><code>sa-jobs</code></th><td>ingest-himawari, ingest-gk2a, evaluate, environment, build</td><td><code>roles/datastore.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/storage.objectAdmin</code> (public bucket, untuk lapisan peta), <code>roles/earthengine.writer</code> + <code>roles/serviceusage.serviceUsageConsumer</code> (build: WorldCover), <code>roles/run.invoker</code> pada <code>asapify-agent</code></td></tr>
+          <tr><th scope="row"><code>sa-agent</code></th><td><code>asapify-agent</code></td><td><code>roles/datastore.user</code>, <code>roles/aiplatform.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/secretmanager.secretAccessor</code> (FIRMS, Telegram), <code>roles/iam.serviceAccountTokenCreator</code> pada dirinya sendiri (signed URL crop)</td></tr>
+          <tr><th scope="row"><code>sa-api</code></th><td><code>asapify-api</code></td><td><code>roles/datastore.user</code>, <code>roles/storage.objectViewer</code> (data bucket, baca <code>score/</code>), <code>roles/secretmanager.secretAccessor</code> (Telegram), <code>roles/iam.serviceAccountTokenCreator</code> pada dirinya sendiri (signed URL untuk UI), <code>roles/run.invoker</code> pada <code>asapify-agent</code> (verifikasi ulang)</td></tr>
+          <tr><th scope="row"><code>sa-scheduler</code></th><td>Cloud Scheduler</td><td><code>roles/run.invoker</code> (menjalankan job)</td></tr>
         </tbody>
       </table>
+    </div>
+    <div class="code" style="margin-top:12px">
+      <div class="code-head"><span>Buat akun dan peran tingkat project</span><span>bash</span></div>
+<pre>for SA in sa-jobs sa-agent sa-api sa-scheduler; do gcloud iam service-accounts create $SA; done
+
+for R in roles/datastore.user roles/earthengine.writer roles/serviceusage.serviceUsageConsumer; do
+  gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$JOBS_SA" --role $R; done
+for R in roles/datastore.user roles/aiplatform.user; do
+  gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$AGENT_SA" --role $R; done
+gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$API_SA" --role roles/datastore.user
+gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SCHED_SA" --role roles/run.invoker
+
+<span class="c"># signed URL: tiap service menandatangani sebagai dirinya sendiri</span>
+for SA in $AGENT_SA $API_SA; do
+  gcloud iam service-accounts add-iam-policy-binding $SA \
+    --member "serviceAccount:$SA" --role roles/iam.serviceAccountTokenCreator; done
+
+<span class="c"># run.invoker pada asapify-agent diberikan setelah service dibuat (bagian 09)</span></pre>
+    </div>
+  </section>
+
+  <section id="secret">
+    <div class="section-head">
+      <span class="eyebrow">04 · Secret Manager</span>
+      <h2>MAP_KEY FIRMS dan token bot Telegram</h2>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Simpan dan beri akses</span><span>bash</span></div>
+<pre><span class="c"># dibuat di Runbook S0-4 dan S0-5; di sini hanya akses</span>
+gcloud secrets add-iam-policy-binding firms-map-key \
+  --member "serviceAccount:$AGENT_SA" --role roles/secretmanager.secretAccessor
+for M in $AGENT_SA $API_SA; do gcloud secrets add-iam-policy-binding telegram-bot-token \
+  --member "serviceAccount:$M" --role roles/secretmanager.secretAccessor; done</pre>
+    </div>
+    <p class="note">Backtest yang memakai FIRMS SP dijalankan dari laptop anggota dengan <code>MAP_KEY</code> di variabel lingkungan lokal, bukan dari job. Job tidak pernah membaca MAP_KEY.</p>
+  </section>
+
+  <section id="storage">
+    <div class="section-head">
+      <span class="eyebrow">05 · Storage dan Firestore</span>
+      <h2>Deret waktu di bucket, keputusan di Firestore</h2>
     </div>
     <div class="grid-2">
       <div class="code">
-        <div class="code-head"><span>Caption template (Indonesian)</span><span>shared/caption.py</span></div>
-<pre>&lt;b&gt;AWAS · Dugaan gambut membara&lt;/b&gt;
-📍 {provinsi} · {lat:.2f}, {lon:.2f} · {n_pixels} piksel
-🛰️ Himawari + GK2A sepakat · utility {U:.2f} · tetangga {n_nbr}/8
-🔎 {"Bukti kuat" | "Inkonklusif"}: {alasan singkat dari evidence}
-🕙 Slot {slot WIB:%d %b %H.%M} WIB
-Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
+        <div class="code-head"><span>Bucket</span><span>bash</span></div>
+<pre>for B in $DATA_BUCKET $PUBLIC_BUCKET; do
+  gcloud storage buckets create gs://$B --location=$REGION \
+    --uniform-bucket-level-access
+done
+gcloud storage buckets add-iam-policy-binding gs://$PUBLIC_BUCKET \
+  --member=allUsers --role=roles/storage.objectViewer
+for SA in $JOBS_SA $AGENT_SA; do
+  gcloud storage buckets add-iam-policy-binding gs://$DATA_BUCKET \
+    --member="serviceAccount:$SA" --role=roles/storage.objectAdmin; done
+gcloud storage buckets add-iam-policy-binding gs://$PUBLIC_BUCKET \
+  --member="serviceAccount:$JOBS_SA" --role=roles/storage.objectAdmin
+gcloud storage buckets add-iam-policy-binding gs://$DATA_BUCKET \
+  --member="serviceAccount:$API_SA" --role=roles/storage.objectViewer
+gcloud storage buckets update gs://$DATA_BUCKET --lifecycle-file=infra/lifecycle.json</pre>
       </div>
-      <div class="card">
-        <h4>Rules</h4>
-        <ul>
-          <li>Caption at most 1,024 characters; numbers come from <code>clusters</code> and <code>verifications</code>, never retyped</li>
-          <li>Never says "confirmed fire"; the last line reads "AWAS status comes from satellite rules; it is not a field confirmation"</li>
-          <li>The caption stays in Indonesian (its recipients are responders in Indonesia), also when the web screen is in English; the demo video uses English subtitles</li>
-          <li>The bot accepts no input: no buttons, commands or webhook; it stores no user data</li>
-        </ul>
+      <div class="stack">
+        <div class="code">
+          <div class="code-head"><span>Lifecycle data bucket</span><span>infra/lifecycle.json</span></div>
+<pre>{ "rule": [{ "action": { "type": "Delete" },
+  "condition": { "age": 150,
+    "matchesPrefix": ["himawari/", "gk2a/", "score/", "raw/firms/"] } }] }</pre>
+        </div>
+        <div class="code">
+          <div class="code-head"><span>Firestore, tertutup untuk browser</span><span>bash</span></div>
+<pre>gcloud firestore databases create --location=$REGION --type=firestore-native
+<span class="c"># firestore.rules: allow read, write: if false;</span>
+firebase deploy --only firestore:rules,firestore:indexes</pre>
+        </div>
       </div>
+    </div>
+    <p class="note">Umur 150 hari dihitung dari waktu objek dibuat, jadi data backtest yang di-backfill awal Oktober tetap ada sampai final 4 Desember. <code>peat/</code> dan <code>environment/</code> tidak dihapus.</p>
+    <div class="code" style="margin-top:12px">
+      <div class="code-head"><span>Lapisan peta statis untuk web (sekali, setelah S0-8 dan A1)</span><span>bash</span></div>
+<pre><span class="c"># browser membaca bucket publik dari domain web, jadi perlu CORS</span>
+cat &gt; infra/cors.json &lt;&lt;'EOF'
+[{"origin": ["https://&lt;PROJECT_ID&gt;.web.app", "http://localhost:5173"],
+  "method": ["GET"], "responseHeader": ["Content-Type"], "maxAgeSeconds": 3600}]
+EOF
+gcloud storage buckets update gs://$PUBLIC_BUCKET --cors-file=infra/cors.json
+
+<span class="c"># 15 provinsi, disederhanakan ±90 KB untuk peta (asli: data/ref/provinces.geojson)</span>
+python - &lt;&lt;'EOF'
+import geopandas as gpd
+g = gpd.read_file("data/ref/provinces.geojson").rename(columns={"shapeName": "name"})
+g["geometry"] = g.geometry.simplify(0.01, preserve_topology=True)
+g[["code", "name", "geometry"]].to_file("data/ref/provinces_web.geojson", driver="GeoJSON")
+EOF
+gcloud storage cp data/ref/provinces_web.geojson gs://$PUBLIC_BUCKET/layers/provinces.geojson
+<span class="c"># layers/peat_pixels.geojson ditulis asapify-build (A1)</span></pre>
     </div>
   </section>
 
-  <section id="layer">
+  <section id="sumber">
     <div class="section-head">
-      <span class="eyebrow">04 · Map layers</span>
-      <h2>MapLibre data layers over the basemap</h2>
-      <p>Pixel geometry is built once from <code>/operator/pixels</code>. Per-slot status, the status filter and the player use <code>feature-state</code> (only changed cells are rewritten), so playing slots never triggers re-tiling. Map labels (provinces, basemap, MapLibre buttons) follow the screen language.</p>
+      <span class="eyebrow">06 · Sumber data luar</span>
+      <h2>Semuanya dibaca tanpa akun, kecuali FIRMS</h2>
+      <p>Bucket NOAA dibaca anonim, tanpa akun AWS dan tanpa biaya; itu arsip unduhan, bukan infrastruktur kita. Di materi submit sebut <strong>"NOAA open data"</strong>.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Layer</th><th scope="col">Source</th><th scope="col">Type</th><th scope="col">Style</th><th scope="col">Zoom</th></tr></thead>
+        <thead><tr><th scope="col">Sumber</th><th scope="col">Alamat</th><th scope="col">Dipakai oleh</th><th scope="col">Catatan</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Basemap</th><td>OpenFreeMap positron/dark (street map), raster from <code>/operator/basemaps</code> (VIIRS imagery), or plain with no tiles</td><td>vector / raster / background</td><td>follows the light/dark theme; lite mode uses plain</td><td>all</td></tr>
-          <tr><th scope="row">Pixel status</th><td><code>/operator/pixels</code> + <code>/operator/grid?format=compact</code> (or <code>/grid/night</code> for other slots)</td><td>fill + symbol</td><td>colour per status, NO_OBSERVATION hatched, Watch/AWAS icons at zoom ≥ 10, thin grid lines at zoom ≥ 9</td><td>all</td></tr>
-          <tr><th scope="row">Peat boundary</th><td><code>layers/peat_pixels.geojson</code> in the public bucket</td><td>line</td><td>1 px dashed line</td><td>all</td></tr>
-          <tr><th scope="row">Province boundaries</th><td><code>layers/provinces.geojson</code> in the public bucket</td><td>line + symbol</td><td>thin line + name label; selected province: thick haloed line, bold label, surroundings dimmed</td><td>labels ≤ 8–9</td></tr>
-          <tr><th scope="row">AWAS clusters</th><td><code>clusters</code> in the compact responses (cell indices)</td><td>line + symbol</td><td>thick dashed line + glow, cluster ID label; selected cluster in blue</td><td>all</td></tr>
-          <tr><th scope="row">VIIRS detections</th><td>verification evidence of the selected cluster</td><td>circle + symbol</td><td>small dot + distance, can be switched off</td><td>≥ 9</td></tr>
+          <tr><th scope="row">Himawari-9</th><td><code>s3://noaa-himawari9/AHI-L1b-FLDK/YYYY/MM/DD/HHMM/</code></td><td>ingest-himawari, tool <code>fetch_himawari_image</code></td><td>B07 + B14, segmen S05/S06 ⚠️; <code>.DAT.bz2</code></td></tr>
+          <tr><th scope="row">GK2A</th><td><code>s3://noaa-gk2a-pds/AMI/L1B/FD/YYYYMM/DD/HH/</code></td><td>ingest-gk2a</td><td><code>gk2a_ami_le1b_{sw038,ir105}_fd020ge_YYYYMMDDHHMM.nc</code>, ~30 MB/kanal; arsip mulai 16 Feb 2023</td></tr>
+          <tr><th scope="row">NASA POWER</th><td><code>https://power.larc.nasa.gov/api/temporal/hourly/point</code></td><td>environment</td><td><code>parameters=TS,T2M</code>, <code>time-standard=UTC</code>; latensi ~1,5 hari; jeda 0,2 detik antar request</td></tr>
+          <tr><th scope="row">NASA FIRMS</th><td><code>https://firms.modaps.eosdis.nasa.gov/api/area/csv/…</code></td><td>tool <code>get_latest_viirs</code> (agent)</td><td>MAP_KEY; ≤ 5 hari per request; 5.000 transaksi/10 menit</td></tr>
+          <tr><th scope="row">NASA GIBS</th><td><code>https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi</code></td><td>tool <code>fetch_viirs_image</code> (agent)</td><td>WMS 1.3.0; <code>BBOX=lat_min,lon_min,lat_max,lon_max</code></td></tr>
+          <tr><th scope="row">KHG BIG</th><td>REST <code>…/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/37</code></td><td>build</td><td>1.000 fitur per request</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="note">Keluar dari Cloud Run ke internet memakai egress default; tidak perlu NAT. Unduhan GK2A full disk ~60 MB per slot: jangan jalankan backfill besar dari laptop.</p>
   </section>
 
-  <section id="token">
+  <section id="ee">
     <div class="section-head">
-      <span class="eyebrow">05 · Status and colour</span>
-      <h2>A status always comes with a label and an icon</h2>
+      <span class="eyebrow">07 · Earth Engine</span>
+      <h2>Hanya sekali: fraksi terbangun dari WorldCover</h2>
+    </div>
+    <div class="card">
+      <ol>
+        <li>Daftarkan project ke Earth Engine (nonkomersial), Runbook <a href="runbook.html#s0-3">S0-3</a>.</li>
+        <li><code>sa-jobs</code> sudah punya <code>earthengine.writer</code> dan Service Usage Consumer (bagian 03).</li>
+        <li>Dipakai hanya oleh <code>asapify-build</code> (<code>ESA/WorldCover/v200</code>, kelas 50). Tidak ada Landsat, tidak ada panggilan dari agen.</li>
+        <li>Bila pendaftaran ditolak: unduh tile WorldCover untuk bbox Sumatra + Kalimantan dari situs ESA dan hitung fraksi yang sama secara lokal.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="gemini">
+    <div class="section-head">
+      <span class="eyebrow">08 · Gemini lewat Vertex AI</span>
+      <h2>Tanpa API key; kredensial dari <code>sa-agent</code></h2>
+    </div>
+    <div class="card">
+      <dl class="kv">
+        <dt>GOOGLE_GENAI_USE_VERTEXAI</dt><dd><code>True</code></dd>
+        <dt>GOOGLE_CLOUD_LOCATION</dt><dd><code>$GEMINI_LOCATION</code></dd>
+        <dt>GEMINI_MODEL</dt><dd>Gemini Flash terbaru yang mendukung input gambar</dd>
+        <dt>Setelan</dt><dd>temperature 0,2; maksimal 8 panggilan tool per verifikasi</dd>
+        <dt>Siapa memanggil</dt><dd>hanya <code>asapify-agent</code>, hanya untuk kelompok AWAS</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="run-service">
+    <div class="section-head">
+      <span class="eyebrow">09 · Image dan Cloud Run service</span>
+      <h2>Bangun sekali, pakai tujuh kali</h2>
     </div>
     <div class="grid-2">
-      <div class="table-wrap">
-        <table>
-          <caption>Pixel status (rule engine)</caption>
-          <thead><tr><th scope="col">Status</th><th scope="col">Label EN / ID</th><th scope="col">Colour</th></tr></thead>
-          <tbody>
-            <tr><th scope="row"><code>SAFE</code></th><td>Safe / Aman</td><td><span class="swatch" style="background:#dbe8dd"></span><code>#DBE8DD</code></td></tr>
-            <tr><th scope="row"><code>NO_OBSERVATION</code></th><td>No observation / Tidak teramati</td><td>grey hatching</td></tr>
-            <tr><th scope="row"><code>WATCH</code></th><td>Watch / Pantau</td><td><span class="swatch" style="background:#f0c46a"></span><code>#F0C46A</code></td></tr>
-            <tr><th scope="row"><code>AWAS</code></th><td>AWAS / AWAS</td><td><span class="swatch" style="background:#c2410c"></span><code>#C2410C</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <caption>Verification result (agent) and decision (operator)</caption>
-          <thead><tr><th scope="col">Value</th><th scope="col">Label EN / ID</th><th scope="col">Display</th></tr></thead>
-          <tbody>
-            <tr><th scope="row"><code>strong_evidence</code></th><td>Strong evidence / Bukti kuat</td><td>satellite-blue badge</td></tr>
-            <tr><th scope="row"><code>inconclusive</code></th><td>Inconclusive / Inkonklusif</td><td>grey badge</td></tr>
-            <tr><th scope="row"><code>published</code> · <code>rejected</code> · none</th><td>Published · Rejected · Awaiting decision / Diterbitkan · Ditolak · Menunggu keputusan</td><td>text + icon, no level colour</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <p class="note">Type: IBM Plex Sans for text, IBM Plex Sans Condensed for headings, IBM Plex Mono only for data (IDs, numbers, times). Labels and badges use sentence case, not all caps. Touch targets at least 44 × 44 px. Text contrast at least WCAG AA. The light/dark theme follows the system and can be switched.</p>
-  </section>
-
-  <section id="komponen">
-    <div class="section-head">
-      <span class="eyebrow">06 · Components</span>
-      <h2>Components in <code>asapify-web/src/components</code></h2>
-    </div>
-    <div class="table-wrap">
-      <table class="wide">
-        <thead><tr><th scope="col">Component</th><th scope="col">Used on</th><th scope="col">Role</th></tr></thead>
-        <tbody>
-          <tr><th scope="row"><code>StatusBadge</code>, <code>EvidenceBadge</code>, <code>SatelliteAgree</code></th><td>every screen</td><td>pixel status with icon; agent result; "Himawari + GK2A agree" / "one satellite"</td></tr>
-          <tr><th scope="row"><code>DataBanner</code></th><td>map</td><td>latest slot + satellites; amber when one satellite is &gt; 40 minutes late, blue for replay and archive, plus cloud, daytime and no-data banners</td></tr>
-          <tr><th scope="row"><code>SlotPlayer</code></th><td>map</td><td>54-slot night ribbon (▲ row = AWAS count, H/G rows = availability), play/pause, keyboard-friendly slider</td></tr>
-          <tr><th scope="row"><code>NightCalendar</code></th><td>slot player</td><td>month calendar from <code>/operator/nights</code>: faded dates without data, a dot when a night had AWAS clusters; Escape or a click outside closes it</td></tr>
-          <tr><th scope="row"><code>Select</code></th><td>province filter, sort, calendar</td><td>custom dropdown replacing <code>&lt;select&gt;</code> (ARIA listbox pattern): arrows, Home/End, Enter, Escape, type-ahead; opens upward when space below is short</td></tr>
-          <tr><th scope="row"><code>LayerControl</code></th><td>map</td><td>basemap (radio), layer switches, lite-mode switch</td></tr>
-          <tr><th scope="row"><code>PixelInspector</code></th><td>map</td><td>pixel card: ID, province, coordinates, status at this slot and latest, utility, 54-slot history, button to the cluster</td></tr>
-          <tr><th scope="row"><code>Sheet</code></th><td>map (screens &lt; 1024 px)</td><td>draggable bottom sheet; its content still scrolls</td></tr>
-          <tr><th scope="row"><code>UtilityChart</code></th><td>detail</td><td>utility per slot over 3 nights, lines at 0.30 and 0.65, cloudy slots hatched</td></tr>
-          <tr><th scope="row"><code>AttributeBars</code></th><td>detail</td><td>MAUT parameter table from <code>attribute_details</code>: measured value, u, weight, contribution, supporting numbers, scale, formula; missing attributes read "not available"</td></tr>
-          <tr><th scope="row"><code>NeighbourGrid</code></th><td>detail, sign-in</td><td>3 × 3: neighbours ≥ 0.5, normal, cloudy, not peat</td></tr>
-          <tr><th scope="row"><code>EvidenceImage</code>, <code>ProbeTips</code>, <code>FloatingTip</code></th><td>detail</td><td>VIIRS and Himawari images side by side with a 5 km marker; per-cell temperature tooltip (from <code>images[].thermal</code>) and FIRMS points; tooltips render in <code>&lt;body&gt;</code> so they are never clipped</td></tr>
-          <tr><th scope="row"><code>ViirsList</code>, <code>ToolTrace</code></th><td>detail</td><td>VIIRS detections (satellite, WIB time, distance); agent steps: tool name, arguments, duration</td></tr>
-          <tr><th scope="row"><code>DecisionPanel</code></th><td>detail</td><td>Publish / Reject (reason required), confirmation, errors written from <code>code</code></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section id="status">
-    <div class="section-head">
-      <span class="eyebrow">07 · Screen states</span>
-      <h2>States that must render correctly</h2>
-      <p>Mock mode can demo each state with <code>?skenario=normal|kosong|awan|satu_satelit|siang</code> (normal, empty, cloudy, one satellite, daytime).</p>
-    </div>
-    <div class="table-wrap">
-      <table class="wide">
-        <thead><tr><th scope="col">State</th><th scope="col">When</th><th scope="col">Copy (EN)</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Loading</th><td>request in flight</td><td>grey skeleton, no text</td></tr>
-          <tr><th scope="row">Empty</th><td>no AWAS clusters</td><td>"No AWAS pixels in the latest slot." · archive night: "No AWAS clusters on the night of {date}."</td></tr>
-          <tr><th scope="row">Cloud covered</th><td>&gt; 50% of pixels NO_OBSERVATION</td><td>"Cloud covers more than half of the pixels. Cloudy pixels never count as safe."</td></tr>
-          <tr><th scope="row">One satellite</th><td><code>n_sat = 1</code> in the latest slot</td><td>"{satellite} data is late. AWAS needs both satellites, so pixels can reach Watch at most."</td></tr>
-          <tr><th scope="row">Daytime</th><td>outside 20:00–04:00 WIB</td><td>"Daytime. The map shows the last slot of last night."</td></tr>
-          <tr><th scope="row">Replay</th><td><code>replay = true</code></td><td>"Replay: data as of {date time}."</td></tr>
-          <tr><th scope="row">Archive night</th><td>a night other than the latest is open</td><td>"Archive night of {date}. The map and the cluster list follow this night."</td></tr>
-          <tr><th scope="row">Night without data</th><td>every slot of that night is <code>null</code></td><td>"This night has no satellite data, so every pixel is unobserved."</td></tr>
-          <tr><th scope="row">Error</th><td>non-2xx response or network failure</td><td>"Could not load data. {message for the code}" + a "Retry" button</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section id="teks">
-    <div class="section-head">
-      <span class="eyebrow">08 · Language and copy</span>
-      <h2>One language per screen</h2>
-    </div>
-    <div class="grid-2">
-      <div class="card">
-        <h4>Rules</h4>
-        <ul>
-          <li>English by default; EN/ID in the top bar, remembered per device. <code>en.json</code> and <code>id.json</code> must hold the same keys</li>
-          <li>Agent text follows the screen language (<code>finding</code>/<code>finding_en</code>, <code>summary_id</code>/<code>summary_en</code>); errors are written from <code>code</code></li>
-          <li><strong>AWAS</strong> stays AWAS in both languages as the status name (the English version explains it once: Indonesian for "beware")</li>
-          <li>Telegram captions stay in Indonesian</li>
-          <li>Plain, active sentences: no jargon, no em dashes</li>
-        </ul>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th scope="col">Key</th><th scope="col">EN</th><th scope="col">ID</th></tr></thead>
-          <tbody>
-            <tr><th scope="row"><code>status.awas</code></th><td>AWAS</td><td>AWAS</td></tr>
-            <tr><th scope="row"><code>status.watch</code></th><td>Watch</td><td>Pantau</td></tr>
-            <tr><th scope="row"><code>awas.note</code></th><td>AWAS calls the agent to verify. The status alone does not mean a fire.</td><td>AWAS memanggil agen untuk verifikasi. Status ini belum berarti ada kebakaran.</td></tr>
-            <tr><th scope="row"><code>evidence.inconclusive</code></th><td>Inconclusive</td><td>Inkonklusif</td></tr>
-            <tr><th scope="row"><code>sat.agree</code></th><td>Himawari + GK2A agree</td><td>Himawari + GK2A sepakat</td></tr>
-            <tr><th scope="row"><code>btn.publish</code></th><td>Publish to group</td><td>Terbitkan ke grup</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <section id="stack-fe">
-    <div class="section-head">
-      <span class="eyebrow">09 · Stack</span>
-      <h2>A light frontend, also for low-end phones</h2>
-    </div>
-    <div class="grid-2">
-      <div class="card">
-        <dl class="kv">
-          <dt>Build</dt><dd>React 19 + Vite + TypeScript (repo <code>asapify-web</code>)</dd>
-          <dt>Map</dt><dd>MapLibre GL JS 6; the module worker is served as-is from <code>/maplibre/</code></dd>
-          <dt>Motion</dt><dd><code>motion</code> (springs), lazy-loaded; off under <em>reduced motion</em> and in lite mode</dd>
-          <dt>Charts</dt><dd>hand-written SVG for <code>UtilityChart</code> and the parameter table</dd>
-          <dt>Type</dt><dd>IBM Plex through <code>@fontsource</code> (no Google Fonts)</dd>
-          <dt>Mode</dt><dd><code>VITE_API_MODE=mock</code> (default, fictional data + demo sign-in) or <code>live</code> (<code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code>)</dd>
-          <dt>Auth</dt><dd>demo sign-in in mock mode; Firebase JS SDK (Auth) in live mode</dd>
-          <dt>Hosting</dt><dd>Firebase Hosting, <code>/api/**</code> to Cloud Run <code>asapify-api</code> (the judged prototype URL). A mock-mode preview on Vercel serves internal review</dd>
-          <dt>Lite mode</dt><dd>automatic when data saver is on, RAM ≤ 2 GB, the CPU is limited, or <em>reduced motion</em> is set: plain basemap, no glow/grid lines/camera animation, pixel ratio 1</dd>
-        </dl>
+      <div class="code">
+        <div class="code-head"><span>Satu image untuk semua</span><span>Dockerfile (root repo)</span></div>
+<pre>FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.lock .
+RUN pip install --no-cache-dir -r requirements.lock
+COPY shared/ shared/
+COPY jobs/ jobs/
+COPY agent/ agent/
+COPY api/ api/
+ENV PYTHONUNBUFFERED=1</pre>
       </div>
       <div class="code">
-        <div class="code-head"><span>Folder layout</span><span>asapify-web/src/</span></div>
-<pre>src/
-├─ api.ts, auth.ts, types.ts
-├─ map/ map.ts, layers.ts
-├─ pages/ Masuk, PetaOperator, Kelompok, Tentang, KontrakApi
-├─ components/      <span class="c"># section 06</span>
-├─ contract/ spec.ts   <span class="c"># content of the API contract tab</span>
-├─ mock/ fixtures.ts, thermal.ts, scenario.ts
-├─ motion/ presets.ts, MotionProvider.tsx
-├─ lib/ grid.ts, maut.ts, format.ts, errors.ts, …
-└─ i18n/ en.json, id.json</pre>
+        <div class="code-head"><span>Jangan ikut diunggah</span><span>.gcloudignore</span></div>
+<pre>.venv/
+data/local/
+web/
+notebooks/
+docs/
+.git/</pre>
       </div>
+    </div>
+    <div class="code" style="margin-top:12px">
+      <div class="code-head"><span>Bangun image, deploy dua service</span><span>bash</span></div>
+<pre>gcloud artifacts repositories create asapify --repository-format=docker --location=$REGION
+gcloud builds submit --tag $IMAGE .                  <span class="c"># ulangi setiap ada perubahan kode</span>
+
+<span class="c"># 1) asapify-agent: privat, hanya bisa dipanggil sa-jobs dan sa-api</span>
+gcloud run deploy asapify-agent --image $IMAGE --region $REGION \
+  --command uvicorn --args=agent.main:app,--host,0.0.0.0,--port,8080 \
+  --service-account $AGENT_SA --no-allow-unauthenticated \
+  --cpu 1 --memory 2Gi --concurrency 4 --min-instances 0 --max-instances 3 --timeout 300 \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$GEMINI_LOCATION,\
+GOOGLE_GENAI_USE_VERTEXAI=True,GEMINI_MODEL=$GEMINI_MODEL,DATA_BUCKET=$DATA_BUCKET" \
+  --set-secrets FIRMS_MAP_KEY=firms-map-key:latest,TELEGRAM_BOT_TOKEN=telegram-bot-token:latest
+for SA in $JOBS_SA $API_SA; do
+  gcloud run services add-iam-policy-binding asapify-agent --region $REGION \
+    --member "serviceAccount:$SA" --role roles/run.invoker; done
+AGENT_URL=$(gcloud run services describe asapify-agent --region $REGION --format='value(status.url)')
+
+<span class="c"># 2) asapify-api: publik untuk web; endpoint operator dijaga token Firebase di kode</span>
+gcloud run deploy asapify-api --image $IMAGE --region $REGION \
+  --command uvicorn --args=api.main:app,--host,0.0.0.0,--port,8080 \
+  --service-account $API_SA --allow-unauthenticated \
+  --cpu 1 --memory 1Gi --concurrency 40 --min-instances 0 --max-instances 3 --timeout 60 \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,AGENT_URL=$AGENT_URL" \
+  --set-secrets TELEGRAM_BOT_TOKEN=telegram-bot-token:latest</pre>
+    </div>
+    <p class="note">⚠️ Bila <code>gcloud builds submit</code> gagal karena izin service account Cloud Build di project baru, beri akun build <code>roles/artifactregistry.writer</code> dan <code>roles/logging.logWriter</code>, lalu ulangi. ⚠️ Bila <code>requirements.lock</code> dari Mac/Windows gagal dipasang di Linux, buat ulang lock di Cloud Shell. Hari penjurian: <code>--min-instances 1</code> untuk kedua service.</p>
+  </section>
+
+  <section id="run-jobs">
+    <div class="section-head">
+      <span class="eyebrow">10 · Job dan Scheduler</span>
+      <h2>Lima job, empat jadwal, semuanya dari image yang sama</h2>
+    </div>
+    <div class="code">
+      <div class="code-head"><span>Deploy job dan jadwal</span><span>bash</span></div>
+<pre>ENV="GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,PUBLIC_BUCKET=$PUBLIC_BUCKET,BBOX=$BBOX,AGENT_URL=$AGENT_URL"
+COMMON="--image $IMAGE --region $REGION --service-account $JOBS_SA --command python --set-env-vars $ENV"
+
+gcloud run jobs deploy asapify-ingest-himawari $COMMON --args=-m,jobs.ingest,--sat,himawari \
+  --cpu 2 --memory 4Gi --task-timeout 8m --max-retries 0
+gcloud run jobs deploy asapify-ingest-gk2a     $COMMON --args=-m,jobs.ingest,--sat,gk2a \
+  --cpu 2 --memory 4Gi --task-timeout 8m --max-retries 0
+gcloud run jobs deploy asapify-evaluate        $COMMON --args=-m,jobs.evaluate \
+  --cpu 2 --memory 4Gi --task-timeout 8m --max-retries 0
+gcloud run jobs deploy asapify-environment     $COMMON --args=-m,jobs.environment \
+  --cpu 2 --memory 4Gi --task-timeout 30m --max-retries 1
+gcloud run jobs deploy asapify-build           $COMMON --args=-m,jobs.build_all \
+  --cpu 2 --memory 8Gi --task-timeout 60m --max-retries 0
+
+for JOB in "asapify-ingest-himawari|*/10 20-23,0-4 * * *" \
+           "asapify-ingest-gk2a|*/10 20-23,0-4 * * *" \
+           "asapify-evaluate|5-59/10 20-23,0-4 * * *" \
+           "asapify-environment|0 12 * * *"; do
+  NAME="${JOB%%|*}"; CRON="${JOB#*|}"
+  gcloud scheduler jobs create http "$NAME-schedule" --location $REGION \
+    --schedule "$CRON" --time-zone "Asia/Jakarta" \
+    --uri "https://run.googleapis.com/v2/projects/$PROJECT_ID/locations/$REGION/jobs/$NAME:run" \
+    --http-method POST --oauth-service-account-email $SCHED_SA
+done
+
+<span class="c"># sekali setelah deploy</span>
+gcloud run jobs execute asapify-build --region $REGION --wait
+
+<span class="c"># replay satu slot (AS_OF menggantikan waktu sekarang)</span>
+gcloud run jobs execute asapify-ingest-gk2a --region $REGION --wait \
+  --update-env-vars AS_OF=2023-09-25T15:00:00Z
+
+<span class="c"># backfill paralel: 8 task, tiap task mengambil tanggal dengan CLOUD_RUN_TASK_INDEX</span>
+gcloud run jobs execute asapify-ingest-gk2a --region $REGION --tasks 8 --task-timeout 6h \
+  --args=-m,jobs.backfill,--sat,gk2a,--start,$BACKTEST_START,--end,$BACKTEST_END,--step,10,--night-only</pre>
+    </div>
+    <p class="note">Jadwal <code>20-23,0-4</code> WIB mencakup 20.00–04.50; slot setelah 04.00 WIB (21.00 UTC) diabaikan kode. Ingest dan evaluate tanpa retry karena siklus berikutnya 10 menit lagi dan semuanya idempoten per slot. Evaluate berjalan 5 menit setelah ingest supaya file kedua satelit sempat tertulis.</p>
+  </section>
+
+  <section id="firebase">
+    <div class="section-head">
+      <span class="eyebrow">11 · Firebase</span>
+      <h2>Hosting dan peran pengguna</h2>
+      <p>Web operator ada di repo terpisah <code>asapify-web</code>. URL prototipe yang dinilai harus di Firebase Hosting atau Cloud Run (aturan lomba); pratinjau mode mock di Vercel hanya untuk review internal.</p>
+    </div>
+    <div class="grid-2">
+      <div class="code">
+        <div class="code-head"><span>Rewrite ke Cloud Run</span><span>asapify-web/firebase.json</span></div>
+<pre>{ "hosting": { "public": "dist", "rewrites": [
+    { "source": "/api/**",
+      "run": { "serviceId": "asapify-api", "region": "asia-southeast2" } },
+    { "source": "**", "destination": "/index.html" } ],
+  "headers": [
+    { "source": "/maplibre/**",       <span class="c"># worker peta = modul JS</span>
+      "headers": [{ "key": "Content-Type", "value": "text/javascript" }] } ] } }</pre>
+      </div>
+      <div class="code">
+        <div class="code-head"><span>Set peran</span><span>infra/set_role.py</span></div>
+<pre>import sys, firebase_admin
+from firebase_admin import auth
+firebase_admin.initialize_app()
+email, role = sys.argv[1], sys.argv[2]   <span class="c"># operator</span>
+auth.set_custom_user_claims(
+    auth.get_user_by_email(email).uid, {"role": role})</pre>
+      </div>
+    </div>
+    <div class="code" style="margin-top:12px">
+      <div class="code-head"><span>Build mode live dan deploy</span><span>asapify-web/.env.production</span></div>
+<pre>VITE_API_MODE=live
+VITE_API_BASE=                <span class="c"># kosong = same-origin /api lewat rewrite Hosting</span>
+VITE_PEAT_LAYER_URL=https://storage.googleapis.com/&lt;PUBLIC_BUCKET&gt;/layers/peat_pixels.geojson
+VITE_PROVINCES_LAYER_URL=https://storage.googleapis.com/&lt;PUBLIC_BUCKET&gt;/layers/provinces.geojson
+
+<span class="c"># variabel VITE_* dibaca saat build</span>
+npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
+    </div>
+    <div class="callout" style="margin-top:12px">⚠️ Pastikan rewrite Hosting ke Cloud Run mendukung <code>asia-southeast2</code>. Bila tidak, isi <code>VITE_API_BASE</code> dengan URL <code>asapify-api</code> dan izinkan origin web lewat CORS di API. <code>asapify-agent</code> tidak pernah dipanggil dari browser.</div>
+  </section>
+
+  <section id="monitor">
+    <div class="section-head">
+      <span class="eyebrow">12 · Monitoring</span>
+      <h2>Tahu lebih dulu kalau observasi berhenti</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Yang dipantau</th><th scope="col">Kapan memberi tahu</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Ingest sukses per satelit (log <code>run_success</code>, label <code>sat</code>)</th><td>tidak ada selama 30 menit pada jam malam</td></tr>
+          <tr><th scope="row">Latensi per satelit (log <code>scan_latency_min</code>)</th><td>median &gt; 30 menit dalam 2 jam</td></tr>
+          <tr><th scope="row">Evaluate dengan satu satelit (log <code>n_sat</code>)</th><td><code>n_sat = 1</code> pada &gt; 50% slot dalam 2 jam</td></tr>
+          <tr><th scope="row">Environment (log <code>power_cells_ok</code>)</th><td>&lt; 90% sel POWER berhasil</td></tr>
+          <tr><th scope="row">Verifikasi agen gagal</th><td>&gt; 2 kali berturut-turut</td></tr>
+          <tr><th scope="row">Uptime <code>/api/v1/health</code></th><td>2 kali gagal berturut-turut</td></tr>
+          <tr><th scope="row">Kirim Telegram (log <code>tg_send_failed</code>)</th><td>&gt; 0 dalam 15 menit</td></tr>
+          <tr><th scope="row">Biaya</th><td>50%, 90%, 100% anggaran tim</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <nav class="pager" aria-label="Next pages">
-    <a href="index.html"><span>← Previous</span>Plan</a>
-    <a href="backend.html"><span>Next →</span>Backend &amp; API</a>
+  <section id="env">
+    <div class="section-head">
+      <span class="eyebrow">13 · Env var</span>
+      <h2>Ringkasan</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="wide">
+        <thead><tr><th scope="col">Variabel</th><th scope="col">agent</th><th scope="col">api</th><th scope="col">job (semua)</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_PROJECT</code>, <code>DATA_BUCKET</code></th><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_LOCATION</code>, <code>GOOGLE_GENAI_USE_VERTEXAI</code>, <code>GEMINI_MODEL</code></th><td>✓</td><td></td><td></td></tr>
+          <tr><th scope="row"><code>PUBLIC_BUCKET</code>, <code>BBOX</code></th><td></td><td></td><td>✓</td></tr>
+          <tr><th scope="row"><code>AGENT_URL</code></th><td></td><td>✓</td><td>✓ (evaluate)</td></tr>
+          <tr><th scope="row"><code>AS_OF</code> (opsional, replay)</th><td></td><td></td><td>✓</td></tr>
+          <tr><th scope="row"><code>FIRMS_MAP_KEY</code> (secret)</th><td>✓</td><td></td><td></td></tr>
+          <tr><th scope="row"><code>TELEGRAM_BOT_TOKEN</code> (secret)</th><td>✓</td><td>✓</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Web (<code>asapify-web</code>) tidak memakai variabel di atas; ia dibangun dengan <code>VITE_API_MODE</code>, <code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, dan <code>VITE_PROVINCES_LAYER_URL</code> (bagian 11).</p>
+  </section>
+
+  <section id="urutan">
+    <div class="section-head">
+      <span class="eyebrow">14 · Urutan deploy</span>
+      <h2>Dari project kosong sampai jadwal berjalan</h2>
+    </div>
+    <div class="card">
+      <ol>
+        <li>Project, billing, <code>env.sh</code>, aktifkan API, daftar Earth Engine (Runbook S0-2, S0-3).</li>
+        <li>Service account dan peran (03), akses secret (04).</li>
+        <li>Bucket dan Firestore (05). Pindahkan <code>tg_chats</code> ke Firestore.</li>
+        <li>Bangun image, deploy <code>asapify-agent</code> lalu <code>asapify-api</code> (09); cek <code>/api/v1/health</code>.</li>
+        <li>Deploy lima job (10); jalankan <code>asapify-build</code> sekali.</li>
+        <li>Backfill Himawari dan GK2A (Agustus – 15 Okt 2023), lalu <code>asapify-environment --as-of</code> per hari jendela backtest.</li>
+        <li>Replay evaluate untuk jendela backtest; cek kelompok muncul di Firestore.</li>
+        <li>Buat empat jadwal Scheduler.</li>
+        <li>Unggah lapisan peta statis dan pasang CORS bucket publik (05); build <code>asapify-web</code> dalam mode live dan deploy ke Firebase Hosting (11); aktifkan Auth, set akun operator demo.</li>
+        <li>Pasang monitoring dan budget alert.</li>
+      </ol>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="Halaman berikutnya">
+    <a href="backend.html"><span>← Sebelumnya</span>Backend &amp; API</a>
+    <a href="runbook.html"><span>Berikutnya →</span>Runbook</a>
   </nav>
 </div>
 

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rencana Tim EWS Gambut</title>
+<title>ASAPify Team Plan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -418,74 +418,82 @@
   .nbg span.p { background: var(--ember); color: #fff; font-weight: 700; border-color: var(--ember); }
   .nbg span.c { background: repeating-linear-gradient(45deg, var(--surface-2) 0 4px, var(--line) 4px 6px); }
   .formula { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; }
+
+  /* ---------- language switch ---------- */
+  .langs { display: flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; flex-shrink: 0; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; }
+  .langs a, .langs span { padding: 4px 8px; border-radius: 6px; line-height: 1.2; color: var(--ink-dim); text-decoration: none; }
+  .langs a:hover { color: var(--ink); background: var(--surface-2); }
+  .langs [aria-current] { color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
 </style>
-<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html" aria-current="page">Rencana</a><a href="ui.html">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html">Konfigurasi Cloud</a><a href="runbook.html">Runbook</a></div></div></nav>
+</head>
+<body>
+<nav class="topnav" aria-label="Main navigation"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>team plan</small></a><div class="navlinks"><a href="index.html" aria-current="page">Plan</a><a href="ui.html">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html">Cloud setup</a><a href="runbook.html">Runbook</a></div><div class="langs" aria-label="Language"><span aria-current="true">EN</span><a href="id/index.html" hreflang="id" lang="id">ID</a></div></div></nav>
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Briefing tim · AI Builder Cup 2026 · arsitektur revisi 29 September</span>
-    <h1>ASAPify: deteksi dini smoldering gambut</h1>
-    <p class="lede"><strong>ASAPify</strong> mendeteksi api yang sudah membara di dalam tanah gambut tetapi belum membakar vegetasi di permukaan. Dua satelit geostasioner, <strong>Himawari-9 dan GK2A</strong>, mengamati setiap piksel gambut Sumatra dan Kalimantan (15 provinsi) tiap 10 menit sepanjang malam. Rule engine deterministik (<strong>MAUT + neighbour support</strong>) menandai piksel <code>AWAS</code>; baru setelah itu agen Gemini mengambil <strong>VIIRS terbaru</strong> dan citra untuk memverifikasi, dan <strong>operator</strong> memutuskan sebelum bot Telegram mengirim ke grup peringatan. <strong>AI bukan detektor.</strong></p>
-    <p class="note" style="margin-top:0">Legenda: ✅ sudah diputuskan · 💡 usulan, angka awal yang dikalibrasi · ❓ open item · ⚠️ belum diverifikasi</p>
+    <span class="eyebrow">Team briefing · AI Builder Cup 2026 · architecture revised 29 September · web aligned 6 October</span>
+    <h1>ASAPify: early detection of smouldering peat</h1>
+    <p class="lede"><strong>ASAPify</strong> detects fire that is already smouldering inside peat soil but has not yet burned the vegetation on the surface. Two geostationary satellites, <strong>Himawari-9 and GK2A</strong>, observe every peat pixel in Sumatra and Kalimantan (15 provinces) every 10 minutes through the night. A deterministic rule engine (<strong>MAUT + neighbour support</strong>) flags pixels as <code>AWAS</code>; only then does a Gemini agent fetch the <strong>latest VIIRS</strong> data and imagery to verify, and an <strong>operator</strong> decides before the Telegram bot posts to the alert group. <strong>AI is not the detector.</strong></p>
+    <p class="note" style="margin-top:0">Legend: ✅ decided · 💡 proposal, starting figures to calibrate · ❓ open item · ⚠️ not verified yet</p>
     <div class="dates">
-      <div class="date"><b>29 Sep</b><span>arsitektur revisi</span></div>
-      <div class="date hot"><b>11 Okt</b><span>registrasi tim ditutup</span></div>
-      <div class="date"><b>16 Okt</b><span>fitur dibekukan</span></div>
-      <div class="date hot"><b>18 Okt</b><span>batas submit</span></div>
-      <div class="date"><b>4 Des</b><span>final di Singapura</span></div>
+      <div class="date"><b>29 Sep</b><span>architecture revised</span></div>
+      <div class="date hot"><b>11 Oct</b><span>team registration closes</span></div>
+      <div class="date"><b>16 Oct</b><span>feature freeze</span></div>
+      <div class="date hot"><b>18 Oct</b><span>submission deadline</span></div>
+      <div class="date"><b>4 Dec</b><span>final in Singapore</span></div>
     </div>
-    <ul class="toc" aria-label="Isi halaman">
-      <li><a href="#aturan"><span>01</span>Aturan main</a></li>
+    <ul class="toc" aria-label="Page contents">
+      <li><a href="#aturan"><span>01</span>Rules</a></li>
       <li><a href="#scope"><span>02</span>Scope</a></li>
-      <li><a href="#alur"><span>03</span>Alur &amp; skematik</a></li>
-      <li><a href="#fisika"><span>04</span>Kenapa 3,8–3,9 µm</a></li>
-      <li><a href="#rule"><span>05</span>MAUT &amp; tetangga</a></li>
-      <li><a href="#agen"><span>06</span>Agen verifikasi</a></li>
-      <li><a href="#batas"><span>07</span>Keterbatasan</a></li>
-      <li><a href="#data"><span>08</span>Sumber data &amp; tools</a></li>
-      <li><a href="#arsitektur"><span>09</span>Arsitektur</a></li>
+      <li><a href="#alur"><span>03</span>Flow &amp; schematic</a></li>
+      <li><a href="#fisika"><span>04</span>Why 3.8–3.9 µm</a></li>
+      <li><a href="#rule"><span>05</span>MAUT &amp; neighbours</a></li>
+      <li><a href="#agen"><span>06</span>Verification agent</a></li>
+      <li><a href="#batas"><span>07</span>Limitations</a></li>
+      <li><a href="#data"><span>08</span>Data sources &amp; tools</a></li>
+      <li><a href="#arsitektur"><span>09</span>Architecture</a></li>
       <li><a href="#open"><span>10</span>Open items</a></li>
-      <li><a href="#tarik"><span>11</span>Tarik data</a></li>
-      <li><a href="#jadwal"><span>12</span>Jadwal</a></li>
-      <li><a href="#peran"><span>13</span>Peran</a></li>
+      <li><a href="#tarik"><span>11</span>Pulling data</a></li>
+      <li><a href="#jadwal"><span>12</span>Schedule</a></li>
+      <li><a href="#peran"><span>13</span>Roles</a></li>
       <li><a href="#video"><span>14</span>Video</a></li>
       <li><a href="#submit"><span>15</span>Checklist</a></li>
-      <li><a href="#istilah"><span>16</span>Istilah</a></li>
+      <li><a href="#istilah"><span>16</span>Glossary</a></li>
     </ul>
   </header>
 
   <div class="decide" role="note">
-    <h3>Mulai dari Runbook Sprint 0 (29 Sep – 1 Okt)</h3>
+    <h3>Start with Runbook Sprint 0 (29 Sep – 1 Oct)</h3>
     <ol>
-      <li><a href="runbook.html#s0-1">S0-1</a> Registrasi tim · <a href="runbook.html#s0-2">S0-2</a> Project GCP + billing · <a href="runbook.html#s0-3">S0-3</a> Earth Engine (WorldCover) · <a href="runbook.html#s0-4">S0-4</a> FIRMS MAP_KEY · <a href="runbook.html#s0-5">S0-5</a> Bot Telegram + 2 grup</li>
-      <li><a href="runbook.html#s0-6">S0-6</a> Repo + cek jendela backtest 2023 · <a href="runbook.html#s0-7">S0-7</a> Satu scan Himawari + GK2A · <a href="runbook.html#s0-8">S0-8</a> KHG + batas provinsi · <a href="runbook.html#s0-9">S0-9</a> NASA POWER + GIBS</li>
-      <li>Setiap tugas punya perintah lengkap dan cek selesai di halaman <a href="runbook.html">Runbook</a>.</li>
+      <li><a href="runbook.html#s0-1">S0-1</a> Team registration · <a href="runbook.html#s0-2">S0-2</a> GCP project + billing · <a href="runbook.html#s0-3">S0-3</a> Earth Engine (WorldCover) · <a href="runbook.html#s0-4">S0-4</a> FIRMS MAP_KEY · <a href="runbook.html#s0-5">S0-5</a> Telegram bot + 2 groups</li>
+      <li><a href="runbook.html#s0-6">S0-6</a> Repo + check the 2023 backtest window · <a href="runbook.html#s0-7">S0-7</a> One Himawari + GK2A scan · <a href="runbook.html#s0-8">S0-8</a> KHG + province boundaries · <a href="runbook.html#s0-9">S0-9</a> NASA POWER + GIBS</li>
+      <li>Every task has complete commands and a done check on the <a href="runbook.html">Runbook</a> page.</li>
     </ol>
   </div>
 
   <!-- 01 -->
   <section id="aturan">
     <div class="section-head">
-      <span class="eyebrow">01 · Aturan main</span>
-      <h2>Yang wajib ada dan cara juri menilai</h2>
+      <span class="eyebrow">01 · Rules</span>
+      <h2>What is required and how the judges score</h2>
     </div>
     <div class="grid-2">
       <div class="card">
-        <h3>Wajib</h3>
+        <h3>Required</h3>
         <div class="must">
-          <div>Model Gemini atau Gemma</div>
-          <div>Dibangun dengan Agent Platform (ADK), Antigravity, atau AI Studio</div>
-          <div>Prototipe live di Cloud Run atau Firebase</div>
-          <div>Deck PDF, video demo 3 menit, semua dalam bahasa Inggris</div>
+          <div>A Gemini or Gemma model</div>
+          <div>Built with Agent Platform (ADK), Antigravity or AI Studio</div>
+          <div>A live prototype on Cloud Run or Firebase</div>
+          <div>PDF deck and 3-minute demo video, all in English</div>
         </div>
       </div>
       <div class="card">
-        <h3>Bobot penilaian</h3>
+        <h3>Scoring weights</h3>
         <div class="weights">
-          <div class="w-row"><span>Teknik &amp; implementasi GenAI</span><div class="w-bar"><i style="width:100%"></i></div><b>40%</b></div>
-          <div class="w-row"><span>Kesesuaian masalah &amp; dampak</span><div class="w-bar"><i style="width:62.5%"></i></div><b>25%</b></div>
-          <div class="w-row"><span>Inovasi &amp; kreativitas</span><div class="w-bar"><i style="width:62.5%"></i></div><b>25%</b></div>
-          <div class="w-row"><span>Pengalaman pengguna &amp; desain</span><div class="w-bar"><i style="width:25%"></i></div><b>10%</b></div>
+          <div class="w-row"><span>Technical &amp; GenAI implementation</span><div class="w-bar"><i style="width:100%"></i></div><b>40%</b></div>
+          <div class="w-row"><span>Problem fit &amp; impact</span><div class="w-bar"><i style="width:62.5%"></i></div><b>25%</b></div>
+          <div class="w-row"><span>Innovation &amp; creativity</span><div class="w-bar"><i style="width:62.5%"></i></div><b>25%</b></div>
+          <div class="w-row"><span>User experience &amp; design</span><div class="w-bar"><i style="width:25%"></i></div><b>10%</b></div>
         </div>
       </div>
     </div>
@@ -495,18 +503,18 @@
   <section id="scope">
     <div class="section-head">
       <span class="eyebrow">02 · Scope</span>
-      <h2>Mendeteksi pembakaran yang sudah terjadi, bukan memprediksi risiko</h2>
+      <h2>Detect burning that has already started, not predict risk</h2>
     </div>
     <div class="concept">
-      <p>✅ "Observasi dua satelit + aturan deterministik mendeteksi anomali; tetangga piksel memvalidasi secara spasial; piksel <code>AWAS</code> diverifikasi AI dengan VIIRS dan citra; operator memutuskan; bot Telegram mengirim ke grup peringatan."</p>
+      <p>✅ "Two-satellite observation + deterministic rules detect anomalies; neighbouring pixels validate them spatially; <code>AWAS</code> pixels are verified by AI with VIIRS and imagery; an operator decides; the Telegram bot posts to the alert group."</p>
       <div class="grid-2">
         <div class="card" style="background:var(--moss-soft);border-color:transparent">
-          <h4>Termasuk scope ✅</h4>
-          <ul><li>Early detection of combustion: api yang sudah ada di dalam tanah</li><li><strong>Wilayah: seluruh gambut Sumatra + Kalimantan</strong> (15 provinsi, kode 11–19, 21, 61–65; diperluas 5 Okt)</li><li>Hanya piksel gambut (peat mask KHG, tanpa area terbangun)</li><li>Deteksi: Himawari-9 + GK2A, malam hari, MAUT + neighbour support</li><li>Baseline lingkungan: NASA POWER (TS sebagai LST, T2M sebagai SAT)</li><li>Verifikasi on-demand: VIIRS (titik FIRMS + citra GIBS) + citra Himawari</li><li>Keputusan kirim oleh operator (terbitkan / tolak)</li></ul>
+          <h4>In scope ✅</h4>
+          <ul><li>Early detection of combustion: fire already present in the soil</li><li><strong>Area: all peat in Sumatra + Kalimantan</strong> (15 provinces, codes 11–19, 21, 61–65; widened 5 Oct)</li><li>Peat pixels only (KHG peat mask, excluding built-up areas)</li><li>Detection: Himawari-9 + GK2A, at night, MAUT + neighbour support</li><li>Environment baseline: NASA POWER (TS as LST, T2M as SAT)</li><li>On-demand verification: VIIRS (FIRMS points + GIBS imagery) + Himawari imagery</li><li>Send decision by an operator (publish / reject)</li></ul>
         </div>
         <div class="card" style="background:var(--surface-2);border-color:transparent">
-          <h4>Di luar scope ✅</h4>
-          <ul><li>Prediksi risiko sebelum pembakaran (TMAT, curah hujan, indeks kekeringan)</li><li>AI yang mendeteksi atau menetapkan status</li><li>ToPeCAl dan Landsat di jalur operasional (hanya roadmap pasca-kejadian)</li><li>Ingest FIRMS/VIIRS berkala untuk seluruh wilayah</li><li>Level Waspada/Siaga/Awas pilihan operator</li><li>Area gambut yang sudah terbakar (NBR/dNBR, luas terbakar); hotspot SiPongi; MODIS</li><li>Gambut di Sabah, Sarawak, Brunei; petugas lapangan; bot dua arah</li></ul>
+          <h4>Out of scope ✅</h4>
+          <ul><li>Risk prediction before burning (water table, rainfall, drought indices)</li><li>AI that detects or sets status</li><li>ToPeCAl and Landsat in the operational path (post-event roadmap only)</li><li>Periodic FIRMS/VIIRS ingest for the whole area</li><li>Operator-chosen Waspada/Siaga/Awas levels</li><li>Already-burned peat (NBR/dNBR, burned area); SiPongi hotspots; MODIS</li><li>Peat in Sabah, Sarawak, Brunei; field officers; two-way bot</li></ul>
         </div>
       </div>
     </div>
@@ -515,126 +523,126 @@
   <!-- 03 -->
   <section id="alur">
     <div class="section-head">
-      <span class="eyebrow">03 · Alur sistem dan keterkaitan layanan</span>
-      <h2>Observasi → deteksi → verifikasi → respons</h2>
-      <p>Tiga bagian: <strong>A</strong> alur logika (apa yang terjadi, di mana keputusan diambil), <strong>B</strong> skematik layanan (siapa bicara dengan siapa), dan <strong>C</strong> tabel sambungan bernomor yang menjelaskan tiap garis di B.</p>
+      <span class="eyebrow">03 · System flow and service links</span>
+      <h2>Observation → detection → verification → response</h2>
+      <p>Three parts: <strong>A</strong> the logic flow (what happens, where decisions are made), <strong>B</strong> the service schematic (who talks to whom), and <strong>C</strong> a numbered table of links that explains every line in B.</p>
     </div>
 
     <figure class="fig">
-      <div class="legend-row"><span><i></i>alur data</span><span><i class="dash"></i>cabang yang tidak memanggil agen / tidak mengirim</span><span><b class="sw" style="background:var(--amber-soft);border-color:var(--amber)"></b>deterministik (kode)</span><span><b class="sw" style="background:var(--sat-soft);border-color:var(--sat)"></b>AI (agen)</span><span><b class="sw" style="background:var(--ember-soft);border-color:var(--ember)"></b>keluar ke Telegram</span></div>
+      <div class="legend-row"><span><i></i>data flow</span><span><i class="dash"></i>branch that does not call the agent / does not send</span><span><b class="sw" style="background:var(--amber-soft);border-color:var(--amber)"></b>deterministic (code)</span><span><b class="sw" style="background:var(--sat-soft);border-color:var(--sat)"></b>AI (agent)</span><span><b class="sw" style="background:var(--ember-soft);border-color:var(--ember)"></b>out to Telegram</span></div>
       <div class="diagram-box">
-        <svg viewBox="0 0 1000 1040" role="img" aria-label="Alur logika ASAPify: peat mask dibangun sekali; tiap 10 menit malam Himawari-9 dan GK2A diingest terpisah; rule engine menghitung skor z per satelit, utility MAUT dengan baseline NASA POWER, lalu neighbour support, dan menetapkan status; hanya kelompok AWAS yang memanggil agen; agen mengambil VIIRS terbaru dan citra untuk verifikasi lalu memberi tahu grup operator; operator menerbitkan atau menolak; hanya yang diterbitkan dikirim bot ke grup peringatan.">
+        <svg viewBox="0 0 1000 1040" role="img" aria-label="ASAPify logic flow: the peat mask is built once; every 10 minutes at night Himawari-9 and GK2A are ingested separately; the rule engine computes a z-score per satellite, the MAUT utility with the NASA POWER baseline, then neighbour support, and sets the status; only AWAS clusters call the agent; the agent fetches the latest VIIRS data and imagery to verify, then notifies the operator group; the operator publishes or rejects; only published alerts are sent by the bot to the alert group.">
           <defs><marker id="fa" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-dim" d="M0,0 L10,5 L0,10 z"/></marker></defs>
-          <g class="stg"><line x1="178" y1="20" x2="178" y2="76"/><text class="k" x="20" y="38">TAHAP 0</text><text class="v" x="20" y="56">Sekali</text></g>
-          <g class="stg"><line x1="178" y1="110" x2="178" y2="252"/><text class="k" x="20" y="128">TAHAP 1</text><text class="v" x="20" y="146">Observasi</text></g>
-          <g class="stg"><line x1="178" y1="282" x2="178" y2="620"/><text class="k" x="20" y="300">TAHAP 2</text><text class="v" x="20" y="318">Deteksi</text></g>
-          <g class="stg"><line x1="178" y1="670" x2="178" y2="830"/><text class="k" x="20" y="688">TAHAP 3</text><text class="v" x="20" y="706">Verifikasi</text></g>
-          <g class="stg"><line x1="178" y1="860" x2="178" y2="1026"/><text class="k" x="20" y="878">TAHAP 4</text><text class="v" x="20" y="896">Respons</text></g>
+          <g class="stg"><line x1="178" y1="20" x2="178" y2="76"/><text class="k" x="20" y="38">STAGE 0</text><text class="v" x="20" y="56">Once</text></g>
+          <g class="stg"><line x1="178" y1="110" x2="178" y2="252"/><text class="k" x="20" y="128">STAGE 1</text><text class="v" x="20" y="146">Observation</text></g>
+          <g class="stg"><line x1="178" y1="282" x2="178" y2="620"/><text class="k" x="20" y="300">STAGE 2</text><text class="v" x="20" y="318">Detection</text></g>
+          <g class="stg"><line x1="178" y1="670" x2="178" y2="830"/><text class="k" x="20" y="688">STAGE 3</text><text class="v" x="20" y="706">Verification</text></g>
+          <g class="stg"><line x1="178" y1="860" x2="178" y2="1026"/><text class="k" x="20" y="878">STAGE 4</text><text class="v" x="20" y="896">Response</text></g>
 
-          <text class="ch" x="410" y="14" text-anchor="middle">JALUR UTAMA</text>
-          <text class="ch" x="835" y="14" text-anchor="middle">MASUKAN DAN KELUARAN SAMPING</text>
+          <text class="ch" x="410" y="14" text-anchor="middle">MAIN PATH</text>
+          <text class="ch" x="835" y="14" text-anchor="middle">SIDE INPUTS AND OUTPUTS</text>
 
           <!-- T0 -->
-          <g class="fc term"><rect x="220" y="20" width="380" height="56" rx="28"/><text class="t" x="410" y="43" text-anchor="middle">asapify-build: peat mask</text><text class="s" x="410" y="61" text-anchor="middle">KHG ∩ 15 provinsi − area terbangun</text></g>
+          <g class="fc term"><rect x="220" y="20" width="380" height="56" rx="28"/><text class="t" x="410" y="43" text-anchor="middle">asapify-build: peat mask</text><text class="s" x="410" y="61" text-anchor="middle">KHG ∩ 15 provinces − built-up area</text></g>
           <g class="fc"><rect x="690" y="20" width="290" height="56" rx="6"/><text class="t" x="835" y="43" text-anchor="middle">BIG KHG · geoBoundaries</text><text class="s" x="835" y="61" text-anchor="middle">WorldCover (Earth Engine)</text></g>
           <line class="edge" x1="690" y1="48" x2="602" y2="48" marker-end="url(#fa)"/>
           <line class="edge" x1="410" y1="76" x2="410" y2="108" marker-end="url(#fa)"/>
-          <text class="yn" x="420" y="97">peat/: piksel, tetangga, sel POWER</text>
+          <text class="yn" x="420" y="97">peat/: pixels, neighbours, POWER cells</text>
 
           <!-- T1 -->
-          <g class="fc rule"><rect x="220" y="110" width="380" height="56" rx="6"/><text class="t" x="410" y="133" text-anchor="middle">asapify-ingest-himawari · tiap 10 menit</text><text class="s" x="410" y="151" text-anchor="middle">B07 + B14 → mir, win, awan → himawari/</text></g>
-          <g class="fc"><rect x="690" y="110" width="290" height="56" rx="6"/><text class="t" x="835" y="133" text-anchor="middle">NOAA open data · Himawari-9</text><text class="s" x="835" y="151" text-anchor="middle">observasi 1 · 140,7° BT</text></g>
+          <g class="fc rule"><rect x="220" y="110" width="380" height="56" rx="6"/><text class="t" x="410" y="133" text-anchor="middle">asapify-ingest-himawari · every 10 min</text><text class="s" x="410" y="151" text-anchor="middle">B07 + B14 → mir, win, cloud → himawari/</text></g>
+          <g class="fc"><rect x="690" y="110" width="290" height="56" rx="6"/><text class="t" x="835" y="133" text-anchor="middle">NOAA open data · Himawari-9</text><text class="s" x="835" y="151" text-anchor="middle">observation 1 · 140.7° E</text></g>
           <line class="edge" x1="690" y1="138" x2="602" y2="138" marker-end="url(#fa)"/>
-          <g class="fc rule"><rect x="220" y="196" width="380" height="56" rx="6"/><text class="t" x="410" y="219" text-anchor="middle">asapify-ingest-gk2a · tiap 10 menit</text><text class="s" x="410" y="237" text-anchor="middle">SW038 + IR105 → mir, win, awan → gk2a/</text></g>
-          <g class="fc"><rect x="690" y="196" width="290" height="56" rx="6"/><text class="t" x="835" y="219" text-anchor="middle">NOAA open data · GK2A</text><text class="s" x="835" y="237" text-anchor="middle">observasi 2 · 128,2° BT</text></g>
+          <g class="fc rule"><rect x="220" y="196" width="380" height="56" rx="6"/><text class="t" x="410" y="219" text-anchor="middle">asapify-ingest-gk2a · every 10 min</text><text class="s" x="410" y="237" text-anchor="middle">SW038 + IR105 → mir, win, cloud → gk2a/</text></g>
+          <g class="fc"><rect x="690" y="196" width="290" height="56" rx="6"/><text class="t" x="835" y="219" text-anchor="middle">NOAA open data · GK2A</text><text class="s" x="835" y="237" text-anchor="middle">observation 2 · 128.2° E</text></g>
           <line class="edge" x1="690" y1="224" x2="602" y2="224" marker-end="url(#fa)"/>
           <path class="edge" d="M220 138 H200 V300 H218" marker-end="url(#fa)"/>
           <line class="edge" x1="410" y1="252" x2="410" y2="280" marker-end="url(#fa)"/>
-          <text class="yn" x="420" y="271">dua satelit, dinilai terpisah</text>
+          <text class="yn" x="420" y="271">two satellites, scored separately</text>
 
           <!-- T2 -->
-          <g class="fc rule"><rect x="220" y="282" width="380" height="56" rx="6"/><text class="t" x="410" y="305" text-anchor="middle">1 · Skor z per satelit</text><text class="s" x="410" y="323" text-anchor="middle">z_rel Himawari · z_rel GK2A · awan → NaN</text></g>
-          <g class="fc rule"><rect x="690" y="282" width="290" height="142" rx="6"/><text class="t" x="835" y="306" text-anchor="middle">asapify-environment</text><text class="s" x="835" y="324" text-anchor="middle">harian 12.00 WIB</text><text class="s" x="835" y="352" text-anchor="middle">baseline termal 30 malam</text><text class="s" x="835" y="370" text-anchor="middle">NASA POWER TS (= LST)</text><text class="s" x="835" y="388" text-anchor="middle">NASA POWER T2M (= SAT)</text><text class="s" x="835" y="406" text-anchor="middle">median 30 hari per jam</text></g>
+          <g class="fc rule"><rect x="220" y="282" width="380" height="56" rx="6"/><text class="t" x="410" y="305" text-anchor="middle">1 · z-score per satellite</text><text class="s" x="410" y="323" text-anchor="middle">z_rel Himawari · z_rel GK2A · cloud → NaN</text></g>
+          <g class="fc rule"><rect x="690" y="282" width="290" height="142" rx="6"/><text class="t" x="835" y="306" text-anchor="middle">asapify-environment</text><text class="s" x="835" y="324" text-anchor="middle">daily 12:00 WIB</text><text class="s" x="835" y="352" text-anchor="middle">30-night thermal baseline</text><text class="s" x="835" y="370" text-anchor="middle">NASA POWER TS (= LST)</text><text class="s" x="835" y="388" text-anchor="middle">NASA POWER T2M (= SAT)</text><text class="s" x="835" y="406" text-anchor="middle">30-day median per hour</text></g>
           <line class="edge" x1="690" y1="310" x2="602" y2="310" marker-end="url(#fa)"/>
           <line class="edge" x1="690" y1="396" x2="602" y2="396" marker-end="url(#fa)"/>
           <line class="edge" x1="410" y1="338" x2="410" y2="366" marker-end="url(#fa)"/>
-          <g class="fc rule"><rect x="220" y="368" width="380" height="56" rx="6"/><text class="t" x="410" y="391" text-anchor="middle">2 · MAUT utility U0</text><text class="s" x="410" y="409" text-anchor="middle">u_H · u_G · u_LST · u_SAT · u_T × bobot</text></g>
+          <g class="fc rule"><rect x="220" y="368" width="380" height="56" rx="6"/><text class="t" x="410" y="391" text-anchor="middle">2 · MAUT utility U0</text><text class="s" x="410" y="409" text-anchor="middle">u_H · u_G · u_LST · u_SAT · u_T × weights</text></g>
           <line class="edge" x1="410" y1="424" x2="410" y2="452" marker-end="url(#fa)"/>
-          <g class="fc rule"><rect x="220" y="454" width="380" height="56" rx="6"/><text class="t" x="410" y="477" text-anchor="middle">3 · Neighbour support → U</text><text class="s" x="410" y="495" text-anchor="middle">u_N = fraksi 8 tetangga dengan U0 ≥ 0,5</text></g>
+          <g class="fc rule"><rect x="220" y="454" width="380" height="56" rx="6"/><text class="t" x="410" y="477" text-anchor="middle">3 · Neighbour support → U</text><text class="s" x="410" y="495" text-anchor="middle">u_N = share of 8 neighbours with U0 ≥ 0.5</text></g>
           <line class="edge" x1="410" y1="510" x2="410" y2="538" marker-end="url(#fa)"/>
-          <g class="fc dec rule"><polygon points="410,540 560,580 410,620 260,580"/><text class="t" x="410" y="576" text-anchor="middle">4 · Status piksel?</text><text class="s" x="410" y="594" text-anchor="middle">tabel bagian 05</text></g>
+          <g class="fc dec rule"><polygon points="410,540 560,580 410,620 260,580"/><text class="t" x="410" y="576" text-anchor="middle">4 · Pixel status?</text><text class="s" x="410" y="594" text-anchor="middle">table in section 05</text></g>
           <line class="edge no" x1="560" y1="580" x2="688" y2="580" marker-end="url(#fa)"/>
-          <text class="yn" x="572" y="570">bukan AWAS</text>
-          <g class="fc side"><rect x="690" y="552" width="290" height="56" rx="6"/><text class="t" x="835" y="575" text-anchor="middle">SAFE · WATCH · NO_OBSERVATION</text><text class="s" x="835" y="593" text-anchor="middle">tampil di peta; dinilai ulang</text></g>
+          <text class="yn" x="572" y="570">not AWAS</text>
+          <g class="fc side"><rect x="690" y="552" width="290" height="56" rx="6"/><text class="t" x="835" y="575" text-anchor="middle">SAFE · WATCH · NO_OBSERVATION</text><text class="s" x="835" y="593" text-anchor="middle">shown on the map; re-scored</text></g>
           <line class="edge" x1="410" y1="620" x2="410" y2="668" marker-end="url(#fa)"/>
-          <text class="yn" x="420" y="642">AWAS: kelompok baru, atau</text>
-          <text class="yn" x="420" y="658">verifikasi terakhir &gt; 6 jam</text>
+          <text class="yn" x="420" y="642">AWAS: new cluster, or</text>
+          <text class="yn" x="420" y="658">last verified &gt; 6 h ago</text>
 
           <!-- T3 -->
-          <g class="fc ai"><rect x="220" y="670" width="380" height="160" rx="6"/><text class="t" x="410" y="693" text-anchor="middle">asapify-agent · ADK + Gemini</text><text class="s" x="410" y="711" text-anchor="middle">verifikasi, bukan deteksi · maks 8 tool</text></g>
+          <g class="fc ai"><rect x="220" y="670" width="380" height="160" rx="6"/><text class="t" x="410" y="693" text-anchor="middle">asapify-agent · ADK + Gemini</text><text class="s" x="410" y="711" text-anchor="middle">verification, not detection · max 8 tools</text></g>
           <g class="fc side"><rect x="238" y="722" width="344" height="26" rx="4"/><text class="s" x="410" y="739" text-anchor="middle">get_pixel_context</text></g>
           <g class="fc side"><rect x="238" y="754" width="344" height="26" rx="4"/><text class="s" x="410" y="771" text-anchor="middle">get_latest_viirs · fetch_viirs_image</text></g>
           <g class="fc side"><rect x="238" y="786" width="344" height="26" rx="4"/><text class="s" x="410" y="803" text-anchor="middle">fetch_himawari_image · save_verification</text></g>
-          <g class="fc"><rect x="690" y="670" width="290" height="56" rx="6"/><text class="t" x="835" y="693" text-anchor="middle">NASA FIRMS + GIBS</text><text class="s" x="835" y="711" text-anchor="middle">VIIRS terbaru, hanya saat AWAS</text></g>
+          <g class="fc"><rect x="690" y="670" width="290" height="56" rx="6"/><text class="t" x="835" y="693" text-anchor="middle">NASA FIRMS + GIBS</text><text class="s" x="835" y="711" text-anchor="middle">latest VIIRS, only on AWAS</text></g>
           <line class="edge" x1="690" y1="698" x2="602" y2="698" marker-end="url(#fa)"/>
           <line class="edge" x1="600" y1="788" x2="688" y2="788" marker-end="url(#fa)"/>
-          <text class="yn" x="612" y="778">hasil</text>
-          <g class="fc send"><rect x="690" y="760" width="290" height="56" rx="6"/><text class="t" x="835" y="783" text-anchor="middle">Grup Telegram operator</text><text class="s" x="835" y="801" text-anchor="middle">otomatis · bukti kuat / inkonklusif</text></g>
+          <text class="yn" x="612" y="778">result</text>
+          <g class="fc send"><rect x="690" y="760" width="290" height="56" rx="6"/><text class="t" x="835" y="783" text-anchor="middle">Operator Telegram group</text><text class="s" x="835" y="801" text-anchor="middle">automatic · strong evidence / inconclusive</text></g>
           <line class="edge" x1="410" y1="830" x2="410" y2="858" marker-end="url(#fa)"/>
 
           <!-- T4 -->
-          <g class="fc dec"><polygon points="410,860 560,900 410,940 260,900"/><text class="t" x="410" y="896" text-anchor="middle">Operator memutuskan</text><text class="s" x="410" y="914" text-anchor="middle">terbitkan / tolak</text></g>
+          <g class="fc dec"><polygon points="410,860 560,900 410,940 260,900"/><text class="t" x="410" y="896" text-anchor="middle">Operator decides</text><text class="s" x="410" y="914" text-anchor="middle">publish / reject</text></g>
           <line class="edge no" x1="560" y1="900" x2="688" y2="900" marker-end="url(#fa)"/>
-          <text class="yn" x="572" y="890">tolak</text>
-          <g class="fc side"><rect x="690" y="872" width="290" height="56" rx="6"/><text class="t" x="835" y="895" text-anchor="middle">Tidak dikirim</text><text class="s" x="835" y="913" text-anchor="middle">alasan wajib · audit_log</text></g>
+          <text class="yn" x="572" y="890">reject</text>
+          <g class="fc side"><rect x="690" y="872" width="290" height="56" rx="6"/><text class="t" x="835" y="895" text-anchor="middle">Not sent</text><text class="s" x="835" y="913" text-anchor="middle">reason required · audit_log</text></g>
           <line class="edge" x1="410" y1="940" x2="410" y2="968" marker-end="url(#fa)"/>
-          <text class="yn" x="420" y="959">terbitkan</text>
-          <g class="fc send"><rect x="220" y="970" width="380" height="56" rx="6"/><text class="t" x="410" y="993" text-anchor="middle">Bot → grup peringatan provinsi</text><text class="s" x="410" y="1011" text-anchor="middle">satu pesan; ditutup = edit SELESAI</text></g>
+          <text class="yn" x="420" y="959">publish</text>
+          <g class="fc send"><rect x="220" y="970" width="380" height="56" rx="6"/><text class="t" x="410" y="993" text-anchor="middle">Bot → provincial alert group</text><text class="s" x="410" y="1011" text-anchor="middle">one message; closed = edited to SELESAI</text></g>
         </svg>
       </div>
-      <figcaption><strong>A · Alur logika.</strong> Dua keputusan menentukan apa yang bergerak: rule engine (langkah 4) memutuskan apakah agen dipanggil, operator (Tahap 4) memutuskan apakah pesan dikirim. VIIRS baru masuk di Tahap 3, dan hanya untuk kelompok AWAS. Himawari dan GK2A dinilai terpisah dulu (langkah 1), baru digabung di MAUT (langkah 2).</figcaption>
-      <p class="scroll-hint">Geser diagram ke samping bila terpotong.</p>
+      <figcaption><strong>A · Logic flow.</strong> Two decisions control what moves: the rule engine (step 4) decides whether the agent is called, and the operator (Stage 4) decides whether a message is sent. VIIRS only enters at Stage 3, and only for AWAS clusters. Himawari and GK2A are scored separately first (step 1) and only combined in MAUT (step 2).</figcaption>
+      <p class="scroll-hint">Scroll the diagram sideways if it is cut off.</p>
     </figure>
 
     <figure class="fig" style="margin-top:28px">
-      <div class="legend-row"><span><i></i>data / panggilan</span><span><i class="dash"></i>pemicu jadwal</span><span><b class="n">4</b>nomor sambungan, lihat tabel C</span><span><b class="sw" style="border:1.5px dashed var(--sat)"></b>batas Google Cloud</span></div>
+      <div class="legend-row"><span><i></i>data / call</span><span><i class="dash"></i>schedule trigger</span><span><b class="n">4</b>link number, see table C</span><span><b class="sw" style="border:1.5px dashed var(--sat)"></b>Google Cloud boundary</span></div>
       <div class="diagram-box wide">
-        <svg viewBox="0 0 1200 760" role="img" aria-label="Skematik layanan: di kiri sumber data luar (NOAA Himawari-9, NOAA GK2A, NASA POWER, KHG dan batas provinsi); di dalam Google Cloud, Cloud Scheduler memicu empat job yang menulis ke Cloud Storage dan Firestore; job evaluate memanggil service asapify-agent hanya untuk AWAS; agent memakai Gemini, membaca Storage dan Firestore, mengambil VIIRS dari NASA FIRMS dan GIBS serta citra Himawari dari NOAA, dan memberi tahu grup operator Telegram; service asapify-api melayani web operator dan mengirim ke grup peringatan; job build memakai Earth Engine sekali.">
+        <svg viewBox="0 0 1200 760" role="img" aria-label="Service schematic: on the left, external data sources (NOAA Himawari-9, NOAA GK2A, NASA POWER, KHG and province boundaries); inside Google Cloud, Cloud Scheduler triggers four jobs that write to Cloud Storage and Firestore; the evaluate job calls the asapify-agent service only for AWAS; the agent uses Gemini, reads Storage and Firestore, fetches VIIRS from NASA FIRMS and GIBS and Himawari imagery from NOAA, and notifies the operator Telegram group; the asapify-api service serves the operator web app and posts to the alert group; the build job uses Earth Engine once.">
           <defs><marker id="fb" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-dim" d="M0,0 L10,5 L0,10 z"/></marker></defs>
           <rect class="zone" x="236" y="24" width="734" height="712" rx="12"/>
           <text class="zl" x="252" y="724">GOOGLE CLOUD · asia-southeast2 (Gemini: global)</text>
-          <text class="ch" x="20" y="218">SUMBER DATA LUAR</text>
-          <text class="ch" x="990" y="138">LAYANAN LUAR DAN PENGGUNA</text>
+          <text class="ch" x="20" y="218">EXTERNAL DATA SOURCES</text>
+          <text class="ch" x="990" y="138">EXTERNAL SERVICES AND USERS</text>
 
           <!-- sumber luar -->
-          <g class="fc"><rect x="20" y="230" width="190" height="60" rx="6"/><text class="t" x="115" y="255" text-anchor="middle">NOAA · Himawari-9</text><text class="s" x="115" y="274" text-anchor="middle">B07, B14 · anonim</text></g>
-          <g class="fc"><rect x="20" y="310" width="190" height="60" rx="6"/><text class="t" x="115" y="335" text-anchor="middle">NOAA · GK2A</text><text class="s" x="115" y="354" text-anchor="middle">SW038, IR105 · anonim</text></g>
-          <g class="fc"><rect x="20" y="390" width="190" height="60" rx="6"/><text class="t" x="115" y="415" text-anchor="middle">NASA POWER</text><text class="s" x="115" y="434" text-anchor="middle">TS, T2M per jam</text></g>
-          <g class="fc"><rect x="20" y="560" width="190" height="60" rx="6"/><text class="t" x="115" y="585" text-anchor="middle">KHG + provinsi</text><text class="s" x="115" y="604" text-anchor="middle">BIG REST · geoBoundaries</text></g>
+          <g class="fc"><rect x="20" y="230" width="190" height="60" rx="6"/><text class="t" x="115" y="255" text-anchor="middle">NOAA · Himawari-9</text><text class="s" x="115" y="274" text-anchor="middle">B07, B14 · anonymous</text></g>
+          <g class="fc"><rect x="20" y="310" width="190" height="60" rx="6"/><text class="t" x="115" y="335" text-anchor="middle">NOAA · GK2A</text><text class="s" x="115" y="354" text-anchor="middle">SW038, IR105 · anonymous</text></g>
+          <g class="fc"><rect x="20" y="390" width="190" height="60" rx="6"/><text class="t" x="115" y="415" text-anchor="middle">NASA POWER</text><text class="s" x="115" y="434" text-anchor="middle">TS, T2M hourly</text></g>
+          <g class="fc"><rect x="20" y="560" width="190" height="60" rx="6"/><text class="t" x="115" y="585" text-anchor="middle">KHG + provinces</text><text class="s" x="115" y="604" text-anchor="middle">BIG REST · geoBoundaries</text></g>
 
           <!-- jobs -->
-          <g class="fc term"><rect x="270" y="56" width="200" height="54" rx="27"/><text class="t" x="370" y="79" text-anchor="middle">Cloud Scheduler</text><text class="s" x="370" y="97" text-anchor="middle">4 jadwal · WIB</text></g>
-          <g class="fc rule"><rect x="280" y="150" width="180" height="60" rx="6"/><text class="t" x="370" y="175" text-anchor="middle">asapify-evaluate</text><text class="s" x="370" y="194" text-anchor="middle">menit 5, 15… · MAUT</text></g>
-          <g class="fc rule"><rect x="280" y="230" width="180" height="60" rx="6"/><text class="t" x="370" y="255" text-anchor="middle">ingest-himawari</text><text class="s" x="370" y="274" text-anchor="middle">*/10 malam</text></g>
-          <g class="fc rule"><rect x="280" y="310" width="180" height="60" rx="6"/><text class="t" x="370" y="335" text-anchor="middle">ingest-gk2a</text><text class="s" x="370" y="354" text-anchor="middle">*/10 malam</text></g>
-          <g class="fc rule"><rect x="280" y="390" width="180" height="60" rx="6"/><text class="t" x="370" y="415" text-anchor="middle">asapify-environment</text><text class="s" x="370" y="434" text-anchor="middle">12.00 WIB · baseline</text></g>
-          <g class="fc"><rect x="280" y="560" width="180" height="60" rx="6"/><text class="t" x="370" y="585" text-anchor="middle">asapify-build</text><text class="s" x="370" y="604" text-anchor="middle">sekali · peat mask</text></g>
+          <g class="fc term"><rect x="270" y="56" width="200" height="54" rx="27"/><text class="t" x="370" y="79" text-anchor="middle">Cloud Scheduler</text><text class="s" x="370" y="97" text-anchor="middle">4 schedules · WIB</text></g>
+          <g class="fc rule"><rect x="280" y="150" width="180" height="60" rx="6"/><text class="t" x="370" y="175" text-anchor="middle">asapify-evaluate</text><text class="s" x="370" y="194" text-anchor="middle">minute 5, 15… · MAUT</text></g>
+          <g class="fc rule"><rect x="280" y="230" width="180" height="60" rx="6"/><text class="t" x="370" y="255" text-anchor="middle">ingest-himawari</text><text class="s" x="370" y="274" text-anchor="middle">*/10 at night</text></g>
+          <g class="fc rule"><rect x="280" y="310" width="180" height="60" rx="6"/><text class="t" x="370" y="335" text-anchor="middle">ingest-gk2a</text><text class="s" x="370" y="354" text-anchor="middle">*/10 at night</text></g>
+          <g class="fc rule"><rect x="280" y="390" width="180" height="60" rx="6"/><text class="t" x="370" y="415" text-anchor="middle">asapify-environment</text><text class="s" x="370" y="434" text-anchor="middle">12:00 WIB · baseline</text></g>
+          <g class="fc"><rect x="280" y="560" width="180" height="60" rx="6"/><text class="t" x="370" y="585" text-anchor="middle">asapify-build</text><text class="s" x="370" y="604" text-anchor="middle">once · peat mask</text></g>
 
           <!-- data -->
           <g class="fc"><rect x="520" y="150" width="220" height="150" rx="6"/><text class="t" x="630" y="176" text-anchor="middle">Cloud Storage</text><text class="s" x="630" y="200" text-anchor="middle">peat/ · himawari/ · gk2a/</text><text class="s" x="630" y="218" text-anchor="middle">environment/ · score/</text><text class="s" x="630" y="236" text-anchor="middle">crops/ · raw/</text><text class="s" x="630" y="262" text-anchor="middle">Parquet + PNG</text></g>
           <g class="fc"><rect x="520" y="360" width="200" height="120" rx="6"/><text class="t" x="620" y="386" text-anchor="middle">Firestore</text><text class="s" x="620" y="410" text-anchor="middle">clusters · runs</text><text class="s" x="620" y="428" text-anchor="middle">verifications · alerts</text><text class="s" x="620" y="446" text-anchor="middle">audit_log · tg_chats</text></g>
-          <g class="fc"><rect x="520" y="560" width="200" height="66" rx="6"/><text class="t" x="620" y="583" text-anchor="middle">Secret Manager</text><text class="s" x="620" y="601" text-anchor="middle">MAP_KEY → agent</text><text class="s" x="620" y="617" text-anchor="middle">token bot → agent, api</text></g>
+          <g class="fc"><rect x="520" y="560" width="200" height="66" rx="6"/><text class="t" x="620" y="583" text-anchor="middle">Secret Manager</text><text class="s" x="620" y="601" text-anchor="middle">MAP_KEY → agent</text><text class="s" x="620" y="617" text-anchor="middle">bot token → agent, api</text></g>
 
           <!-- services -->
-          <g class="fc ai"><rect x="770" y="150" width="170" height="120" rx="6"/><text class="t" x="855" y="176" text-anchor="middle">asapify-agent</text><text class="s" x="855" y="198" text-anchor="middle">Cloud Run service</text><text class="s" x="855" y="216" text-anchor="middle">ADK + 5 tool</text><text class="s" x="855" y="234" text-anchor="middle">POST /verify</text></g>
+          <g class="fc ai"><rect x="770" y="150" width="170" height="120" rx="6"/><text class="t" x="855" y="176" text-anchor="middle">asapify-agent</text><text class="s" x="855" y="198" text-anchor="middle">Cloud Run service</text><text class="s" x="855" y="216" text-anchor="middle">ADK + 5 tools</text><text class="s" x="855" y="234" text-anchor="middle">POST /verify</text></g>
           <g class="fc ai"><rect x="800" y="296" width="140" height="54" rx="6"/><text class="t" x="870" y="319" text-anchor="middle">Gemini</text><text class="s" x="870" y="337" text-anchor="middle">Vertex AI</text></g>
-          <g class="fc"><rect x="770" y="520" width="170" height="100" rx="6"/><text class="t" x="855" y="546" text-anchor="middle">asapify-api</text><text class="s" x="855" y="568" text-anchor="middle">Cloud Run service</text><text class="s" x="855" y="586" text-anchor="middle">FastAPI /api/v1</text><text class="s" x="855" y="604" text-anchor="middle">keputusan + kirim</text></g>
-          <g class="fc ver"><rect x="770" y="650" width="170" height="56" rx="6"/><text class="t" x="855" y="673" text-anchor="middle">Earth Engine</text><text class="s" x="855" y="691" text-anchor="middle">WorldCover · sekali</text></g>
+          <g class="fc"><rect x="770" y="520" width="170" height="100" rx="6"/><text class="t" x="855" y="546" text-anchor="middle">asapify-api</text><text class="s" x="855" y="568" text-anchor="middle">Cloud Run service</text><text class="s" x="855" y="586" text-anchor="middle">FastAPI /api/v1</text><text class="s" x="855" y="604" text-anchor="middle">decisions + sending</text></g>
+          <g class="fc ver"><rect x="770" y="650" width="170" height="56" rx="6"/><text class="t" x="855" y="673" text-anchor="middle">Earth Engine</text><text class="s" x="855" y="691" text-anchor="middle">WorldCover · once</text></g>
 
           <!-- luar kanan -->
-          <g class="fc"><rect x="990" y="150" width="190" height="60" rx="6"/><text class="t" x="1085" y="175" text-anchor="middle">NASA FIRMS + GIBS</text><text class="s" x="1085" y="194" text-anchor="middle">VIIRS titik + citra</text></g>
-          <g class="fc send"><rect x="990" y="240" width="190" height="70" rx="6"/><text class="t" x="1085" y="265" text-anchor="middle">Telegram Bot API</text><text class="s" x="1085" y="284" text-anchor="middle">grup operator</text><text class="s" x="1085" y="300" text-anchor="middle">grup peringatan</text></g>
-          <g class="fc"><rect x="990" y="540" width="190" height="70" rx="6"/><text class="t" x="1085" y="565" text-anchor="middle">Web operator</text><text class="s" x="1085" y="584" text-anchor="middle">Firebase Hosting + Auth</text><text class="s" x="1085" y="600" text-anchor="middle">MapLibre</text></g>
+          <g class="fc"><rect x="990" y="150" width="190" height="60" rx="6"/><text class="t" x="1085" y="175" text-anchor="middle">NASA FIRMS + GIBS</text><text class="s" x="1085" y="194" text-anchor="middle">VIIRS points + imagery</text></g>
+          <g class="fc send"><rect x="990" y="240" width="190" height="70" rx="6"/><text class="t" x="1085" y="265" text-anchor="middle">Telegram Bot API</text><text class="s" x="1085" y="284" text-anchor="middle">operator group</text><text class="s" x="1085" y="300" text-anchor="middle">alert group</text></g>
+          <g class="fc"><rect x="990" y="540" width="190" height="70" rx="6"/><text class="t" x="1085" y="565" text-anchor="middle">Operator web app</text><text class="s" x="1085" y="584" text-anchor="middle">Firebase Hosting + Auth</text><text class="s" x="1085" y="600" text-anchor="middle">MapLibre</text></g>
 
           <!-- 1 pemicu -->
           <path class="edge no" d="M270 83 H258 V420"/>
@@ -653,7 +661,7 @@
           <line class="edge" x1="490" y1="420" x2="518" y2="420" marker-end="url(#fb)"/>
           <!-- 8 verify -->
           <path class="edge" d="M370 150 V130 H750 V200 H768" marker-end="url(#fb)"/>
-          <text class="yn" x="640" y="122">POST /verify (hanya AWAS)</text>
+          <text class="yn" x="640" y="122">POST /verify (AWAS only)</text>
           <!-- 9 agent-storage, 10 agent-firestore, 11 gemini -->
           <line class="edge" x1="768" y1="240" x2="742" y2="240" marker-start="url(#fb)" marker-end="url(#fb)"/>
           <path class="edge" d="M790 270 V400 H722" marker-start="url(#fb)" marker-end="url(#fb)"/>
@@ -661,7 +669,7 @@
           <!-- 12 firms/gibs, 13 noaa crop, 14 tg operator -->
           <line class="edge" x1="940" y1="180" x2="988" y2="180" marker-end="url(#fb)"/>
           <path class="edge" d="M900 150 V40 H190 V228" marker-end="url(#fb)"/>
-          <text class="yn" x="600" y="56">crop citra Himawari (pelengkap)</text>
+          <text class="yn" x="600" y="56">Himawari image crop (complementary)</text>
           <line class="edge" x1="940" y1="262" x2="988" y2="262" marker-end="url(#fb)"/>
           <!-- 15 web-api, 16 api-firestore, 17 api-telegram -->
           <line class="edge" x1="988" y1="575" x2="942" y2="575" marker-start="url(#fb)" marker-end="url(#fb)"/>
@@ -671,7 +679,7 @@
           <path class="edge" d="M770 530 H757 V290 H742" marker-end="url(#fb)"/>
           <!-- 18 build-EE -->
           <path class="edge" d="M370 620 V678 H768" marker-end="url(#fb)"/>
-          <text class="yn" x="560" y="670">WorldCover → fraksi terbangun</text>
+          <text class="yn" x="548" y="670">WorldCover → built-up fraction</text>
 
           <g class="nb"><circle cx="258" cy="130" r="10"/><text x="258" y="134" text-anchor="middle">1</text></g>
           <g class="nb"><circle cx="232" cy="270" r="10"/><text x="232" y="274" text-anchor="middle">2</text></g>
@@ -694,75 +702,76 @@
           <g class="nb"><circle cx="757" cy="470" r="10"/><text x="757" y="474" text-anchor="middle">19</text></g>
         </svg>
       </div>
-      <figcaption><strong>B · Skematik layanan.</strong> Job tidak pernah memanggil Gemini atau FIRMS. Satu-satunya jembatan dari jalur terjadwal ke AI adalah sambungan 8, dan hanya untuk kelompok AWAS. <code>asapify-agent</code> memverifikasi dan memberi tahu grup operator; <code>asapify-api</code> melayani operator dan mengirim ke grup peringatan. Browser hanya membaca Storage lewat signed URL gambar crop dan lapisan peta statis di bucket publik.</figcaption>
-      <p class="scroll-hint">Geser diagram ke samping bila terpotong.</p>
+      <figcaption><strong>B · Service schematic.</strong> Jobs never call Gemini or FIRMS. The only bridge from the scheduled path to AI is link 8, and only for AWAS clusters. <code>asapify-agent</code> verifies and notifies the operator group; <code>asapify-api</code> serves operators and posts to the alert group. The browser only reads Storage through signed URLs for crop images and the static map layers in the public bucket.</figcaption>
+      <p class="scroll-hint">Scroll the diagram sideways if it is cut off.</p>
     </figure>
 
     <div class="table-wrap" style="margin-top:20px">
       <table class="wide">
-        <caption><strong>C · Sambungan.</strong> Nomor sama dengan lingkaran di skematik B. Izin IAM lengkap di <a href="cloud.html#iam">Konfigurasi Cloud 03</a>.</caption>
-        <thead><tr><th scope="col">#</th><th scope="col">Dari → ke</th><th scope="col">Apa yang lewat</th><th scope="col">Kapan</th><th scope="col">Akses</th></tr></thead>
+        <caption><strong>C · Links.</strong> Numbers match the circles in schematic B. Full IAM permissions are in <a href="cloud.html#iam">Cloud setup 03</a>.</caption>
+        <thead><tr><th scope="col">#</th><th scope="col">From → to</th><th scope="col">What passes</th><th scope="col">When</th><th scope="col">Access</th></tr></thead>
         <tbody>
-          <tr><td class="nbc">1</td><th scope="row">Cloud Scheduler → 4 job</th><td>perintah jalankan job (Cloud Run Admin API)</td><td>ingest <code>*/10 20-23,0-4</code> · evaluate <code>5-59/10 20-23,0-4</code> · environment <code>0 12</code> (WIB)</td><td>OAuth <code>sa-scheduler</code> (run.invoker)</td></tr>
-          <tr><td class="nbc">2</td><th scope="row">NOAA Himawari-9 → ingest-himawari</th><td><code>B07</code> + <code>B14</code>, segmen S05/S06 (<code>.DAT.bz2</code>)</td><td>tiap 10 menit, malam</td><td>anonim</td></tr>
-          <tr><td class="nbc">3</td><th scope="row">NOAA GK2A → ingest-gk2a</th><td><code>sw038</code> + <code>ir105</code> full disk NetCDF (~30 MB/kanal)</td><td>tiap 10 menit, malam</td><td>anonim</td></tr>
-          <tr><td class="nbc">4</td><th scope="row">NASA POWER → environment</th><td>TS + T2M per jam UTC, per sel POWER (0,5° × 0,625°)</td><td>harian; hanya hari yang belum ada</td><td>tanpa kunci</td></tr>
-          <tr><td class="nbc">5</td><th scope="row">BIG + geoBoundaries → build</th><td>poligon KHG, batas 15 provinsi</td><td>sekali</td><td>tanpa kunci</td></tr>
-          <tr><td class="nbc">6</td><th scope="row">Semua job ↔ Cloud Storage</th><td>ingest menulis <code>himawari/</code>, <code>gk2a/</code>; environment menulis <code>environment/</code>; evaluate membaca semuanya dan menulis <code>score/</code>; build menulis <code>peat/</code> (dan GeoJSON piksel gambut ke bucket publik untuk lapisan peta)</td><td>tiap eksekusi</td><td><code>sa-jobs</code> objectAdmin</td></tr>
-          <tr><td class="nbc">7</td><th scope="row">Semua job → Firestore</th><td><code>runs</code> (semua job), <code>clusters</code> (evaluate)</td><td>tiap eksekusi</td><td><code>sa-jobs</code> datastore.user</td></tr>
-          <tr><td class="nbc">8</td><th scope="row">evaluate → asapify-agent</th><td><code>POST /verify {cluster_id, trigger_slot}</code>; <code>POST /cluster-closed {cluster_id}</code></td><td>/verify: hanya kelompok AWAS baru, atau aktif dan verifikasi terakhir &gt; 6 jam · /cluster-closed: saat kelompok ditutup</td><td>OIDC <code>sa-jobs</code> → run.invoker</td></tr>
-          <tr><td class="nbc">9</td><th scope="row">agent ↔ Cloud Storage</th><td>baca <code>score/</code>; tulis <code>crops/</code> PNG + signed URL 1 jam</td><td>per verifikasi</td><td><code>sa-agent</code> objectAdmin + TokenCreator</td></tr>
-          <tr><td class="nbc">10</td><th scope="row">agent ↔ Firestore</th><td>baca <code>clusters</code>, <code>alerts</code>; tulis <code>verifications</code>, <code>alerts.status</code>, <code>audit_log</code></td><td>per verifikasi</td><td><code>sa-agent</code> datastore.user</td></tr>
-          <tr><td class="nbc">11</td><th scope="row">agent → Gemini</th><td>instruksi, konteks, hasil tool, citra PNG (multimodal)</td><td>≤ 8 panggilan tool per verifikasi</td><td><code>sa-agent</code> aiplatform.user</td></tr>
-          <tr><td class="nbc">12</td><th scope="row">agent → NASA FIRMS + GIBS</th><td>deteksi VIIRS kotak ±10 km, 48 jam; citra true colour tanggal terbaru</td><td>per verifikasi (on-demand)</td><td>MAP_KEY (FIRMS); GIBS tanpa kunci</td></tr>
-          <tr><td class="nbc">13</td><th scope="row">agent → NOAA Himawari-9</th><td>crop termal malam / true colour siang (capture pelengkap)</td><td>per verifikasi</td><td>anonim</td></tr>
-          <tr><td class="nbc">14</td><th scope="row">agent → Telegram</th><td><code>sendPhoto</code> ke grup operator; <code>editMessageCaption</code> SELESAI di grup peringatan</td><td>setelah verifikasi tersimpan; saat kelompok ditutup</td><td>token bot</td></tr>
-          <tr><td class="nbc">15</td><th scope="row">Web operator ↔ asapify-api</th><td><code>GET/POST /api/v1/operator/*</code>: peta, kelompok, keputusan</td><td>saat operator membuka web</td><td>token Firebase, klaim <code>role = operator</code></td></tr>
-          <tr><td class="nbc">16</td><th scope="row">asapify-api ↔ Firestore</th><td>baca <code>clusters</code>, <code>verifications</code>; tulis <code>alerts</code>, <code>audit_log</code>; <code>tg_chats</code></td><td>per request, per keputusan</td><td><code>sa-api</code> datastore.user</td></tr>
-          <tr><td class="nbc">17</td><th scope="row">asapify-api → Telegram</th><td><code>sendPhoto</code> ke grup peringatan provinsi; <code>editMessageCaption</code> bila operator menutup lebih awal</td><td>hanya setelah operator menerbitkan</td><td>token bot</td></tr>
-          <tr><td class="nbc">18</td><th scope="row">build → Earth Engine</th><td>WorldCover kelas 50 → fraksi terbangun per sel 0,02°</td><td>sekali</td><td><code>sa-jobs</code> earthengine.writer</td></tr>
-          <tr><td class="nbc">19</td><th scope="row">asapify-api → Cloud Storage</th><td>baca <code>score/</code> (grid peta, deret utility kelompok); membuat signed URL <code>crops/</code> untuk browser</td><td>per request web</td><td><code>sa-api</code> objectViewer + TokenCreator</td></tr>
+          <tr><td class="nbc">1</td><th scope="row">Cloud Scheduler → 4 jobs</th><td>job run command (Cloud Run Admin API)</td><td>ingest <code>*/10 20-23,0-4</code> · evaluate <code>5-59/10 20-23,0-4</code> · environment <code>0 12</code> (WIB)</td><td>OAuth <code>sa-scheduler</code> (run.invoker)</td></tr>
+          <tr><td class="nbc">2</td><th scope="row">NOAA Himawari-9 → ingest-himawari</th><td><code>B07</code> + <code>B14</code>, segments S05/S06 (<code>.DAT.bz2</code>)</td><td>every 10 minutes, at night</td><td>anonymous</td></tr>
+          <tr><td class="nbc">3</td><th scope="row">NOAA GK2A → ingest-gk2a</th><td><code>sw038</code> + <code>ir105</code> full-disk NetCDF (~30 MB/channel)</td><td>every 10 minutes, at night</td><td>anonymous</td></tr>
+          <tr><td class="nbc">4</td><th scope="row">NASA POWER → environment</th><td>hourly TS + T2M in UTC, per POWER cell (0.5° × 0.625°)</td><td>daily; missing days only</td><td>no key</td></tr>
+          <tr><td class="nbc">5</td><th scope="row">BIG + geoBoundaries → build</th><td>KHG polygons, 15 province boundaries</td><td>once</td><td>no key</td></tr>
+          <tr><td class="nbc">6</td><th scope="row">All jobs ↔ Cloud Storage</th><td>ingest writes <code>himawari/</code>, <code>gk2a/</code>; environment writes <code>environment/</code>; evaluate reads all of them and writes <code>score/</code>; build writes <code>peat/</code> (and the peat-pixel GeoJSON to the public bucket for the map layer)</td><td>every run</td><td><code>sa-jobs</code> objectAdmin</td></tr>
+          <tr><td class="nbc">7</td><th scope="row">All jobs → Firestore</th><td><code>runs</code> (every job), <code>clusters</code> (evaluate)</td><td>every run</td><td><code>sa-jobs</code> datastore.user</td></tr>
+          <tr><td class="nbc">8</td><th scope="row">evaluate → asapify-agent</th><td><code>POST /verify {cluster_id, trigger_slot}</code>; <code>POST /cluster-closed {cluster_id}</code></td><td>/verify: only new AWAS clusters, or active ones last verified &gt; 6 h ago · /cluster-closed: when a cluster closes</td><td>OIDC <code>sa-jobs</code> → run.invoker</td></tr>
+          <tr><td class="nbc">9</td><th scope="row">agent ↔ Cloud Storage</th><td>reads <code>score/</code>; writes <code>crops/</code> PNGs + 1-hour signed URLs</td><td>per verification</td><td><code>sa-agent</code> objectAdmin + TokenCreator</td></tr>
+          <tr><td class="nbc">10</td><th scope="row">agent ↔ Firestore</th><td>reads <code>clusters</code>, <code>alerts</code>; writes <code>verifications</code>, <code>alerts.status</code>, <code>audit_log</code></td><td>per verification</td><td><code>sa-agent</code> datastore.user</td></tr>
+          <tr><td class="nbc">11</td><th scope="row">agent → Gemini</th><td>instructions, context, tool results, PNG images (multimodal)</td><td>≤ 8 tool calls per verification</td><td><code>sa-agent</code> aiplatform.user</td></tr>
+          <tr><td class="nbc">12</td><th scope="row">agent → NASA FIRMS + GIBS</th><td>VIIRS detections in a ±10 km box, 48 hours; true-colour image for the latest date</td><td>per verification (on demand)</td><td>MAP_KEY (FIRMS); GIBS needs no key</td></tr>
+          <tr><td class="nbc">13</td><th scope="row">agent → NOAA Himawari-9</th><td>night thermal crop / daytime true colour (complementary capture)</td><td>per verification</td><td>anonymous</td></tr>
+          <tr><td class="nbc">14</td><th scope="row">agent → Telegram</th><td><code>sendPhoto</code> to the operator group; <code>editMessageCaption</code> SELESAI in the alert group</td><td>after a verification is saved; when a cluster closes</td><td>bot token</td></tr>
+          <tr><td class="nbc">15</td><th scope="row">Operator web app ↔ asapify-api</th><td><code>GET/POST /api/v1/operator/*</code>: map, clusters, decisions</td><td>when an operator opens the web app</td><td>Firebase token, claim <code>role = operator</code></td></tr>
+          <tr><td class="nbc">16</td><th scope="row">asapify-api ↔ Firestore</th><td>reads <code>clusters</code>, <code>verifications</code>; writes <code>alerts</code>, <code>audit_log</code>; <code>tg_chats</code></td><td>per request, per decision</td><td><code>sa-api</code> datastore.user</td></tr>
+          <tr><td class="nbc">17</td><th scope="row">asapify-api → Telegram</th><td><code>sendPhoto</code> to the provincial alert group; <code>editMessageCaption</code> if an operator closes it early</td><td>only after an operator publishes</td><td>bot token</td></tr>
+          <tr><td class="nbc">18</td><th scope="row">build → Earth Engine</th><td>WorldCover class 50 → built-up fraction per 0.02° cell</td><td>once</td><td><code>sa-jobs</code> earthengine.writer</td></tr>
+          <tr><td class="nbc">19</td><th scope="row">asapify-api → Cloud Storage</th><td>reads <code>score/</code> (map grid, cluster utility series); creates <code>crops/</code> signed URLs for the browser</td><td>per web request</td><td><code>sa-api</code> objectViewer + TokenCreator</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="card" style="margin-top:20px">
-      <h4>Contoh satu kejadian (fiktif, untuk memahami urutan dan angka)</h4>
+      <h4>One event, step by step (fictional, to show the order and the numbers)</h4>
       <ol>
-        <li><strong>23 Sep, malam</strong> · piksel <code>p420_950</code> Kalteng: Himawari <code>z_rel = 3,1</code> (<code>u_H = 0,55</code>), GK2A berawan → <code>n_sat = 1</code>, <code>U = 0,38</code> → <code>WATCH</code>. Sambungan 2, 3, 6.</li>
-        <li><strong>24 Sep, 22.10 WIB</strong> · kedua satelit cerah: <code>z_rel</code> Himawari 4,4 dan GK2A 4,1 → <code>u_H = u_G = 1</code>; <code>ΔLST = 2,5 K</code> → <code>u_LST = 0,5</code>; <code>ΔSAT = −1 K</code> → 0; 2 dari 3 malam → <code>u_T = 0,67</code>.</li>
-        <li><code>U0 = (0,25 + 0,25 + 0,05 + 0 + 0,10) / 0,80 = 0,81</code>; 3 dari 8 tetangga <code>U0 ≥ 0,5</code> → <code>u_N = 0,375</code>; <code>U = (0,65 + 0,075) / 1,00 = 0,73</code> → <strong><code>AWAS</code></strong> (U ≥ 0,65, tetangga ≥ 0,25, dua satelit sepakat). Kelompok <code>C-0924-002</code> (4 piksel) dibuat (7), <code>POST /verify</code> (8).</li>
-        <li><strong>Agen</strong> · konteks piksel (9, 10); <code>get_latest_viirs</code>: 1 deteksi NOAA-20 1,4 km dari koordinat, 13 jam lalu (12); citra VIIRS 24 Sep siang: asap tipis ke barat laut (12); crop Himawari (13); Gemini menalar (11) → <code>strong_evidence</code>, tersimpan (10); ringkasan ke grup operator (14).</li>
-        <li><strong>Operator</strong> · membuka detail kelompok (15, 16), menerbitkan. Bot mengirim foto + caption ke grup peringatan Kalteng (17).</li>
-        <li><strong>25–27 Sep</strong> · tiga malam valid tanpa piksel AWAS → evaluate menutup kelompok dan memanggil <code>/cluster-closed</code> (8); agent mengedit pesan yang sama dengan awalan SELESAI (14).</li>
+        <li><strong>23 Sep, night</strong> · pixel <code>p420_950</code> in Central Kalimantan: Himawari <code>z_rel = 3.1</code> (<code>u_H = 0.55</code>), GK2A cloudy → <code>n_sat = 1</code>, <code>U = 0.38</code> → <code>WATCH</code>. Links 2, 3, 6.</li>
+        <li><strong>24 Sep, 22:10 WIB</strong> · both satellites clear: <code>z_rel</code> Himawari 4.4 and GK2A 4.1 → <code>u_H = u_G = 1</code>; <code>ΔLST = 2.5 K</code> → <code>u_LST = 0.5</code>; <code>ΔSAT = −1 K</code> → 0; 2 of 3 nights → <code>u_T = 0.67</code>.</li>
+        <li><code>U0 = (0.25 + 0.25 + 0.05 + 0 + 0.10) / 0.80 = 0.81</code>; 3 of 8 neighbours <code>U0 ≥ 0.5</code> → <code>u_N = 0.375</code>; <code>U = (0.65 + 0.075) / 1.00 = 0.73</code> → <strong><code>AWAS</code></strong> (U ≥ 0.65, neighbours ≥ 0.25, both satellites agree). Cluster <code>C-0924-002</code> (4 pixels) is created (7), <code>POST /verify</code> (8).</li>
+        <li><strong>Agent</strong> · pixel context (9, 10); <code>get_latest_viirs</code>: 1 NOAA-20 detection 1.4 km from the coordinate, 13 hours ago (12); VIIRS image from 24 Sep daytime: thin smoke drifting north-west (12); Himawari crop (13); Gemini reasons (11) → <code>strong_evidence</code>, saved (10); summary to the operator group (14).</li>
+        <li><strong>Operator</strong> · opens the cluster detail (15, 16) and publishes. The bot sends photo + caption to the Central Kalimantan alert group (17).</li>
+        <li><strong>25–27 Sep</strong> · three valid nights with no AWAS pixels → evaluate closes the cluster and calls <code>/cluster-closed</code> (8); the agent edits the same message with the prefix SELESAI (14).</li>
       </ol>
     </div>
   </section>
 
+
   <!-- 04 -->
   <section id="fisika">
     <div class="section-head">
-      <span class="eyebrow">04 · Kenapa kanal 3,8–3,9 µm pada malam hari</span>
-      <h2>Kanal gelombang pendek sekitar 25 kali lebih peka terhadap bara kecil</h2>
-      <p>Perhitungan Planck: pergeseran brightness temperature satu piksel 2 km oleh bara 400 °C di atas latar 298 K. Berlaku untuk Himawari B07 (3,9 µm) dan GK2A SW038 (3,8 µm).</p>
+      <span class="eyebrow">04 · Why the 3.8–3.9 µm channel at night</span>
+      <h2>The shortwave channel is about 25 times more sensitive to small embers</h2>
+      <p>Planck calculation: the brightness-temperature shift of one 2 km pixel caused by a 400 °C ember on a 298 K background. Applies to Himawari B07 (3.9 µm) and GK2A SW038 (3.8 µm).</p>
     </div>
     <div class="grid-2">
       <div class="table-wrap">
         <table>
-          <thead><tr><th scope="col">Luas bara</th><th scope="col">10,5–11,2 µm (B14 / IR105)</th><th scope="col">3,8–3,9 µm (B07 / SW038)</th></tr></thead>
+          <thead><tr><th scope="col">Ember area</th><th scope="col">10.5–11.2 µm (B14 / IR105)</th><th scope="col">3.8–3.9 µm (B07 / SW038)</th></tr></thead>
           <tbody>
-            <tr><th scope="row">90 m²</th><td class="num">0,02 K</td><td class="num">0,5 K</td></tr>
-            <tr><th scope="row">1.000 m²</th><td class="num">0,2 K</td><td class="num">5,4 K</td></tr>
-            <tr><th scope="row">1 ha</th><td class="num">2,1 K</td><td class="num">33 K</td></tr>
+            <tr><th scope="row">90 m²</th><td class="num">0.02 K</td><td class="num">0.5 K</td></tr>
+            <tr><th scope="row">1,000 m²</th><td class="num">0.2 K</td><td class="num">5.4 K</td></tr>
+            <tr><th scope="row">1 ha</th><td class="num">2.1 K</td><td class="num">33 K</td></tr>
           </tbody>
         </table>
       </div>
       <div class="card">
         <ul>
-          <li>Kanal 3,8–3,9 µm (<code>mir</code>) membawa sinyal utama; kanal jendela 10,5–11,2 µm (<code>win</code>) dipakai untuk awan, ΔLST, dan ΔSAT.</li>
-          <li>Siang hari kanal 3,8–3,9 µm tercampur pantulan matahari; malam hari bersih. Karena itu evaluasi hanya malam ✅.</li>
-          <li><strong>Dua satelit, dua sudut pandang:</strong> GK2A (128,2° BT) melihat Kalimantan dan Sumatra lebih tegak daripada Himawari-9 (140,7° BT), jadi pikselnya lebih kecil di sana. Derau atau salah navigasi di satu satelit tidak cukup untuk memicu <code>AWAS</code>.</li>
-          <li>⚠️ Piksel di Kalimantan lebih besar dari 2 km (jauh dari nadir), dan di Sumatra lebih besar lagi (terutama Himawari), jadi sensitivitas nyata lebih rendah dari tabel.</li>
+          <li>The 3.8–3.9 µm channel (<code>mir</code>) carries the main signal; the 10.5–11.2 µm window channel (<code>win</code>) is used for cloud, ΔLST and ΔSAT.</li>
+          <li>In daytime the 3.8–3.9 µm channel is mixed with reflected sunlight; at night it is clean. That is why evaluation runs at night only ✅.</li>
+          <li><strong>Two satellites, two viewing angles:</strong> GK2A (128.2° E) sees Kalimantan and Sumatra more directly than Himawari-9 (140.7° E), so its pixels are smaller there. Noise or a navigation error on one satellite is not enough to trigger <code>AWAS</code>.</li>
+          <li>⚠️ Pixels in Kalimantan are larger than 2 km (far from nadir), and larger still in Sumatra (especially for Himawari), so real sensitivity is lower than the table.</li>
         </ul>
       </div>
     </div>
@@ -772,14 +781,14 @@
   <section id="rule">
     <div class="section-head">
       <span class="eyebrow">05 · Rule engine ✅ MAUT + neighbour support</span>
-      <h2>Enam atribut, satu utility score, empat status</h2>
-      <p>✅ Mekanisme: MAUT menggabungkan atribut dua satelit, baseline lingkungan, dan waktu; tetangga memvalidasi secara spasial. 💡 Angka di bawah adalah nilai awal yang dikalibrasi di backtest (<a href="runbook.html#a7">A7</a>, <a href="runbook.html#a8">A8</a>); perubahan dicatat di WORKLOG bagian 7.</p>
+      <h2>Six attributes, one utility score, four statuses</h2>
+      <p>✅ Mechanism: MAUT combines the two-satellite attributes, the environment baseline and time; neighbours validate spatially. 💡 The figures below are starting values calibrated in the backtest (<a href="runbook.html#a7">A7</a>, <a href="runbook.html#a8">A8</a>); changes are logged in WORKLOG section 7.</p>
     </div>
     <div class="grid-2">
       <div class="card">
-        <h4>Rumus yang dipakai kode (<code>jobs/lib/maut.py</code>)</h4>
-<div class="formula">z_s     = (mir − median) / (1,4826 × max(MAD, 0,3 K))
-z_rel_s = z_s − median(z_s tetangga radius 5 sel ≈ 10 km)
+        <h4>Formulas used in code (<code>jobs/lib/maut.py</code>)</h4>
+<div class="formula">z_s     = (mir − median) / (1.4826 × max(MAD, 0.3 K))
+z_rel_s = z_s − median(z_s of neighbours within 5 cells ≈ 10 km)
 
 u_H   = ramp(z_rel Himawari; 2 → 4)
 u_G   = ramp(z_rel GK2A;     2 → 4)
@@ -787,79 +796,79 @@ u_LST = ramp(ΔLST; 1 K → 4 K)
 u_SAT = ramp(ΔSAT; 0 K → 3 K)
 u_T   = min(k / 3, 1)
 
-U0  = Σ wᵢuᵢ / Σ wᵢ   atas H, G, LST, SAT, T yang tersedia
-u_N = #(tetangga U0 ≥ 0,5) / #(tetangga teramati), 8 arah
-U   = Σ wᵢuᵢ / Σ wᵢ   atas H, G, LST, SAT, T, N
+U0  = Σ wᵢuᵢ / Σ wᵢ   over the available H, G, LST, SAT, T
+u_N = #(neighbours U0 ≥ 0.5) / #(observed neighbours), 8 directions
+U   = Σ wᵢuᵢ / Σ wᵢ   over H, G, LST, SAT, T, N
 
 ramp(x; a → b) = clip((x − a) / (b − a), 0, 1)</div>
       </div>
       <div class="card">
-        <h4>Bobot awal 💡</h4>
+        <h4>Starting weights 💡</h4>
         <div class="weights">
-          <div class="w-row"><span>u_H · Himawari</span><div class="w-bar"><i style="width:100%"></i></div><b>0,25</b></div>
-          <div class="w-row"><span>u_G · GK2A</span><div class="w-bar"><i style="width:100%"></i></div><b>0,25</b></div>
-          <div class="w-row"><span>u_N · tetangga</span><div class="w-bar"><i style="width:80%"></i></div><b>0,20</b></div>
-          <div class="w-row"><span>u_T · temporal</span><div class="w-bar"><i style="width:60%"></i></div><b>0,15</b></div>
-          <div class="w-row"><span>u_LST · vs TS POWER</span><div class="w-bar"><i style="width:40%"></i></div><b>0,10</b></div>
-          <div class="w-row"><span>u_SAT · vs T2M POWER</span><div class="w-bar"><i style="width:20%"></i></div><b>0,05</b></div>
+          <div class="w-row"><span>u_H · Himawari</span><div class="w-bar"><i style="width:100%"></i></div><b>0.25</b></div>
+          <div class="w-row"><span>u_G · GK2A</span><div class="w-bar"><i style="width:100%"></i></div><b>0.25</b></div>
+          <div class="w-row"><span>u_N · neighbours</span><div class="w-bar"><i style="width:80%"></i></div><b>0.20</b></div>
+          <div class="w-row"><span>u_T · temporal</span><div class="w-bar"><i style="width:60%"></i></div><b>0.15</b></div>
+          <div class="w-row"><span>u_LST · vs POWER TS</span><div class="w-bar"><i style="width:40%"></i></div><b>0.10</b></div>
+          <div class="w-row"><span>u_SAT · vs POWER T2M</span><div class="w-bar"><i style="width:20%"></i></div><b>0.05</b></div>
         </div>
-        <p class="note">Satelit yang berawan pada slot itu dikeluarkan dan bobot dinormalisasi ulang, jadi skor tetap 0–1.</p>
+        <p class="note">A satellite that is cloudy in that slot is dropped and the weights are renormalised, so the score stays 0–1.</p>
       </div>
     </div>
     <div class="table-wrap" style="margin-top:16px">
       <table class="wide">
-        <thead><tr><th scope="col">Istilah</th><th scope="col">Definisi yang dipakai kode</th></tr></thead>
+        <thead><tr><th scope="col">Term</th><th scope="col">Definition used in code</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Malam, slot</th><td>20.00–04.00 WIB = 13.00–21.00 UTC; slot = waktu scan 10 menit UTC, sama untuk kedua satelit. <code>night_id</code> = tanggal WIB saat malam dimulai.</td></tr>
-          <tr><th scope="row">Berawan (per satelit)</th><td>kanal jendela (<code>B14</code> / <code>IR105</code>) <code>&lt; 270 K</code> → atribut satelit itu tidak dipakai</td></tr>
-          <tr><th scope="row">Baseline termal</th><td>median dan MAD <code>mir</code> per piksel per jam UTC dari 30 malam sebelumnya, per satelit; dibekukan untuk piksel <code>WATCH</code>/<code>AWAS</code></td></tr>
-          <tr><th scope="row">ΔLST</th><td><code>win_max − TS_base(sel, jam) − b_LST(piksel, jam)</code>. <code>TS_base</code> = median 30 hari NASA POWER TS; <code>b_LST</code> = median 30 malam dari selisih yang sama (menghapus bias atmosfer dan emisivitas per piksel)</td></tr>
-          <tr><th scope="row">ΔSAT</th><td><code>win_max − T2M_base(sel, jam)</code>. Malam normal permukaan lebih dingin dari udara; di atas suhu udara berarti ada sumber panas ⚠️ cek distribusi (open item 15)</td></tr>
-          <tr><th scope="row">u_T (temporal)</th><td><code>k</code> = jumlah malam valid di antara 3 malam valid terakhir (termasuk malam ini) dengan ≥ 2 slot <code>max(u_H, u_G) ≥ 0,5</code></td></tr>
-          <tr><th scope="row">Sepakat dua satelit</th><td><code>u_H ≥ 0,5</code> dan <code>u_G ≥ 0,5</code>, masing-masing pada ≥ 1 slot dalam 60 menit terakhir</td></tr>
+          <tr><th scope="row">Night, slot</th><td>20:00–04:00 WIB = 13:00–21:00 UTC; slot = 10-minute scan time in UTC, the same for both satellites. <code>night_id</code> = WIB date when the night starts.</td></tr>
+          <tr><th scope="row">Cloudy (per satellite)</th><td>window channel (<code>B14</code> / <code>IR105</code>) <code>&lt; 270 K</code> → that satellite's attribute is not used</td></tr>
+          <tr><th scope="row">Thermal baseline</th><td>median and MAD of <code>mir</code> per pixel per UTC hour over the previous 30 nights, per satellite; frozen for <code>WATCH</code>/<code>AWAS</code> pixels</td></tr>
+          <tr><th scope="row">ΔLST</th><td><code>win_max − TS_base(cell, hour) − b_LST(pixel, hour)</code>. <code>TS_base</code> = 30-day median of NASA POWER TS; <code>b_LST</code> = 30-night median of the same difference (removes per-pixel atmospheric and emissivity bias)</td></tr>
+          <tr><th scope="row">ΔSAT</th><td><code>win_max − T2M_base(cell, hour)</code>. On a normal night the surface is cooler than the air; above air temperature means a heat source ⚠️ check the distribution (open item 15)</td></tr>
+          <tr><th scope="row">u_T (temporal)</th><td><code>k</code> = number of valid nights among the last 3 valid nights (including tonight) with ≥ 2 slots where <code>max(u_H, u_G) ≥ 0.5</code></td></tr>
+          <tr><th scope="row">Two satellites agree</th><td><code>u_H ≥ 0.5</code> and <code>u_G ≥ 0.5</code>, each in ≥ 1 slot within the last 60 minutes</td></tr>
         </tbody>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:16px">
       <table class="wide">
-        <thead><tr><th scope="col">Status piksel</th><th scope="col">Syarat (dievaluasi tiap slot malam oleh <code>asapify-evaluate</code>)</th><th scope="col">Artinya</th></tr></thead>
+        <thead><tr><th scope="col">Pixel status</th><th scope="col">Condition (evaluated every night slot by <code>asapify-evaluate</code>)</th><th scope="col">Meaning</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><span class="pill awas">AWAS</span></th><td><code>U ≥ 0,65</code> <strong>dan</strong> <code>u_N ≥ 0,25</code> (≥ 2 dari 8 tetangga) <strong>dan</strong> sepakat dua satelit</td><td>Pemicu verifikasi. <strong>Bukan</strong> kebakaran terkonfirmasi.</td></tr>
-          <tr><th scope="row"><span class="pill waspada">WATCH</span></th><td>bukan AWAS, dan <code>U ≥ 0,30</code></td><td>Termasuk anomali terisolasi dan anomali satu satelit</td></tr>
-          <tr><th scope="row"><span class="pill grey">NO_OBSERVATION</span></th><td>kedua satelit berawan atau tidak ada data pada slot itu</td><td>Data hilang, bukan aman</td></tr>
-          <tr><th scope="row"><span class="pill ok">SAFE</span></th><td>selain di atas</td><td>—</td></tr>
+          <tr><th scope="row"><span class="pill awas">AWAS</span></th><td><code>U ≥ 0.65</code> <strong>and</strong> <code>u_N ≥ 0.25</code> (≥ 2 of 8 neighbours) <strong>and</strong> both satellites agree</td><td>Triggers verification. <strong>Not</strong> a confirmed fire.</td></tr>
+          <tr><th scope="row"><span class="pill waspada">WATCH</span></th><td>not AWAS, and <code>U ≥ 0.30</code></td><td>Includes isolated anomalies and single-satellite anomalies</td></tr>
+          <tr><th scope="row"><span class="pill grey">NO_OBSERVATION</span></th><td>both satellites cloudy or no data in that slot</td><td>Missing data, not safe</td></tr>
+          <tr><th scope="row"><span class="pill ok">SAFE</span></th><td>anything else</td><td>—</td></tr>
         </tbody>
-        <caption>Kelompok = piksel AWAS bersebelahan 8 arah; ID <code>C-{MMDD}-{nnn}</code>. Agen dipanggil untuk kelompok baru atau kelompok aktif yang verifikasi terakhirnya &gt; 6 jam. Kelompok ditutup setelah 3 malam valid tanpa AWAS. Tujuh kasus uji di Runbook <a href="runbook.html#a5">A5</a>.</caption>
+        <caption>Cluster = AWAS pixels adjacent in 8 directions; ID <code>C-{MMDD}-{nnn}</code>. The agent is called for new clusters or active clusters last verified &gt; 6 hours ago. A cluster closes after 3 valid nights without AWAS. The seven test cases are in Runbook <a href="runbook.html#a5">A5</a>.</caption>
       </table>
     </div>
     <div class="card" style="margin-top:16px">
-      <h4>Neighbour support: kenapa piksel tidak dinilai sendirian</h4>
+      <h4>Neighbour support: why a pixel is never judged alone</h4>
       <div class="nbwrap">
-        <div class="nbfig"><div class="nbg" role="img" aria-label="Piksel tengah anomali, tiga tetangga juga anomali, lima tidak"><span class="a">A</span><span class="a">A</span><span>·</span><span>·</span><span class="p">P</span><span class="a">A</span><span>·</span><span>·</span><span>·</span></div><p><strong>Didukung.</strong> 3 dari 8 tetangga <code>U0 ≥ 0,5</code> → <code>u_N = 0,375</code>. Bisa menjadi AWAS.</p></div>
-        <div class="nbfig"><div class="nbg" role="img" aria-label="Piksel tengah anomali, semua tetangga normal"><span>·</span><span>·</span><span>·</span><span>·</span><span class="p">P</span><span>·</span><span>·</span><span>·</span><span>·</span></div><p><strong>Terisolasi.</strong> <code>u_N = 0</code> → paling tinggi WATCH. Lebih mungkin derau sensor.</p></div>
-        <div class="nbfig"><div class="nbg" role="img" aria-label="Piksel tengah anomali, tiga tetangga berawan, dua dari lima tetangga teramati anomali"><span class="c"></span><span class="c"></span><span class="a">A</span><span class="c"></span><span class="p">P</span><span>·</span><span>·</span><span class="a">A</span><span>·</span></div><p><strong>Sebagian berawan.</strong> Hanya tetangga teramati yang dihitung: 2 dari 5 → <code>u_N = 0,4</code>.</p></div>
+        <div class="nbfig"><div class="nbg" role="img" aria-label="Centre pixel anomalous, three neighbours also anomalous, five not"><span class="a">A</span><span class="a">A</span><span>·</span><span>·</span><span class="p">P</span><span class="a">A</span><span>·</span><span>·</span><span>·</span></div><p><strong>Supported.</strong> 3 of 8 neighbours <code>U0 ≥ 0.5</code> → <code>u_N = 0.375</code>. Can become AWAS.</p></div>
+        <div class="nbfig"><div class="nbg" role="img" aria-label="Centre pixel anomalous, all neighbours normal"><span>·</span><span>·</span><span>·</span><span>·</span><span class="p">P</span><span>·</span><span>·</span><span>·</span><span>·</span></div><p><strong>Isolated.</strong> <code>u_N = 0</code> → WATCH at most. More likely sensor noise.</p></div>
+        <div class="nbfig"><div class="nbg" role="img" aria-label="Centre pixel anomalous, three neighbours cloudy, two of five observed neighbours anomalous"><span class="c"></span><span class="c"></span><span class="a">A</span><span class="c"></span><span class="p">P</span><span>·</span><span>·</span><span class="a">A</span><span>·</span></div><p><strong>Partly cloudy.</strong> Only observed neighbours count: 2 of 5 → <code>u_N = 0.4</code>.</p></div>
       </div>
-      <p class="note">Legenda: <strong>P</strong> piksel yang dinilai · <strong>A</strong> tetangga dengan <code>U0 ≥ 0,5</code> · arsir = tetangga berawan · titik = tetangga normal. Tetangga bukan gambut tidak dihitung.</p>
+      <p class="note">Legend: <strong>P</strong> pixel being scored · <strong>A</strong> neighbour with <code>U0 ≥ 0.5</code> · hatched = cloudy neighbour · dot = normal neighbour. Non-peat neighbours are not counted.</p>
     </div>
   </section>
 
   <section id="agen">
     <div class="section-head">
-      <span class="eyebrow">06 · Agen verifikasi</span>
-      <h2>Agen memeriksa kandidat AWAS; ia tidak mendeteksi dan tidak mengubah status</h2>
-      <p>✅ Agen ADK dipanggil per kelompok AWAS, tidak berjalan berkala. Komputasi di tool deterministik; Gemini memilih urutan tool, membaca citra, dan menulis ringkasan.</p>
+      <span class="eyebrow">06 · Verification agent</span>
+      <h2>The agent checks AWAS candidates; it neither detects nor changes status</h2>
+      <p>✅ The ADK agent is called per AWAS cluster, not on a schedule. Computation lives in deterministic tools; Gemini chooses the tool order, reads the images and writes the summary.</p>
     </div>
     <div class="grid-3">
       <div class="card">
         <span class="pill ai">Tools ✅</span>
-        <div class="tool">get_pixel_context(cluster_id, as_of)<small>utility, atribut, tetangga 3 malam</small></div>
-        <div class="tool">get_latest_viirs(lat, lon, as_of)<small>FIRMS ±10 km, 48 jam, jarak tiap deteksi</small></div>
-        <div class="tool">fetch_viirs_image(lat, lon, as_of)<small>GIBS true colour terbaru (siang), penanda 5 km</small></div>
-        <div class="tool">fetch_himawari_image(lat, lon, as_of, kind)<small>capture pelengkap: termal malam / true colour siang</small></div>
-        <div class="tool">save_verification(result)<small>validasi skema dan angka, simpan</small></div>
+        <div class="tool">get_pixel_context(cluster_id, as_of)<small>utility, attributes, neighbours over 3 nights</small></div>
+        <div class="tool">get_latest_viirs(lat, lon, as_of)<small>FIRMS ±10 km, 48 hours, distance of each detection</small></div>
+        <div class="tool">fetch_viirs_image(lat, lon, as_of)<small>latest GIBS true colour (daytime), 5 km marker</small></div>
+        <div class="tool">fetch_himawari_image(lat, lon, as_of, kind)<small>complementary capture: night thermal / daytime true colour</small></div>
+        <div class="tool">save_verification(result)<small>validate schema and numbers, save</small></div>
       </div>
       <div class="code">
-        <div class="code-head"><span>Output schema-locked</span><span>JSON</span></div>
+        <div class="code-head"><span>Schema-locked output</span><span>JSON</span></div>
 <pre>{
   "cluster_id": "C-0924-002",
   "pixel_id": "p420_950",
@@ -884,19 +893,19 @@ ramp(x; a → b) = clip((x − a) / (b − a), 0, 1)</div>
 }</pre>
       </div>
       <div class="card guard">
-        <h4>Pagar ✅</h4>
+        <h4>Guardrails ✅</h4>
         <ul>
-          <li>Tidak ada field status atau level di output</li>
-          <li><code>strong_evidence</code> bila asap terlihat ≤ 5 km dari koordinat, atau ada deteksi VIIRS ≤ 2 km dalam 48 jam</li>
-          <li>Selain itu <code>inconclusive</code>. Tidak terlihat asap tidak pernah menjadi penolak</li>
-          <li>Validator menolak bila <code>viirs_within_2km_48h &gt; 0</code> tetapi hasil <code>inconclusive</code>, atau ada angka di ringkasan yang tidak ada di hasil tool</li>
-          <li>Maks 8 panggilan tool; dihitung di lapisan tool</li>
+          <li>No status or level field in the output</li>
+          <li><code>strong_evidence</code> when smoke is visible ≤ 5 km from the coordinate, or there is a VIIRS detection ≤ 2 km within 48 hours</li>
+          <li>Otherwise <code>inconclusive</code>. No visible smoke is never grounds for rejection</li>
+          <li>The validator rejects when <code>viirs_within_2km_48h &gt; 0</code> but the result is <code>inconclusive</code>, or when a number in the summary is not in the tool results</li>
+          <li>At most 8 tool calls; counted in the tool layer</li>
         </ul>
       </div>
     </div>
     <div class="grid-2" style="margin-top:16px">
       <div class="code">
-        <div class="code-head"><span>Instruksi inti agen</span><span>agent/agent.py</span></div>
+        <div class="code-head"><span>Core agent instruction</span><span>agent/agent.py</span></div>
 <pre>You verify AWAS thermal anomalies on Indonesian peatland.
 The rule engine has already identified the coordinate as AWAS.
 Your task is verification, not detection.
@@ -911,15 +920,15 @@ Your task is verification, not detection.
 7. Save the result with save_verification.</pre>
       </div>
       <div class="card">
-        <span class="pill grey">ToPeCAl dan Landsat ✅ keluar dari jalur EWS</span>
-        <p>Landsat hanya lewat beberapa hari sekali di satu lokasi, sehingga tidak cocok untuk peringatan dini yang butuh frekuensi tinggi. ToPeCAl (Sofan dkk. 2019) tidak dipakai untuk deteksi maupun verifikasi.</p>
-        <p>Masih boleh disebut sebagai <strong>roadmap</strong>: analisis pasca-kejadian, validasi dataset, riset, evaluasi model.</p>
+        <span class="pill grey">ToPeCAl and Landsat ✅ removed from the EWS path</span>
+        <p>Landsat passes over a given location only once every few days, so it does not suit early warning, which needs high frequency. ToPeCAl (Sofan et al. 2019) is used neither for detection nor for verification.</p>
+        <p>It can still be mentioned as a <strong>roadmap</strong>: post-event analysis, dataset validation, research, model evaluation.</p>
         <div class="table-wrap" style="margin-top:8px">
           <table>
-            <thead><tr><th scope="col">Hasil agen</th><th scope="col">Tampil ke operator dan di Telegram</th></tr></thead>
+            <thead><tr><th scope="col">Agent result</th><th scope="col">Shown to the operator and in Telegram</th></tr></thead>
             <tbody>
-              <tr><th scope="row"><code>strong_evidence</code></th><td>"Bukti kuat: …" (asap terlihat / deteksi VIIRS dekat)</td></tr>
-              <tr><th scope="row"><code>inconclusive</code></th><td>"Inkonklusif: …" (tidak terlihat asap, berawan, atau citra lama)</td></tr>
+              <tr><th scope="row"><code>strong_evidence</code></th><td>"Strong evidence: …" (visible smoke / nearby VIIRS detection); in Telegram "Bukti kuat: …"</td></tr>
+              <tr><th scope="row"><code>inconclusive</code></th><td>"Inconclusive: …" (no visible smoke, cloudy, or an old image); in Telegram "Inkonklusif: …"</td></tr>
             </tbody>
           </table>
         </div>
@@ -930,19 +939,19 @@ Your task is verification, not detection.
   <!-- 07 -->
   <section id="batas">
     <div class="section-head">
-      <span class="eyebrow">07 · Keterbatasan</span>
-      <h2>Disebut terang-terangan di pitch</h2>
+      <span class="eyebrow">07 · Limitations</span>
+      <h2>Stated plainly in the pitch</h2>
     </div>
     <div class="card">
       <ul>
-        <li>✅ Hanya mendeteksi area smoldering yang cukup luas; bukan sensor in-situ.</li>
-        <li>✅ Awan di kedua satelit berarti data hilang, bukan sinyal aman.</li>
-        <li>✅ Bobot dan ambang MAUT dikalibrasi pada satu musim (2023) di satu sub-area; perlu kalibrasi ulang per musim dan wilayah.</li>
-        <li>✅ NASA POWER kasar (0,5° × 0,625°) dan terlambat ~1,5 hari, jadi hanya dipakai sebagai baseline 30 hari, bukan pengukuran malam ini.</li>
-        <li>✅ Citra VIIRS true colour hanya siang (~13.30) dan sering berawan; asap smoldering tipis. Tidak terlihat asap = inkonklusif.</li>
-        <li>✅ Deteksi VIIRS hanya ± 2 lintasan per satelit per hari; tidak ada deteksi bukan berarti tidak ada api.</li>
-        <li>✅ Backtest dibatasi mulai 2023 karena arsip GK2A di NOAA open data mulai 16 Feb 2023.</li>
-        <li>⚠️ Piksel di Kalimantan lebih besar dari 2 km dan di Sumatra lebih besar lagi, jadi bara kecil tidak terdeteksi.</li>
+        <li>✅ Detects only smouldering areas that are large enough; it is not an in-situ sensor.</li>
+        <li>✅ Cloud over both satellites means missing data, not a safe signal.</li>
+        <li>✅ MAUT weights and thresholds are calibrated on one season (2023) in one sub-area; they need recalibration per season and region.</li>
+        <li>✅ NASA POWER is coarse (0.5° × 0.625°) and ~1.5 days late, so it is used only as a 30-day baseline, not as tonight's measurement.</li>
+        <li>✅ VIIRS true-colour imagery exists only in daytime (~13:30) and is often cloudy; smouldering smoke is thin. No visible smoke = inconclusive.</li>
+        <li>✅ VIIRS detections come from only ± 2 passes per satellite per day; no detection does not mean no fire.</li>
+        <li>✅ The backtest starts in 2023 because the GK2A archive on NOAA open data begins on 16 Feb 2023.</li>
+        <li>⚠️ Pixels in Kalimantan are larger than 2 km and larger still in Sumatra, so small embers go undetected.</li>
       </ul>
     </div>
   </section>
@@ -950,63 +959,64 @@ Your task is verification, not detection.
   <!-- 08 -->
   <section id="data">
     <div class="section-head">
-      <span class="eyebrow">08 · Sumber data dan tools (penegasan) ✅</span>
-      <h2>Setiap sumber punya satu peran, dan yang bukan perannya ditulis</h2>
-      <p><strong>Himawari-9 dan GK2A</strong> = dua observasi utama yang independen. <strong>NASA POWER</strong> = baseline lingkungan. <strong>VIIRS</strong> = bukti verifikasi on-demand, hanya untuk AWAS. <strong>Citra Himawari</strong> = capture pelengkap untuk agen.</p>
+      <span class="eyebrow">08 · Data sources and tools (confirmed) ✅</span>
+      <h2>Each source has one role, and what it is not used for is written down</h2>
+      <p><strong>Himawari-9 and GK2A</strong> = the two independent main observations. <strong>NASA POWER</strong> = environment baseline. <strong>VIIRS</strong> = on-demand verification evidence, for AWAS only. <strong>Himawari imagery</strong> = complementary capture for the agent.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Sumber</th><th scope="col">Peran dan dipakai untuk</th><th scope="col">Tidak dipakai untuk</th><th scope="col">Akses</th><th scope="col">Frekuensi / resolusi</th><th scope="col">Status</th></tr></thead>
-        <tbody><tr><th scope="row">D1 · Himawari-9 AHI (B07 3,9 µm + B14 11,2 µm)</th><td><strong>Observasi utama 1</strong><br>Fitur termal per piksel gambut tiap 10 menit, malam (MAUT: u_H, awan, ΔLST, ΔSAT)</td><td>Verifikasi agen</td><td>Bucket NOAA noaa-himawari9, anonim; segmen S05 + S06 ⚠️</td><td>10 menit · ~2 km nadir · 140,7° BT</td><td>✅</td></tr><tr><th scope="row">D2 · GK2A AMI (SW038 3,8 µm + IR105 10,5 µm)</th><td><strong>Observasi utama 2 (independen)</strong><br>Fitur termal per piksel gambut tiap 10 menit, malam (MAUT: u_G, awan, ΔLST, ΔSAT)</td><td>Verifikasi agen</td><td>Bucket NOAA noaa-gk2a-pds, anonim; NetCDF full disk ~30 MB/kanal</td><td>10 menit · 2 km · 128,2° BT · arsip sejak 16 Feb 2023</td><td>✅ dicek</td></tr><tr><th scope="row">D3 · NASA POWER hourly: TS (= LST) + T2M (= SAT)</th><td><strong>Baseline lingkungan</strong><br>Suhu kulit dan udara yang diharapkan per sel per jam UTC (median 30 hari) untuk ΔLST dan ΔSAT</td><td>Pengukuran malam ini; LST per piksel</td><td>API titik /api/temporal/hourly/point, tanpa kunci</td><td>Per jam · 0,5° × 0,625° (GEOS-IT) · latensi ~1,5 hari</td><td>✅ dicek</td></tr><tr><th scope="row">D4 · VIIRS FIRMS (3 satelit NRT; SP untuk arsip)</th><td><strong>Bukti verifikasi on-demand</strong><br>Deteksi di sekitar kelompok AWAS (dipanggil agen); pembanding waktu di backtest</td><td>Deteksi; ingest berkala</td><td>FIRMS area API, MAP_KEY gratis; ≤ 5 hari per request</td><td>375 m · ± 2 lintasan/satelit/hari · NRT ~3 jam</td><td>✅</td></tr><tr><th scope="row">D5 · VIIRS true colour (NASA GIBS, 3 satelit)</th><td><strong>Bukti visual</strong><br>Citra asap siang di sekitar koordinat, dibaca Gemini</td><td>Deteksi; malam hari</td><td>GIBS WMS epsg4326/best, tanpa kunci</td><td>Harian siang (~13.30) · sering berawan</td><td>✅ diuji</td></tr><tr><th scope="row">D6 · Himawari-9 citra (crop B07 malam, true colour siang)</th><td><strong>Capture pelengkap</strong><br>Citra kapan pun AWAS terjadi, untuk agen dan UI</td><td>MAUT</td><td>Bucket yang sama dengan D1, diambil saat agen butuh</td><td>Per permintaan</td><td>✅</td></tr><tr><th scope="row">D7 · Peta Indikatif KHG (Dit. PKG KLHK)</th><td><strong>Peat mask</strong><br>Menentukan piksel gambut yang diproses</td><td>Membedakan objek di atas gambut</td><td>REST BIG layer 37, tanpa kunci, GeoJSON, 1.000 fitur/request</td><td>Statis</td><td>✅ diuji</td></tr><tr><th scope="row">D8 · ESA WorldCover v200 + batas provinsi (geoBoundaries)</th><td><strong>Mask bangunan + filter wilayah</strong><br>Piksel built-up ≥ 0,2 dikeluarkan; provinsi 11–19, 21, 61–65 dan routing grup Telegram</td><td>—</td><td>Earth Engine sekali di asapify-build; GeoJSON geoBoundaries</td><td>Statis</td><td>✅ / ⚠️ lisensi</td></tr></tbody>
-        <caption><strong>Tidak dipakai sama sekali:</strong> ToPeCAl + Landsat di jalur operasional (roadmap pasca-kejadian) · job FIRMS berkala · hotspot SiPongi · NBR/dNBR · MODIS · level Waspada/Siaga.</caption>
+        <thead><tr><th scope="col">Source</th><th scope="col">Role and use</th><th scope="col">Not used for</th><th scope="col">Access</th><th scope="col">Frequency / resolution</th><th scope="col">Status</th></tr></thead>
+        <tbody><tr><th scope="row">D1 · Himawari-9 AHI (B07 3.9 µm + B14 11.2 µm)</th><td><strong>Main observation 1</strong><br>Thermal features per peat pixel every 10 minutes, at night (MAUT: u_H, cloud, ΔLST, ΔSAT)</td><td>Agent verification</td><td>NOAA bucket noaa-himawari9, anonymous; segments S05 + S06 ⚠️</td><td>10 minutes · ~2 km at nadir · 140.7° E</td><td>✅</td></tr><tr><th scope="row">D2 · GK2A AMI (SW038 3.8 µm + IR105 10.5 µm)</th><td><strong>Main observation 2 (independent)</strong><br>Thermal features per peat pixel every 10 minutes, at night (MAUT: u_G, cloud, ΔLST, ΔSAT)</td><td>Agent verification</td><td>NOAA bucket noaa-gk2a-pds, anonymous; full-disk NetCDF ~30 MB/channel</td><td>10 minutes · 2 km · 128.2° E · archive since 16 Feb 2023</td><td>✅ checked</td></tr><tr><th scope="row">D3 · NASA POWER hourly: TS (= LST) + T2M (= SAT)</th><td><strong>Environment baseline</strong><br>Expected skin and air temperature per cell per UTC hour (30-day median) for ΔLST and ΔSAT</td><td>Tonight's measurement; per-pixel LST</td><td>Point API /api/temporal/hourly/point, no key</td><td>Hourly · 0.5° × 0.625° (GEOS-IT) · ~1.5 day latency</td><td>✅ checked</td></tr><tr><th scope="row">D4 · VIIRS FIRMS (3 satellites NRT; SP for the archive)</th><td><strong>On-demand verification evidence</strong><br>Detections around an AWAS cluster (called by the agent); timing reference in the backtest</td><td>Detection; periodic ingest</td><td>FIRMS area API, free MAP_KEY; ≤ 5 days per request</td><td>375 m · ± 2 passes/satellite/day · NRT ~3 hours</td><td>✅</td></tr><tr><th scope="row">D5 · VIIRS true colour (NASA GIBS, 3 satellites)</th><td><strong>Visual evidence</strong><br>Daytime smoke imagery around the coordinate, read by Gemini</td><td>Detection; night</td><td>GIBS WMS epsg4326/best, no key</td><td>Daily daytime (~13:30) · often cloudy</td><td>✅ tested</td></tr><tr><th scope="row">D6 · Himawari-9 imagery (night B07 crop, daytime true colour)</th><td><strong>Complementary capture</strong><br>Imagery at whatever time AWAS happens, for the agent and the UI</td><td>MAUT</td><td>Same bucket as D1, fetched when the agent needs it</td><td>On request</td><td>✅</td></tr><tr><th scope="row">D7 · KHG Indicative Map (Dit. PKG KLHK)</th><td><strong>Peat mask</strong><br>Decides which peat pixels are processed</td><td>Telling apart objects on top of peat</td><td>BIG REST layer 37, no key, GeoJSON, 1,000 features/request</td><td>Static</td><td>✅ tested</td></tr><tr><th scope="row">D8 · ESA WorldCover v200 + province boundaries (geoBoundaries)</th><td><strong>Building mask + area filter</strong><br>Pixels with built-up ≥ 0.2 are dropped; provinces 11–19, 21, 61–65 and Telegram group routing</td><td>—</td><td>Earth Engine once in asapify-build; geoBoundaries GeoJSON</td><td>Static</td><td>✅ ODbL</td></tr></tbody>
+        <caption><strong>Not used at all:</strong> ToPeCAl + Landsat in the operational path (post-event roadmap) · periodic FIRMS job · SiPongi hotspots · NBR/dNBR · MODIS · Waspada/Siaga levels.</caption>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:16px">
       <table class="wide">
-        <thead><tr><th scope="col">Tools / layanan</th><th scope="col">Dipakai untuk</th><th scope="col">Tidak dipakai untuk</th></tr></thead>
-        <tbody><tr><th scope="row">Gemini (Vertex AI, model Flash terbaru)</th><td>Memilih urutan tool, membaca citra VIIRS/Himawari, menulis ringkasan ID/EN</td><td>Menghitung skor, menetapkan status</td></tr><tr><th scope="row">Agent Development Kit (ADK)</th><td>Loop agen, 5 tool, batas 8 panggilan</td><td>Tahap deterministik</td></tr><tr><th scope="row">Cloud Run jobs</th><td>ingest-himawari, ingest-gk2a, evaluate (10 menit, malam), environment (harian), build (sekali)</td><td>Melayani request web</td></tr><tr><th scope="row">Cloud Run service asapify-agent</th><td>POST /verify: agen + tool, notifikasi grup operator</td><td>Dipanggil publik</td></tr><tr><th scope="row">Cloud Run service asapify-api</th><td>FastAPI untuk web operator, keputusan, kirim ke grup peringatan</td><td>Menjalankan agen</td></tr><tr><th scope="row">Cloud Scheduler</th><td>4 jadwal (2 ingest, evaluate, environment)</td><td>—</td></tr><tr><th scope="row">Cloud Storage</th><td>Parquet peat/, himawari/, gk2a/, environment/, score/; PNG crops/; raw/ (manifest, cache)</td><td>Dibaca browser langsung</td></tr><tr><th scope="row">Firestore</th><td>clusters, verifications, alerts, runs, audit_log, tg_chats</td><td>Deret waktu piksel</td></tr><tr><th scope="row">Secret Manager</th><td>firms-map-key (agent), telegram-bot-token (agent, api)</td><td>—</td></tr><tr><th scope="row">Earth Engine</th><td>Fraksi terbangun WorldCover, sekali</td><td>Himawari, GK2A, Landsat</td></tr><tr><th scope="row">Firebase Hosting + Auth, MapLibre</th><td>Web operator (login Google, role operator)</td><td>Akun penerima peringatan</td></tr><tr><th scope="row">Telegram Bot API</th><td>sendPhoto, editMessageCaption ke 2 jenis grup</td><td>Webhook, tombol, menerima pesan</td></tr><tr><th scope="row">Python</th><td>satpy (ahi_hsd, ami_l1b), pyresample, s3fs, xarray, netCDF4, numpy, pandas, pyarrow, geopandas, rasterio, shapely, scipy, httpx, pillow, earthengine-api, google-adk, google-genai, fastapi, pytest</td><td>—</td></tr></tbody>
+        <thead><tr><th scope="col">Tools / services</th><th scope="col">Used for</th><th scope="col">Not used for</th></tr></thead>
+        <tbody><tr><th scope="row">Gemini (Vertex AI, latest Flash model)</th><td>Choosing the tool order, reading VIIRS/Himawari images, writing ID/EN summaries</td><td>Computing scores, setting status</td></tr><tr><th scope="row">Agent Development Kit (ADK)</th><td>Agent loop, 5 tools, 8-call limit</td><td>Deterministic stages</td></tr><tr><th scope="row">Cloud Run jobs</th><td>ingest-himawari, ingest-gk2a, evaluate (10 minutes, at night), environment (daily), build (once)</td><td>Serving web requests</td></tr><tr><th scope="row">Cloud Run service asapify-agent</th><td>POST /verify: agent + tools, operator group notification</td><td>Public calls</td></tr><tr><th scope="row">Cloud Run service asapify-api</th><td>FastAPI for the operator web app, decisions, sending to the alert group</td><td>Running the agent</td></tr><tr><th scope="row">Cloud Scheduler</th><td>4 schedules (2 ingest, evaluate, environment)</td><td>—</td></tr><tr><th scope="row">Cloud Storage</th><td>Parquet peat/, himawari/, gk2a/, environment/, score/; PNG crops/; raw/ (manifests, cache)</td><td>Direct browser reads</td></tr><tr><th scope="row">Firestore</th><td>clusters, verifications, alerts, runs, audit_log, tg_chats</td><td>Pixel time series</td></tr><tr><th scope="row">Secret Manager</th><td>firms-map-key (agent), telegram-bot-token (agent, api)</td><td>—</td></tr><tr><th scope="row">Earth Engine</th><td>WorldCover built-up fraction, once</td><td>Himawari, GK2A, Landsat</td></tr><tr><th scope="row">Firebase Hosting + Auth</th><td>Serving the operator web app (the judged URL), Google sign-in, operator role</td><td>Accounts for alert recipients</td></tr><tr><th scope="row">React 19 + Vite + MapLibre 6 (repo <code>asapify-web</code>)</th><td>Operator web app: map, slot player, archive calendar, cluster detail, decisions; mock mode for previews</td><td>Computing scores or status</td></tr><tr><th scope="row">Telegram Bot API</th><td>sendPhoto, editMessageCaption to 2 kinds of group</td><td>Webhooks, buttons, receiving messages</td></tr><tr><th scope="row">Python</th><td>satpy (ahi_hsd, ami_l1b), pyresample, s3fs, xarray, netCDF4, numpy, pandas, pyarrow, geopandas, rasterio, shapely, scipy, httpx, pillow, earthengine-api, google-adk, google-genai, fastapi, pytest</td><td>—</td></tr></tbody>
       </table>
     </div>
-    <div class="callout" style="margin-top:12px"><strong>Penamaan di materi submit:</strong> tulis sumber Himawari dan GK2A sebagai <strong>"NOAA open data"</strong>, bukan "AWS", dan tegaskan semua pemrosesan berjalan di Google Cloud. Berlaku untuk deck, video, dan halaman "Tentang" di prototipe.</div>
+    <div class="callout" style="margin-top:12px"><strong>Naming in submission material:</strong> credit Himawari and GK2A as <strong>"NOAA open data"</strong>, not "AWS", and state that all processing runs on Google Cloud. This applies to the deck, the video and the prototype's "About" page.</div>
   </section>
 
   <!-- 09 -->
   <section id="arsitektur">
     <div class="section-head">
-      <span class="eyebrow">09 · Arsitektur ✅</span>
-      <h2>Lima job, dua service, satu web, semuanya di Google Cloud</h2>
-      <p>Detail endpoint di <a href="backend.html">Backend &amp; API</a>, perintah setup di <a href="cloud.html">Konfigurasi Cloud</a>, layar di <a href="ui.html">UI</a>. Satu image Docker untuk semuanya.</p>
+      <span class="eyebrow">09 · Architecture ✅</span>
+      <h2>Five jobs, two services, one web app, all on Google Cloud</h2>
+      <p>Endpoint details in <a href="backend.html">Backend &amp; API</a>, setup commands in <a href="cloud.html">Cloud setup</a>, screens in <a href="ui.html">UI</a>. One Docker image for everything.</p>
     </div>
     <div class="arch" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
-      <div class="comp"><span class="num">1</span><h4>asapify-ingest-himawari</h4><span class="svc">Cloud Run job · */10 malam</span><p>B07 + B14 → himawari/</p></div>
-      <div class="comp"><span class="num">2</span><h4>asapify-ingest-gk2a</h4><span class="svc">Cloud Run job · */10 malam</span><p>SW038 + IR105 → gk2a/</p></div>
-      <div class="comp"><span class="num">3</span><h4>asapify-evaluate</h4><span class="svc">Cloud Run job · menit 5, 15, … malam</span><p>MAUT + tetangga → score/; kelompok → Firestore; POST /verify.</p></div>
-      <div class="comp"><span class="num">4</span><h4>asapify-environment</h4><span class="svc">Cloud Run job · 12.00 WIB</span><p>NASA POWER + baseline termal → environment/</p></div>
-      <div class="comp"><span class="num">5</span><h4>asapify-build</h4><span class="svc">Cloud Run job · sekali</span><p>WorldCover + KHG + provinsi → peat/</p></div>
-      <div class="comp"><span class="num">6</span><h4>asapify-agent</h4><span class="svc">Cloud Run service · privat</span><p>ADK + Gemini + 5 tool; grup operator.</p></div>
-      <div class="comp"><span class="num">7</span><h4>asapify-api</h4><span class="svc">Cloud Run service · FastAPI</span><p>Web operator, keputusan, grup peringatan.</p></div>
-      <div class="comp"><span class="num">8</span><h4>Web operator</h4><span class="svc">Firebase Hosting · Auth · MapLibre</span><p>Peta, detail kelompok, terbitkan/tolak.</p></div>
+      <div class="comp"><span class="num">1</span><h4>asapify-ingest-himawari</h4><span class="svc">Cloud Run job · */10 at night</span><p>B07 + B14 → himawari/</p></div>
+      <div class="comp"><span class="num">2</span><h4>asapify-ingest-gk2a</h4><span class="svc">Cloud Run job · */10 at night</span><p>SW038 + IR105 → gk2a/</p></div>
+      <div class="comp"><span class="num">3</span><h4>asapify-evaluate</h4><span class="svc">Cloud Run job · minute 5, 15, … at night</span><p>MAUT + neighbours → score/; clusters → Firestore; POST /verify.</p></div>
+      <div class="comp"><span class="num">4</span><h4>asapify-environment</h4><span class="svc">Cloud Run job · 12:00 WIB</span><p>NASA POWER + thermal baseline → environment/</p></div>
+      <div class="comp"><span class="num">5</span><h4>asapify-build</h4><span class="svc">Cloud Run job · once</span><p>WorldCover + KHG + provinces → peat/</p></div>
+      <div class="comp"><span class="num">6</span><h4>asapify-agent</h4><span class="svc">Cloud Run service · private</span><p>ADK + Gemini + 5 tools; operator group.</p></div>
+      <div class="comp"><span class="num">7</span><h4>asapify-api</h4><span class="svc">Cloud Run service · FastAPI</span><p>Operator web app, decisions, alert group.</p></div>
+      <div class="comp"><span class="num">8</span><h4>Operator web app</h4><span class="svc">Firebase Hosting · React + MapLibre · repo asapify-web</span><p>Map, night archive, cluster detail, publish/reject.</p></div>
     </div>
-    <p class="note">Penyimpanan: fitur dan skor per piksel di Cloud Storage (Parquet); kelompok, verifikasi, alert, audit di Firestore. Browser tidak mengakses Firestore langsung.</p>
+    <p class="note">Storage: per-pixel features and scores in Cloud Storage (Parquet); clusters, verifications, alerts and audit in Firestore. The browser never reads Firestore directly.</p>
   </section>
+
 
   <!-- 10 -->
   <section id="open">
     <div class="section-head">
       <span class="eyebrow">10 · Open items ❓</span>
-      <h2>Hal yang masih terbuka</h2>
-      <p>Selesai: pemetaan level (diganti terbitkan/tolak), scene Landsat lama (ToPeCAl keluar), kelayakan Earth Engine (hanya WorldCover sekali), FIRMS (on-demand), KHG via REST BIG, grup Telegram.</p>
+      <h2>What is still open</h2>
+      <p>Closed: level mapping (replaced by publish/reject), old Landsat scenes (ToPeCAl dropped), Earth Engine eligibility (WorldCover once only), FIRMS (on demand), KHG via BIG REST, Telegram groups.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">#</th><th scope="col">Pertanyaan</th><th scope="col">Usulan 💡</th><th scope="col">Batas</th></tr></thead>
+        <thead><tr><th scope="col">#</th><th scope="col">Question</th><th scope="col">Proposal 💡</th><th scope="col">Due</th></tr></thead>
         <tbody>
-          <tr><td class="num">8</td><th scope="row">Latensi Himawari dan GK2A</th><td>Ukur di Runbook <a href="runbook.html#s0-7">S0-7</a>; ambang "terlambat" 40 menit</td><td class="num">1 Okt</td></tr>
-          <tr><td class="num">11</td><th scope="row">Jendela backtest</th><td>✅ Sub-area Kalteng <code>113.5,-2.6,114.3,-1.9</code>, 1 Sep – 15 Okt 2023; pemanasan Agustus 2023. Cek ≥ 20 deteksi di <a href="runbook.html#s0-6">S0-6</a>. 💡 Jendela kedua: OKI, Sumsel <code>105.2,-3.7,106.0,-3.0</code>, periode sama (direncanakan, belum ada angka)</td><td class="num">30 Sep</td></tr>
-          <tr><td class="num">12</td><th scope="row">Batas provinsi</th><td>geoBoundaries IDN ADM1 atau BIG; cek lisensi di <a href="runbook.html#s0-8">S0-8</a></td><td class="num">1 Okt</td></tr>
-          <tr><td class="num">14</td><th scope="row">Kalibrasi MAUT</th><td>Bobot dan ambang dikalibrasi terhadap VIIRS SP di Sep 2023, diuji di 1–15 Okt (<a href="runbook.html#a8">A8</a>)</td><td class="num">13 Okt</td></tr>
-          <tr><td class="num">15</td><th scope="row">Distribusi ΔSAT</th><td>Cek persentil 99 piksel tanpa VIIRS; bila &gt; 0 K geser ramp (<a href="runbook.html#a7">A7</a>)</td><td class="num">5 Okt</td></tr>
-          <tr><td class="num">16</td><th scope="row">Jumlah sel POWER</th><td>Hitung di <a href="runbook.html#a1">A1</a>; bila &gt; 300, pakai sel berisi ≥ 5 piksel gambut</td><td class="num">2 Okt</td></tr>
+          <tr><td class="num">8</td><th scope="row">Himawari and GK2A latency</th><td>Measure in Runbook <a href="runbook.html#s0-7">S0-7</a>; "late" threshold 40 minutes</td><td class="num">1 Oct</td></tr>
+          <tr><td class="num">11</td><th scope="row">Backtest window</th><td>✅ Central Kalimantan sub-area <code>113.5,-2.6,114.3,-1.9</code>, 1 Sep – 15 Oct 2023; August 2023 warm-up. Check ≥ 20 detections in <a href="runbook.html#s0-6">S0-6</a>. 💡 Second window: OKI, South Sumatra <code>105.2,-3.7,106.0,-3.0</code>, same period (planned, no figures yet)</td><td class="num">30 Sep</td></tr>
+          <tr><td class="num">12</td><th scope="row">Province boundaries</th><td>✅ geoBoundaries IDN ADM1 (ODbL, © OpenStreetMap contributors), attribution shown on the map and the About page (<a href="runbook.html#s0-8">S0-8</a>)</td><td class="num">1 Oct</td></tr>
+          <tr><td class="num">14</td><th scope="row">MAUT calibration</th><td>Weights and thresholds calibrated against VIIRS SP in Sep 2023, tested on 1–15 Oct (<a href="runbook.html#a8">A8</a>)</td><td class="num">13 Oct</td></tr>
+          <tr><td class="num">15</td><th scope="row">ΔSAT distribution</th><td>Check the 99th percentile of pixels without VIIRS; if &gt; 0 K shift the ramp (<a href="runbook.html#a7">A7</a>)</td><td class="num">5 Oct</td></tr>
+          <tr><td class="num">16</td><th scope="row">Number of POWER cells</th><td>Count in <a href="runbook.html#a1">A1</a>; if &gt; 300, use cells holding ≥ 5 peat pixels</td><td class="num">2 Oct</td></tr>
         </tbody>
       </table>
     </div>
@@ -1015,24 +1025,24 @@ Your task is verification, not detection.
   <!-- 11 -->
   <section id="tarik">
     <div class="section-head">
-      <span class="eyebrow">11 · Tarik data lokal</span>
-      <h2>Semua langkah tarik data ada di Runbook Sprint 0</h2>
+      <span class="eyebrow">11 · Pulling data locally</span>
+      <h2>Every data-pull step is in Runbook Sprint 0</h2>
     </div>
     <div class="grid-2">
       <div class="card">
         <ol>
-          <li><a href="runbook.html#s0-7">S0-7</a> Himawari-9 dan GK2A: satu scan, baca ke grid, korelasi, latensi.</li>
-          <li><a href="runbook.html#s0-9">S0-9</a> NASA POWER hourly (TS, T2M) dan GIBS true colour.</li>
-          <li><a href="runbook.html#s0-4">S0-4</a> FIRMS: MAP_KEY, uji query kotak kecil seperti agen.</li>
-          <li><a href="runbook.html#s0-6">S0-6</a> Cek jendela backtest 2023 punya ≥ 20 deteksi VIIRS.</li>
-          <li><a href="runbook.html#s0-8">S0-8</a> KHG dan batas provinsi ke <code>data/ref/</code>.</li>
-          <li><a href="runbook.html#s0-3">S0-3</a> WorldCover di Earth Engine.</li>
+          <li><a href="runbook.html#s0-7">S0-7</a> Himawari-9 and GK2A: one scan, read onto the grid, correlation, latency.</li>
+          <li><a href="runbook.html#s0-9">S0-9</a> NASA POWER hourly (TS, T2M) and GIBS true colour.</li>
+          <li><a href="runbook.html#s0-4">S0-4</a> FIRMS: MAP_KEY, test a small-box query like the agent's.</li>
+          <li><a href="runbook.html#s0-6">S0-6</a> Check the 2023 backtest window has ≥ 20 VIIRS detections.</li>
+          <li><a href="runbook.html#s0-8">S0-8</a> KHG and province boundaries into <code>data/ref/</code>.</li>
+          <li><a href="runbook.html#s0-3">S0-3</a> WorldCover in Earth Engine.</li>
         </ol>
       </div>
       <div class="card" style="background:var(--sat-soft);border-color:transparent">
         <h4>Backtest</h4>
-        <p>Sub-area Kalteng <code>113.5,-2.6,114.3,-1.9</code>, <strong>1 Sep – 15 Okt 2023</strong>, baseline pemanasan Agustus 2023. Alasan: arsip GK2A mulai 16 Feb 2023; musim karhutla 2023 ditandai kabut asap parah di Kalteng–Kalsel akhir September dan 713,23 ha gambut terbakar di Palangka Raya.</p>
-        <p>Keluaran (<a href="runbook.html#a7">A7</a>): per kelompok <code>first_awas_at</code>, <code>first_viirs_at</code>, <code>lead_h</code>, alarm palsu, terlewat, jumlah slot <code>NO_OBSERVATION</code>. VIIRS SP dipakai offline sebagai pembanding, bukan di jalur operasional.</p>
+        <p>Central Kalimantan sub-area <code>113.5,-2.6,114.3,-1.9</code>, <strong>1 Sep – 15 Oct 2023</strong>, August 2023 warm-up baseline. Why: the GK2A archive starts on 16 Feb 2023; the 2023 fire season saw heavy haze over Central and South Kalimantan in late September and 713.23 ha of peat burned in Palangka Raya.</p>
+        <p>Outputs (<a href="runbook.html#a7">A7</a>): per cluster <code>first_awas_at</code>, <code>first_viirs_at</code>, <code>lead_h</code>, false alarms, misses, number of <code>NO_OBSERVATION</code> slots. VIIRS SP is used offline as the reference, not in the operational path.</p>
       </div>
     </div>
   </section>
@@ -1040,42 +1050,42 @@ Your task is verification, not detection.
   <!-- 12 -->
   <section id="jadwal">
     <div class="section-head">
-      <span class="eyebrow">12 · Jadwal</span>
-      <h2>Enam sprint sampai 18 Oktober</h2>
-      <p>Klik ID tugas untuk membuka perintah lengkap di Runbook.</p>
+      <span class="eyebrow">12 · Schedule</span>
+      <h2>Six sprints to 18 October</h2>
+      <p>Click a task ID to open its complete commands in the Runbook.</p>
     </div>
     <ol class="timeline">
-      <li><div class="t-date"><b>29 Sep – 1 Okt</b><span>Sprint 0</span></div><div class="t-rail"><i></i></div>
-        <div class="t-body"><div class="t-card"><h4>Akun dan data lokal</h4><ul><li><a href="runbook.html#s0-1">S0-1</a> Registrasi tim di Hack2Skill</li><li><a href="runbook.html#s0-2">S0-2</a> Project GCP, billing, budget, API</li><li><a href="runbook.html#s0-3">S0-3</a> Earth Engine terdaftar, uji WorldCover</li><li><a href="runbook.html#s0-4">S0-4</a> FIRMS MAP_KEY dan uji query area kecil</li><li><a href="runbook.html#s0-5">S0-5</a> Bot Telegram, dua grup, chat_id</li><li><a href="runbook.html#s0-6">S0-6</a> Repo, lingkungan Python, cek jendela backtest 2023</li><li><a href="runbook.html#s0-7">S0-7</a> Satu scan Himawari dan GK2A: baca, latensi</li><li><a href="runbook.html#s0-8">S0-8</a> KHG dan batas provinsi Sumatra + Kalimantan</li><li><a href="runbook.html#s0-9">S0-9</a> Uji NASA POWER hourly dan GIBS true colour</li></ul><div class="done"><b>Selesai jika:</b> Semua akun aktif; satu scan Himawari dan satu scan GK2A terbaca di grid gabungan Sumatra + Kalimantan; NASA POWER, FIRMS, dan GIBS teruji.</div></div></div></li>
-      <li><div class="t-date"><b>2–5 Okt</b><span>Sprint 1</span></div><div class="t-rail"><i></i></div>
-        <div class="t-body"><div class="t-card"><h4>Observasi dan rule engine</h4><ul><li><a href="runbook.html#a1">A1</a> Peat mask, indeks tetangga, sel POWER</li><li><a href="runbook.html#a2">A2</a> asapify-ingest-himawari → himawari/</li><li><a href="runbook.html#a3">A3</a> asapify-ingest-gk2a → gk2a/</li><li><a href="runbook.html#a4">A4</a> asapify-environment → environment/</li><li><a href="runbook.html#a5">A5</a> MAUT dan neighbour support (pustaka)</li><li><a href="runbook.html#a6">A6</a> asapify-evaluate → score/ dan kelompok</li><li><a href="runbook.html#a7">A7</a> Backtest pertama (2023)</li><li><a href="runbook.html#c1">C1</a> Infrastruktur dasar</li></ul><div class="done"><b>Selesai jika:</b> Backtest pertama 2023 menghasilkan daftar kelompok AWAS dan tabel lead time terhadap deteksi VIIRS.</div></div></div></li>
-      <li><div class="t-date"><b>6–9 Okt</b><span>Sprint 2</span></div><div class="t-rail"><i></i></div>
-        <div class="t-body"><div class="t-card"><h4>Verifikasi dan agen</h4><ul><li><a href="runbook.html#b1">B1</a> Tool get_latest_viirs (FIRMS on-demand)</li><li><a href="runbook.html#b2">B2</a> Tool fetch_viirs_image (GIBS true colour)</li><li><a href="runbook.html#b3">B3</a> Tool fetch_himawari_image</li><li><a href="runbook.html#c2">C2</a> Agen ADK, validator, service asapify-agent</li><li><a href="runbook.html#c3">C3</a> Service asapify-api</li><li><a href="runbook.html#c4">C4</a> Deploy job, service, dan Scheduler</li></ul><div class="done"><b>Selesai jika:</b> Satu kelompok AWAS backtest diverifikasi agen dan tersimpan di Firestore; semua job dan service berjalan di Cloud Run.</div></div></div></li>
-      <li class="hot"><div class="t-date"><b>10–13 Okt</b><span>Sprint 3</span></div><div class="t-rail"><i></i></div>
-        <div class="t-body"><div class="t-card"><h4>Web dan Telegram</h4><ul><li><a href="runbook.html#d1">D1</a> Peta operator</li><li><a href="runbook.html#d2">D2</a> Detail kelompok + ToolTrace</li><li><a href="runbook.html#d3">D3</a> Panel keputusan: terbitkan / tolak</li><li><a href="runbook.html#d4">D4</a> Pengirim Telegram</li><li><a href="runbook.html#c5">C5</a> Uji ujung-ke-ujung</li></ul><div class="done"><b>Selesai jika:</b> Alur ujung-ke-ujung di URL publik: replay → AWAS → verifikasi → keputusan operator → pesan Telegram.</div></div></div></li>
-      <li><div class="t-date"><b>14–16 Okt</b><span>Sprint 4</span></div><div class="t-rail"><i></i></div>
-        <div class="t-body"><div class="t-card"><h4>Uji dan freeze</h4><ul><li><a href="runbook.html#a8">A8</a> Kalibrasi dan angka final backtest</li><li><a href="runbook.html#c6">C6</a> Evaluasi agen</li><li><a href="runbook.html#d5">D5</a> UI di layar 360 px dan freeze</li></ul><div class="done"><b>Selesai jika:</b> Tiga kali replay tanpa galat; angka final backtest dan evaluasi agen tercatat. Freeze 16 Okt 23.59 WIB.</div></div></div></li>
-      <li class="hot"><div class="t-date"><b>17–18 Okt</b><span>Sprint 5</span></div><div class="t-rail"><i></i></div>
-        <div class="t-body"><div class="t-card"><h4>Submit</h4><ul><li><a href="runbook.html#d6">D6</a> Video 3 menit</li><li><a href="runbook.html#d7">D7</a> Deck submit final dan submit</li></ul><div class="done"><b>Selesai jika:</b> Konfirmasi submit diterima dari Hack2Skill.</div></div></div></li>
+      <li><div class="t-date"><b>29 Sep – 1 Oct</b><span>Sprint 0</span></div><div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Accounts and local data</h4><ul><li><a href="runbook.html#s0-1">S0-1</a> Register the team on Hack2Skill</li><li><a href="runbook.html#s0-2">S0-2</a> GCP project, billing, budget, APIs</li><li><a href="runbook.html#s0-3">S0-3</a> Earth Engine registered, WorldCover tested</li><li><a href="runbook.html#s0-4">S0-4</a> FIRMS MAP_KEY and a small-area query test</li><li><a href="runbook.html#s0-5">S0-5</a> Telegram bot, two groups, chat_id</li><li><a href="runbook.html#s0-6">S0-6</a> Repo, Python environment, check the 2023 backtest window</li><li><a href="runbook.html#s0-7">S0-7</a> One Himawari and one GK2A scan: read, latency</li><li><a href="runbook.html#s0-8">S0-8</a> KHG and province boundaries for Sumatra + Kalimantan</li><li><a href="runbook.html#s0-9">S0-9</a> Test NASA POWER hourly and GIBS true colour</li></ul><div class="done"><b>Done when:</b> All accounts are active; one Himawari scan and one GK2A scan are read onto the combined Sumatra + Kalimantan grid; NASA POWER, FIRMS and GIBS are tested.</div></div></div></li>
+      <li><div class="t-date"><b>2–5 Oct</b><span>Sprint 1</span></div><div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Observation and the rule engine</h4><ul><li><a href="runbook.html#a1">A1</a> Peat mask, neighbour index, POWER cells</li><li><a href="runbook.html#a2">A2</a> asapify-ingest-himawari → himawari/</li><li><a href="runbook.html#a3">A3</a> asapify-ingest-gk2a → gk2a/</li><li><a href="runbook.html#a4">A4</a> asapify-environment → environment/</li><li><a href="runbook.html#a5">A5</a> MAUT and neighbour support (library)</li><li><a href="runbook.html#a6">A6</a> asapify-evaluate → score/ and clusters</li><li><a href="runbook.html#a7">A7</a> First backtest (2023)</li><li><a href="runbook.html#c1">C1</a> Base infrastructure</li></ul><div class="done"><b>Done when:</b> The first 2023 backtest produces a list of AWAS clusters and a lead-time table against VIIRS detections.</div></div></div></li>
+      <li><div class="t-date"><b>6–9 Oct</b><span>Sprint 2</span></div><div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Verification and the agent</h4><ul><li><a href="runbook.html#b1">B1</a> Tool get_latest_viirs (FIRMS on demand)</li><li><a href="runbook.html#b2">B2</a> Tool fetch_viirs_image (GIBS true colour)</li><li><a href="runbook.html#b3">B3</a> Tool fetch_himawari_image</li><li><a href="runbook.html#c2">C2</a> ADK agent, validator, asapify-agent service</li><li><a href="runbook.html#c3">C3</a> asapify-api service</li><li><a href="runbook.html#c4">C4</a> Deploy jobs, services and Scheduler</li></ul><div class="done"><b>Done when:</b> One backtest AWAS cluster is verified by the agent and stored in Firestore; every job and service runs on Cloud Run.</div></div></div></li>
+      <li class="hot"><div class="t-date"><b>10–13 Oct</b><span>Sprint 3</span></div><div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Web and Telegram</h4><ul><li><a href="runbook.html#d1">D1</a> Operator map</li><li><a href="runbook.html#d2">D2</a> Cluster detail + ToolTrace</li><li><a href="runbook.html#d3">D3</a> Decision panel: publish / reject</li><li><a href="runbook.html#d4">D4</a> Telegram sender</li><li><a href="runbook.html#c5">C5</a> End-to-end test</li></ul><p class="note" style="margin-top:0">Status 6 Oct: the operator web app was finished early in the <code>asapify-web</code> repo (mock mode). This sprint connects it to the live API, Firebase Auth and Telegram.</p><div class="done"><b>Done when:</b> The end-to-end flow works at the public URL: replay → AWAS → verification → operator decision → Telegram message.</div></div></div></li>
+      <li><div class="t-date"><b>14–16 Oct</b><span>Sprint 4</span></div><div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Test and freeze</h4><ul><li><a href="runbook.html#a8">A8</a> Calibration and final backtest figures</li><li><a href="runbook.html#c6">C6</a> Agent evaluation</li><li><a href="runbook.html#d5">D5</a> UI on a 360 px screen and freeze</li></ul><div class="done"><b>Done when:</b> Three replays run without errors; final backtest and agent-evaluation figures are recorded. Freeze 16 Oct 23:59 WIB.</div></div></div></li>
+      <li class="hot"><div class="t-date"><b>17–18 Oct</b><span>Sprint 5</span></div><div class="t-rail"><i></i></div>
+        <div class="t-body"><div class="t-card"><h4>Submit</h4><ul><li><a href="runbook.html#d6">D6</a> 3-minute video</li><li><a href="runbook.html#d7">D7</a> Final submission deck and submit</li></ul><div class="done"><b>Done when:</b> The submission confirmation from Hack2Skill is received.</div></div></div></li>
     </ol>
   </section>
 
   <!-- 13 -->
   <section id="peran">
     <div class="section-head">
-      <span class="eyebrow">13 · Peran</span>
-      <h2>Empat peran, bisa dirangkap</h2>
+      <span class="eyebrow">13 · Roles</span>
+      <h2>Four roles, which can be combined</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Peran</th><th scope="col">Tugas utama</th></tr></thead>
+        <thead><tr><th scope="col">Role</th><th scope="col">Main work</th></tr></thead>
         <tbody>
-          <tr><th scope="row">A · Observasi &amp; rule engine</th><td>Ingest Himawari dan GK2A, NASA POWER, peat mask, baseline, MAUT, neighbour support, status, backtest. <strong>Jalur kritis.</strong></td></tr>
-          <tr><th scope="row">B · Verifikasi</th><td>Tool VIIRS (FIRMS + GIBS), crop Himawari, uji akses data verifikasi</td></tr>
-          <tr><th scope="row">C · Backend &amp; AI</th><td>Cloud Run, Scheduler, agen ADK + Gemini, API, Firestore, IAM</td></tr>
-          <tr><th scope="row">D · Web, bot &amp; pitch</th><td>Peta operator, detail kelompok, bot Telegram, video, deck</td></tr>
+          <tr><th scope="row">A · Observation &amp; rule engine</th><td>Himawari and GK2A ingest, NASA POWER, peat mask, baselines, MAUT, neighbour support, status, backtest. <strong>Critical path.</strong></td></tr>
+          <tr><th scope="row">B · Verification</th><td>VIIRS tools (FIRMS + GIBS), Himawari crops, testing access to verification data</td></tr>
+          <tr><th scope="row">C · Backend &amp; AI</th><td>Cloud Run, Scheduler, ADK agent + Gemini, API, Firestore, IAM</td></tr>
+          <tr><th scope="row">D · Web, bot &amp; pitch</th><td>Operator map, cluster detail, Telegram bot, video, deck</td></tr>
         </tbody>
-        <caption>2 orang: A+B dan C+D. 3 orang: A, B+C, D. 4 orang: satu peran per orang.</caption>
+        <caption>2 people: A+B and C+D. 3 people: A, B+C, D. 4 people: one role each.</caption>
       </table>
     </div>
   </section>
@@ -1083,64 +1093,64 @@ Your task is verification, not detection.
   <!-- 14 -->
   <section id="video">
     <div class="section-head">
-      <span class="eyebrow">14 · Video demo 3 menit</span>
-      <h2>Satu kelompok dari WATCH sampai pesan di grup</h2>
+      <span class="eyebrow">14 · 3-minute demo video</span>
+      <h2>One cluster from WATCH to a message in the group</h2>
     </div>
     <div class="script">
-      <div class="head"><span>Waktu</span><span>Yang tampil</span><span class="say">Inti narasi</span></div>
-      <div><span class="tc">0:00–0:20</span><span>Angka karhutla 2026 + asap lintas batas</span><span class="say">Api gambut membara di bawah permukaan sebelum terlihat.</span></div>
-      <div><span class="tc">0:20–0:50</span><span>Peta operator Sumatra + Kalimantan malam hari</span><span class="say">Dua satelit, tiap 10 menit, hanya piksel gambut, 15 provinsi.</span></div>
-      <div><span class="tc">0:50–1:20</span><span>Piksel naik ke AWAS: batang atribut MAUT + grid tetangga</span><span class="say">Aturan transparan, bukan kotak hitam.</span></div>
-      <div><span class="tc">1:20–1:50</span><span>Agen memanggil VIIRS + citra (ToolTrace)</span><span class="say">AI memverifikasi, tidak mendeteksi.</span></div>
-      <div><span class="tc">1:50–2:15</span><span>Operator menerbitkan → pesan di grup Telegram</span><span class="say">Manusia memegang keputusan.</span></div>
-      <div><span class="tc">2:15–2:40</span><span>Backtest 2023: AWAS vs deteksi VIIRS pertama</span><span class="say">Bukti waktu deteksi.</span></div>
-      <div><span class="tc">2:40–3:00</span><span>Arsitektur + keterbatasan</span><span class="say">Jujur soal awan dan batas deteksi.</span></div>
+      <div class="head"><span>Time</span><span>On screen</span><span class="say">Core narration</span></div>
+      <div><span class="tc">0:00–0:20</span><span>2026 forest and land fire figures + transboundary haze</span><span class="say">Peat fires smoulder underground before anyone can see them.</span></div>
+      <div><span class="tc">0:20–0:50</span><span>Operator map of Sumatra + Kalimantan at night</span><span class="say">Two satellites, every 10 minutes, peat pixels only, 15 provinces.</span></div>
+      <div><span class="tc">0:50–1:20</span><span>A pixel rises to AWAS: MAUT attribute bars + neighbour grid</span><span class="say">Transparent rules, not a black box.</span></div>
+      <div><span class="tc">1:20–1:50</span><span>The agent calls VIIRS + imagery (ToolTrace)</span><span class="say">AI verifies; it does not detect.</span></div>
+      <div><span class="tc">1:50–2:15</span><span>The operator publishes → message in the Telegram group</span><span class="say">A human holds the decision.</span></div>
+      <div><span class="tc">2:15–2:40</span><span>2023 backtest: AWAS vs the first VIIRS detection</span><span class="say">Evidence of detection timing.</span></div>
+      <div><span class="tc">2:40–3:00</span><span>Architecture + limitations</span><span class="say">Honest about cloud and detection limits.</span></div>
     </div>
   </section>
 
   <!-- 15 -->
   <section id="submit">
     <div class="section-head">
-      <span class="eyebrow">15 · Checklist submit</span>
-      <h2>Sebelum menekan tombol submit</h2>
+      <span class="eyebrow">15 · Submission checklist</span>
+      <h2>Before pressing submit</h2>
     </div>
     <div class="grid-2">
-      <div class="card"><ul class="check"><li>Kategori: Sustainability &amp; Social Impact</li><li>Deck PDF bahasa Inggris</li><li>URL prototipe publik</li><li>Video 3 menit tanpa login</li><li>Kalimat "AI is not the detector" di deck dan video</li></ul></div>
-      <div class="card"><ul class="check"><li>Gemini lewat ADK terlihat di video (ToolTrace)</li><li>Replay jendela backtest tanpa galat</li><li>Akun demo operator + grup Telegram demo untuk juri</li><li>Angka backtest dan keterbatasan di deck</li><li>Himawari dan GK2A ditulis "NOAA open data", semua pemrosesan di Google Cloud</li></ul></div>
+      <div class="card"><ul class="check"><li>Category: Sustainability &amp; Social Impact</li><li>PDF deck in English</li><li>Public prototype URL on Firebase Hosting (live mode), not the Vercel preview</li><li>The web app opens in English (default); Indonesian as the second option</li><li>3-minute video that needs no sign-in</li><li>The sentence "AI is not the detector" in the deck and the video</li></ul></div>
+      <div class="card"><ul class="check"><li>Gemini via ADK visible in the video (ToolTrace)</li><li>Backtest window replays without errors</li><li>Demo operator account + demo Telegram group for the judges</li><li>Backtest figures and limitations in the deck</li><li>Himawari and GK2A credited as "NOAA open data", all processing on Google Cloud</li></ul></div>
     </div>
   </section>
 
   <!-- 16 -->
   <section id="istilah">
     <div class="section-head">
-      <span class="eyebrow">16 · Istilah</span>
-      <h2>Kamus singkat</h2>
+      <span class="eyebrow">16 · Glossary</span>
+      <h2>Short dictionary</h2>
     </div>
     <dl class="gloss">
-      <div><dt>Smoldering</dt><dd>Pembakaran membara bersuhu rendah di dalam gambut, tanpa nyala di permukaan.</dd></div>
-      <div><dt>Brightness temperature (BT)</dt><dd>Suhu yang dihitung dari radiansi satu kanal satelit, tanpa koreksi emisivitas.</dd></div>
-      <div><dt>mir / win</dt><dd>Kanal 3,8–3,9 µm (Himawari B07, GK2A SW038) dan kanal jendela 10,5–11,2 µm (B14, IR105).</dd></div>
-      <div><dt>GK2A</dt><dd>GEO-KOMPSAT-2A, satelit geostasioner Korea (KMA) di 128,2° BT. Observasi kedua yang independen.</dd></div>
-      <div><dt>MAUT</dt><dd>Multi-Attribute Utility Theory: tiap atribut diubah ke utilitas 0–1 lalu dijumlah berbobot menjadi satu utility score.</dd></div>
-      <div><dt>Neighbour support (u_N)</dt><dd>Fraksi tetangga 8 arah yang juga beranomali. Menyaring anomali piksel tunggal.</dd></div>
-      <div><dt>LST / SAT</dt><dd>Di ASAPify: TS (Earth Skin Temperature) dan T2M dari NASA POWER, dipakai sebagai baseline 30 hari per jam.</dd></div>
-      <div><dt>AWAS</dt><dd>Status rule engine yang memicu verifikasi AI. Bukan kebakaran terkonfirmasi.</dd></div>
-      <div><dt>NO_OBSERVATION</dt><dd>Kedua satelit tertutup awan atau data hilang. Bukan berarti aman.</dd></div>
-      <div><dt>Kelompok (cluster)</dt><dd>Piksel AWAS yang bersebelahan. Agen dipanggil sekali per kelompok.</dd></div>
-      <div><dt>VIIRS / FIRMS / GIBS</dt><dd>Sensor 375 m di tiga satelit polar; FIRMS menyediakan titik deteksinya, GIBS citra true colour. Di ASAPify: bukti verifikasi on-demand.</dd></div>
-      <div><dt>strong_evidence / inconclusive</dt><dd>Dua kemungkinan hasil agen. Tidak ada hasil "negatif".</dd></div>
-      <div><dt>ADK built-in loop</dt><dd>Agen memanggil tools berulang sampai tugas selesai atau batas tercapai.</dd></div>
-      <div><dt>Schema-locked</dt><dd>Keluaran agen harus sesuai skema JSON; tidak bisa menambah field lain.</dd></div>
+      <div><dt>Smouldering</dt><dd>Low-temperature glowing combustion inside peat, with no flame at the surface.</dd></div>
+      <div><dt>Brightness temperature (BT)</dt><dd>Temperature computed from the radiance of one satellite channel, without emissivity correction.</dd></div>
+      <div><dt>mir / win</dt><dd>The 3.8–3.9 µm channel (Himawari B07, GK2A SW038) and the 10.5–11.2 µm window channel (B14, IR105).</dd></div>
+      <div><dt>GK2A</dt><dd>GEO-KOMPSAT-2A, Korea's (KMA) geostationary satellite at 128.2° E. The second, independent observation.</dd></div>
+      <div><dt>MAUT</dt><dd>Multi-Attribute Utility Theory: each attribute becomes a 0–1 utility, then a weighted sum gives one utility score.</dd></div>
+      <div><dt>Neighbour support (u_N)</dt><dd>Share of the 8 surrounding neighbours that are also anomalous. Filters out single-pixel anomalies.</dd></div>
+      <div><dt>LST / SAT</dt><dd>In ASAPify: TS (Earth Skin Temperature) and T2M from NASA POWER, used as a 30-day hourly baseline.</dd></div>
+      <div><dt>AWAS</dt><dd>The rule-engine status that triggers AI verification. Not a confirmed fire. The word is Indonesian ("alert") and is kept in both languages.</dd></div>
+      <div><dt>NO_OBSERVATION</dt><dd>Both satellites are under cloud or data is missing. It does not mean safe.</dd></div>
+      <div><dt>Cluster</dt><dd>Adjacent AWAS pixels. The agent is called once per cluster.</dd></div>
+      <div><dt>VIIRS / FIRMS / GIBS</dt><dd>A 375 m sensor on three polar satellites; FIRMS provides its detection points, GIBS its true-colour imagery. In ASAPify: on-demand verification evidence.</dd></div>
+      <div><dt>strong_evidence / inconclusive</dt><dd>The two possible agent results. There is no "negative" result.</dd></div>
+      <div><dt>ADK built-in loop</dt><dd>The agent calls tools repeatedly until the task is done or a limit is reached.</dd></div>
+      <div><dt>Schema-locked</dt><dd>Agent output must match the JSON schema; it cannot add other fields.</dd></div>
     </dl>
   </section>
 
-  <nav class="pager" aria-label="Halaman berikutnya">
-    <a href="ui.html"><span>Berikutnya →</span>Spesifikasi UI</a>
-    <a href="runbook.html"><span>Langsung ke</span>Runbook</a>
+  <nav class="pager" aria-label="Next pages">
+    <a href="ui.html"><span>Next →</span>UI specification</a>
+    <a href="runbook.html"><span>Jump to</span>Runbook</a>
   </nav>
 
-  <footer>Acuan: ASAPify Backend Architecture (revisi 29 September 2026), WORKLOG.md, dan halaman Runbook. Sofan, P., Bruce, D., Jones, E., &amp; Marsden, J. (2019), <em>Remote Sensing</em> 11(4), 465.</footer>
+  <footer>References: ASAPify Backend Architecture (revised 29 September 2026), WORKLOG.md, and the Runbook page. Sofan, P., Bruce, D., Jones, E., &amp; Marsden, J. (2019), <em>Remote Sensing</em> 11(4), 465.</footer>
 </div>
 
-
+</body>
 </html>

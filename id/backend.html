@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ASAPify API</title>
+<title>API ASAPify</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -428,48 +428,48 @@
 </style>
 </head>
 <body>
-<nav class="topnav" aria-label="Main navigation"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>team plan</small></a><div class="navlinks"><a href="index.html">Plan</a><a href="ui.html">UI</a><a href="backend.html" aria-current="page">Backend &amp; API</a><a href="cloud.html">Cloud setup</a><a href="runbook.html">Runbook</a></div><div class="langs" aria-label="Language"><span aria-current="true">EN</span><a href="id/backend.html" hreflang="id" lang="id">ID</a></div></div></nav>
+<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html">Rencana</a><a href="ui.html">UI</a><a href="backend.html" aria-current="page">Backend &amp; API</a><a href="cloud.html">Konfigurasi Cloud</a><a href="runbook.html">Runbook</a></div><div class="langs" aria-label="Bahasa"><a href="../backend.html" hreflang="en" lang="en">EN</a><span aria-current="true">ID</span></div></div></nav>
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Backend &amp; API · reference for roles A, B, C · architecture revised 29 Sep · API aligned with the web app 6 Oct</span>
-    <h1>Five deterministic jobs, two services</h1>
-    <p class="lede">Observation (Himawari-9, GK2A), baselines (NASA POWER + thermal baseline) and the rule engine (MAUT + neighbour support) run as Cloud Run jobs. The ADK agent lives in the <code>asapify-agent</code> service and <strong>is called only for AWAS clusters</strong>; it fetches VIIRS at that moment (on demand). The <code>asapify-api</code> service serves the operator web app and posts to the alert group once an operator publishes. Code on this page is a 💡 starting point; ⚠️ parts are checked in Sprint 0.</p>
-    <ul class="toc" aria-label="Page contents">
-      <li><a href="#layanan"><span>01</span>Who reads/writes what</a></li>
-      <li><a href="#konvensi"><span>02</span>Conventions</a></li>
-      <li><a href="#endpoint"><span>03</span>Endpoints</a></li>
-      <li><a href="#contoh"><span>04</span>Examples</a></li>
-      <li><a href="#model"><span>05</span>Data model</a></li>
-      <li><a href="#wilayah"><span>05b</span>Region</a></li>
+    <span class="eyebrow">Backend &amp; API · pegangan Peran A, B, C · arsitektur revisi 29 Sep · API disamakan dengan web 6 Okt</span>
+    <h1>Lima job deterministik, dua service</h1>
+    <p class="lede">Observasi (Himawari-9, GK2A), baseline (NASA POWER + baseline termal), dan rule engine (MAUT + neighbour support) berjalan sebagai Cloud Run job. Agen ADK tinggal di service <code>asapify-agent</code> dan <strong>hanya dipanggil untuk kelompok AWAS</strong>; ia mengambil VIIRS saat itu juga (on-demand). Service <code>asapify-api</code> melayani web operator dan mengirim ke grup peringatan setelah operator menerbitkan. Kode di halaman ini 💡 titik awal; bagian ⚠️ dicek di Sprint 0.</p>
+    <ul class="toc" aria-label="Isi halaman">
+      <li><a href="#layanan"><span>01</span>Siapa baca/tulis apa</a></li>
+      <li><a href="#konvensi"><span>02</span>Konvensi</a></li>
+      <li><a href="#endpoint"><span>03</span>Endpoint</a></li>
+      <li><a href="#contoh"><span>04</span>Contoh</a></li>
+      <li><a href="#model"><span>05</span>Model data</a></li>
+      <li><a href="#wilayah"><span>05b</span>Wilayah</a></li>
       <li><a href="#observasi"><span>05c</span>Himawari &amp; GK2A</a></li>
       <li><a href="#environment"><span>05d</span>NASA POWER</a></li>
       <li><a href="#maut"><span>05e</span>MAUT</a></li>
-      <li><a href="#agen-adk"><span>06</span>ADK agent</a></li>
-      <li><a href="#telegram"><span>06b</span>Telegram bot</a></li>
-      <li><a href="#jobs"><span>07</span>Jobs</a></li>
+      <li><a href="#agen-adk"><span>06</span>Agen ADK</a></li>
+      <li><a href="#telegram"><span>06b</span>Bot Telegram</a></li>
+      <li><a href="#jobs"><span>07</span>Job</a></li>
       <li><a href="#repo"><span>08</span>Repo</a></li>
-      <li><a href="#galat"><span>09</span>Errors</a></li>
+      <li><a href="#galat"><span>09</span>Galat</a></li>
     </ul>
   </header>
 
   <section id="layanan">
     <div class="section-head">
-      <span class="eyebrow">01 · Who reads and writes what</span>
-      <h2>Seven components, one image</h2>
-      <p>The wiring diagram is in <a href="index.html#alur">Plan 03 (schematic B)</a>. Keep this table at hand while writing code.</p>
+      <span class="eyebrow">01 · Siapa membaca dan menulis apa</span>
+      <h2>Tujuh komponen, satu image</h2>
+      <p>Gambar sambungannya ada di <a href="index.html#alur">Rencana 03 (skematik B)</a>. Tabel ini untuk dipegang saat menulis kode.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Component</th><th scope="col">Trigger</th><th scope="col">Reads</th><th scope="col">Writes</th><th scope="col">Calls</th></tr></thead>
+        <thead><tr><th scope="col">Komponen</th><th scope="col">Pemicu</th><th scope="col">Membaca</th><th scope="col">Menulis</th><th scope="col">Memanggil</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>asapify-build</code> (job)</th><td>manual, once</td><td>BIG KHG, <code>data/ref/provinces.geojson</code>, WorldCover (EE)</td><td><code>peat/pixels.parquet</code>, <code>neighbors8</code>, <code>neighbors_r5</code>, <code>power_cells</code></td><td>Earth Engine</td></tr>
+          <tr><th scope="row"><code>asapify-build</code> (job)</th><td>manual, sekali</td><td>BIG KHG, <code>data/ref/provinces.geojson</code>, WorldCover (EE)</td><td><code>peat/pixels.parquet</code>, <code>neighbors8</code>, <code>neighbors_r5</code>, <code>power_cells</code></td><td>Earth Engine</td></tr>
           <tr><th scope="row"><code>asapify-ingest-himawari</code> (job)</th><td>Scheduler <code>*/10 20-23,0-4</code></td><td>NOAA <code>noaa-himawari9</code>, <code>peat/</code></td><td><code>himawari/…/HHMM.parquet</code>, <code>raw/himawari/manifest/</code>, <code>runs</code></td><td>—</td></tr>
           <tr><th scope="row"><code>asapify-ingest-gk2a</code> (job)</th><td>Scheduler <code>*/10 20-23,0-4</code></td><td>NOAA <code>noaa-gk2a-pds</code>, <code>peat/</code></td><td><code>gk2a/…/HHMM.parquet</code>, <code>raw/gk2a/manifest/</code>, <code>runs</code></td><td>—</td></tr>
-          <tr><th scope="row"><code>asapify-environment</code> (job)</th><td>Scheduler <code>0 12 * * *</code></td><td>NASA POWER, <code>himawari/</code>, <code>gk2a/</code>, <code>score/</code> (frozen pixels)</td><td><code>environment/power/</code>, <code>environment/thermal/</code>, <code>environment/bias/</code>, <code>raw/power/</code></td><td>—</td></tr>
-          <tr><th scope="row"><code>asapify-evaluate</code> (job)</th><td>Scheduler <code>5-59/10 20-23,0-4</code></td><td><code>himawari/</code>, <code>gk2a/</code>, <code>environment/</code>, <code>peat/</code>, <code>score/</code> 3 nights</td><td><code>score/…/HHMM.parquet</code>, Firestore <code>clusters</code>, <code>runs</code></td><td><code>asapify-agent</code>: <code>POST /verify</code> (AWAS only), <code>POST /cluster-closed</code></td></tr>
-          <tr><th scope="row"><code>asapify-agent</code> (service, private)</th><td>POST from evaluate or api</td><td><code>clusters</code>, <code>score/</code>, NASA FIRMS, NASA GIBS, NOAA Himawari</td><td><code>crops/</code>, <code>raw/firms/</code>, <code>verifications</code>, <code>alerts.status</code> (close), <code>audit_log</code></td><td>Gemini, Telegram (operator group; SELESAI edit in the alert group)</td></tr>
-          <tr><th scope="row"><code>asapify-api</code> (service)</th><td>operator web requests</td><td><code>score/</code> (grid), <code>clusters</code>, <code>verifications</code>, <code>tg_chats</code></td><td><code>alerts</code>, <code>audit_log</code></td><td>Telegram (alert group), <code>asapify-agent</code> (re-verification)</td></tr>
+          <tr><th scope="row"><code>asapify-environment</code> (job)</th><td>Scheduler <code>0 12 * * *</code></td><td>NASA POWER, <code>himawari/</code>, <code>gk2a/</code>, <code>score/</code> (piksel beku)</td><td><code>environment/power/</code>, <code>environment/thermal/</code>, <code>environment/bias/</code>, <code>raw/power/</code></td><td>—</td></tr>
+          <tr><th scope="row"><code>asapify-evaluate</code> (job)</th><td>Scheduler <code>5-59/10 20-23,0-4</code></td><td><code>himawari/</code>, <code>gk2a/</code>, <code>environment/</code>, <code>peat/</code>, <code>score/</code> 3 malam</td><td><code>score/…/HHMM.parquet</code>, Firestore <code>clusters</code>, <code>runs</code></td><td><code>asapify-agent</code>: <code>POST /verify</code> (hanya AWAS), <code>POST /cluster-closed</code></td></tr>
+          <tr><th scope="row"><code>asapify-agent</code> (service, privat)</th><td>POST dari evaluate atau api</td><td><code>clusters</code>, <code>score/</code>, NASA FIRMS, NASA GIBS, NOAA Himawari</td><td><code>crops/</code>, <code>raw/firms/</code>, <code>verifications</code>, <code>alerts.status</code> (tutup), <code>audit_log</code></td><td>Gemini, Telegram (grup operator; edit SELESAI di grup peringatan)</td></tr>
+          <tr><th scope="row"><code>asapify-api</code> (service)</th><td>request web operator</td><td><code>score/</code> (grid), <code>clusters</code>, <code>verifications</code>, <code>tg_chats</code></td><td><code>alerts</code>, <code>audit_log</code></td><td>Telegram (grup peringatan), <code>asapify-agent</code> (verifikasi ulang)</td></tr>
         </tbody>
       </table>
     </div>
@@ -477,65 +477,65 @@
 
   <section id="konvensi">
     <div class="section-head">
-      <span class="eyebrow">02 · Conventions</span>
-      <h2>Apply to every job and endpoint</h2>
+      <span class="eyebrow">02 · Konvensi</span>
+      <h2>Berlaku di semua job dan endpoint</h2>
     </div>
     <div class="card">
       <dl class="kv">
-        <dt>Base path</dt><dd>Operator API: <code>/api/v1</code>, through Firebase Hosting (same origin as the web app). Agent: <code>/verify</code> on the private Cloud Run URL.</dd>
-        <dt>Format</dt><dd>UTF-8 JSON, coordinates <code>[lon, lat]</code>. The web map uses a <strong>compact format</strong>: a static pixel index once (<code>/operator/pixels</code>), then one status letter per cell (<code>S</code>, <code>N</code>, <code>W</code>, <code>A</code>). For 10k cells that is ≈ 23 KB raw / 11 KB gzip, against ≈ 1.9 MB / 83 KB for GeoJSON. GeoJSON points stay available (<code>format=geojson</code>, the default) for other tools.</dd>
-        <dt>Time</dt><dd>ISO 8601. Store UTC, display WIB. <code>slot</code> = the 10-minute scan time in UTC.</dd>
-        <dt>IDs</dt><dd>pixel <code>p{row}_{col}</code> on the 0.02° Sumatra + Kalimantan grid (1,225 × 620, origin 94.9° E / 6.2° N, row 0 in the north); cluster <code>C-{MMDD}-{nnn}</code>; verification <code>{cluster_id}_{slot:%Y%m%dT%H%M}</code></dd>
-        <dt>Status</dt><dd><code>SAFE</code>, <code>NO_OBSERVATION</code>, <code>WATCH</code>, <code>AWAS</code> (upper case, exactly)</dd>
-        <dt>Operator auth</dt><dd>Firebase ID token, claim <code>role = "operator"</code></dd>
-        <dt>Internal auth</dt><dd>OIDC from <code>sa-jobs</code> or <code>sa-api</code> to <code>asapify-agent</code> (Cloud Run IAM <code>run.invoker</code>)</dd>
-        <dt>Replay</dt><dd>jobs: <code>--as-of</code> or env <code>AS_OF</code>; endpoints: <code>as_of</code>; response header <code>X-Asapify-As-Of</code></dd>
-        <dt>Errors</dt><dd><code>{"error": {"code": "...", "message": "..."}}</code>. <code>code</code> is stable; the web app writes its own message from <code>code</code> in the operator's language (EN/ID). <code>message</code> (Indonesian) shows only when the web app does not know the <code>code</code> yet.</dd>
-        <dt>Language</dt><dd>Agent text is sent in both languages (<code>finding</code> + <code>finding_en</code>, <code>summary_id</code> + <code>summary_en</code>) so a screen never mixes languages. Telegram captions stay in Indonesian.</dd>
+        <dt>Base path</dt><dd>API operator: <code>/api/v1</code>, lewat Firebase Hosting (satu origin dengan web). Agen: <code>/verify</code> di URL Cloud Run privat.</dd>
+        <dt>Format</dt><dd>JSON UTF-8, koordinat <code>[lon, lat]</code>. Peta web memakai <strong>format ringkas</strong>: indeks piksel statis sekali (<code>/operator/pixels</code>), lalu satu huruf status per sel (<code>S</code>, <code>N</code>, <code>W</code>, <code>A</code>). Untuk 10 ribu sel ≈ 23 KB mentah / 11 KB gzip, dibanding GeoJSON ≈ 1,9 MB / 83 KB. GeoJSON titik tetap tersedia (<code>format=geojson</code>, default) untuk alat lain.</dd>
+        <dt>Waktu</dt><dd>ISO 8601. Simpan UTC, tampilkan WIB. <code>slot</code> = waktu scan 10 menit UTC.</dd>
+        <dt>ID</dt><dd>piksel <code>p{row}_{col}</code> di grid 0,02° Sumatra + Kalimantan (1.225 × 620, asal 94,9° BT / 6,2° LU, baris 0 di utara); kelompok <code>C-{MMDD}-{nnn}</code>; verifikasi <code>{cluster_id}_{slot:%Y%m%dT%H%M}</code></dd>
+        <dt>Status</dt><dd><code>SAFE</code>, <code>NO_OBSERVATION</code>, <code>WATCH</code>, <code>AWAS</code> (huruf besar, persis)</dd>
+        <dt>Auth operator</dt><dd>Firebase ID token, claim <code>role = "operator"</code></dd>
+        <dt>Auth internal</dt><dd>OIDC dari <code>sa-jobs</code> atau <code>sa-api</code> ke <code>asapify-agent</code> (Cloud Run IAM <code>run.invoker</code>)</dd>
+        <dt>Replay</dt><dd>job: <code>--as-of</code> atau env <code>AS_OF</code>; endpoint: <code>as_of</code>; header respons <code>X-Asapify-As-Of</code></dd>
+        <dt>Galat</dt><dd><code>{"error": {"code": "...", "message": "..."}}</code>. <code>code</code> stabil; web menulis pesannya sendiri dari <code>code</code> dalam bahasa operator (EN/ID). <code>message</code> (Bahasa Indonesia) hanya tampil bila <code>code</code> belum dikenal web.</dd>
+        <dt>Bahasa</dt><dd>Teks agen dikirim dua bahasa (<code>finding</code> + <code>finding_en</code>, <code>summary_id</code> + <code>summary_en</code>) supaya layar tidak mencampur bahasa. Caption Telegram tetap Bahasa Indonesia.</dd>
       </dl>
     </div>
   </section>
 
   <section id="endpoint">
     <div class="section-head">
-      <span class="eyebrow">03 · Endpoints</span>
-      <h2>asapify-api and asapify-agent</h2>
+      <span class="eyebrow">03 · Endpoint</span>
+      <h2>asapify-api dan asapify-agent</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Method</th><th scope="col">Path</th><th scope="col">Auth</th><th scope="col">Purpose</th></tr></thead>
+        <thead><tr><th scope="col">Metode</th><th scope="col">Path</th><th scope="col">Auth</th><th scope="col">Fungsi</th></tr></thead>
         <tbody>
-          <tr class="sub"><td colspan="4">asapify-api · public (after <code>/api/v1</code>)</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/health</code>, <code>/meta</code></td><td><span class="auth pub">public</span></td><td>liveness; latest slot per satellite, night/day, replay status, range of archive nights that can be opened (<code>nights.first</code>–<code>nights.last</code>)</td></tr>
+          <tr class="sub"><td colspan="4">asapify-api · umum (setelah <code>/api/v1</code>)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/health</code>, <code>/meta</code></td><td><span class="auth pub">publik</span></td><td>cek hidup; slot terakhir per satelit, malam/siang, status replay, rentang malam arsip yang bisa dibuka (<code>nights.first</code>–<code>nights.last</code>)</td></tr>
           <tr class="sub"><td colspan="4">asapify-api · operator</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/pixels</code></td><td><span class="auth op">operator</span></td><td>static peat pixel index: <code>version</code>, grid origin, 0.02° step, rows, columns and province code per cell. Its order is the cell index in every compact response. Downloaded once; send <code>ETag</code> + <code>Cache-Control</code></td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/grid?as_of=</code>, <code>&amp;format=compact</code></td><td><span class="auth op">operator</span></td><td>status of every peat pixel for the latest night slot ≤ <code>as_of</code>. Default GeoJSON points (status, utility, n_sat, cluster_id, province). <code>format=compact</code> (used by the web app): a status string with one letter per cell, utility as base64 Uint8 (<code>round(U × 250)</code>, 255 = null), and active clusters → cell indices</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/grid/night?night=</code></td><td><span class="auth op">operator</span></td><td>54 status strings (compact format) for one night, 20:00–04:50 WIB, plus the clusters that were AWAS in any slot that night → cell indices. One request for the slot player and for archive nights. Slots after <code>as_of</code> or without data = <code>null</code></td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/nights?month=</code></td><td><span class="auth op">operator</span></td><td>one row per archive night in that month: <code>night</code>, <code>has_data</code>, <code>awas_clusters</code>. Fills the night calendar (faded date = no data, dot = AWAS clusters)</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/basemaps?as_of=</code></td><td><span class="auth op">operator</span></td><td>raster basemap options from the backend, e.g. NASA GIBS VIIRS true colour for the <code>as_of</code> date (tile template, tile size, max zoom, attribution, EN/ID label). Empty array = street and plain maps only</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters?state=active</code>, <code>?night=</code></td><td><span class="auth op">operator</span></td><td>AWAS clusters + latest verification + decision. With <code>night=YYYY-MM-DD</code> (archive night): clusters that were AWAS in any slot that night, active or closed (<code>first_awas_at</code> ≤ night end and <code>last_awas_at</code> ≥ night start); <code>state</code> is ignored</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters/{id}</code></td><td><span class="auth op">operator</span></td><td>3-night utility series, MAUT attributes at the trigger slot with their measured numbers (<code>attribute_details</code>), neighbour grid, verification + tool trace, signed image URLs with the crop <code>bbox</code>, and per-cell brightness temperatures behind the thermal image (<code>images[].thermal</code>)</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/verify</code></td><td><span class="auth op">operator</span></td><td>request re-verification; forwarded to the agent (respects the 6 h cooldown unless <code>force=true</code>)</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/decision</code></td><td><span class="auth op">operator</span></td><td><code>publish</code> (caption; the bot posts to the provincial alert group) / <code>reject</code> (reason required)</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts?status=</code></td><td><span class="auth op">operator</span></td><td>published alerts + Telegram send status</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/close</code></td><td><span class="auth op">operator</span></td><td>early close by an operator; the caption is edited to SELESAI (automatic through agent <code>/cluster-closed</code> when a cluster closes)</td></tr>
-          <tr class="sub"><td colspan="4">public bucket · static files for map layers (not endpoints)</td></tr>
-          <tr><td><span class="m m-job">FILE</span></td><td class="path"><code>layers/peat_pixels.geojson</code></td><td><span class="auth pub">public</span></td><td>processed peat boundary (KHG ∩ 15 provinces − built-up), simplified; written by <code>asapify-build</code></td></tr>
-          <tr><td><span class="m m-job">FILE</span></td><td class="path"><code>layers/provinces.geojson</code></td><td><span class="auth pub">public</span></td><td>the 15 Sumatra + Kalimantan provinces (BPS code, name), simplified to ≈ 90 KB (≈ 30 KB gzip); used for province lines and the selected-province highlight. geoBoundaries IDN ADM1, ODbL</td></tr>
-          <tr class="sub"><td colspan="4">asapify-agent · internal (private Cloud Run URL)</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/verify</code></td><td><span class="auth int">OIDC sa-jobs / sa-api</span></td><td>body <code>{"cluster_id", "trigger_slot", "force": false}</code>; runs the agent, saves <code>verifications</code>, posts to the operator group. Response 202 + <code>verification_id</code></td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/cluster-closed</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"cluster_id"}</code>; deterministic code (no Gemini): if an alert was published for that cluster, edit its caption to SELESAI and set <code>alerts.status = closed</code></td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/pixels</code></td><td><span class="auth op">operator</span></td><td>indeks piksel gambut statis: <code>version</code>, asal grid, langkah 0,02°, baris, kolom, dan kode provinsi per sel. Urutannya menjadi indeks sel di semua respons ringkas. Diunduh sekali; kirim <code>ETag</code> + <code>Cache-Control</code></td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/grid?as_of=</code>, <code>&amp;format=compact</code></td><td><span class="auth op">operator</span></td><td>status semua piksel gambut untuk slot malam terakhir ≤ <code>as_of</code>. Default GeoJSON titik (status, utility, n_sat, cluster_id, province). <code>format=compact</code> (dipakai web): string status satu huruf per sel, utility base64 Uint8 (<code>round(U × 250)</code>, 255 = null), dan kelompok aktif → indeks sel</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/grid/night?night=</code></td><td><span class="auth op">operator</span></td><td>54 string status (format ringkas) untuk satu malam, 20.00–04.50 WIB, plus kelompok yang AWAS di salah satu slot malam itu → indeks sel. Satu permintaan untuk pemutar slot dan malam arsip. Slot setelah <code>as_of</code> atau tanpa data = <code>null</code></td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/nights?month=</code></td><td><span class="auth op">operator</span></td><td>satu baris per malam arsip dalam bulan itu: <code>night</code>, <code>has_data</code>, <code>awas_clusters</code>. Mengisi kalender malam (tanggal pudar = tanpa data, titik = ada kelompok AWAS)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/basemaps?as_of=</code></td><td><span class="auth op">operator</span></td><td>pilihan peta dasar raster dari BE, mis. citra VIIRS true colour NASA GIBS tanggal <code>as_of</code> (template tile, ukuran tile, zoom maksimum, atribusi, label ID/EN). Array kosong = hanya peta jalan dan polos</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters?state=active</code>, <code>?night=</code></td><td><span class="auth op">operator</span></td><td>daftar kelompok AWAS + hasil verifikasi terakhir + keputusan. Dengan <code>night=YYYY-MM-DD</code> (malam arsip): kelompok yang AWAS di salah satu slot malam itu, aktif maupun ditutup (<code>first_awas_at</code> ≤ akhir malam dan <code>last_awas_at</code> ≥ awal malam); <code>state</code> diabaikan</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters/{id}</code></td><td><span class="auth op">operator</span></td><td>deret utility 3 malam, atribut MAUT slot pemicu beserta angka terukurnya (<code>attribute_details</code>), grid tetangga, verifikasi + jejak tool, signed URL citra dengan <code>bbox</code> crop, dan suhu kecerahan per sel di balik citra termal (<code>images[].thermal</code>)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/verify</code></td><td><span class="auth op">operator</span></td><td>minta verifikasi ulang; diteruskan ke agen (hormati 6 jam kecuali <code>force=true</code>)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/decision</code></td><td><span class="auth op">operator</span></td><td><code>publish</code> (caption; bot mengirim ke grup peringatan provinsi) / <code>reject</code> (alasan wajib)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts?status=</code></td><td><span class="auth op">operator</span></td><td>peringatan terbit + status kirim Telegram</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/close</code></td><td><span class="auth op">operator</span></td><td>tutup lebih awal oleh operator; caption diedit jadi SELESAI (otomatis lewat agent <code>/cluster-closed</code> saat kelompok ditutup)</td></tr>
+          <tr class="sub"><td colspan="4">bucket publik · file statis untuk lapisan peta (bukan endpoint)</td></tr>
+          <tr><td><span class="m m-job">FILE</span></td><td class="path"><code>layers/peat_pixels.geojson</code></td><td><span class="auth pub">publik</span></td><td>batas gambut yang diproses (KHG ∩ 15 provinsi − area terbangun), disederhanakan; ditulis <code>asapify-build</code></td></tr>
+          <tr><td><span class="m m-job">FILE</span></td><td class="path"><code>layers/provinces.geojson</code></td><td><span class="auth pub">publik</span></td><td>15 provinsi Sumatra + Kalimantan (kode BPS, nama), disederhanakan ±90 KB (±30 KB gzip); dipakai garis provinsi dan sorotan provinsi terpilih. geoBoundaries IDN ADM1, ODbL</td></tr>
+          <tr class="sub"><td colspan="4">asapify-agent · internal (URL Cloud Run privat)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/verify</code></td><td><span class="auth int">OIDC sa-jobs / sa-api</span></td><td>body <code>{"cluster_id", "trigger_slot", "force": false}</code>; jalankan agen, simpan <code>verifications</code>, kirim ke grup operator. Respons 202 + <code>verification_id</code></td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/cluster-closed</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"cluster_id"}</code>; kode deterministik (tanpa Gemini): bila ada alert terbit untuk kelompok itu, edit caption jadi SELESAI dan set <code>alerts.status = closed</code></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note">The full schema of every response (fields, types, required, JSON examples) is in the <strong>API contract</strong> tab of the web app (<code>/kontrak-api</code>, public, EN/ID). Its examples come from the same mock data the screens show.</p>
+    <p class="note">Skema lengkap tiap respons (field, tipe, wajib, contoh JSON) ada di tab <strong>Kontrak API</strong> aplikasi web (<code>/kontrak-api</code>, publik, EN/ID). Contoh di sana diambil dari data mock yang sama dengan yang tampil di layar.</p>
   </section>
 
   <section id="contoh">
     <div class="section-head">
-      <span class="eyebrow">04 · Examples</span>
-      <h2>The agreed data shapes</h2>
-      <p>Fictional data.</p>
+      <span class="eyebrow">04 · Contoh</span>
+      <h2>Bentuk data yang disepakati</h2>
+      <p>Data fiktif.</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
@@ -580,7 +580,7 @@
 <pre>{ "pixels_version": "2023-09-v1",
   "slot": "2023-09-24T15:10:00Z",
   "n_sat": 2,
-  "status": "SSSWSNNSAAS…",   <span class="c"># one letter per cell, order of /operator/pixels</span>
+  "status": "SSSWSNNSAAS…",   <span class="c"># satu huruf per sel, urutan /operator/pixels</span>
   "utility": "Mjw8RlB…",      <span class="c"># base64 Uint8: round(U × 250), 255 = null</span>
   "clusters": {"C-0924-002": [1204, 1205, 1287, 1288]} }</pre>
         </div>
@@ -593,14 +593,14 @@
 }</pre>
         </div>
         <div class="code">
-          <div class="code-head"><span>Response</span><span>201</span></div>
+          <div class="code-head"><span>Respons</span><span>201</span></div>
 <pre>{ "action": "publish", "by": "operator@contoh.id",
   "at": "2023-09-24T15:30:00Z", "reason": null,
   "alert_id": "A-0924-001",
   "telegram": {"status": "sent", "message_id": 812} }</pre>
         </div>
         <div class="code">
-          <div class="code-head"><span>Error · 409</span><span>response</span></div>
+          <div class="code-head"><span>Galat · 409</span><span>response</span></div>
 <pre>{ "error": { "code": "ALREADY_DECIDED",
   "message": "Kelompok ini sudah diterbitkan oleh operator lain." } }</pre>
         </div>
@@ -610,14 +610,14 @@
 
   <section id="model">
     <div class="section-head">
-      <span class="eyebrow">05 · Data model</span>
-      <h2>Time series in Storage, decisions in Firestore</h2>
+      <span class="eyebrow">05 · Model data</span>
+      <h2>Deret waktu di Storage, keputusan di Firestore</h2>
     </div>
     <div class="grid-2">
       <div class="table-wrap">
         <table>
-          <caption>Cloud Storage (Parquet unless stated otherwise)</caption>
-          <thead><tr><th scope="col">Path</th><th scope="col">Contents</th></tr></thead>
+          <caption>Cloud Storage (Parquet, kecuali disebut lain)</caption>
+          <thead><tr><th scope="col">Path</th><th scope="col">Isi</th></tr></thead>
           <tbody>
             <tr><th scope="row"><code>peat/pixels.parquet</code></th><td>pixel_id, row, col, lat, lon, peat_frac, built_frac, kode_khg, province (11–19, 21, 61–65), cell_id</td></tr>
             <tr><th scope="row"><code>peat/neighbors8.parquet</code>, <code>neighbors_r5.parquet</code>, <code>power_cells.parquet</code></th><td>pixel_id, neighbor_ids[]; cell_id, lat, lon, n_pixels</td></tr>
@@ -627,50 +627,49 @@
             <tr><th scope="row"><code>environment/thermal/{sat}/YYYYMMDD.parquet</code></th><td>pixel_id, hour_utc, median, mad, n_obs, frozen</td></tr>
             <tr><th scope="row"><code>environment/bias/YYYYMMDD.parquet</code></th><td>pixel_id, hour_utc, b_lst</td></tr>
             <tr><th scope="row"><code>score/YYYY/MM/DD/HHMM.parquet</code></th><td>pixel_id, timestamp, himawari_score, gk2a_score, z_rel_h, z_rel_g, lst, sat, d_lst, d_sat, u_lst, u_sat, u_t, utility_score, neighbour_support, n_sat, status, cluster_id</td></tr>
-            <tr><th scope="row"><code>crops/{pixel_id}/{timestamp}_{source}.png</code></th><td>VIIRS and Himawari images for the agent and the UI; thermal PNGs use a fixed hot-channel colour scale of 270–340 K (the same as the web legend)</td></tr>
-            <tr><th scope="row"><code>crops/{pixel_id}/{timestamp}_thermal.json</code></th><td>brightness temperature per 0.02° cell behind the thermal crop: <code>bbox</code>, 20 × 20 cells, channels B07/B14 (Himawari) and SW038/IR105 (GK2A), kelvin to 1 decimal, <code>null</code> = cloudy. Served as <code>images[].thermal</code> ⚠️</td></tr>
-            <tr><th scope="row"><code>raw/{source}/…</code></th><td>per-slot source file manifests (JSON), POWER cache per cell, FIRMS cache per box</td></tr>
-            <tr><th scope="row"><code>layers/*.geojson</code> (public bucket)</th><td><code>peat_pixels.geojson</code> and <code>provinces.geojson</code> for the web map layers; read by the browser directly (CORS)</td></tr>
+            <tr><th scope="row"><code>crops/{pixel_id}/{timestamp}_{source}.png</code></th><td>citra VIIRS dan Himawari untuk agen dan UI; PNG termal memakai skala warna tetap kanal panas 270–340 K (sama dengan legenda web)</td></tr>
+            <tr><th scope="row"><code>crops/{pixel_id}/{timestamp}_thermal.json</code></th><td>suhu kecerahan per sel 0,02° di balik crop termal: <code>bbox</code>, 20 × 20 sel, kanal B07/B14 (Himawari) dan SW038/IR105 (GK2A), kelvin 1 desimal, <code>null</code> = berawan. Disajikan sebagai <code>images[].thermal</code> ⚠️</td></tr>
+            <tr><th scope="row"><code>raw/{source}/…</code></th><td>manifest file sumber per slot (JSON), cache POWER per sel, cache FIRMS per kotak</td></tr>
+            <tr><th scope="row"><code>layers/*.geojson</code> (bucket publik)</th><td><code>peat_pixels.geojson</code> dan <code>provinces.geojson</code> untuk lapisan peta web; dibaca browser langsung (CORS)</td></tr>
           </tbody>
         </table>
       </div>
       <div class="table-wrap">
         <table>
           <caption>Firestore</caption>
-          <thead><tr><th scope="col">Collection</th><th scope="col">Contents</th></tr></thead>
+          <thead><tr><th scope="col">Koleksi</th><th scope="col">Isi</th></tr></thead>
           <tbody>
             <tr><th scope="row"><code>clusters</code></th><td>pixels, rep_pixel, centroid, province, utility_max, neighbour_support, first_awas_at, last_awas_at, last_verified_at, state (active/closed)</td></tr>
-            <tr><th scope="row"><code>verifications</code></th><td>schema-locked agent output, tool trace, model, validator_ok</td></tr>
+            <tr><th scope="row"><code>verifications</code></th><td>output agen schema-locked, jejak tool, model, validator_ok</td></tr>
             <tr><th scope="row"><code>alerts</code></th><td>cluster_id, caption, published_by/at, status (published/closed), <code>telegram {chat_id, message_id, status}</code></td></tr>
-            <tr><th scope="row"><code>tg_chats</code></th><td><code>jenis</code> (operator / peringatan = alert), <code>provinsi</code>, chat_id</td></tr>
-            <tr><th scope="row"><code>runs</code></th><td>log of every job run: slot, n_sat, count per status, latency, missing files</td></tr>
-            <tr><th scope="row"><code>audit_log</code></th><td>every operator action, agent call and bot message</td></tr>
+            <tr><th scope="row"><code>tg_chats</code></th><td>jenis (operator/peringatan), provinsi, chat_id</td></tr>
+            <tr><th scope="row"><code>runs</code></th><td>log tiap eksekusi job: slot, n_sat, jumlah per status, latensi, file hilang</td></tr>
+            <tr><th scope="row"><code>audit_log</code></th><td>setiap aksi operator, panggilan agen, dan pesan bot</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </section>
 
-
   <section id="wilayah">
     <div class="section-head">
-      <span class="eyebrow">05b · Sumatra + Kalimantan region ✅</span>
-      <h2>One grid, fifteen provinces, peat pixels only</h2>
-      <p>Every job, the backtest and the UI use the same constants from <code>jobs/lib/region.py</code>.</p>
+      <span class="eyebrow">05b · Wilayah Sumatra + Kalimantan ✅</span>
+      <h2>Satu grid, lima belas provinsi, hanya piksel gambut</h2>
+      <p>Semua job, backtest, dan UI memakai konstanta yang sama dari <code>jobs/lib/region.py</code>.</p>
     </div>
     <div class="grid-2">
       <div class="code">
-        <div class="code-head"><span>Region constants</span><span>jobs/lib/region.py</span></div>
+        <div class="code-head"><span>Konstanta wilayah</span><span>jobs/lib/region.py</span></div>
 <pre>from pyresample import create_area_def
 
 <span class="c"># lon_min, lat_min, lon_max, lat_max (WGS84)</span>
-MONITOR_BBOX  = (94.9, -6.2, 119.4, 6.2)    <span class="c"># Sumatra + Kalimantan (grid origin 94.9 E / 6.2 N)</span>
-BACKTEST_BBOX = (113.5, -2.6, 114.3, -1.9)  <span class="c"># Central Kalimantan sub-area (main)</span>
-BACKTEST_BBOX_SUMSEL = (105.2, -3.7, 106.0, -3.0)  <span class="c"># OKI, South Sumatra (planned)</span>
-GRID_DEG = 0.02                             <span class="c"># 1,225 columns × 620 rows</span>
-NIGHT_UTC = range(13, 21)                   <span class="c"># 20:00–04:00 WIB (Sumatra is also WIB)</span>
+MONITOR_BBOX  = (94.9, -6.2, 119.4, 6.2)    <span class="c"># Sumatra + Kalimantan (asal grid 94,9 BT / 6,2 LU)</span>
+BACKTEST_BBOX = (113.5, -2.6, 114.3, -1.9)  <span class="c"># sub-area Kalteng (utama)</span>
+BACKTEST_BBOX_SUMSEL = (105.2, -3.7, 106.0, -3.0)  <span class="c"># OKI, Sumsel (direncanakan)</span>
+GRID_DEG = 0.02                             <span class="c"># 1.225 kolom × 620 baris</span>
+NIGHT_UTC = range(13, 21)                   <span class="c"># 20.00–04.00 WIB (Sumatra juga WIB)</span>
 
-PROVINCES = {                               <span class="c"># BPS codes</span>
+PROVINCES = {                               <span class="c"># kode BPS</span>
     "11": "Aceh", "12": "Sumatera Utara", "13": "Sumatera Barat",
     "14": "Riau", "15": "Jambi", "16": "Sumatera Selatan",
     "17": "Bengkulu", "18": "Lampung",
@@ -684,27 +683,27 @@ AREA = create_area_def("sumkal_002", "EPSG:4326",
                        area_extent=MONITOR_BBOX, resolution=GRID_DEG)
 
 def pixel_id(row: int, col: int) -&gt; str:
-    return f"p{row}_{col}"                  <span class="c"># row 0 = north</span></pre>
+    return f"p{row}_{col}"                  <span class="c"># baris 0 = utara</span></pre>
       </div>
       <div class="card">
-        <h4>Why the bbox alone is not enough</h4>
+        <h4>Kenapa bbox saja tidak cukup</h4>
         <ul>
-          <li>The <code>MONITOR_BBOX</code> box also covers Peninsular Malaysia, Singapore, Sarawak, Sabah, Brunei, the western tip of Java and part of the West Sulawesi coast.</li>
-          <li>KHG covers Indonesia only, so Malaysia, Singapore and Brunei drop out automatically. Java and Sulawesi are removed with the <strong>province filter</strong> (codes 11–19, 21, 61–65).</li>
-          <li>The per-pixel <code>province</code> column also selects the Telegram alert group (one group per province).</li>
+          <li>Kotak <code>MONITOR_BBOX</code> ikut mencakup Semenanjung Malaysia, Singapura, Sarawak, Sabah, Brunei, ujung barat Jawa, dan sebagian pantai Sulawesi Barat.</li>
+          <li>KHG hanya berisi Indonesia, jadi Malaysia, Singapura, dan Brunei otomatis keluar. Jawa dan Sulawesi dikeluarkan dengan <strong>filter provinsi</strong> (kode 11–19, 21, 61–65).</li>
+          <li>Kolom <code>province</code> per piksel juga dipakai untuk memilih grup Telegram peringatan (satu grup per provinsi).</li>
         </ul>
         <dl class="kv" style="margin-top:10px">
-          <dt>Full grid</dt><dd>1,225 × 620 = ~760 thousand cells</dd>
-          <dt>Peat pixels</dt><dd>rough estimate ~20–25 thousand ⚠️ (count in A1)</dd>
-          <dt>NASA POWER cells</dt><dd>0.5° × 0.625°; an estimated 250–400 cells contain peat ⚠️</dd>
-          <dt>Per slot</dt><dd>2 small Parquet files (hundreds of KB), 1 per satellite</dd>
+          <dt>Grid penuh</dt><dd>1.225 × 620 = ~760 ribu sel</dd>
+          <dt>Piksel gambut</dt><dd>perkiraan kasar ~20–25 ribu ⚠️ (hitung di A1)</dd>
+          <dt>Sel NASA POWER</dt><dd>0,5° × 0,625°; perkiraan 250–400 sel berisi gambut ⚠️</dd>
+          <dt>Per slot</dt><dd>2 file Parquet kecil (ratusan KB), 1 per satelit</dd>
         </dl>
       </div>
     </div>
 
     <div class="grid-2" style="margin-top:14px">
       <div class="code tall">
-        <div class="code-head"><span>Peat mask: KHG + provinces + built-up</span><span>jobs/build_peat_mask.py</span></div>
+        <div class="code-head"><span>Peat mask: KHG + provinsi + terbangun</span><span>jobs/build_peat_mask.py</span></div>
 <pre>import geopandas as gpd, numpy as np, requests
 from rasterio import features, transform
 from jobs.lib.region import MONITOR_BBOX, GRID_DEG, AREA, pixel_id
@@ -714,7 +713,7 @@ KHG = ("https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/"
 
 def fetch_khg(bbox):
     feats, off = [], 0
-    while True:                                 <span class="c"># max 1,000 features/request</span>
+    while True:                                 <span class="c"># maks 1.000 fitur/request</span>
         r = requests.get(KHG, timeout=120, params={
             "where": "1=1", "outFields": "kode_khg", "f": "geojson",
             "geometry": ",".join(map(str, bbox)),
@@ -724,14 +723,14 @@ def fetch_khg(bbox):
         if len(page) &lt; 1000: return gpd.GeoDataFrame.from_features(feats, crs=4326)
         off += 1000
 
-def fraction(gdf, sub=10):                      <span class="c"># area fraction per 0.02° cell</span>
+def fraction(gdf, sub=10):                      <span class="c"># fraksi luas per sel 0,02°</span>
     h, w = AREA.shape
     t = transform.from_bounds(*MONITOR_BBOX, w * sub, h * sub)
     fine = features.rasterize(gdf.geometry, (h * sub, w * sub), transform=t)
     return fine.reshape(h, sub, w, sub).mean(axis=(1, 3))
 
 khg  = fetch_khg(MONITOR_BBOX).make_valid()
-prov = gpd.read_file("data/ref/provinces.geojson")   <span class="c"># 15 provinces, Runbook S0-8</span>
+prov = gpd.read_file("data/ref/provinces.geojson")   <span class="c"># 15 provinsi, Runbook S0-8</span>
 peat_frac  = fraction(khg.clip(prov))
 built_frac = np.load("data/ref/built_frac_002.npy")
 
@@ -752,7 +751,7 @@ df.drop(columns=["geometry", "index_right"]).to_parquet(
       </div>
       <div class="stack">
         <div class="code">
-          <div class="code-head"><span>Built-up fraction (once)</span><span>jobs/build_built_frac.py</span></div>
+          <div class="code-head"><span>Fraksi terbangun (sekali)</span><span>jobs/build_built_frac.py</span></div>
 <pre>import ee, numpy as np, requests, io
 from jobs.lib.region import MONITOR_BBOX, GRID_DEG
 
@@ -767,11 +766,11 @@ arr = np.load(io.BytesIO(requests.get(url).content))
 np.save("data/ref/built_frac_002.npy", arr["Map"].astype("float32"))</pre>
         </div>
         <div class="code">
-          <div class="code-head"><span>Neighbours + POWER cells (once)</span><span>jobs/build_neighbors.py, build_power_cells.py</span></div>
+          <div class="code-head"><span>Tetangga + sel POWER (sekali)</span><span>jobs/build_neighbors.py, build_power_cells.py</span></div>
 <pre>peat = pd.read_parquet(f"gs://{DATA_BUCKET}/peat/pixels.parquet")
 idx = {(r, c): p for p, r, c in zip(peat.pixel_id, peat.row, peat.col)}
 
-def around(r, c, k):        <span class="c"># k=1 → 8 directions; k=5 → 5-cell radius</span>
+def around(r, c, k):        <span class="c"># k=1 → 8 arah; k=5 → radius 5 sel</span>
     return [idx[(r+i, c+j)] for i in range(-k, k+1) for j in range(-k, k+1)
             if (i or j) and (r+i, c+j) in idx and (k == 1 or i*i + j*j &lt;= k*k)]
 
@@ -780,7 +779,7 @@ for k, name in ((1, "neighbors8"), (5, "neighbors_r5")):
                   "neighbor_ids": [around(r, c, k) for r, c in zip(peat.row, peat.col)]}
                  ).to_parquet(f"gs://{DATA_BUCKET}/peat/{name}.parquet")
 
-<span class="c"># NASA POWER cell (GEOS-IT 0.5° × 0.625°)</span>
+<span class="c"># sel NASA POWER (GEOS-IT 0,5° × 0,625°)</span>
 peat["cell_lat"] = (peat.lat / 0.5).round() * 0.5
 peat["cell_lon"] = (peat.lon / 0.625).round() * 0.625
 peat["cell_id"] = [f"c{a:+.1f}_{o:.3f}" for a, o in zip(peat.cell_lat, peat.cell_lon)]
@@ -794,25 +793,25 @@ cells = (peat.groupby("cell_id")
 
   <section id="observasi">
     <div class="section-head">
-      <span class="eyebrow">05c · Observation: Himawari-9 and GK2A</span>
-      <h2>Two readers, one output format</h2>
-      <p>Both ingests write the same columns (<code>pixel_id, mir, win, cloud</code>), so the rule engine never needs to know which satellite it reads. Only night slots (13:00–20:50 UTC) are processed.</p>
+      <span class="eyebrow">05c · Observasi: Himawari-9 dan GK2A</span>
+      <h2>Dua pembaca, satu format keluaran</h2>
+      <p>Kedua ingest menulis kolom yang sama (<code>pixel_id, mir, win, cloud</code>), jadi rule engine tidak perlu tahu satelit mana yang dibaca. Hanya slot malam (13.00–20.50 UTC) yang diproses.</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
-        <div class="code-head"><span>Himawari-9 (segments)</span><span>jobs/lib/himawari.py</span></div>
+        <div class="code-head"><span>Himawari-9 (segmen)</span><span>jobs/lib/himawari.py</span></div>
 <pre>import os, s3fs
 from satpy import Scene
 from jobs.lib.region import AREA
 
 fs = s3fs.S3FileSystem(anon=True)
-SEGMENTS = ("S0510", "S0610")              <span class="c"># ⚠️ checked in S0-7</span>
+SEGMENTS = ("S0510", "S0610")              <span class="c"># ⚠️ dicek di S0-7</span>
 
-def list_scan(slot):                       <span class="c"># slot: UTC datetime, multiple of 10 minutes</span>
+def list_scan(slot):                       <span class="c"># slot: datetime UTC, kelipatan 10 menit</span>
     d = f"noaa-himawari9/AHI-L1b-FLDK/{slot:%Y/%m/%d/%H%M}"
     return [f for f in fs.ls(d)
             if any(f"_{b}_" in f for b in ("B07", "B14"))
-            and any(s in f for s in SEGMENTS)]      <span class="c"># 4 files</span>
+            and any(s in f for s in SEGMENTS)]      <span class="c"># 4 file</span>
 
 def read_scan(files, tmp):
     local = []
@@ -832,10 +831,10 @@ from jobs.lib.region import AREA
 fs = s3fs.S3FileSystem(anon=True)
 CHANNELS = ("sw038", "ir105")
 
-def list_scan(slot):                       <span class="c"># archive starts 16 Feb 2023</span>
+def list_scan(slot):                       <span class="c"># arsip mulai 16 Feb 2023</span>
     d = f"noaa-gk2a-pds/AMI/L1B/FD/{slot:%Y%m/%d/%H}"
     return [f"{d}/gk2a_ami_le1b_{ch}_fd020ge_{slot:%Y%m%d%H%M}.nc"
-            for ch in CHANNELS]            <span class="c"># 2 files × ~30 MB</span>
+            for ch in CHANNELS]            <span class="c"># 2 file × ~30 MB</span>
 
 def read_scan(files, tmp):
     local = []
@@ -844,13 +843,13 @@ def read_scan(files, tmp):
     scn = Scene(reader="ami_l1b", filenames=local)
     scn.load(["SW038", "IR105"], calibration="brightness_temperature")
     g = scn.resample(AREA, resampler="nearest", radius_of_influence=5000)
-    for p in local: os.remove(p)           <span class="c"># do not keep the full disk</span>
+    for p in local: os.remove(p)           <span class="c"># jangan simpan full disk</span>
     return g["SW038"].values, g["IR105"].values</pre>
       </div>
     </div>
     <div class="code" style="margin-top:14px">
-      <div class="code-head"><span>Shared thermal features</span><span>jobs/lib/features.py</span></div>
-<pre>CLOUD_K = 270.0                              <span class="c"># window channel &lt; 270 K = cloud</span>
+      <div class="code-head"><span>Fitur termal bersama</span><span>jobs/lib/features.py</span></div>
+<pre>CLOUD_K = 270.0                              <span class="c"># kanal jendela &lt; 270 K = awan</span>
 
 def to_features(mir, win, peat):
     r, c = peat.row.values, peat.col.values
@@ -863,9 +862,9 @@ def to_features(mir, win, peat):
 
   <section id="environment">
     <div class="section-head">
-      <span class="eyebrow">05d · Baselines: NASA POWER and the thermal baseline</span>
-      <h2>What "normal" looks like for each night hour</h2>
-      <p>NASA POWER hourly data arrive ~1.5 days late and are coarse (0.5° × 0.625°), so they serve as a 30-day median per hour, not as tonight's value. There is no area endpoint for hourly data: one request per cell.</p>
+      <span class="eyebrow">05d · Baseline: NASA POWER dan baseline termal</span>
+      <h2>Yang "normal" untuk tiap jam malam</h2>
+      <p>NASA POWER hourly terlambat ~1,5 hari dan kasar (0,5° × 0,625°), jadi dipakai sebagai median 30 hari per jam, bukan nilai malam ini. Tidak ada endpoint wilayah untuk data jam-an: satu request per sel.</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
@@ -891,22 +890,22 @@ def power_baseline(raw, as_of, days=30):     <span class="c"># raw: cell_id, tim
                          "n_days": g.ts.count()}).reset_index()</pre>
       </div>
       <div class="code tall">
-        <div class="code-head"><span>Thermal baseline and LST bias</span><span>jobs/lib/baseline.py</span></div>
+        <div class="code-head"><span>Baseline termal dan bias LST</span><span>jobs/lib/baseline.py</span></div>
 <pre>def thermal_baseline(feats, as_of, nights=30, frozen_ids=(), prev=None):
-    <span class="c"># feats: pixel_id, slot, mir, cloud from one satellite, 30 nights ≤ as_of</span>
+    <span class="c"># feats: pixel_id, slot, mir, cloud dari satu satelit, 30 malam ≤ as_of</span>
     f = feats[~feats.cloud].assign(hour_utc=feats.slot.dt.hour)
     g = f.groupby(["pixel_id", "hour_utc"]).mir
     base = pd.DataFrame({"median": g.median(),
                          "mad": g.apply(lambda x: (x - x.median()).abs().median()),
                          "n_obs": g.size()}).reset_index()
     base["frozen"] = base.pixel_id.isin(frozen_ids)
-    if prev is not None:                     <span class="c"># WATCH/AWAS pixels keep the old rows</span>
+    if prev is not None:                     <span class="c"># piksel WATCH/AWAS pakai baris lama</span>
         base = pd.concat([base[~base.frozen],
                           prev[prev.pixel_id.isin(frozen_ids)].assign(frozen=True)])
     return base
 
 def lst_bias(win_max, power, cells):
-    <span class="c"># b_LST = 30-night median of (win_max − ts_base) per pixel per hour</span>
+    <span class="c"># b_LST = median 30 malam dari (win_max − ts_base) per piksel per jam</span>
     d = (win_max.merge(cells, on="pixel_id")
                 .merge(power, on=["cell_id", "hour_utc"]))
     d["x"] = d.win_max - d.ts_base
@@ -918,8 +917,8 @@ def lst_bias(win_max, power, cells):
   <section id="maut">
     <div class="section-head">
       <span class="eyebrow">05e · Rule engine: MAUT + neighbour support</span>
-      <h2>Pure functions, one dict for every number</h2>
-      <p>The numbers are exactly <a href="index.html#rule">Plan 05</a>. Change only <code>W</code>, <code>RAMP</code> and <code>T</code>, then record it in WORKLOG section 7.</p>
+      <h2>Fungsi murni, satu dict untuk semua angka</h2>
+      <p>Angka persis <a href="index.html#rule">Rencana 05</a>. Ubah hanya di <code>W</code>, <code>RAMP</code>, dan <code>T</code>, lalu catat di WORKLOG bagian 7.</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
@@ -930,14 +929,14 @@ W    = {"H": .25, "G": .25, "LST": .10, "SAT": .05, "T": .15, "N": .20}
 RAMP = {"H": (2.0, 4.0), "G": (2.0, 4.0), "LST": (1.0, 4.0), "SAT": (0.0, 3.0)}
 
 def ramp(x, a, b):
-    return np.clip((x - a) / (b - a), 0.0, 1.0)   <span class="c"># NaN stays NaN</span>
+    return np.clip((x - a) / (b - a), 0.0, 1.0)   <span class="c"># NaN tetap NaN</span>
 
 def attributes(zrel_h, zrel_g, d_lst, d_sat, k_nights):
     return {"H": ramp(zrel_h, *RAMP["H"]), "G": ramp(zrel_g, *RAMP["G"]),
             "LST": ramp(d_lst, *RAMP["LST"]), "SAT": ramp(d_sat, *RAMP["SAT"]),
             "T": np.minimum(k_nights / 3.0, 1.0)}
 
-def weighted(u, keys):                    <span class="c"># weights normalised over available attributes</span>
+def weighted(u, keys):                    <span class="c"># bobot dinormalisasi atas atribut ada</span>
     num = sum(np.where(np.isnan(u[k]), 0, u[k]) * W[k] for k in keys)
     den = sum(np.where(np.isnan(u[k]), 0, W[k]) for k in keys)
     return np.where(den &gt; 0, num / np.where(den &gt; 0, den, 1), np.nan)
@@ -950,11 +949,11 @@ def utility(u, u_n):
       </div>
       <div class="stack">
         <div class="code">
-          <div class="code-head"><span>Neighbours</span><span>jobs/lib/neighbours.py</span></div>
+          <div class="code-head"><span>Tetangga</span><span>jobs/lib/neighbours.py</span></div>
 <pre>def support(u0: pd.Series, nbr8: pd.DataFrame) -&gt; pd.Series:
     <span class="c"># u0: index pixel_id; nbr8: pixel_id, neighbor_ids[]</span>
     def one(ids):
-        v = u0.reindex(ids).dropna()          <span class="c"># observed neighbours only</span>
+        v = u0.reindex(ids).dropna()          <span class="c"># hanya tetangga teramati</span>
         return float((v &gt;= 0.5).mean()) if len(v) else 0.0
     return pd.Series(nbr8.neighbor_ids.map(one).values, index=nbr8.pixel_id)</pre>
         </div>
@@ -968,23 +967,22 @@ def classify(U, u_n, agree, n_sat):
          (U &gt;= T["awas_u"]) &amp; (u_n &gt;= T["awas_n"]) &amp; agree,
          U &gt;= T["watch_u"]],
         ["NO_OBSERVATION", "AWAS", "WATCH"], default="SAFE")
-<span class="c"># agree = u_H ≥ 0.5 and u_G ≥ 0.5, each in ≥ 1 slot within 60 minutes</span></pre>
+<span class="c"># agree = u_H ≥ 0,5 dan u_G ≥ 0,5, masing-masing ≥ 1 slot dalam 60 menit</span></pre>
         </div>
-        <div class="callout info">Order inside <code>jobs/evaluate.py</code>: read slot features → <code>anomaly.zscore</code> per satellite → ΔLST, ΔSAT → <code>maut.attributes</code> → <code>u0</code> → <code>neighbours.support</code> → <code>utility</code> → <code>status.classify</code> → write <code>score/</code> → <code>cluster.label</code> → <code>POST /verify</code> for new clusters.</div>
+        <div class="callout info">Urutan di <code>jobs/evaluate.py</code>: baca fitur slot → <code>anomaly.zscore</code> per satelit → ΔLST, ΔSAT → <code>maut.attributes</code> → <code>u0</code> → <code>neighbours.support</code> → <code>utility</code> → <code>status.classify</code> → tulis <code>score/</code> → <code>cluster.label</code> → <code>POST /verify</code> untuk kelompok baru.</div>
       </div>
     </div>
   </section>
 
-
   <section id="agen-adk">
     <div class="section-head">
-      <span class="eyebrow">06 · ADK agent</span>
-      <h2>On-demand verification; limits live in the tool layer</h2>
-      <p>✅ ADK built-in loop, called per AWAS cluster. Output goes through <code>save_verification</code>, which validates the schema; there is no status or level field.</p>
+      <span class="eyebrow">06 · Agen ADK</span>
+      <h2>Verifikasi on-demand; batas di lapisan tool</h2>
+      <p>✅ Built-in loop ADK, dipanggil per kelompok AWAS. Output lewat <code>save_verification</code> yang memvalidasi skema; tidak ada field status atau level.</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
-        <div class="code-head"><span>Agent definition</span><span>agent/agent.py</span></div>
+        <div class="code-head"><span>Definisi agen</span><span>agent/agent.py</span></div>
 <pre>from google.adk.agents import Agent
 
 INSTRUCTION = """
@@ -1015,12 +1013,12 @@ verifier = Agent(
 )</pre>
       </div>
       <div class="code tall">
-        <div class="code-head"><span>Schema and guardrails</span><span>agent/schema.py</span></div>
+        <div class="code-head"><span>Skema dan pagar</span><span>agent/schema.py</span></div>
 <pre>class Evidence(BaseModel):
     source: Literal["rule_engine", "viirs_firms",
                     "viirs_image", "himawari_image"]
-    finding: str = Field(max_length=200)      <span class="c"># Indonesian</span>
-    finding_en: str = Field(max_length=200)   <span class="c"># the same finding for the English UI</span>
+    finding: str = Field(max_length=200)      <span class="c"># Bahasa Indonesia</span>
+    finding_en: str = Field(max_length=200)   <span class="c"># temuan yang sama untuk UI bahasa Inggris</span>
     observed_at: str | None = None
     age_h: float | None = None
 
@@ -1034,36 +1032,36 @@ class Verification(BaseModel):
     evidence: list[Evidence] = Field(min_length=1)
     summary_id: str = Field(max_length=500)
     summary_en: str = Field(max_length=500)
-    <span class="c"># no status or level field</span>
+    <span class="c"># tidak ada field status atau level</span>
 
 MAX_TOOL_CALLS = 8
 
 def save_verification(result: dict) -&gt; dict:
-    """Validate schema + rules:
-    - viirs_within_2km_48h must equal the get_latest_viirs result
-    - viirs_within_2km_48h &gt; 0  →  result must be strong_evidence
-    - every number in summary_* exists in a tool result
-    Return {"ok": true} or {"ok": false, "errors": [...]}"""</pre>
+    """Validasi skema + aturan:
+    - viirs_within_2km_48h harus sama dengan hasil get_latest_viirs
+    - viirs_within_2km_48h &gt; 0  →  result wajib strong_evidence
+    - setiap angka di summary_* ada di hasil tool
+    Kembalikan {"ok": true} atau {"ok": false, "errors": [...]}"""</pre>
       </div>
     </div>
     <div class="grid-2" style="margin-top:14px">
       <div class="code tall">
-        <div class="code-head"><span>VIIRS from FIRMS (on demand)</span><span>agent/tools/viirs.py</span></div>
+        <div class="code-head"><span>VIIRS dari FIRMS (on-demand)</span><span>agent/tools/viirs.py</span></div>
 <pre>FIRMS = "https://firms.modaps.eosdis.nasa.gov/api/area/csv/{k}/{src}/{w},{s},{e},{n}/{days}"
 SATS = ("VIIRS_SNPP", "VIIRS_NOAA20", "VIIRS_NOAA21")
 
 def get_latest_viirs(lat: float, lon: float, as_of: str,
                      radius_km: float = 10, hours: int = 48) -&gt; dict:
     t = parse_utc(as_of); d = radius_km / 111
-    recent = (now_utc() - t).days &lt;= 7          <span class="c"># NRT; otherwise the SP archive</span>
+    recent = (now_utc() - t).days &lt;= 7          <span class="c"># NRT; selain itu arsip SP</span>
     rows = []
     for sat in SATS:
         src = f"{sat}_NRT" if recent else f"{sat}_SP"
         url = FIRMS.format(k=MAP_KEY, src=src, w=lon-d, s=lat-d, e=lon+d, n=lat+d, days=2)
         if not recent:
-            url += f"/{t - timedelta(days=1):%Y-%m-%d}"   <span class="c"># ⚠️ meaning of the date: S0-6</span>
+            url += f"/{t - timedelta(days=1):%Y-%m-%d}"   <span class="c"># ⚠️ arti tanggal: S0-6</span>
         try: rows.append(read_csv(cached_get(url)).assign(src=src))
-        except SourceUnavailable: continue       <span class="c"># e.g. NOAA21 SP not available yet</span>
+        except SourceUnavailable: continue       <span class="c"># mis. NOAA21 SP belum ada</span>
     df = pd.concat(rows)
     df["time_utc"] = to_utc(df.acq_date, df.acq_time)
     df = df[(df.time_utc &gt; t - timedelta(hours=hours)) &amp; (df.time_utc &lt;= t)]
@@ -1074,7 +1072,7 @@ def get_latest_viirs(lat: float, lon: float, as_of: str,
             "within_2km": int((df.distance_km &lt;= 2).sum())}</pre>
       </div>
       <div class="code tall">
-        <div class="code-head"><span>VIIRS image from GIBS</span><span>agent/tools/viirs_image.py</span></div>
+        <div class="code-head"><span>Citra VIIRS dari GIBS</span><span>agent/tools/viirs_image.py</span></div>
 <pre>GIBS = "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi"
 LAYERS = [f"{s}_CorrectedReflectance_TrueColor"
           for s in ("VIIRS_NOAA21", "VIIRS_NOAA20", "VIIRS_SNPP")]
@@ -1082,7 +1080,7 @@ LAYERS = [f"{s}_CorrectedReflectance_TrueColor"
 def fetch_viirs_image(lat: float, lon: float, as_of: str,
                       half_deg: float = 0.2) -&gt; dict:
     t = parse_utc(as_of)
-    for back in range(0, 4):                     <span class="c"># WIB date of as_of, back ≤ 3 days</span>
+    for back in range(0, 4):                     <span class="c"># tanggal WIB as_of, mundur ≤ 3 hari</span>
         day = (t + timedelta(hours=7)).date() - timedelta(days=back)
         for layer in LAYERS:
             r = httpx.get(GIBS, timeout=60, params={
@@ -1092,33 +1090,33 @@ def fetch_viirs_image(lat: float, lon: float, as_of: str,
                 "WIDTH": 512, "HEIGHT": 512, "FORMAT": "image/jpeg",
                 "TIME": f"{day:%Y-%m-%d}"})
             img = Image.open(io.BytesIO(r.content))
-            if np.asarray(img).std() &lt; 3: continue    <span class="c"># blank / no data</span>
-            png = draw_marker(img, radius_km=5)       <span class="c"># dot + 5 km circle</span>
+            if np.asarray(img).std() &lt; 3: continue    <span class="c"># kosong / tanpa data</span>
+            png = draw_marker(img, radius_km=5)       <span class="c"># titik + lingkaran 5 km</span>
             path = save_crop(png, pixel_id, t, "viirs")
             return {"path": path, "signed_url": sign(path, hours=1),
                     "layer": layer, "date": str(day),
                     "age_h": hours_since(day, local_time="13:30", tz="+07:00", now=t)}
-    return {"none": True, "reason": "no image in the last 3 days"}</pre>
+    return {"none": True, "reason": "tidak ada citra 3 hari terakhir"}</pre>
       </div>
     </div>
   </section>
 
   <section id="telegram">
     <div class="section-head">
-      <span class="eyebrow">06b · Telegram bot ✅</span>
-      <h2>Send once, edit afterwards, one way</h2>
-      <p>Plain HTTP to the Bot API (httpx), no bot framework and no webhook. The same module serves <code>asapify-agent</code> (operator group) and <code>asapify-api</code> (alert group).</p>
+      <span class="eyebrow">06b · Bot Telegram ✅</span>
+      <h2>Kirim sekali, edit sesudahnya, satu arah</h2>
+      <p>HTTP langsung ke Bot API (httpx), tanpa framework bot dan tanpa webhook. Modul yang sama dipakai <code>asapify-agent</code> (grup operator) dan <code>asapify-api</code> (grup peringatan).</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
-        <div class="code-head"><span>Send and edit messages</span><span>shared/telegram.py</span></div>
+        <div class="code-head"><span>Kirim dan edit pesan</span><span>shared/telegram.py</span></div>
 <pre>TG = f"https://api.telegram.org/bot{TOKEN}"
 
 async def send(chat_id, photo_url, caption):
     r = await http.post(f"{TG}/sendPhoto", json={
         "chat_id": chat_id,
-        "photo": photo_url,          <span class="c"># signed crop URL</span>
-        "caption": caption,          <span class="c"># ≤ 1024 characters</span>
+        "photo": photo_url,          <span class="c"># signed URL crop</span>
+        "caption": caption,          <span class="c"># ≤ 1024 karakter</span>
         "parse_mode": "HTML"})
     msg = r.json()["result"]
     return {"chat_id": chat_id, "message_id": msg["message_id"]}
@@ -1129,64 +1127,64 @@ async def edit(chat_id, message_id, caption):   <span class="c"># SELESAI</span>
         "caption": caption, "parse_mode": "HTML"})</pre>
       </div>
       <div class="code tall">
-        <div class="code-head"><span>Get a group's chat_id (once)</span><span>bash</span></div>
-<pre><span class="c"># 1. add the bot to the group, send /start@bot_name in the group</span>
-<span class="c"># 2. read chat.id from the latest update</span>
+        <div class="code-head"><span>Ambil chat_id grup (sekali)</span><span>bash</span></div>
+<pre><span class="c"># 1. tambahkan bot ke grup, kirim /start@nama_bot di grup</span>
+<span class="c"># 2. baca chat.id dari update terakhir</span>
 curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
   | jq '.result[].message.chat | {id, title}'
 
-<span class="c"># 3. store it in Firestore</span>
+<span class="c"># 3. simpan ke Firestore</span>
 <span class="c">#    tg_chats/{id}: {jenis: "peringatan",</span>
 <span class="c">#                    provinsi: "62", chat_id: -100…}</span></pre>
-        <div class="callout info" style="margin-top:8px">No webhook: no public endpoint for Telegram, no secret token, and no Telegram user data stored.</div>
+        <div class="callout info" style="margin-top:8px">Tanpa webhook: tidak ada endpoint publik untuk Telegram, tidak ada secret token, dan tidak ada data pengguna Telegram yang tersimpan.</div>
       </div>
     </div>
-    <div class="callout" style="margin-top:12px">Telegram limits a bot to about 20 messages per minute per group. That is safe for this flow: the operator group gets one message per verification, the alert group only after an operator decision.</div>
+    <div class="callout" style="margin-top:12px">Telegram membatasi kiriman bot sekitar 20 pesan per menit per grup. Aman untuk alur ini: grup operator hanya menerima satu pesan per verifikasi, grup peringatan hanya setelah keputusan operator.</div>
   </section>
 
   <section id="jobs">
     <div class="section-head">
-      <span class="eyebrow">07 · Jobs</span>
-      <h2>Steps inside each job</h2>
+      <span class="eyebrow">07 · Job</span>
+      <h2>Langkah di setiap job</h2>
     </div>
     <div class="grid-2">
       <div class="card">
-        <span class="pill waspada">asapify-ingest-himawari / -gk2a · */10 at night</span>
+        <span class="pill waspada">asapify-ingest-himawari / -gk2a · */10 malam</span>
         <ol>
-          <li>Pick the slot: <code>AS_OF</code> rounded down to a multiple of 10 minutes; process that slot + any missing night slot from the last 60 minutes. Outside 13:00–20:50 UTC: exit without action.</li>
-          <li><code>list_scan(slot)</code>; if files are incomplete, record it in <code>runs</code> (<code>pending</code>) and exit. The next cycle retries.</li>
-          <li><code>read_scan</code> → 0.02° grid → <code>to_features</code> (peat pixels only).</li>
-          <li>Write <code>{sat}/YYYY/MM/DD/HHMM.parquet</code> (idempotent: overwrite) and the source file manifest in <code>raw/{sat}/manifest/</code>.</li>
-          <li>Record latency (slot time vs the file's <code>LastModified</code>) in <code>runs</code>.</li>
+          <li>Tentukan slot: <code>AS_OF</code> dibulatkan ke bawah ke kelipatan 10 menit; proses slot itu + slot malam yang belum ada dalam 60 menit terakhir. Di luar 13.00–20.50 UTC: selesai tanpa aksi.</li>
+          <li><code>list_scan(slot)</code>; bila file belum lengkap, catat di <code>runs</code> (<code>pending</code>) dan selesai. Siklus berikutnya mencoba lagi.</li>
+          <li><code>read_scan</code> → grid 0,02° → <code>to_features</code> (hanya piksel gambut).</li>
+          <li>Tulis <code>{sat}/YYYY/MM/DD/HHMM.parquet</code> (idempoten: tulis ulang) dan manifest file sumber di <code>raw/{sat}/manifest/</code>.</li>
+          <li>Catat latensi (waktu slot vs <code>LastModified</code> file) di <code>runs</code>.</li>
         </ol>
       </div>
       <div class="card">
-        <span class="pill waspada">asapify-evaluate · minutes 5, 15, … at night</span>
+        <span class="pill waspada">asapify-evaluate · menit 5, 15, … malam</span>
         <ol>
-          <li>Pick the latest slot where both satellites are present; if one satellite is &gt; 40 minutes late, run with one satellite (<code>n_sat = 1</code>). Skip slots already in <code>runs</code>.</li>
-          <li>Read the latest thermal baseline, LST bias and POWER from <code>environment/</code>.</li>
-          <li>Compute z, ΔLST, ΔSAT, attributes, U0, u_N, U, status (05e). Write <code>score/</code>.</li>
-          <li>Label AWAS clusters (<code>cluster.label</code>), update <code>clusters</code>, close clusters without AWAS for 3 valid nights, then <code>POST $AGENT_URL/cluster-closed</code> so any published message is edited to SELESAI.</li>
-          <li>For new clusters, or when the last verification is &gt; 6 h old: <code>POST $AGENT_URL/verify</code> with an OIDC token.</li>
+          <li>Pilih slot terbaru yang kedua satelitnya ada; bila satu satelit terlambat &gt; 40 menit, jalan dengan satu satelit (<code>n_sat = 1</code>). Lewati slot yang sudah ada di <code>runs</code>.</li>
+          <li>Baca baseline termal, bias LST, dan POWER terbaru dari <code>environment/</code>.</li>
+          <li>Hitung z, ΔLST, ΔSAT, atribut, U0, u_N, U, status (05e). Tulis <code>score/</code>.</li>
+          <li>Label kelompok AWAS (<code>cluster.label</code>), perbarui <code>clusters</code>, tutup kelompok tanpa AWAS 3 malam valid lalu <code>POST $AGENT_URL/cluster-closed</code> agar pesan yang pernah diterbitkan diedit jadi SELESAI.</li>
+          <li>Untuk kelompok baru atau verifikasi terakhir &gt; 6 jam: <code>POST $AGENT_URL/verify</code> dengan token OIDC.</li>
         </ol>
       </div>
       <div class="card">
-        <span class="pill waspada">asapify-environment · daily 12:00 WIB</span>
+        <span class="pill waspada">asapify-environment · harian 12.00 WIB</span>
         <ol>
-          <li>For each cell in <code>peat/power_cells.parquet</code>: request the days missing from <code>raw/power/{cell_id}.parquet</code> (0.2 s pause between requests).</li>
+          <li>Untuk tiap sel di <code>peat/power_cells.parquet</code>: minta hari yang belum ada di <code>raw/power/{cell_id}.parquet</code> (jeda 0,2 detik antar request).</li>
           <li><code>power_baseline</code> → <code>environment/power/YYYYMMDD.parquet</code>.</li>
-          <li><code>thermal_baseline</code> per satellite from 30 nights of <code>himawari/</code> and <code>gk2a/</code>; WATCH/AWAS pixels are frozen.</li>
+          <li><code>thermal_baseline</code> per satelit dari 30 malam <code>himawari/</code> dan <code>gk2a/</code>; piksel WATCH/AWAS dibekukan.</li>
           <li><code>lst_bias</code> → <code>environment/bias/YYYYMMDD.parquet</code>.</li>
         </ol>
       </div>
       <div class="card">
-        <span class="pill grey">asapify-build · once</span>
+        <span class="pill grey">asapify-build · sekali</span>
         <ol>
           <li><code>build_built_frac</code> (Earth Engine WorldCover).</li>
-          <li><code>build_peat_mask</code> (BIG KHG + provinces + built_frac).</li>
-          <li><code>build_neighbors</code> (8 directions, radius 5) and <code>build_power_cells</code>.</li>
+          <li><code>build_peat_mask</code> (KHG BIG + provinsi + built_frac).</li>
+          <li><code>build_neighbors</code> (8 arah, radius 5) dan <code>build_power_cells</code>.</li>
         </ol>
-        <p class="note">The backtest backfill uses the same image and ingest code: <code>python -m jobs.backfill --sat … --start … --end … --step 10|20 --night-only</code>, run as an 8-task Cloud Run job.</p>
+        <p class="note">Backfill backtest memakai image dan kode ingest yang sama: <code>python -m jobs.backfill --sat … --start … --end … --step 10|20 --night-only</code>, dijalankan sebagai Cloud Run job 8 task.</p>
       </div>
     </div>
   </section>
@@ -1194,14 +1192,14 @@ curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
   <section id="repo">
     <div class="section-head">
       <span class="eyebrow">08 · Repo</span>
-      <h2>Monorepo layout</h2>
+      <h2>Struktur monorepo</h2>
     </div>
     <div class="code">
       <div class="code-head"><span>Monorepo</span><span>asapify/</span></div>
 <pre>asapify/
 ├─ WORKLOG.md, Dockerfile, .gcloudignore, requirements.lock
 ├─ infra/ env.sh, set_role.py, lifecycle.json
-├─ shared/ telegram.py, auth.py, storage.py      <span class="c"># used by agent and api</span>
+├─ shared/ telegram.py, auth.py, storage.py      <span class="c"># dipakai agent dan api</span>
 ├─ agent/                    <span class="c"># Cloud Run service asapify-agent</span>
 │  ├─ main.py (POST /verify), agent.py, schema.py, validator.py, run.py, evaluate.py
 │  ├─ tools/ context.py, viirs.py, viirs_image.py, himawari_image.py
@@ -1209,49 +1207,49 @@ curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
 ├─ api/                      <span class="c"># Cloud Run service asapify-api</span>
 │  ├─ main.py
 │  └─ routers/ public.py, operator.py
-├─ jobs/                     <span class="c"># Cloud Run jobs, one image</span>
-│  ├─ ingest.py (--sat himawari|gk2a), evaluate.py, environment.py   <span class="c"># scheduled</span>
+├─ jobs/                     <span class="c"># Cloud Run jobs, satu image</span>
+│  ├─ ingest.py (--sat himawari|gk2a), evaluate.py, environment.py   <span class="c"># terjadwal</span>
 │  ├─ build_all.py, build_built_frac.py, build_peat_mask.py,
-│  │  build_neighbors.py, build_power_cells.py                       <span class="c"># once</span>
+│  │  build_neighbors.py, build_power_cells.py                       <span class="c"># sekali</span>
 │  ├─ backfill.py, replay.py, calibrate.py                           <span class="c"># backtest</span>
 │  ├─ lib/ region.py, himawari.py, gk2a.py, features.py, power.py, baseline.py,
 │  │       anomaly.py, maut.py, neighbours.py, status.py, cluster.py
 │  └─ tests/ test_features.py, test_himawari.py, test_gk2a.py, test_power.py,
 │            test_baseline.py, test_maut.py, test_status.py, test_cluster.py
-├─ notebooks/ backtest.ipynb   <span class="c"># lead time: first VIIRS − first AWAS</span>
+├─ notebooks/ backtest.ipynb   <span class="c"># lead time: VIIRS pertama − AWAS pertama</span>
 ├─ scripts/ e2e.sh
-├─ data/ref/                   <span class="c"># KHG, provinces, built_frac, tg_chats (no secrets)</span>
-├─ data/local/                 <span class="c"># raw, not committed</span>
-├─ docs/                       <span class="c"># proof of done: png, csv, log</span>
-└─ (operator web app in the separate asapify-web repo: React 19 + Vite + MapLibre 6)</pre>
+├─ data/ref/                   <span class="c"># KHG, provinsi, built_frac, tg_chats (tanpa rahasia)</span>
+├─ data/local/                 <span class="c"># mentah, tidak di-commit</span>
+├─ docs/                       <span class="c"># bukti selesai: png, csv, log</span>
+└─ (web operator di repo terpisah asapify-web: React 19 + Vite + MapLibre 6)</pre>
     </div>
   </section>
 
   <section id="galat">
     <div class="section-head">
-      <span class="eyebrow">09 · Errors</span>
-      <h2>What happens when something fails</h2>
+      <span class="eyebrow">09 · Galat</span>
+      <h2>Yang terjadi saat sesuatu gagal</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Event</th><th scope="col">Behaviour</th></tr></thead>
+        <thead><tr><th scope="col">Kejadian</th><th scope="col">Perilaku</th></tr></thead>
         <tbody>
-          <tr><th scope="row">One satellite's scan is not available yet</th><td>Ingest exits without action; evaluate waits up to 40 minutes, then runs with one satellite (<code>n_sat = 1</code>, AWAS impossible).</td></tr>
-          <tr><th scope="row">Both satellites missing or corrupt</th><td>Every pixel is <code>NO_OBSERVATION</code> for that slot; recorded in <code>runs</code>.</td></tr>
-          <tr><th scope="row">NASA POWER fails / is late</th><td>Environment uses the latest available POWER baseline (max 3 days); older than that → <code>u_LST</code> and <code>u_SAT</code> are dropped (NaN) and the weights are normalised.</td></tr>
-          <tr><th scope="row">FIRMS or GIBS fails</th><td>The tool returns an error; the agent continues with the evidence it has and the result is <code>inconclusive</code>, noting the failed source.</td></tr>
-          <tr><th scope="row">Gemini fails or the tool limit is reached</th><td>The verification is saved as <code>inconclusive</code> with <code>validator_failed</code> / <code>tool_limit</code>; the operator can request re-verification.</td></tr>
-          <tr><th scope="row">Two operators decide at the same time</th><td>Firestore transaction; the second gets 409 <code>ALREADY_DECIDED</code> and the web app shows the decision already saved.</td></tr>
-          <tr><th scope="row">Archive night without data</th><td><code>/operator/nights</code> sends <code>has_data = false</code> (a faded date in the calendar); <code>/operator/grid/night</code> sends every slot as <code>null</code> and the web app shows every pixel as unobserved with a banner.</td></tr>
-          <tr><th scope="row">Telegram send fails (429 / network)</th><td>The alert is still saved with <code>telegram.status = pending</code>; resend after <code>retry_after</code>. The operator sees the send status in the alert list.</td></tr>
+          <tr><th scope="row">Scan satu satelit belum tersedia</th><td>Ingest selesai tanpa aksi; evaluate menunggu sampai 40 menit, lalu jalan dengan satu satelit (<code>n_sat = 1</code>, AWAS tidak mungkin).</td></tr>
+          <tr><th scope="row">Kedua satelit hilang atau rusak</th><td>Semua piksel <code>NO_OBSERVATION</code> untuk slot itu; tercatat di <code>runs</code>.</td></tr>
+          <tr><th scope="row">NASA POWER gagal / terlambat</th><td>Environment memakai baseline POWER terakhir yang ada (maks 3 hari); lebih lama → <code>u_LST</code> dan <code>u_SAT</code> dikeluarkan (NaN) dan bobot dinormalisasi.</td></tr>
+          <tr><th scope="row">FIRMS atau GIBS gagal</th><td>Tool mengembalikan galat; agen melanjutkan dengan bukti yang ada dan hasilnya <code>inconclusive</code> dengan catatan sumber yang gagal.</td></tr>
+          <tr><th scope="row">Gemini gagal atau batas tool tercapai</th><td>Verifikasi disimpan <code>inconclusive</code> dengan <code>validator_failed</code> / <code>tool_limit</code>; operator bisa minta verifikasi ulang.</td></tr>
+          <tr><th scope="row">Dua operator memutuskan bersamaan</th><td>Transaksi Firestore; yang kedua mendapat 409 <code>ALREADY_DECIDED</code>, web menampilkan keputusan yang sudah tersimpan.</td></tr>
+          <tr><th scope="row">Malam arsip tanpa data</th><td><code>/operator/nights</code> mengirim <code>has_data = false</code> (tanggal pudar di kalender); <code>/operator/grid/night</code> mengirim semua slot <code>null</code> dan web menampilkan semua piksel tidak teramati dengan banner.</td></tr>
+          <tr><th scope="row">Kirim Telegram gagal (429 / jaringan)</th><td>Alert tetap tersimpan dengan <code>telegram.status = pending</code>; kirim ulang dengan jeda sesuai <code>retry_after</code>. Operator melihat status kirim di daftar alert.</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <nav class="pager" aria-label="Next pages">
-    <a href="ui.html"><span>← Previous</span>UI specification</a>
-    <a href="cloud.html"><span>Next →</span>Cloud setup</a>
+  <nav class="pager" aria-label="Halaman berikutnya">
+    <a href="ui.html"><span>← Sebelumnya</span>Spesifikasi UI</a>
+    <a href="cloud.html"><span>Berikutnya →</span>Konfigurasi Cloud</a>
   </nav>
 </div>
 

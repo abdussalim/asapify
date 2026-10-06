@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ASAPify UI</title>
+<title>UI ASAPify</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -428,84 +428,84 @@
 </style>
 </head>
 <body>
-<nav class="topnav" aria-label="Main navigation"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>team plan</small></a><div class="navlinks"><a href="index.html">Plan</a><a href="ui.html" aria-current="page">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html">Cloud setup</a><a href="runbook.html">Runbook</a></div><div class="langs" aria-label="Language"><span aria-current="true">EN</span><a href="id/ui.html" hreflang="id" lang="id">ID</a></div></div></nav>
+<nav class="topnav" aria-label="Navigasi utama"><div class="topnav-in"><a class="brand" href="index.html"><i aria-hidden="true"></i>ASAPify <small>rencana tim</small></a><div class="navlinks"><a href="index.html">Rencana</a><a href="ui.html" aria-current="page">UI</a><a href="backend.html">Backend &amp; API</a><a href="cloud.html">Konfigurasi Cloud</a><a href="runbook.html">Runbook</a></div><div class="langs" aria-label="Bahasa"><a href="../ui.html" hreflang="en" lang="en">EN</a><span aria-current="true">ID</span></div></div></nav>
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">UI specification · reference for role D · aligned with the app 6 Oct</span>
-    <h1>Operator screens and Telegram bot messages</h1>
-    <p class="lede">The main user is the <strong>operator</strong>, who watches peat pixels, reads <em>why</em> a pixel is <code>AWAS</code> (MAUT attributes with their measured numbers, and neighbours), reads the agent's verification, then <strong>publishes or rejects</strong>. Published messages go out through the bot to a <strong>Telegram group</strong>, one way. The operator web app already runs in the <code>asapify-web</code> repo in <strong>mock mode</strong> (fictional data, demo sign-in); in live mode all data comes through the <a href="backend.html">API</a>. Default language is <strong>English</strong>, with an EN/ID switch in the top bar that the device remembers.</p>
-    <ul class="toc" aria-label="Page contents">
-      <li><a href="#rute"><span>01</span>Routes</a></li>
-      <li><a href="#alur-pengguna"><span>02</span>Flows</a></li>
-      <li><a href="#layar"><span>03</span>Wireframes</a></li>
-      <li><a href="#telegram"><span>03b</span>Bot messages</a></li>
-      <li><a href="#layer"><span>04</span>Map layers</a></li>
-      <li><a href="#token"><span>05</span>Status &amp; colour</a></li>
-      <li><a href="#komponen"><span>06</span>Components</a></li>
-      <li><a href="#status"><span>07</span>Screen states</a></li>
-      <li><a href="#teks"><span>08</span>Language &amp; copy</a></li>
+    <span class="eyebrow">Spesifikasi UI · pegangan Peran D · disamakan dengan aplikasi 6 Okt</span>
+    <h1>Layar operator dan pesan bot Telegram</h1>
+    <p class="lede">Pengguna utama adalah <strong>operator</strong> yang memantau piksel gambut, membaca <em>kenapa</em> sebuah piksel berstatus <code>AWAS</code> (atribut MAUT dengan angka terukurnya, dan tetangga), membaca hasil verifikasi agen, lalu <strong>menerbitkan atau menolak</strong>. Pesan yang diterbitkan dikirim bot ke <strong>grup Telegram</strong>, satu arah. Web operator sudah berjalan di repo <code>asapify-web</code> dalam <strong>mode mock</strong> (data fiktif, login demo); semua data mode live lewat <a href="backend.html">API</a>. Bahasa default <strong>Inggris</strong>, tombol EN/ID di bilah atas, pilihan diingat per perangkat.</p>
+    <ul class="toc" aria-label="Isi halaman">
+      <li><a href="#rute"><span>01</span>Rute</a></li>
+      <li><a href="#alur-pengguna"><span>02</span>Alur</a></li>
+      <li><a href="#layar"><span>03</span>Wireframe</a></li>
+      <li><a href="#telegram"><span>03b</span>Pesan bot</a></li>
+      <li><a href="#layer"><span>04</span>Layer peta</a></li>
+      <li><a href="#token"><span>05</span>Status &amp; warna</a></li>
+      <li><a href="#komponen"><span>06</span>Komponen</a></li>
+      <li><a href="#status"><span>07</span>Keadaan layar</a></li>
+      <li><a href="#teks"><span>08</span>Bahasa &amp; teks</a></li>
       <li><a href="#stack-fe"><span>09</span>Stack</a></li>
     </ul>
   </header>
 
   <section id="rute">
     <div class="section-head">
-      <span class="eyebrow">01 · Routes</span>
-      <h2>Five routes for operators, judges and the backend team</h2>
+      <span class="eyebrow">01 · Rute</span>
+      <h2>Lima rute untuk operator, juri, dan tim BE</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Route</th><th scope="col">Page</th><th scope="col">User</th><th scope="col">Main content</th><th scope="col">Data from</th></tr></thead>
+        <thead><tr><th scope="col">Rute</th><th scope="col">Halaman</th><th scope="col">Pengguna</th><th scope="col">Isi utama</th><th scope="col">Data dari</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>/masuk</code></th><td>Sign-in</td><td>operator</td><td>Demo sign-in in mock mode; Firebase Auth (Google) in live mode. The left side explains when a pixel becomes AWAS with a 3 × 3 neighbour grid</td><td>Firebase Auth</td></tr>
-          <tr><th scope="row"><code>/</code></th><td>Operator map</td><td>operator</td><td>Peat pixel status, a sortable AWAS cluster list, search, status and province filters with a province highlight, layer control, slot player with an archive-night calendar, pixel inspector</td><td><code>/meta</code>, <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code>, <code>/operator/clusters</code>, <code>/operator/basemaps</code>, <code>layers/*.geojson</code></td></tr>
-          <tr><th scope="row"><code>/kelompok/:id</code></th><td>Cluster detail</td><td>operator</td><td>3-night utility chart, MAUT parameter table (measured value, u, weight, contribution), neighbour grid, agent verification with temperature tooltips on the images, ToolTrace, decision panel</td><td><code>/operator/clusters/{id}</code></td></tr>
-          <tr><th scope="row"><code>/tentang</code></th><td>About &amp; method</td><td>everyone, judges</td><td>How it works (5 steps), pixel status, MAUT weights, two satellites, limitations, data sources ("NOAA open data"; all processing on Google Cloud)</td><td>static</td></tr>
-          <tr><th scope="row"><code>/kontrak-api</code></th><td>API contract</td><td>backend team, judges</td><td>Conventions, error codes, every endpoint (parameters, body, responses, errors, screens that use it), schemas, static files, internal agent endpoints. JSON examples come from the same mock data as the screens</td><td>static</td></tr>
+          <tr><th scope="row"><code>/masuk</code></th><td>Masuk</td><td>operator</td><td>Login demo di mode mock; Firebase Auth (Google) di mode live. Sisi kiri menjelaskan kapan piksel menjadi AWAS dengan grid tetangga 3 × 3</td><td>Firebase Auth</td></tr>
+          <tr><th scope="row"><code>/</code></th><td>Peta operator</td><td>operator</td><td>Status piksel gambut, daftar kelompok AWAS (bisa diurutkan), pencarian, filter status dan provinsi dengan sorotan provinsi, kontrol lapisan, pemutar slot dengan kalender malam arsip, inspektur piksel</td><td><code>/meta</code>, <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code>, <code>/operator/clusters</code>, <code>/operator/basemaps</code>, <code>layers/*.geojson</code></td></tr>
+          <tr><th scope="row"><code>/kelompok/:id</code></th><td>Detail kelompok</td><td>operator</td><td>Grafik utility 3 malam, tabel parameter MAUT (angka terukur, u, bobot, sumbangan), grid tetangga, verifikasi agen dengan tooltip suhu di citra, ToolTrace, panel keputusan</td><td><code>/operator/clusters/{id}</code></td></tr>
+          <tr><th scope="row"><code>/tentang</code></th><td>Tentang &amp; metode</td><td>semua, juri</td><td>Cara kerja (5 langkah), status piksel, bobot MAUT, dua satelit, keterbatasan, sumber data ("NOAA open data"; semua pemrosesan di Google Cloud)</td><td>statis</td></tr>
+          <tr><th scope="row"><code>/kontrak-api</code></th><td>Kontrak API</td><td>tim BE, juri</td><td>Konvensi, kode galat, semua endpoint (parameter, body, respons, galat, layar pemakai), skema, file statis, endpoint internal agen. Contoh JSON diambil dari data mock yang sama dengan layar</td><td>statis</td></tr>
         </tbody>
-        <caption>Every API path starts with <code>/api/v1</code>. Alert recipients have no web route; their channel is the Telegram group (section 03b). Deep links such as <code>/kelompok/C-0924-002</code> open directly.</caption>
+        <caption>Semua path API diawali <code>/api/v1</code>. Penerima peringatan tidak punya rute web; kanalnya grup Telegram (bagian 03b). Deep link seperti <code>/kelompok/C-0924-002</code> bisa dibuka langsung.</caption>
       </table>
     </div>
   </section>
 
   <section id="alur-pengguna">
     <div class="section-head">
-      <span class="eyebrow">02 · Flows</span>
-      <h2>Three flows that must run smoothly in the demo</h2>
+      <span class="eyebrow">02 · Alur</span>
+      <h2>Tiga alur yang harus mulus di demo</h2>
     </div>
     <div class="grid-3">
       <div class="card">
         <span class="pill waspada">Operator</span>
-        <div class="flowline"><span>Message in the operator group</span><b>→</b><span>Open the cluster detail</span><b>→</b><span>Read MAUT parameters + neighbours</span><b>→</b><span>Read verification + images</span><b>→</b><span>Publish / reject</span></div>
-        <p class="note" style="margin-top:4px">There is no level to choose. Clusters without a decision stay monitored.</p>
+        <div class="flowline"><span>Pesan di grup operator</span><b>→</b><span>Buka detail kelompok</span><b>→</b><span>Baca parameter MAUT + tetangga</span><b>→</b><span>Baca verifikasi + citra</span><b>→</b><span>Terbitkan / tolak</span></div>
+        <p class="note" style="margin-top:4px">Tidak ada pilihan level. Kelompok tanpa keputusan tetap dipantau.</p>
       </div>
       <div class="card">
-        <span class="pill ai">Archive night</span>
-        <div class="flowline"><span>Open the calendar in the slot player</span><b>→</b><span>Pick a date with a dot</span><b>→</b><span>Play that night's 54 slots</span><b>→</b><span>Open that night's cluster</span></div>
-        <p class="note" style="margin-top:4px">The map, cluster outlines and list follow the chosen night.</p>
+        <span class="pill ai">Arsip malam</span>
+        <div class="flowline"><span>Buka kalender di pemutar slot</span><b>→</b><span>Pilih tanggal bertitik</span><b>→</b><span>Putar 54 slot malam itu</span><b>→</b><span>Buka kelompok malam itu</span></div>
+        <p class="note" style="margin-top:4px">Peta, garis kelompok, dan daftar mengikuti malam yang dipilih.</p>
       </div>
       <div class="card">
-        <span class="pill ok">Telegram alert group</span>
-        <div class="flowline"><span>Operator publishes</span><b>→</b><span>Bot sends photo + caption</span><b>→</b><span>Cluster closes: caption SELESAI</span></div>
-        <p class="note" style="margin-top:4px">One way. One message per event, updated in place.</p>
+        <span class="pill ok">Grup Telegram peringatan</span>
+        <div class="flowline"><span>Operator menerbitkan</span><b>→</b><span>Bot kirim foto + caption</span><b>→</b><span>Kelompok ditutup: caption SELESAI</span></div>
+        <p class="note" style="margin-top:4px">Satu arah. Satu pesan per kejadian, diperbarui di tempat.</p>
       </div>
     </div>
   </section>
 
   <section id="layar">
     <div class="section-head">
-      <span class="eyebrow">03 · Wireframes</span>
-      <h2>Five operator web screens and one Telegram message, phone size</h2>
-      <p>From 1024 px up, the cluster list moves to a 360 px left panel; below that, the list becomes a draggable bottom sheet. Sketch data is fictional.</p>
+      <span class="eyebrow">03 · Wireframe</span>
+      <h2>Lima layar web operator dan satu pesan Telegram, ukuran HP</h2>
+      <p>Di layar 1024 px ke atas, daftar kelompok pindah ke panel kiri 360 px; di bawahnya daftar menjadi bottom sheet yang bisa diseret. Data dalam sketsa fiktif.</p>
     </div>
     <div class="phones">
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
           <div class="scr-top"><span>ASAPify · Operator</span><small>EN | ID</small></div>
-          <div class="banner">Slot 24 Sep 22:10 WIB · Himawari ✓ · GK2A ✓</div>
-          <svg viewBox="0 0 270 250" role="img" aria-label="Sketch of the peat pixel grid with four statuses inside the selected province" style="display:block;width:100%;height:auto">
+          <div class="banner">Slot 24 Sep 22.10 WIB · Himawari ✓ · GK2A ✓</div>
+          <svg viewBox="0 0 270 250" role="img" aria-label="Sketsa grid piksel gambut dengan empat status di dalam provinsi terpilih" style="display:block;width:100%;height:auto">
             <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--line)" stroke-width="3"/></pattern></defs>
             <rect width="270" height="250" fill="var(--surface-2)"/>
             <path d="M20 40 L120 18 L230 34 L250 120 L210 220 L90 232 L30 170 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
@@ -520,86 +520,85 @@
           </svg>
           <div class="sheet">
             <div class="grab"></div>
-            <div class="row"><b>AWAS clusters: 1</b><span>Highest utility ▾</span></div>
-            <div class="row"><span class="pill awas">AWAS</span><span>C-0924-002 · 4 pixels · U 0.73</span></div>
-            <div class="row"><span class="pill ai">Strong evidence</span><span>Awaiting decision</span></div>
+            <div class="row"><b>Kelompok AWAS: 1</b><span>Utilitas tertinggi ▾</span></div>
+            <div class="row"><span class="pill awas">AWAS</span><span>C-0924-002 · 4 piksel · U 0,73</span></div>
+            <div class="row"><span class="pill ai">Bukti kuat</span><span>Menunggu keputusan</span></div>
           </div>
         </div></div>
-        <div class="spec"><h4>Operator map <code>/</code></h4>
-          <ul><li>Opens on Sumatra + Kalimantan (<code>fitBounds([[94.9,-6.1],[119.4,6.0]])</code>)</li><li>2 km pixel grid: colour + status icon; NO_OBSERVATION hatched; AWAS clusters dashed</li><li>Search by cluster ID, pixel ID or coordinates; status chips can be switched off</li><li>15-province filter (dropdown by island): the selected province gets a thick outline and a label, and its surroundings are dimmed</li><li>Cluster list sorted by utility or trigger time</li></ul></div>
+        <div class="spec"><h4>Peta operator <code>/</code></h4>
+          <ul><li>Tampilan awal Sumatra + Kalimantan (<code>fitBounds([[94.9,-6.1],[119.4,6.0]])</code>)</li><li>Grid piksel 2 km: warna + ikon status; NO_OBSERVATION diarsir; kelompok AWAS bergaris putus</li><li>Cari ID kelompok, ID piksel, atau koordinat; chip status bisa dimatikan</li><li>Filter 15 provinsi (dropdown per pulau): provinsi terpilih bergaris tebal, berlabel, sekelilingnya diredupkan</li><li>Daftar kelompok diurutkan menurut utilitas atau waktu pemicu</li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
-          <div class="scr-top"><span>22:10 WIB · latest slot</span><small>▶</small></div>
+          <div class="scr-top"><span>22.10 WIB · slot terbaru</span><small>▶</small></div>
           <div class="scr-body">
-            <div class="blk"><span class="lbl">Night ribbon · 54 slots</span>
-              <svg viewBox="0 0 240 46" role="img" aria-label="Night ribbon: a row with the AWAS count per slot and rows for Himawari and GK2A availability" style="display:block;width:100%;height:auto">
+            <div class="blk"><span class="lbl">Pita malam · 54 slot</span>
+              <svg viewBox="0 0 240 46" role="img" aria-label="Pita malam: baris jumlah AWAS per slot dan baris ketersediaan Himawari dan GK2A" style="display:block;width:100%;height:auto">
                 <g fill="var(--ember)"><rect x="0" y="2" width="8" height="10" opacity="0.35"/><rect x="10" y="2" width="8" height="10" opacity="0.5"/><rect x="20" y="2" width="8" height="10" opacity="0.7"/><rect x="30" y="2" width="8" height="10"/><rect x="40" y="2" width="8" height="10"/></g>
                 <g fill="var(--moss)"><rect x="0" y="18" width="48" height="8"/><rect x="0" y="32" width="48" height="8"/></g>
                 <g fill="var(--surface-2)"><rect x="50" y="2" width="190" height="10"/><rect x="50" y="18" width="190" height="8"/><rect x="50" y="32" width="190" height="8"/></g>
                 <line x1="49" y1="0" x2="49" y2="44" stroke="var(--ink)" stroke-width="2"/>
               </svg>
               <span style="color:var(--ink-dim)">▲ AWAS per slot · H Himawari · G GK2A</span></div>
-            <div class="blk"><span class="lbl">Night calendar · September 2023</span>
+            <div class="blk"><span class="lbl">Kalender malam · September 2023</span>
               <div class="row"><span>11</span><span>12</span><span>13</span><span>14</span><span><b>15•</b></span><span>16</span><span>17</span></div>
               <div class="row"><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span><b>23•</b></span><span><b>24•</b></span></div>
-              <span style="color:var(--ink-dim)">• AWAS clusters that night · faded dates: no data</span></div>
+              <span style="color:var(--ink-dim)">• ada kelompok AWAS · tanggal pudar: tidak ada data</span></div>
           </div>
         </div></div>
-        <div class="spec"><h4>Slot player and calendar</h4>
-          <ul><li>Play the 54 night slots (20:00–04:50 WIB); drag, or use the arrow keys on the ribbon</li><li>Month calendar with month and year pickers; ‹ › moves one night; "Go to latest" returns to the replay night</li><li>The archive starts on 16 Feb 2023 (start of the NOAA GK2A archive)</li></ul></div>
+        <div class="spec"><h4>Pemutar slot dan kalender</h4>
+          <ul><li>Putar 54 slot malam (20.00–04.50 WIB); geser atau pakai panah keyboard di pita</li><li>Kalender per bulan, pilih bulan dan tahun; ‹ › pindah satu malam; "Ke terbaru" kembali ke malam replay</li><li>Arsip mulai 16 Feb 2023 (arsip GK2A di NOAA)</li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
           <div class="scr-top"><span>← C-0924-002</span><span class="pill awas">AWAS</span></div>
           <div class="scr-body">
-            <div class="blk"><span class="lbl">Utility over 3 nights</span>
-              <svg viewBox="0 0 240 80" role="img" aria-label="Line chart of utility rising past the 0.65 threshold" style="display:block;width:100%;height:auto">
-                <line x1="10" y1="24" x2="235" y2="24" stroke="var(--ember)" stroke-dasharray="3 3"/><text x="14" y="20" font-size="8" fill="var(--ember)" font-family="IBM Plex Mono, monospace">0.65 AWAS</text>
-                <line x1="10" y1="50" x2="235" y2="50" stroke="var(--amber)" stroke-dasharray="3 3"/><text x="232" y="60" text-anchor="end" font-size="8" fill="var(--amber)" font-family="IBM Plex Mono, monospace">0.30</text>
+            <div class="blk"><span class="lbl">Utilitas 3 malam</span>
+              <svg viewBox="0 0 240 80" role="img" aria-label="Grafik garis utility naik melewati ambang 0,65" style="display:block;width:100%;height:auto">
+                <line x1="10" y1="24" x2="235" y2="24" stroke="var(--ember)" stroke-dasharray="3 3"/><text x="14" y="20" font-size="8" fill="var(--ember)" font-family="IBM Plex Mono, monospace">0,65 AWAS</text>
+                <line x1="10" y1="50" x2="235" y2="50" stroke="var(--amber)" stroke-dasharray="3 3"/><text x="232" y="60" text-anchor="end" font-size="8" fill="var(--amber)" font-family="IBM Plex Mono, monospace">0,30</text>
                 <rect x="80" y="8" width="50" height="64" fill="url(#hatch)" opacity="0.6"/>
                 <polyline points="12,62 40,58 70,52 80,52 130,46 160,40 190,28 210,18 230,16" fill="none" stroke="var(--ink)" stroke-width="2"/>
                 <line x1="10" y1="72" x2="235" y2="72" stroke="var(--line)"/>
               </svg>
-              <span style="color:var(--ink-dim)">22–24 Sep · hatched = no observation</span></div>
-            <div class="blk"><span class="lbl">MAUT parameters at the trigger slot</span>
-              <div class="row"><span>u_H Himawari · +18.6 K</span><b>1.00</b></div><div class="row"><span>u_G GK2A · +16.9 K</span><b>1.00</b></div><div class="row"><span>u_T · 2 of 3 nights</span><b>0.67</b></div><div class="row"><span>u_N · 3/8 neighbours</span><b>0.375</b></div></div>
+              <span style="color:var(--ink-dim)">22–24 Sep · arsir = tidak teramati</span></div>
+            <div class="blk"><span class="lbl">Parameter MAUT di slot pemicu</span>
+              <div class="row"><span>u_H Himawari · +18,6 K</span><b>1,00</b></div><div class="row"><span>u_G GK2A · +16,9 K</span><b>1,00</b></div><div class="row"><span>u_T · 2 dari 3 malam</span><b>0,67</b></div><div class="row"><span>u_N · 3/8 tetangga</span><b>0,375</b></div></div>
           </div>
         </div></div>
-        <div class="spec"><h4>Cluster detail <code>/kelompok/:id</code></h4>
-          <ul><li>Utility per slot, lines at 0.30 and 0.65, cloudy slots hatched</li><li>Parameter table: measured value, u, weight, contribution w × u, supporting numbers, scale, and the formula <code>U = Σ w·u ÷ Σ w</code></li><li>3 × 3 neighbour mini grid; "both satellites agree" or "one satellite" label</li></ul></div>
-      </div>
-
-
-      <div class="phone-wrap">
-        <div class="phone"><div class="scr">
-          <div class="scr-top"><span>← Verification</span><span class="pill ai">Strong evidence</span></div>
-          <div class="scr-body">
-            <div class="blk"><span class="lbl">VIIRS true colour · NOAA-20 · 24 Sep</span><div class="thumb" aria-hidden="true"></div><span>Thin smoke drifting north-west · 9 h old</span></div>
-            <div class="blk"><span class="lbl">Himawari thermal · 22:10 · tooltip</span><span>p420_950 · B07 45.1 °C · B14 27.3 °C · anomaly +18.6 K (z 4.4) · cluster member</span></div>
-            <div class="blk"><span class="lbl">VIIRS detections, 48 h</span><div class="row"><span>NOAA-20 · 01:42 WIB</span><b>1.4 km</b></div></div>
-            <div class="btns"><span class="btn">Agent steps (5)</span></div>
-          </div>
-        </div></div>
-        <div class="spec"><h4>Verification card</h4>
-          <ul><li>Every piece of evidence shows its time and age; agent text appears in the screen's language</li><li>Tooltip on images: brightness temperature per 0.02° pixel (Himawari B07/B14, GK2A SW038/IR105) and the anomaly against the crop background; on the VIIRS image: coordinates, distance, FIRMS points</li><li>No visible smoke = inconclusive, never negative</li><li>Agent steps (ToolTrace): tool name, arguments, duration (for the video)</li></ul></div>
+        <div class="spec"><h4>Detail kelompok <code>/kelompok/:id</code></h4>
+          <ul><li>Grafik utility per slot, garis 0,30 dan 0,65, slot berawan diarsir</li><li>Tabel parameter: angka terukur, u, bobot, sumbangan w × u, angka pendukung, skala, dan rumus <code>U = Σ w·u ÷ Σ w</code></li><li>Mini-grid 3 × 3 tetangga; label "sepakat dua satelit" atau "satu satelit"</li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
-          <div class="scr-top"><span>Decision C-0924-002</span><small>operator</small></div>
+          <div class="scr-top"><span>← Verifikasi</span><span class="pill ai">Bukti kuat</span></div>
           <div class="scr-body">
-            <div class="blk"><span class="lbl">Summary</span><span>AWAS · U 0.73 · 3/8 neighbours · Himawari + GK2A agree · Strong evidence</span></div>
-            <span class="lbl">Telegram message (in Indonesian) · 412/1024</span>
+            <div class="blk"><span class="lbl">VIIRS true colour · NOAA-20 · 24 Sep</span><div class="thumb" aria-hidden="true"></div><span>Asap tipis ke barat laut · umur 9 jam</span></div>
+            <div class="blk"><span class="lbl">Himawari termal · 22.10 · tooltip</span><span>p420_950 · B07 45,1 °C · B14 27,3 °C · anomali +18,6 K (z 4,4) · anggota kelompok</span></div>
+            <div class="blk"><span class="lbl">Deteksi VIIRS 48 jam</span><div class="row"><span>NOAA-20 · 01.42 WIB</span><b>1,4 km</b></div></div>
+            <div class="btns"><span class="btn">Langkah agen (5)</span></div>
+          </div>
+        </div></div>
+        <div class="spec"><h4>Kartu verifikasi</h4>
+          <ul><li>Setiap bukti menampilkan waktu dan umurnya; teks agen tampil dalam bahasa layar</li><li>Tooltip di citra: suhu kecerahan per piksel 0,02° (Himawari B07/B14, GK2A SW038/IR105), anomali terhadap latar crop; di citra VIIRS: koordinat, jarak, titik FIRMS</li><li>Tanpa asap terlihat = inkonklusif, tidak pernah negatif</li><li>Langkah agen (ToolTrace): nama tool, argumen, durasi (untuk video)</li></ul></div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone"><div class="scr">
+          <div class="scr-top"><span>Keputusan C-0924-002</span><small>operator</small></div>
+          <div class="scr-body">
+            <div class="blk"><span class="lbl">Ringkasan</span><span>AWAS · U 0,73 · 3/8 tetangga · Himawari + GK2A sepakat · Bukti kuat</span></div>
+            <span class="lbl">Pesan Telegram (bahasa Indonesia) · 412/1024</span>
             <div class="field">AWAS · Kalimantan Tengah · -2.21, 113.92 · 4 piksel …</div>
-            <div class="btns"><span class="btn primary">Publish to group</span><span class="btn">Reject</span></div>
-            <small style="color:var(--ink-dim)">Rejecting needs a reason. Clusters without a decision stay monitored.</small>
+            <div class="btns"><span class="btn primary">Terbitkan ke grup</span><span class="btn">Tolak</span></div>
+            <small style="color:var(--ink-dim)">Menolak butuh alasan. Kelompok yang belum diputuskan tetap dipantau.</small>
           </div>
         </div></div>
-        <div class="spec"><h4>Decision panel</h4>
-          <ul><li>Two buttons only: Publish, Reject (reason required); confirmation before sending</li><li>The caption is prefilled from the 03b template, editable, max 1,024 characters</li><li>"Publish to group" posts to the cluster's provincial alert group</li><li>Everything is logged in <code>audit_log</code>; simultaneous decisions → 409, and the saved decision is shown</li></ul></div>
+        <div class="spec"><h4>Panel keputusan</h4>
+          <ul><li>Dua tombol saja: Terbitkan, Tolak (alasan wajib); konfirmasi sebelum kirim</li><li>Caption terisi otomatis dari templat 03b, bisa disunting, maks 1.024 karakter</li><li>"Terbitkan ke grup" mengirim ke grup peringatan provinsi kelompok</li><li>Semua tercatat di <code>audit_log</code>; keputusan bersamaan → 409, keputusan yang tersimpan ditampilkan</li></ul></div>
       </div>
 
       <div class="phone-wrap">
@@ -608,14 +607,14 @@
           <div class="scr-body tg">
             <div class="tg-msg">
               <span class="tg-from">ASAPify Bot</span>
-              <div class="tg-img" role="img" aria-label="VIIRS image with a coordinate marker"><span></span></div>
+              <div class="tg-img" role="img" aria-label="Citra VIIRS dengan penanda koordinat"><span></span></div>
               <p><b>AWAS · Dugaan gambut membara</b><br>📍 Kalimantan Tengah · -2.21, 113.92 · 4 piksel<br>🛰️ Himawari + GK2A sepakat · utility 0,73 · tetangga 3/8<br>🔎 Bukti kuat: asap terlihat (VIIRS 24 Sep), deteksi VIIRS 1,4 km<br>🕙 Slot 24 Sep 22.10 WIB</p>
               <small class="tg-time">22.31</small>
             </div>
           </div>
         </div></div>
-        <div class="spec"><h4>Bot message in the alert group</h4>
-          <ul><li>Sent only after an operator publishes</li><li>The message stays in Indonesian for responders in Indonesia</li><li>Cluster closed = the same message is edited to start with SELESAI ("resolved")</li><li>One way: no buttons, no reports back</li></ul></div>
+        <div class="spec"><h4>Pesan bot di grup peringatan</h4>
+          <ul><li>Terkirim hanya setelah operator menerbitkan</li><li>Kelompok ditutup = pesan yang sama diedit, diawali SELESAI</li><li>Satu arah: tanpa tombol, tanpa laporan balik</li></ul></div>
       </div>
 
     </div>
@@ -623,22 +622,22 @@
 
   <section id="telegram">
     <div class="section-head">
-      <span class="eyebrow">03b · Telegram bot messages ✅</span>
-      <h2>Two groups, two kinds of message</h2>
+      <span class="eyebrow">03b · Pesan bot Telegram ✅</span>
+      <h2>Dua grup, dua jenis pesan</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Group</th><th scope="col">Sender</th><th scope="col">When the bot posts</th><th scope="col">Content</th></tr></thead>
+        <thead><tr><th scope="col">Grup</th><th scope="col">Pengirim</th><th scope="col">Kapan bot mengirim</th><th scope="col">Isi</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Operator (internal)</th><td><code>asapify-agent</code></td><td>Automatically, once an AWAS cluster's verification is saved</td><td>Cluster ID, province, utility, neighbours, verification result, detail link (operators only)</td></tr>
-          <tr><th scope="row">Alert (per province)</th><td><code>asapify-api</code></td><td>Only after an operator presses <em>Publish to group</em></td><td>Photo (VIIRS image if smoke is visible, otherwise the Himawari thermal crop) + the caption template below</td></tr>
-          <tr><th scope="row">Alert, same message</th><td><code>asapify-agent</code> / <code>asapify-api</code></td><td>Cluster closed automatically / operator closes it</td><td><code>editMessageCaption</code>, first line starts with <strong>SELESAI</strong></td></tr>
+          <tr><th scope="row">Operator (internal)</th><td><code>asapify-agent</code></td><td>Otomatis, setelah verifikasi kelompok AWAS tersimpan</td><td>ID kelompok, provinsi, utility, tetangga, hasil verifikasi, link detail (khusus operator)</td></tr>
+          <tr><th scope="row">Peringatan (per provinsi)</th><td><code>asapify-api</code></td><td>Hanya setelah operator menekan <em>Terbitkan ke grup</em></td><td>Foto (citra VIIRS bila asap terlihat, selain itu crop termal Himawari) + caption templat di bawah</td></tr>
+          <tr><th scope="row">Peringatan, pesan yang sama</th><td><code>asapify-agent</code> / <code>asapify-api</code></td><td>Kelompok ditutup otomatis / operator menutup</td><td><code>editMessageCaption</code>, baris pertama diawali <strong>SELESAI</strong></td></tr>
         </tbody>
       </table>
     </div>
     <div class="grid-2">
       <div class="code">
-        <div class="code-head"><span>Caption template (Indonesian)</span><span>shared/caption.py</span></div>
+        <div class="code-head"><span>Templat caption (ID)</span><span>shared/caption.py</span></div>
 <pre>&lt;b&gt;AWAS · Dugaan gambut membara&lt;/b&gt;
 📍 {provinsi} · {lat:.2f}, {lon:.2f} · {n_pixels} piksel
 🛰️ Himawari + GK2A sepakat · utility {U:.2f} · tetangga {n_nbr}/8
@@ -647,12 +646,12 @@
 Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
       </div>
       <div class="card">
-        <h4>Rules</h4>
+        <h4>Aturan</h4>
         <ul>
-          <li>Caption at most 1,024 characters; numbers come from <code>clusters</code> and <code>verifications</code>, never retyped</li>
-          <li>Never says "confirmed fire"; the last line reads "AWAS status comes from satellite rules; it is not a field confirmation"</li>
-          <li>The caption stays in Indonesian (its recipients are responders in Indonesia), also when the web screen is in English; the demo video uses English subtitles</li>
-          <li>The bot accepts no input: no buttons, commands or webhook; it stores no user data</li>
+          <li>Caption maksimal 1.024 karakter; angka dari <code>clusters</code> dan <code>verifications</code>, tidak diketik ulang</li>
+          <li>Tidak pernah menulis "kebakaran terkonfirmasi"</li>
+          <li>Caption tetap Bahasa Indonesia (penerimanya petugas di Indonesia), juga saat layar web berbahasa Inggris; video demo memakai subtitle Inggris</li>
+          <li>Bot tidak menerima input: tanpa tombol, perintah, atau webhook; tidak menyimpan data pengguna</li>
         </ul>
       </div>
     </div>
@@ -660,20 +659,20 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
 
   <section id="layer">
     <div class="section-head">
-      <span class="eyebrow">04 · Map layers</span>
-      <h2>MapLibre data layers over the basemap</h2>
-      <p>Pixel geometry is built once from <code>/operator/pixels</code>. Per-slot status, the status filter and the player use <code>feature-state</code> (only changed cells are rewritten), so playing slots never triggers re-tiling. Map labels (provinces, basemap, MapLibre buttons) follow the screen language.</p>
+      <span class="eyebrow">04 · Layer peta</span>
+      <h2>Lapisan data MapLibre di atas peta dasar</h2>
+      <p>Geometri piksel dibangun sekali dari <code>/operator/pixels</code>. Status per slot, filter status, dan pemutar memakai <code>feature-state</code> (hanya sel yang berubah yang ditulis ulang), jadi memutar slot tidak memicu re-tiling. Label peta (provinsi, peta dasar, tombol MapLibre) mengikuti bahasa layar.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Layer</th><th scope="col">Source</th><th scope="col">Type</th><th scope="col">Style</th><th scope="col">Zoom</th></tr></thead>
+        <thead><tr><th scope="col">Lapisan</th><th scope="col">Sumber</th><th scope="col">Tipe</th><th scope="col">Gaya</th><th scope="col">Zoom</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Basemap</th><td>OpenFreeMap positron/dark (street map), raster from <code>/operator/basemaps</code> (VIIRS imagery), or plain with no tiles</td><td>vector / raster / background</td><td>follows the light/dark theme; lite mode uses plain</td><td>all</td></tr>
-          <tr><th scope="row">Pixel status</th><td><code>/operator/pixels</code> + <code>/operator/grid?format=compact</code> (or <code>/grid/night</code> for other slots)</td><td>fill + symbol</td><td>colour per status, NO_OBSERVATION hatched, Watch/AWAS icons at zoom ≥ 10, thin grid lines at zoom ≥ 9</td><td>all</td></tr>
-          <tr><th scope="row">Peat boundary</th><td><code>layers/peat_pixels.geojson</code> in the public bucket</td><td>line</td><td>1 px dashed line</td><td>all</td></tr>
-          <tr><th scope="row">Province boundaries</th><td><code>layers/provinces.geojson</code> in the public bucket</td><td>line + symbol</td><td>thin line + name label; selected province: thick haloed line, bold label, surroundings dimmed</td><td>labels ≤ 8–9</td></tr>
-          <tr><th scope="row">AWAS clusters</th><td><code>clusters</code> in the compact responses (cell indices)</td><td>line + symbol</td><td>thick dashed line + glow, cluster ID label; selected cluster in blue</td><td>all</td></tr>
-          <tr><th scope="row">VIIRS detections</th><td>verification evidence of the selected cluster</td><td>circle + symbol</td><td>small dot + distance, can be switched off</td><td>≥ 9</td></tr>
+          <tr><th scope="row">Peta dasar</th><td>OpenFreeMap positron/dark (peta jalan), raster dari <code>/operator/basemaps</code> (citra VIIRS), atau polos tanpa tile</td><td>vector / raster / background</td><td>ikut tema terang/gelap; mode ringan memakai polos</td><td>semua</td></tr>
+          <tr><th scope="row">Status piksel</th><td><code>/operator/pixels</code> + <code>/operator/grid?format=compact</code> (atau <code>/grid/night</code> untuk slot lain)</td><td>fill + symbol</td><td>warna per status, NO_OBSERVATION diarsir, ikon Pantau/AWAS di zoom ≥ 10, garis kisi tipis di zoom ≥ 9</td><td>semua</td></tr>
+          <tr><th scope="row">Batas gambut</th><td><code>layers/peat_pixels.geojson</code> di bucket publik</td><td>line</td><td>garis putus 1 px</td><td>semua</td></tr>
+          <tr><th scope="row">Batas provinsi</th><td><code>layers/provinces.geojson</code> di bucket publik</td><td>line + symbol</td><td>garis tipis + label nama; provinsi terpilih: garis tebal berhalo, label tebal, sekeliling diredupkan</td><td>label ≤ 8–9</td></tr>
+          <tr><th scope="row">Kelompok AWAS</th><td><code>clusters</code> di respons ringkas (indeks sel)</td><td>line + symbol</td><td>garis putus tebal + pendar, label ID kelompok; kelompok terpilih garis biru</td><td>semua</td></tr>
+          <tr><th scope="row">Deteksi VIIRS</th><td>bukti verifikasi kelompok terpilih</td><td>circle + symbol</td><td>titik kecil + jarak, bisa dimatikan</td><td>≥ 9</td></tr>
         </tbody>
       </table>
     </div>
@@ -681,17 +680,17 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
 
   <section id="token">
     <div class="section-head">
-      <span class="eyebrow">05 · Status and colour</span>
-      <h2>A status always comes with a label and an icon</h2>
+      <span class="eyebrow">05 · Status dan warna</span>
+      <h2>Status selalu berpasangan dengan label dan ikon</h2>
     </div>
     <div class="grid-2">
       <div class="table-wrap">
         <table>
-          <caption>Pixel status (rule engine)</caption>
-          <thead><tr><th scope="col">Status</th><th scope="col">Label EN / ID</th><th scope="col">Colour</th></tr></thead>
+          <caption>Status piksel (rule engine)</caption>
+          <thead><tr><th scope="col">Status</th><th scope="col">Label EN / ID</th><th scope="col">Warna</th></tr></thead>
           <tbody>
             <tr><th scope="row"><code>SAFE</code></th><td>Safe / Aman</td><td><span class="swatch" style="background:#dbe8dd"></span><code>#DBE8DD</code></td></tr>
-            <tr><th scope="row"><code>NO_OBSERVATION</code></th><td>No observation / Tidak teramati</td><td>grey hatching</td></tr>
+            <tr><th scope="row"><code>NO_OBSERVATION</code></th><td>No observation / Tidak teramati</td><td>arsir abu-abu</td></tr>
             <tr><th scope="row"><code>WATCH</code></th><td>Watch / Pantau</td><td><span class="swatch" style="background:#f0c46a"></span><code>#F0C46A</code></td></tr>
             <tr><th scope="row"><code>AWAS</code></th><td>AWAS / AWAS</td><td><span class="swatch" style="background:#c2410c"></span><code>#C2410C</code></td></tr>
           </tbody>
@@ -699,42 +698,42 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
       </div>
       <div class="table-wrap">
         <table>
-          <caption>Verification result (agent) and decision (operator)</caption>
-          <thead><tr><th scope="col">Value</th><th scope="col">Label EN / ID</th><th scope="col">Display</th></tr></thead>
+          <caption>Hasil verifikasi (agen) dan keputusan (operator)</caption>
+          <thead><tr><th scope="col">Nilai</th><th scope="col">Label EN / ID</th><th scope="col">Tampilan</th></tr></thead>
           <tbody>
-            <tr><th scope="row"><code>strong_evidence</code></th><td>Strong evidence / Bukti kuat</td><td>satellite-blue badge</td></tr>
-            <tr><th scope="row"><code>inconclusive</code></th><td>Inconclusive / Inkonklusif</td><td>grey badge</td></tr>
-            <tr><th scope="row"><code>published</code> · <code>rejected</code> · none</th><td>Published · Rejected · Awaiting decision / Diterbitkan · Ditolak · Menunggu keputusan</td><td>text + icon, no level colour</td></tr>
+            <tr><th scope="row"><code>strong_evidence</code></th><td>Strong evidence / Bukti kuat</td><td>badge biru satelit</td></tr>
+            <tr><th scope="row"><code>inconclusive</code></th><td>Inconclusive / Inkonklusif</td><td>badge abu-abu</td></tr>
+            <tr><th scope="row"><code>published</code> · <code>rejected</code> · belum</th><td>Published · Rejected · Awaiting decision / Diterbitkan · Ditolak · Menunggu keputusan</td><td>teks + ikon, tanpa warna level</td></tr>
           </tbody>
         </table>
       </div>
     </div>
-    <p class="note">Type: IBM Plex Sans for text, IBM Plex Sans Condensed for headings, IBM Plex Mono only for data (IDs, numbers, times). Labels and badges use sentence case, not all caps. Touch targets at least 44 × 44 px. Text contrast at least WCAG AA. The light/dark theme follows the system and can be switched.</p>
+    <p class="note">Huruf: IBM Plex Sans untuk teks, IBM Plex Sans Condensed untuk judul, IBM Plex Mono hanya untuk data (ID, angka, waktu). Label dan badge memakai huruf kalimat, bukan kapital semua. Target sentuh minimal 44 × 44 px. Kontras teks minimal WCAG AA. Tema terang/gelap mengikuti sistem dan bisa diganti.</p>
   </section>
 
   <section id="komponen">
     <div class="section-head">
-      <span class="eyebrow">06 · Components</span>
-      <h2>Components in <code>asapify-web/src/components</code></h2>
+      <span class="eyebrow">06 · Komponen</span>
+      <h2>Komponen di <code>asapify-web/src/components</code></h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Component</th><th scope="col">Used on</th><th scope="col">Role</th></tr></thead>
+        <thead><tr><th scope="col">Komponen</th><th scope="col">Dipakai di</th><th scope="col">Peran</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>StatusBadge</code>, <code>EvidenceBadge</code>, <code>SatelliteAgree</code></th><td>every screen</td><td>pixel status with icon; agent result; "Himawari + GK2A agree" / "one satellite"</td></tr>
-          <tr><th scope="row"><code>DataBanner</code></th><td>map</td><td>latest slot + satellites; amber when one satellite is &gt; 40 minutes late, blue for replay and archive, plus cloud, daytime and no-data banners</td></tr>
-          <tr><th scope="row"><code>SlotPlayer</code></th><td>map</td><td>54-slot night ribbon (▲ row = AWAS count, H/G rows = availability), play/pause, keyboard-friendly slider</td></tr>
-          <tr><th scope="row"><code>NightCalendar</code></th><td>slot player</td><td>month calendar from <code>/operator/nights</code>: faded dates without data, a dot when a night had AWAS clusters; Escape or a click outside closes it</td></tr>
-          <tr><th scope="row"><code>Select</code></th><td>province filter, sort, calendar</td><td>custom dropdown replacing <code>&lt;select&gt;</code> (ARIA listbox pattern): arrows, Home/End, Enter, Escape, type-ahead; opens upward when space below is short</td></tr>
-          <tr><th scope="row"><code>LayerControl</code></th><td>map</td><td>basemap (radio), layer switches, lite-mode switch</td></tr>
-          <tr><th scope="row"><code>PixelInspector</code></th><td>map</td><td>pixel card: ID, province, coordinates, status at this slot and latest, utility, 54-slot history, button to the cluster</td></tr>
-          <tr><th scope="row"><code>Sheet</code></th><td>map (screens &lt; 1024 px)</td><td>draggable bottom sheet; its content still scrolls</td></tr>
-          <tr><th scope="row"><code>UtilityChart</code></th><td>detail</td><td>utility per slot over 3 nights, lines at 0.30 and 0.65, cloudy slots hatched</td></tr>
-          <tr><th scope="row"><code>AttributeBars</code></th><td>detail</td><td>MAUT parameter table from <code>attribute_details</code>: measured value, u, weight, contribution, supporting numbers, scale, formula; missing attributes read "not available"</td></tr>
-          <tr><th scope="row"><code>NeighbourGrid</code></th><td>detail, sign-in</td><td>3 × 3: neighbours ≥ 0.5, normal, cloudy, not peat</td></tr>
-          <tr><th scope="row"><code>EvidenceImage</code>, <code>ProbeTips</code>, <code>FloatingTip</code></th><td>detail</td><td>VIIRS and Himawari images side by side with a 5 km marker; per-cell temperature tooltip (from <code>images[].thermal</code>) and FIRMS points; tooltips render in <code>&lt;body&gt;</code> so they are never clipped</td></tr>
-          <tr><th scope="row"><code>ViirsList</code>, <code>ToolTrace</code></th><td>detail</td><td>VIIRS detections (satellite, WIB time, distance); agent steps: tool name, arguments, duration</td></tr>
-          <tr><th scope="row"><code>DecisionPanel</code></th><td>detail</td><td>Publish / Reject (reason required), confirmation, errors written from <code>code</code></td></tr>
+          <tr><th scope="row"><code>StatusBadge</code>, <code>EvidenceBadge</code>, <code>SatelliteAgree</code></th><td>semua layar</td><td>status piksel dengan ikon; hasil agen; "Himawari + GK2A sepakat" / "satu satelit"</td></tr>
+          <tr><th scope="row"><code>DataBanner</code></th><td>peta</td><td>slot terakhir + satelit; kuning bila satu satelit &gt; 40 menit terlambat, biru untuk replay dan arsip, banner awan, siang, dan malam tanpa data</td></tr>
+          <tr><th scope="row"><code>SlotPlayer</code></th><td>peta</td><td>pita malam 54 slot (baris ▲ jumlah AWAS, baris H/G ketersediaan), putar/jeda, penggeser yang bisa dipakai keyboard</td></tr>
+          <tr><th scope="row"><code>NightCalendar</code></th><td>pemutar slot</td><td>kalender per bulan dari <code>/operator/nights</code>: tanggal pudar tanpa data, titik bila ada kelompok AWAS; Escape atau klik di luar menutup</td></tr>
+          <tr><th scope="row"><code>Select</code></th><td>filter provinsi, urutan, kalender</td><td>dropdown sendiri pengganti <code>&lt;select&gt;</code> (pola ARIA listbox): panah, Home/End, Enter, Escape, ketik huruf; membuka ke atas bila ruang bawah sempit</td></tr>
+          <tr><th scope="row"><code>LayerControl</code></th><td>peta</td><td>peta dasar (radio), sakelar lapisan, sakelar mode ringan</td></tr>
+          <tr><th scope="row"><code>PixelInspector</code></th><td>peta</td><td>kartu piksel: ID, provinsi, koordinat, status di slot ini dan terbaru, utilitas, riwayat 54 slot, tombol ke kelompok</td></tr>
+          <tr><th scope="row"><code>Sheet</code></th><td>peta (layar &lt; 1024 px)</td><td>bottom sheet yang bisa diseret; isinya tetap bisa digulir</td></tr>
+          <tr><th scope="row"><code>UtilityChart</code></th><td>detail</td><td>garis utility per slot 3 malam, garis 0,30 dan 0,65, slot berawan diarsir</td></tr>
+          <tr><th scope="row"><code>AttributeBars</code></th><td>detail</td><td>tabel parameter MAUT dari <code>attribute_details</code>: angka terukur, u, bobot, sumbangan, angka pendukung, skala, rumus; atribut hilang ditulis "tidak tersedia"</td></tr>
+          <tr><th scope="row"><code>NeighbourGrid</code></th><td>detail, masuk</td><td>3 × 3: tetangga ≥ 0,5, normal, berawan, bukan gambut</td></tr>
+          <tr><th scope="row"><code>EvidenceImage</code>, <code>ProbeTips</code>, <code>FloatingTip</code></th><td>detail</td><td>citra VIIRS dan Himawari berdampingan dengan penanda 5 km; tooltip suhu per sel (dari <code>images[].thermal</code>) dan titik FIRMS; tooltip dirender di <code>&lt;body&gt;</code> agar tidak terpotong</td></tr>
+          <tr><th scope="row"><code>ViirsList</code>, <code>ToolTrace</code></th><td>detail</td><td>deteksi VIIRS (satelit, waktu WIB, jarak); langkah agen: nama tool, argumen, durasi</td></tr>
+          <tr><th scope="row"><code>DecisionPanel</code></th><td>detail</td><td>Terbitkan / Tolak (alasan wajib), konfirmasi, galat sesuai <code>code</code></td></tr>
         </tbody>
       </table>
     </div>
@@ -742,23 +741,23 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
 
   <section id="status">
     <div class="section-head">
-      <span class="eyebrow">07 · Screen states</span>
-      <h2>States that must render correctly</h2>
-      <p>Mock mode can demo each state with <code>?skenario=normal|kosong|awan|satu_satelit|siang</code> (normal, empty, cloudy, one satellite, daytime).</p>
+      <span class="eyebrow">07 · Keadaan layar</span>
+      <h2>Keadaan yang harus tampil benar</h2>
+      <p>Mode mock bisa memperagakan keadaan dengan <code>?skenario=normal|kosong|awan|satu_satelit|siang</code>.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">State</th><th scope="col">When</th><th scope="col">Copy (EN)</th></tr></thead>
+        <thead><tr><th scope="col">Keadaan</th><th scope="col">Kapan</th><th scope="col">Teks (ID)</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Loading</th><td>request in flight</td><td>grey skeleton, no text</td></tr>
-          <tr><th scope="row">Empty</th><td>no AWAS clusters</td><td>"No AWAS pixels in the latest slot." · archive night: "No AWAS clusters on the night of {date}."</td></tr>
-          <tr><th scope="row">Cloud covered</th><td>&gt; 50% of pixels NO_OBSERVATION</td><td>"Cloud covers more than half of the pixels. Cloudy pixels never count as safe."</td></tr>
-          <tr><th scope="row">One satellite</th><td><code>n_sat = 1</code> in the latest slot</td><td>"{satellite} data is late. AWAS needs both satellites, so pixels can reach Watch at most."</td></tr>
-          <tr><th scope="row">Daytime</th><td>outside 20:00–04:00 WIB</td><td>"Daytime. The map shows the last slot of last night."</td></tr>
-          <tr><th scope="row">Replay</th><td><code>replay = true</code></td><td>"Replay: data as of {date time}."</td></tr>
-          <tr><th scope="row">Archive night</th><td>a night other than the latest is open</td><td>"Archive night of {date}. The map and the cluster list follow this night."</td></tr>
-          <tr><th scope="row">Night without data</th><td>every slot of that night is <code>null</code></td><td>"This night has no satellite data, so every pixel is unobserved."</td></tr>
-          <tr><th scope="row">Error</th><td>non-2xx response or network failure</td><td>"Could not load data. {message for the code}" + a "Retry" button</td></tr>
+          <tr><th scope="row">Memuat</th><td>request berjalan</td><td>kerangka abu-abu, tanpa teks</td></tr>
+          <tr><th scope="row">Kosong</th><td>tidak ada kelompok AWAS</td><td>"Belum ada piksel AWAS pada slot terakhir." · malam arsip: "Tidak ada kelompok AWAS pada malam {tanggal}."</td></tr>
+          <tr><th scope="row">Tertutup awan</th><td>&gt; 50% piksel NO_OBSERVATION</td><td>"Awan menutupi lebih dari separuh piksel. Piksel berawan tidak dihitung aman."</td></tr>
+          <tr><th scope="row">Satu satelit</th><td><code>n_sat = 1</code> pada slot terakhir</td><td>"Data {satelit} terlambat. AWAS butuh dua satelit, jadi piksel paling tinggi berstatus Pantau."</td></tr>
+          <tr><th scope="row">Siang</th><td>di luar 20.00–04.00 WIB</td><td>"Siang hari. Peta menampilkan slot terakhir tadi malam."</td></tr>
+          <tr><th scope="row">Replay</th><td><code>replay = true</code></td><td>"Putar ulang: data per {tanggal jam}."</td></tr>
+          <tr><th scope="row">Malam arsip</th><td>malam selain malam terbaru dibuka</td><td>"Arsip malam {tanggal}. Peta dan daftar kelompok mengikuti malam ini."</td></tr>
+          <tr><th scope="row">Malam tanpa data</th><td>semua slot malam itu <code>null</code></td><td>"Malam ini tidak punya data satelit, jadi semua piksel tidak teramati."</td></tr>
+          <tr><th scope="row">Galat</th><td>respons non-2xx atau jaringan</td><td>"Gagal memuat data. {pesan sesuai code}" + tombol "Coba lagi"</td></tr>
         </tbody>
       </table>
     </div>
@@ -766,23 +765,23 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
 
   <section id="teks">
     <div class="section-head">
-      <span class="eyebrow">08 · Language and copy</span>
-      <h2>One language per screen</h2>
+      <span class="eyebrow">08 · Bahasa dan teks</span>
+      <h2>Satu bahasa per layar</h2>
     </div>
     <div class="grid-2">
       <div class="card">
-        <h4>Rules</h4>
+        <h4>Aturan</h4>
         <ul>
-          <li>English by default; EN/ID in the top bar, remembered per device. <code>en.json</code> and <code>id.json</code> must hold the same keys</li>
-          <li>Agent text follows the screen language (<code>finding</code>/<code>finding_en</code>, <code>summary_id</code>/<code>summary_en</code>); errors are written from <code>code</code></li>
-          <li><strong>AWAS</strong> stays AWAS in both languages as the status name (the English version explains it once: Indonesian for "beware")</li>
-          <li>Telegram captions stay in Indonesian</li>
-          <li>Plain, active sentences: no jargon, no em dashes</li>
+          <li>Default bahasa Inggris; EN/ID di bilah atas, diingat per perangkat. Kamus <code>en.json</code> dan <code>id.json</code> harus berisi kunci yang sama</li>
+          <li>Teks agen tampil sesuai bahasa layar (<code>finding</code>/<code>finding_en</code>, <code>summary_id</code>/<code>summary_en</code>); galat ditulis dari <code>code</code></li>
+          <li><strong>AWAS</strong> tetap ditulis AWAS di kedua bahasa sebagai nama status (versi Inggris menjelaskan artinya sekali)</li>
+          <li>Caption Telegram tetap Bahasa Indonesia</li>
+          <li>Kalimat aktif dan polos: tanpa jargon, tanpa tanda pisah panjang</li>
         </ul>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th scope="col">Key</th><th scope="col">EN</th><th scope="col">ID</th></tr></thead>
+          <thead><tr><th scope="col">Kunci</th><th scope="col">EN</th><th scope="col">ID</th></tr></thead>
           <tbody>
             <tr><th scope="row"><code>status.awas</code></th><td>AWAS</td><td>AWAS</td></tr>
             <tr><th scope="row"><code>status.watch</code></th><td>Watch</td><td>Pantau</td></tr>
@@ -799,30 +798,30 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
   <section id="stack-fe">
     <div class="section-head">
       <span class="eyebrow">09 · Stack</span>
-      <h2>A light frontend, also for low-end phones</h2>
+      <h2>Frontend ringan, juga untuk HP spesifikasi rendah</h2>
     </div>
     <div class="grid-2">
       <div class="card">
         <dl class="kv">
           <dt>Build</dt><dd>React 19 + Vite + TypeScript (repo <code>asapify-web</code>)</dd>
-          <dt>Map</dt><dd>MapLibre GL JS 6; the module worker is served as-is from <code>/maplibre/</code></dd>
-          <dt>Motion</dt><dd><code>motion</code> (springs), lazy-loaded; off under <em>reduced motion</em> and in lite mode</dd>
-          <dt>Charts</dt><dd>hand-written SVG for <code>UtilityChart</code> and the parameter table</dd>
-          <dt>Type</dt><dd>IBM Plex through <code>@fontsource</code> (no Google Fonts)</dd>
-          <dt>Mode</dt><dd><code>VITE_API_MODE=mock</code> (default, fictional data + demo sign-in) or <code>live</code> (<code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code>)</dd>
-          <dt>Auth</dt><dd>demo sign-in in mock mode; Firebase JS SDK (Auth) in live mode</dd>
-          <dt>Hosting</dt><dd>Firebase Hosting, <code>/api/**</code> to Cloud Run <code>asapify-api</code> (the judged prototype URL). A mock-mode preview on Vercel serves internal review</dd>
-          <dt>Lite mode</dt><dd>automatic when data saver is on, RAM ≤ 2 GB, the CPU is limited, or <em>reduced motion</em> is set: plain basemap, no glow/grid lines/camera animation, pixel ratio 1</dd>
+          <dt>Peta</dt><dd>MapLibre GL JS 6; worker modul disajikan apa adanya di <code>/maplibre/</code></dd>
+          <dt>Gerak</dt><dd><code>motion</code> (pegas), dimuat malas; mati di <em>reduced motion</em> dan mode ringan</dd>
+          <dt>Grafik</dt><dd>SVG sendiri untuk <code>UtilityChart</code> dan tabel parameter</dd>
+          <dt>Huruf</dt><dd>IBM Plex lewat <code>@fontsource</code> (tanpa Google Fonts)</dd>
+          <dt>Mode</dt><dd><code>VITE_API_MODE=mock</code> (default, data fiktif + login demo) atau <code>live</code> (<code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code>)</dd>
+          <dt>Auth</dt><dd>login demo di mock; Firebase JS SDK (Auth) di live</dd>
+          <dt>Hosting</dt><dd>Firebase Hosting, <code>/api/**</code> ke Cloud Run <code>asapify-api</code> (URL prototipe yang dinilai). Pratinjau mode mock di Vercel untuk review internal</dd>
+          <dt>Mode ringan</dt><dd>otomatis bila penghemat data aktif, RAM ≤ 2 GB, prosesor terbatas, atau <em>reduced motion</em>: peta dasar polos, tanpa pendar/garis kisi/animasi kamera, pixel ratio 1</dd>
         </dl>
       </div>
       <div class="code">
-        <div class="code-head"><span>Folder layout</span><span>asapify-web/src/</span></div>
+        <div class="code-head"><span>Struktur folder</span><span>asapify-web/src/</span></div>
 <pre>src/
 ├─ api.ts, auth.ts, types.ts
 ├─ map/ map.ts, layers.ts
 ├─ pages/ Masuk, PetaOperator, Kelompok, Tentang, KontrakApi
-├─ components/      <span class="c"># section 06</span>
-├─ contract/ spec.ts   <span class="c"># content of the API contract tab</span>
+├─ components/      <span class="c"># bagian 06</span>
+├─ contract/ spec.ts   <span class="c"># isi tab Kontrak API</span>
 ├─ mock/ fixtures.ts, thermal.ts, scenario.ts
 ├─ motion/ presets.ts, MotionProvider.tsx
 ├─ lib/ grid.ts, maut.ts, format.ts, errors.ts, …
@@ -831,9 +830,9 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
     </div>
   </section>
 
-  <nav class="pager" aria-label="Next pages">
-    <a href="index.html"><span>← Previous</span>Plan</a>
-    <a href="backend.html"><span>Next →</span>Backend &amp; API</a>
+  <nav class="pager" aria-label="Halaman berikutnya">
+    <a href="index.html"><span>← Sebelumnya</span>Rencana</a>
+    <a href="backend.html"><span>Berikutnya →</span>Backend &amp; API</a>
   </nav>
 </div>
 
