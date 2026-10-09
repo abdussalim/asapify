@@ -432,9 +432,9 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Konfigurasi Cloud · pegangan Peran C · arsitektur revisi 29 Sep · web disamakan 6 Okt</span>
+    <span class="eyebrow">Konfigurasi Cloud · pegangan Peran C · arsitektur revisi 29 Sep · web disamakan 6 Okt · notifikasi pelanggan 9 Okt</span>
     <h1>Setelan setiap layanan Google Cloud</h1>
-    <p class="lede">Semua perintah memakai variabel di bagian 01. Jalankan berurutan di Cloud Shell. Satu image Docker dibangun sekali lalu dipakai oleh lima job dan dua service. Ukuran CPU dan memori adalah titik awal 💡.</p>
+    <p class="lede">Semua perintah memakai variabel di bagian 01. Jalankan berurutan di Cloud Shell. Satu image Docker dibangun sekali lalu dipakai oleh lima job dan tiga service. Ukuran CPU dan memori adalah titik awal 💡.</p>
     <ul class="toc" aria-label="Isi halaman">
       <li><a href="#variabel"><span>01</span>Variabel</a></li>
       <li><a href="#api-aktif"><span>02</span>API</a></li>
@@ -471,11 +471,15 @@ export BACKTEST_BBOX="113.5,-2.6,114.3,-1.9"      <span class="c"># sub-area Kal
 export BACKTEST_BBOX_SUMSEL="105.2,-3.7,106.0,-3.0"  <span class="c"># OKI, Sumsel (direncanakan)</span>
 export WARMUP_START="2023-08-01"; export BACKTEST_START="2023-09-01"; export BACKTEST_END="2023-10-15"
 export IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/asapify/app:latest"
+export TG_BOT_USERNAME="asapify_demo_bot"           <span class="c"># username bot dari Runbook S0-5</span>
+export TG_OPERATOR_CHAT_ID="-100…"                 <span class="c"># chat_id grup operator, Runbook S0-5</span>
 gcloud config set project $PROJECT_ID
 JOBS_SA="sa-jobs@$PROJECT_ID.iam.gserviceaccount.com"
 AGENT_SA="sa-agent@$PROJECT_ID.iam.gserviceaccount.com"
 API_SA="sa-api@$PROJECT_ID.iam.gserviceaccount.com"
-SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
+SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"
+NOTIFY_SA="sa-notify@$PROJECT_ID.iam.gserviceaccount.com"
+TASK_SA="sa-task@$PROJECT_ID.iam.gserviceaccount.com"</pre>
     </div>
   </section>
 
@@ -491,15 +495,16 @@ SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
   artifactregistry.googleapis.com firestore.googleapis.com storage.googleapis.com \
   secretmanager.googleapis.com aiplatform.googleapis.com earthengine.googleapis.com \
   iamcredentials.googleapis.com logging.googleapis.com monitoring.googleapis.com \
-  firebase.googleapis.com firebasehosting.googleapis.com identitytoolkit.googleapis.com</pre>
+  firebase.googleapis.com firebasehosting.googleapis.com identitytoolkit.googleapis.com \
+  cloudtasks.googleapis.com fcm.googleapis.com</pre>
     </div>
   </section>
 
   <section id="iam">
     <div class="section-head">
       <span class="eyebrow">03 · Service account</span>
-      <h2>Empat akun, masing-masing hanya izin yang dipakai</h2>
-      <p>Hanya <code>sa-agent</code> yang bisa memanggil Gemini dan membaca MAP_KEY. Job tidak punya akses Gemini maupun token bot.</p>
+      <h2>Enam akun, masing-masing hanya izin yang dipakai</h2>
+      <p>Hanya <code>sa-agent</code> yang bisa memanggil Gemini dan membaca MAP_KEY. Job tidak punya akses Gemini maupun token bot. Untuk DM pelanggan, token bot hanya dibaca worker <code>asapify-notify</code>.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
@@ -507,14 +512,16 @@ SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
         <tbody>
           <tr><th scope="row"><code>sa-jobs</code></th><td>ingest-himawari, ingest-gk2a, evaluate, environment, build</td><td><code>roles/datastore.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/storage.objectAdmin</code> (public bucket, untuk lapisan peta), <code>roles/earthengine.writer</code> + <code>roles/serviceusage.serviceUsageConsumer</code> (build: WorldCover), <code>roles/run.invoker</code> pada <code>asapify-agent</code></td></tr>
           <tr><th scope="row"><code>sa-agent</code></th><td><code>asapify-agent</code></td><td><code>roles/datastore.user</code>, <code>roles/aiplatform.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/secretmanager.secretAccessor</code> (FIRMS, Telegram), <code>roles/iam.serviceAccountTokenCreator</code> pada dirinya sendiri (signed URL crop)</td></tr>
-          <tr><th scope="row"><code>sa-api</code></th><td><code>asapify-api</code></td><td><code>roles/datastore.user</code>, <code>roles/storage.objectViewer</code> (data bucket, baca <code>score/</code>), <code>roles/secretmanager.secretAccessor</code> (Telegram), <code>roles/iam.serviceAccountTokenCreator</code> pada dirinya sendiri (signed URL untuk UI), <code>roles/run.invoker</code> pada <code>asapify-agent</code> (verifikasi ulang)</td></tr>
+          <tr><th scope="row"><code>sa-api</code></th><td><code>asapify-api</code></td><td><code>roles/datastore.user</code>, <code>roles/storage.objectViewer</code> (data bucket, baca <code>score/</code>), <code>roles/secretmanager.secretAccessor</code> (secret webhook Telegram), <code>roles/iam.serviceAccountTokenCreator</code> pada dirinya sendiri (signed URL untuk UI), <code>roles/run.invoker</code> pada <code>asapify-agent</code> (verifikasi ulang), <code>roles/cloudtasks.enqueuer</code>, <code>roles/iam.serviceAccountUser</code> pada <code>sa-task</code></td></tr>
           <tr><th scope="row"><code>sa-scheduler</code></th><td>Cloud Scheduler</td><td><code>roles/run.invoker</code> (menjalankan job)</td></tr>
+          <tr><th scope="row"><code>sa-notify</code></th><td><code>asapify-notify</code> (worker)</td><td><code>roles/datastore.user</code>, <code>roles/firebasecloudmessaging.admin</code>, <code>roles/secretmanager.secretAccessor</code> (token bot), <code>roles/cloudtasks.enqueuer</code> + <code>roles/iam.serviceAccountUser</code> pada <code>sa-task</code> (sweep)</td></tr>
+          <tr><th scope="row"><code>sa-task</code></th><td>Cloud Tasks dan sweep Scheduler (token OIDC)</td><td><code>roles/run.invoker</code> hanya pada <code>asapify-notify</code>; tanpa akses data</td></tr>
         </tbody>
       </table>
     </div>
     <div class="code" style="margin-top:12px">
       <div class="code-head"><span>Buat akun dan peran tingkat project</span><span>bash</span></div>
-<pre>for SA in sa-jobs sa-agent sa-api sa-scheduler; do gcloud iam service-accounts create $SA; done
+<pre>for SA in sa-jobs sa-agent sa-api sa-scheduler sa-notify sa-task; do gcloud iam service-accounts create $SA; done
 
 for R in roles/datastore.user roles/earthengine.writer roles/serviceusage.serviceUsageConsumer; do
   gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$JOBS_SA" --role $R; done
@@ -522,28 +529,40 @@ for R in roles/datastore.user roles/aiplatform.user; do
   gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$AGENT_SA" --role $R; done
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$API_SA" --role roles/datastore.user
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SCHED_SA" --role roles/run.invoker
+for R in roles/datastore.user roles/firebasecloudmessaging.admin roles/cloudtasks.enqueuer; do
+  gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$NOTIFY_SA" --role $R; done
+gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$API_SA" --role roles/cloudtasks.enqueuer
+<span class="c"># api dan worker membuat task atas nama sa-task (token OIDC ke worker)</span>
+for SA in $API_SA $NOTIFY_SA; do
+  gcloud iam service-accounts add-iam-policy-binding $TASK_SA \
+    --member "serviceAccount:$SA" --role roles/iam.serviceAccountUser; done
 
 <span class="c"># signed URL: tiap service menandatangani sebagai dirinya sendiri</span>
 for SA in $AGENT_SA $API_SA; do
   gcloud iam service-accounts add-iam-policy-binding $SA \
     --member "serviceAccount:$SA" --role roles/iam.serviceAccountTokenCreator; done
 
-<span class="c"># run.invoker pada asapify-agent diberikan setelah service dibuat (bagian 09)</span></pre>
+<span class="c"># run.invoker pada asapify-agent dan asapify-notify diberikan setelah service dibuat (bagian 09)</span></pre>
     </div>
   </section>
 
   <section id="secret">
     <div class="section-head">
       <span class="eyebrow">04 · Secret Manager</span>
-      <h2>MAP_KEY FIRMS dan token bot Telegram</h2>
+      <h2>MAP_KEY FIRMS, token bot, dan secret webhook Telegram</h2>
     </div>
     <div class="code">
       <div class="code-head"><span>Simpan dan beri akses</span><span>bash</span></div>
 <pre><span class="c"># dibuat di Runbook S0-4 dan S0-5; di sini hanya akses</span>
 gcloud secrets add-iam-policy-binding firms-map-key \
   --member "serviceAccount:$AGENT_SA" --role roles/secretmanager.secretAccessor
-for M in $AGENT_SA $API_SA; do gcloud secrets add-iam-policy-binding telegram-bot-token \
-  --member "serviceAccount:$M" --role roles/secretmanager.secretAccessor; done</pre>
+for M in $AGENT_SA $NOTIFY_SA; do gcloud secrets add-iam-policy-binding telegram-bot-token \
+  --member "serviceAccount:$M" --role roles/secretmanager.secretAccessor; done
+
+<span class="c"># secret webhook: acak, hanya dibaca api untuk memeriksa header dari Telegram</span>
+openssl rand -hex 32 | gcloud secrets create telegram-webhook-secret --data-file=-
+gcloud secrets add-iam-policy-binding telegram-webhook-secret \
+  --member "serviceAccount:$API_SA" --role roles/secretmanager.secretAccessor</pre>
     </div>
     <p class="note">Backtest yang memakai FIRMS SP dijalankan dari laptop anggota dengan <code>MAP_KEY</code> di variabel lingkungan lokal, bukan dari job. Job tidak pernah membaca MAP_KEY.</p>
   </section>
@@ -664,7 +683,7 @@ gcloud storage cp data/ref/provinces_web.geojson gs://$PUBLIC_BUCKET/layers/prov
   <section id="run-service">
     <div class="section-head">
       <span class="eyebrow">09 · Image dan Cloud Run service</span>
-      <h2>Bangun sekali, pakai tujuh kali</h2>
+      <h2>Bangun sekali, pakai delapan kali</h2>
     </div>
     <div class="grid-2">
       <div class="code">
@@ -690,7 +709,7 @@ docs/
       </div>
     </div>
     <div class="code" style="margin-top:12px">
-      <div class="code-head"><span>Bangun image, deploy dua service</span><span>bash</span></div>
+      <div class="code-head"><span>Bangun image, deploy tiga service</span><span>bash</span></div>
 <pre>gcloud artifacts repositories create asapify --repository-format=docker --location=$REGION
 gcloud builds submit --tag $IMAGE .                  <span class="c"># ulangi setiap ada perubahan kode</span>
 
@@ -700,7 +719,8 @@ gcloud run deploy asapify-agent --image $IMAGE --region $REGION \
   --service-account $AGENT_SA --no-allow-unauthenticated \
   --cpu 1 --memory 2Gi --concurrency 4 --min-instances 0 --max-instances 3 --timeout 300 \
   --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$GEMINI_LOCATION,\
-GOOGLE_GENAI_USE_VERTEXAI=True,GEMINI_MODEL=$GEMINI_MODEL,DATA_BUCKET=$DATA_BUCKET" \
+GOOGLE_GENAI_USE_VERTEXAI=True,GEMINI_MODEL=$GEMINI_MODEL,DATA_BUCKET=$DATA_BUCKET,\
+TELEGRAM_OPERATOR_CHAT_ID=$TG_OPERATOR_CHAT_ID" \
   --set-secrets FIRMS_MAP_KEY=firms-map-key:latest,TELEGRAM_BOT_TOKEN=telegram-bot-token:latest
 for SA in $JOBS_SA $API_SA; do
   gcloud run services add-iam-policy-binding asapify-agent --region $REGION \
@@ -712,10 +732,41 @@ gcloud run deploy asapify-api --image $IMAGE --region $REGION \
   --command uvicorn --args=api.main:app,--host,0.0.0.0,--port,8080 \
   --service-account $API_SA --allow-unauthenticated \
   --cpu 1 --memory 1Gi --concurrency 40 --min-instances 0 --max-instances 3 --timeout 60 \
-  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,AGENT_URL=$AGENT_URL" \
-  --set-secrets TELEGRAM_BOT_TOKEN=telegram-bot-token:latest</pre>
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,AGENT_URL=$AGENT_URL,\
+TELEGRAM_BOT_USERNAME=$TG_BOT_USERNAME,NOTIFICATION_MODE=dry_run" \
+  --set-secrets TELEGRAM_WEBHOOK_SECRET=telegram-webhook-secret:latest
+
+<span class="c"># 3) asapify-notify: worker privat, image dan kode yang sama dengan api; hanya sa-task yang boleh memanggil</span>
+gcloud run deploy asapify-notify --image $IMAGE --region $REGION \
+  --command uvicorn --args=api.main:app,--host,0.0.0.0,--port,8080 \
+  --service-account $NOTIFY_SA --no-allow-unauthenticated \
+  --cpu 1 --memory 512Mi --concurrency 4 --min-instances 0 --max-instances 2 --timeout 60 \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,NOTIFICATION_MODE=dry_run,TELEGRAM_ENABLED=false,\
+FCM_ENABLED=false,ASAPIFY_PUBLIC_ORIGIN=https://$PROJECT_ID.web.app" \
+  --set-secrets TELEGRAM_BOT_TOKEN=telegram-bot-token:latest
+gcloud run services add-iam-policy-binding asapify-notify --region $REGION \
+  --member "serviceAccount:$TASK_SA" --role roles/run.invoker
+NOTIFY_URL=$(gcloud run services describe asapify-notify --region $REGION --format='value(status.url)')
+
+<span class="c"># antrean Cloud Tasks dan sweep tiap menit; api dan worker perlu URL worker sebagai audience OIDC</span>
+gcloud tasks queues create asapify-notifications --location $REGION \
+  --max-dispatches-per-second 5 --max-concurrent-dispatches 2 --max-attempts 8 \
+  --min-backoff 10s --max-backoff 300s --max-retry-duration 3600s
+for S in asapify-api asapify-notify; do gcloud run services update $S --region $REGION \
+  --update-env-vars "NOTIFICATION_WORKER_URL=$NOTIFY_URL,NOTIFICATION_TASK_CALLER=$TASK_SA"; done
+gcloud scheduler jobs create http asapify-notification-recovery --location $REGION \
+  --schedule "* * * * *" --time-zone "Asia/Jakarta" --http-method POST \
+  --uri "$NOTIFY_URL/_internal/notifications/sweep" \
+  --oidc-service-account-email $TASK_SA --oidc-token-audience $NOTIFY_URL
+
+<span class="c"># webhook Telegram untuk menautkan akun (/start); jalankan setelah Hosting aktif (bagian 11)</span>
+curl -s "https://api.telegram.org/bot$(gcloud secrets versions access latest --secret telegram-bot-token)/setWebhook" \
+  -d url="https://$PROJECT_ID.web.app/api/v1/notifications/telegram-webhook" \
+  -d secret_token="$(gcloud secrets versions access latest --secret telegram-webhook-secret)" \
+  -d allowed_updates='["message"]'</pre>
     </div>
-    <p class="note">⚠️ Bila <code>gcloud builds submit</code> gagal karena izin service account Cloud Build di project baru, beri akun build <code>roles/artifactregistry.writer</code> dan <code>roles/logging.logWriter</code>, lalu ulangi. ⚠️ Bila <code>requirements.lock</code> dari Mac/Windows gagal dipasang di Linux, buat ulang lock di Cloud Shell. Hari penjurian: <code>--min-instances 1</code> untuk kedua service.</p>
+    <p class="note">⚠️ Bila <code>gcloud builds submit</code> gagal karena izin service account Cloud Build di project baru, beri akun build <code>roles/artifactregistry.writer</code> dan <code>roles/logging.logWriter</code>, lalu ulangi. ⚠️ Bila <code>requirements.lock</code> dari Mac/Windows gagal dipasang di Linux, buat ulang lock di Cloud Shell. Hari penjurian: <code>--min-instances 1</code> untuk <code>asapify-agent</code> dan <code>asapify-api</code>.</p>
+    <p class="note">Kode API dan Notification Engine sudah ada di repo tim <code>ktp-asapify-be</code>, lengkap dengan skrip <code>python3 gcp/manage.py …</code> dan <code>python3 -m gcp.notifications …</code> (tanpa <code>--apply</code> hanya mencetak rencana; skrip itu memakai nama akun <code>asapify-*</code>). Mode bawaan <code>dry_run</code>: tidak ada pesan terkirim sampai <code>NOTIFICATION_MODE=live</code> dan <code>TELEGRAM_ENABLED=true</code> diset di api dan worker, setelah uji dengan akun pelanggan demo.</p>
   </section>
 
   <section id="run-jobs">
@@ -768,18 +819,20 @@ gcloud run jobs execute asapify-ingest-gk2a --region $REGION --tasks 8 --task-ti
     <div class="section-head">
       <span class="eyebrow">11 · Firebase</span>
       <h2>Hosting dan peran pengguna</h2>
-      <p>Web operator ada di repo terpisah <code>asapify-web</code>. URL prototipe yang dinilai harus di Firebase Hosting atau Cloud Run (aturan lomba); pratinjau mode mock di Vercel hanya untuk review internal.</p>
+      <p>Web ada di repo tim <code>ktp-asapify-fe</code>, termasuk <code>firebase.json</code> di bawah. URL prototipe yang dinilai harus di Firebase Hosting atau Cloud Run (aturan lomba); pratinjau mode mock di Vercel hanya untuk review internal.</p>
     </div>
     <div class="grid-2">
       <div class="code">
-        <div class="code-head"><span>Rewrite ke Cloud Run</span><span>asapify-web/firebase.json</span></div>
+        <div class="code-head"><span>Rewrite ke Cloud Run</span><span>ktp-asapify-fe/firebase.json</span></div>
 <pre>{ "hosting": { "public": "dist", "rewrites": [
     { "source": "/api/**",
       "run": { "serviceId": "asapify-api", "region": "asia-southeast2" } },
     { "source": "**", "destination": "/index.html" } ],
   "headers": [
     { "source": "/maplibre/**",       <span class="c"># worker peta = modul JS</span>
-      "headers": [{ "key": "Content-Type", "value": "text/javascript" }] } ] } }</pre>
+      "headers": [{ "key": "Content-Type", "value": "text/javascript" }] },
+    { "source": "/notification-sw.js",   <span class="c"># service worker push + offline</span>
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }] } ] } }</pre>
       </div>
       <div class="code">
         <div class="code-head"><span>Set peran</span><span>infra/set_role.py</span></div>
@@ -792,11 +845,17 @@ auth.set_custom_user_claims(
       </div>
     </div>
     <div class="code" style="margin-top:12px">
-      <div class="code-head"><span>Build mode live dan deploy</span><span>asapify-web/.env.production</span></div>
+      <div class="code-head"><span>Build mode live dan deploy</span><span>ktp-asapify-fe/.env.production</span></div>
 <pre>VITE_API_MODE=live
 VITE_API_BASE=                <span class="c"># kosong = same-origin /api lewat rewrite Hosting</span>
 VITE_PEAT_LAYER_URL=https://storage.googleapis.com/&lt;PUBLIC_BUCKET&gt;/layers/peat_pixels.geojson
 VITE_PROVINCES_LAYER_URL=https://storage.googleapis.com/&lt;PUBLIC_BUCKET&gt;/layers/provinces.geojson
+VITE_FIREBASE_API_KEY=&lt;Firebase Web App&gt;      <span class="c"># konfigurasi web publik, bukan kunci admin</span>
+VITE_FIREBASE_AUTH_DOMAIN=&lt;PROJECT_ID&gt;.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=&lt;PROJECT_ID&gt;
+VITE_FIREBASE_APP_ID=&lt;Firebase Web App&gt;
+VITE_FIREBASE_MESSAGING_SENDER_ID=&lt;Firebase&gt;  <span class="c"># push simulasi (opsional)</span>
+VITE_FIREBASE_VAPID_KEY=&lt;Web Push certificate&gt;
 
 <span class="c"># variabel VITE_* dibaca saat build</span>
 npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
@@ -819,7 +878,8 @@ npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
           <tr><th scope="row">Environment (log <code>power_cells_ok</code>)</th><td>&lt; 90% sel POWER berhasil</td></tr>
           <tr><th scope="row">Verifikasi agen gagal</th><td>&gt; 2 kali berturut-turut</td></tr>
           <tr><th scope="row">Uptime <code>/api/v1/health</code></th><td>2 kali gagal berturut-turut</td></tr>
-          <tr><th scope="row">Kirim Telegram (log <code>tg_send_failed</code>)</th><td>&gt; 0 dalam 15 menit</td></tr>
+          <tr><th scope="row">Job notifikasi <code>failed</code> / <code>unknown</code> (koleksi <code>notification_jobs</code>)</th><td>&gt; 0 dalam 15 menit</td></tr>
+          <tr><th scope="row">Alert dengan <code>fanout = pending</code></th><td>lebih dari 5 menit (sweep tidak berjalan atau fan-out gagal berulang)</td></tr>
           <tr><th scope="row">Biaya</th><td>50%, 90%, 100% anggaran tim</td></tr>
         </tbody>
       </table>
@@ -833,19 +893,24 @@ npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Variabel</th><th scope="col">agent</th><th scope="col">api</th><th scope="col">job (semua)</th></tr></thead>
+        <thead><tr><th scope="col">Variabel</th><th scope="col">agent</th><th scope="col">api</th><th scope="col">notify</th><th scope="col">job (semua)</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>GOOGLE_CLOUD_PROJECT</code>, <code>DATA_BUCKET</code></th><td>✓</td><td>✓</td><td>✓</td></tr>
-          <tr><th scope="row"><code>GOOGLE_CLOUD_LOCATION</code>, <code>GOOGLE_GENAI_USE_VERTEXAI</code>, <code>GEMINI_MODEL</code></th><td>✓</td><td></td><td></td></tr>
-          <tr><th scope="row"><code>PUBLIC_BUCKET</code>, <code>BBOX</code></th><td></td><td></td><td>✓</td></tr>
-          <tr><th scope="row"><code>AGENT_URL</code></th><td></td><td>✓</td><td>✓ (evaluate)</td></tr>
-          <tr><th scope="row"><code>AS_OF</code> (opsional, replay)</th><td></td><td></td><td>✓</td></tr>
-          <tr><th scope="row"><code>FIRMS_MAP_KEY</code> (secret)</th><td>✓</td><td></td><td></td></tr>
-          <tr><th scope="row"><code>TELEGRAM_BOT_TOKEN</code> (secret)</th><td>✓</td><td>✓</td><td></td></tr>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_PROJECT</code>, <code>DATA_BUCKET</code></th><td>✓</td><td>✓</td><td>✓ (project saja)</td><td>✓</td></tr>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_LOCATION</code>, <code>GOOGLE_GENAI_USE_VERTEXAI</code>, <code>GEMINI_MODEL</code></th><td>✓</td><td></td><td></td><td></td></tr>
+          <tr><th scope="row"><code>PUBLIC_BUCKET</code>, <code>BBOX</code></th><td></td><td></td><td></td><td>✓</td></tr>
+          <tr><th scope="row"><code>AGENT_URL</code></th><td></td><td>✓</td><td></td><td>✓ (evaluate)</td></tr>
+          <tr><th scope="row"><code>AS_OF</code> (opsional, replay)</th><td></td><td></td><td></td><td>✓</td></tr>
+          <tr><th scope="row"><code>FIRMS_MAP_KEY</code> (secret)</th><td>✓</td><td></td><td></td><td></td></tr>
+          <tr><th scope="row"><code>TELEGRAM_BOT_TOKEN</code> (secret)</th><td>✓</td><td></td><td>✓</td><td></td></tr>
+          <tr><th scope="row"><code>TELEGRAM_OPERATOR_CHAT_ID</code></th><td>✓</td><td></td><td></td><td></td></tr>
+          <tr><th scope="row"><code>TELEGRAM_WEBHOOK_SECRET</code> (secret), <code>TELEGRAM_BOT_USERNAME</code></th><td></td><td>✓</td><td></td><td></td></tr>
+          <tr><th scope="row"><code>NOTIFICATION_MODE</code>, <code>TELEGRAM_ENABLED</code>, <code>FCM_ENABLED</code></th><td></td><td>✓</td><td>✓</td><td></td></tr>
+          <tr><th scope="row"><code>NOTIFICATION_WORKER_URL</code>, <code>NOTIFICATION_TASK_CALLER</code></th><td></td><td>✓</td><td>✓</td><td></td></tr>
+          <tr><th scope="row"><code>ASAPIFY_PUBLIC_ORIGIN</code></th><td></td><td></td><td>✓</td><td></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note">Web (<code>asapify-web</code>) tidak memakai variabel di atas; ia dibangun dengan <code>VITE_API_MODE</code>, <code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, dan <code>VITE_PROVINCES_LAYER_URL</code> (bagian 11).</p>
+    <p class="note">Web (<code>ktp-asapify-fe</code>) tidak memakai variabel di atas; ia dibangun dengan <code>VITE_API_MODE</code>, <code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code>, dan <code>VITE_FIREBASE_*</code> (bagian 11).</p>
   </section>
 
   <section id="urutan">
@@ -857,14 +922,15 @@ npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
       <ol>
         <li>Project, billing, <code>env.sh</code>, aktifkan API, daftar Earth Engine (Runbook S0-2, S0-3).</li>
         <li>Service account dan peran (03), akses secret (04).</li>
-        <li>Bucket dan Firestore (05). Pindahkan <code>tg_chats</code> ke Firestore.</li>
-        <li>Bangun image, deploy <code>asapify-agent</code> lalu <code>asapify-api</code> (09); cek <code>/api/v1/health</code>.</li>
+        <li>Bucket dan Firestore (05); deploy index Firestore notifikasi dari <code>ktp-asapify-be/gcp/firestore.indexes.json</code>.</li>
+        <li>Bangun image, deploy <code>asapify-agent</code>, <code>asapify-api</code>, lalu <code>asapify-notify</code> dengan antrean dan sweep-nya (09); cek <code>/api/v1/health</code>.</li>
         <li>Deploy lima job (10); jalankan <code>asapify-build</code> sekali.</li>
         <li>Backfill Himawari dan GK2A (Agustus – 15 Okt 2023), lalu <code>asapify-environment --as-of</code> per hari jendela backtest.</li>
         <li>Replay evaluate untuk jendela backtest; cek kelompok muncul di Firestore.</li>
         <li>Buat empat jadwal Scheduler.</li>
-        <li>Unggah lapisan peta statis dan pasang CORS bucket publik (05); build <code>asapify-web</code> dalam mode live dan deploy ke Firebase Hosting (11); aktifkan Auth, set akun operator demo.</li>
+        <li>Unggah lapisan peta statis dan pasang CORS bucket publik (05); build <code>ktp-asapify-fe</code> dalam mode live dan deploy ke Firebase Hosting (11); aktifkan Auth, set akun operator demo; pasang webhook Telegram (09).</li>
         <li>Pasang monitoring dan budget alert.</li>
+        <li>Uji dengan akun pelanggan demo selagi <code>dry_run</code>, lalu set <code>NOTIFICATION_MODE=live</code> dan <code>TELEGRAM_ENABLED=true</code> di api dan worker.</li>
       </ol>
     </div>
   </section>

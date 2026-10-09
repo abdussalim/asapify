@@ -432,7 +432,7 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Runbook · steps you can run as written · web aligned 6 Oct</span>
+    <span class="eyebrow">Runbook · steps you can run as written · web aligned 6 Oct · subscriber notifications 9 Oct</span>
     <h1>ASAPify runbook</h1>
     <p class="lede">Every task has <strong>prerequisites</strong>, <strong>steps</strong> with complete commands, <strong>outputs</strong> (file or resource names) and a <strong>done check</strong> you can prove. A task counts as done only when the done check passes and the evidence is written in the WORKLOG.</p>
     <ul class="toc" aria-label="Page contents"><li><a href="#aturan-pakai"><span>00</span>How to use</a></li><li><a href="#s0"><span>S0</span>29 Sep – 1 Oct</a></li><li><a href="#s1"><span>S1</span>2–5 Oct</a></li><li><a href="#s2"><span>S2</span>6–9 Oct</a></li><li><a href="#s3"><span>S3</span>10–13 Oct</a></li><li><a href="#s4"><span>S4</span>14–16 Oct</a></li><li><a href="#s5"><span>S5</span>17–18 Oct</a></li></ul>
@@ -556,18 +556,16 @@ done</pre></li><li>Store it in Secret Manager.<pre class="cmd">printf "%s" "$MAP
       <div class="check"><h4>Done check</h4><p>Each satellite prints a header that starts with <code>latitude,longitude,bright_ti4</code> and includes the <code>confidence</code> and <code>daynight</code> columns (zero data rows is fine).</p><p>The secret is readable:</p><pre class="cmd">gcloud secrets versions access latest --secret firms-map-key | wc -c   # &gt; 0</pre></div>
     </article>
     <article class="task" id="s0-5">
-      <div class="task-head"><span class="tid">S0-5</span><span class="pill ai">Role D</span><h3>Telegram bot, two groups, chat_id</h3></div>
-      <p class="goal">The one-way send channel is ready before any code is written.</p>
+      <div class="task-head"><span class="tid">S0-5</span><span class="pill ai">Role D</span><h3>Telegram bot, operator group, chat_id</h3></div>
+      <p class="goal">The bot is ready: an operator group for verification summaries, DMs for subscribers.</p>
       <div class="task-grid">
         <div><h4>Prerequisites</h4><ul><li>A Telegram account</li><li>S0-2 done (Secret Manager)</li></ul></div>
-        <div><h4>Outputs</h4><ul><li>Secret telegram-bot-token</li><li><code>data/ref/tg_chats.json</code> </li></ul></div>
+        <div><h4>Outputs</h4><ul><li>Secret telegram-bot-token</li><li><code>TG_OPERATOR_CHAT_ID</code> and <code>TG_BOT_USERNAME</code> in <code>infra/env.sh</code></li></ul></div>
       </div>
-      <div><h4>Steps</h4><ol class="steps"><li>In Telegram open <code>@BotFather</code> → send <code>/newbot</code> → name <code>ASAPify Bot</code> → a username ending in <code>bot</code>, for example <code>asapify_demo_bot</code>. Copy the token.</li><li>Store the token.<pre class="cmd">export TOKEN=&lt;token&gt;
-printf "%s" "$TOKEN" | gcloud secrets create telegram-bot-token --data-file=-</pre></li><li>Create two groups: <code>ASAPify Operator</code> and <code>ASAPify Peringatan Kalteng (demo)</code>. Add the bot to both. (Group names and alert captions stay in Indonesian: the recipients are Indonesian field teams.)</li><li>In each group send <code>/start@asapify_demo_bot</code>. A bot in privacy mode only receives commands that mention it, so ordinary messages do not appear in getUpdates.</li><li>Get the <code>chat_id</code> of both groups (a negative value; supergroups start with <code>-100</code>).<pre class="cmd">curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" | jq '.result[].message.chat | {id, title}'</pre></li><li>Test sending to each group.<pre class="cmd">curl -s "https://api.telegram.org/bot$TOKEN/sendMessage" -d chat_id=&lt;CHAT_ID&gt; -d text="Uji ASAPify"</pre></li><li>Write <code>data/ref/tg_chats.json</code>; it moves to Firestore <code>tg_chats</code> after C1.<pre class="cmd">[
-  {"jenis": "operator",   "provinsi": null, "chat_id": -100...},
-  {"jenis": "peringatan", "provinsi": "62", "chat_id": -100...}
-]</pre></li></ol></div>
-      <div class="check"><h4>Done check</h4><p>The message <em>Uji ASAPify</em> appears in both groups. If a group is upgraded to a supergroup, its <code>chat_id</code> changes: repeat step 5.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>In Telegram open <code>@BotFather</code> → send <code>/newbot</code> → name <code>ASAPify Bot</code> → a username ending in <code>bot</code>, e.g. <code>asapify_demo_bot</code>. Copy the token.</li><li>Store the token.<pre class="cmd">export TOKEN=&lt;token&gt;
+printf "%s" "$TOKEN" | gcloud secrets create telegram-bot-token --data-file=-</pre></li><li>Create the group <code>ASAPify Operator</code> and add the bot. Public alerts do not use groups: subscribers link their own Telegram from the Notifications page (D4).</li><li>In that group send <code>/start@asapify_demo_bot</code>. A bot in privacy mode only receives commands that mention it, so ordinary messages do not appear in getUpdates.</li><li>Get the group's <code>chat_id</code> (a negative value; supergroups start with <code>-100</code>).<pre class="cmd">curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" | jq '.result[].message.chat | {id, title}'</pre></li><li>Test a send to the group.<pre class="cmd">curl -s "https://api.telegram.org/bot$TOKEN/sendMessage" -d chat_id=&lt;CHAT_ID&gt; -d text="Uji ASAPify"</pre></li><li>Record them in <code>infra/env.sh</code> (not secret).<pre class="cmd">export TG_OPERATOR_CHAT_ID=-100...
+export TG_BOT_USERNAME=asapify_demo_bot</pre></li></ol></div>
+      <div class="check"><h4>Done check</h4><p>The message <em>Uji ASAPify</em> appears in the operator group. If the group is upgraded to a supergroup, its <code>chat_id</code> changes: repeat step 5.</p></div>
     </article>
     <article class="task" id="s0-6">
       <div class="task-head"><span class="tid">S0-6</span><span class="pill ai">Role A</span><h3>Repo, Python environment, check the 2023 backtest window</h3></div>
@@ -578,7 +576,7 @@ printf "%s" "$TOKEN" | gcloud secrets create telegram-bot-token --data-file=-</p
       </div>
       <div><h4>Steps</h4><ol class="steps"><li>Create a private GitHub repo <code>asapify</code>, clone it, and create the folders.<pre class="cmd">git clone &lt;repo-url&gt; asapify &amp;&amp; cd asapify
 mkdir -p jobs/lib jobs/tests agent api/routers shared infra data/ref data/local notebooks docs scripts
-# the operator web app lives in a separate repo, asapify-web</pre></li><li>Python 3.12 environment and dependencies.<pre class="cmd">python3.12 -m venv .venv &amp;&amp; source .venv/bin/activate
+# web: team repo ktp-asapify-fe; API + Notification Engine: team repo ktp-asapify-be</pre></li><li>Python 3.12 environment and dependencies.<pre class="cmd">python3.12 -m venv .venv &amp;&amp; source .venv/bin/activate
 pip install satpy pyresample s3fs xarray netCDF4 numpy pandas pyarrow geopandas rasterio \
   shapely scipy matplotlib pillow httpx earthengine-api google-adk google-genai fastapi uvicorn \
   google-cloud-firestore google-cloud-storage pytest
@@ -795,9 +793,9 @@ pytest jobs/tests/test_power.py jobs/tests/test_baseline.py -q</pre></li></ol></
       <p class="goal">Buckets, Firestore, service accounts and permissions ready before deploy.</p>
       <div class="task-grid">
         <div><h4>Prerequisites</h4><ul><li>S0-2 done</li></ul></div>
-        <div><h4>Outputs</h4><ul><li>2 buckets, Firestore (Native), 4 service accounts, 2 secrets, tg_chats</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>2 buckets, Firestore (Native) + notification indexes, 6 service accounts, 3 secrets</li></ul></div>
       </div>
-      <div><h4>Steps</h4><ol class="steps"><li>Run sections 03 (IAM), 04 (Secret) and 05 (Storage + Firestore) on the Cloud setup page, in order.</li><li>Move <code>data/ref/tg_chats.json</code> into the Firestore collection <code>tg_chats</code> (one document per group).</li></ol></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Run sections 03 (IAM), 04 (Secret) and 05 (Storage + Firestore) on the Cloud setup page, in order.</li><li>Deploy the notification Firestore indexes from <code>ktp-asapify-be</code> (its config targets a database named <code>asapify</code>; adjust it if you use <code>(default)</code>).<pre class="cmd">cd ktp-asapify-be/gcp &amp;&amp; npx firebase-tools deploy --only firestore --config firebase.notifications.json --project $PROJECT_ID</pre></li></ol></div>
       <div class="check"><h4>Done check</h4><p>Check:</p><pre class="cmd">gcloud storage ls                      # 2 asapify-* buckets
 gcloud firestore databases list         # (default)
 gcloud iam service-accounts list | grep -c 'sa-'   # 4</pre></div>
@@ -848,7 +846,7 @@ gcloud iam service-accounts list | grep -c 'sa-'   # 4</pre></div>
         <div><h4>Prerequisites</h4><ul><li>B1, B2, B3, A6</li></ul></div>
         <div><h4>Outputs</h4><ul><li><code>agent/agent.py,</code> schema.py, validator.py, main.py, run.py</li><li>Firestore verifications/{id}</li></ul></div>
       </div>
-      <div><h4>Steps</h4><ol class="steps"><li>Copy the <code>agent/agent.py</code> and <code>agent/schema.py</code> skeletons from Backend 06; model from <code>GEMINI_MODEL</code>, location <code>global</code>, <code>GOOGLE_GENAI_USE_VERTEXAI=True</code>.</li><li>Tool <code>get_pixel_context(cluster_id, as_of)</code>: read <code>clusters/{id}</code> + 3 nights of <code>score/</code> for the representative pixel (utility, attributes, neighbours). Limit: at most 8 calls per verification, counted in the tool layer.</li><li><code>agent/validator.py</code>: reject when the schema does not match, when <code>viirs_within_2km_48h &gt; 0</code> but the result is <code>inconclusive</code>, or when a number in the summary is not in the tool results. Fails twice → save <code>inconclusive</code> with the note <code>validator_failed</code>.</li><li><code>agent/main.py</code> (FastAPI): <code>POST /verify {cluster_id, trigger_slot}</code> (OIDC <code>sa-jobs</code>) → run the agent → save <code>verifications/{cluster_id}_{slot}</code> → send a summary to the operator group. <code>POST /cluster-closed {cluster_id}</code> (no Gemini): edit the alert-group message to SELESAI if it was ever published.</li><li>Test locally on one backtest cluster.<pre class="cmd">python -m agent.run --cluster &lt;ID from A7&gt; --as-of 2023-09-25T16:00Z</pre></li></ol></div>
+      <div><h4>Steps</h4><ol class="steps"><li>Copy the <code>agent/agent.py</code> and <code>agent/schema.py</code> skeletons from Backend 06; model from <code>GEMINI_MODEL</code>, location <code>global</code>, <code>GOOGLE_GENAI_USE_VERTEXAI=True</code>.</li><li>Tool <code>get_pixel_context(cluster_id, as_of)</code>: read <code>clusters/{id}</code> + 3 nights of <code>score/</code> for the representative pixel (utility, attributes, neighbours). Limit: at most 8 calls per verification, counted in the tool layer.</li><li><code>agent/validator.py</code>: reject when the schema does not match, when <code>viirs_within_2km_48h &gt; 0</code> but the result is <code>inconclusive</code>, or when a number in the summary is not in the tool results. Fails twice → save <code>inconclusive</code> with the note <code>validator_failed</code>.</li><li><code>agent/main.py</code> (FastAPI): <code>POST /verify {cluster_id, trigger_slot}</code> (OIDC <code>sa-jobs</code>) → run the agent → save <code>verifications/{cluster_id}_{slot}</code> → send a summary to the operator group (<code>TELEGRAM_OPERATOR_CHAT_ID</code>). <code>POST /cluster-closed {cluster_id}</code> (no Gemini): if it was ever published, close the alert, label the inbox entries SELESAI and cancel unsent jobs.</li><li>Test locally on one backtest cluster.<pre class="cmd">python -m agent.run --cluster &lt;ID from A7&gt; --as-of 2023-09-25T16:00Z</pre></li></ol></div>
       <div class="check"><h4>Done check</h4><p>The output has <code>result</code> ∈ {strong_evidence, inconclusive}, ≥ 1 <code>evidence</code>, ID and EN summaries; tool trace ≤ 8; validator passes; no status/level field.</p></div>
     </article>
     <article class="task" id="c3">
@@ -858,7 +856,7 @@ gcloud iam service-accounts list | grep -c 'sa-'   # 4</pre></div>
         <div><h4>Prerequisites</h4><ul><li>C2</li></ul></div>
         <div><h4>Outputs</h4><ul><li><code>api/main.py,</code> api/routers/*.py</li></ul></div>
       </div>
-      <div><h4>Steps</h4><ol class="steps"><li>Implement the endpoints exactly as in the Backend 03 table (public + operator), including <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code> and <code>/operator/basemaps</code>. JSON shapes, examples and error codes follow the web app's API Contract tab (<code>/kontrak-api</code>) exactly; the web app already uses all of them.</li><li>Run locally. <code>AUTH_DISABLED=1</code> is for local use only, never on Cloud Run.<pre class="cmd">AUTH_DISABLED=1 uvicorn api.main:app --reload --port 8000</pre></li><li>Test.<pre class="cmd">curl -s localhost:8000/api/v1/health
+      <div><h4>Steps</h4><ol class="steps"><li>Implement the endpoints exactly as in the Backend 03 table (public, operator, subscriber), including <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code> and <code>/operator/basemaps</code>. JSON shapes, examples and error codes follow the web app's API Contract tab (<code>/kontrak-api</code>) exactly; the web app already uses all of them. The subscriber endpoints (<code>/notifications/*</code>), <code>/operator/alerts/{id}/deliveries</code> and the notification worker are already built in <code>ktp-asapify-be</code> (<code>asapify_api/</code>).</li><li>Run locally. <code>AUTH_DISABLED=1</code> is for local use only, never on Cloud Run.<pre class="cmd">AUTH_DISABLED=1 uvicorn api.main:app --reload --port 8000</pre></li><li>Test.<pre class="cmd">curl -s localhost:8000/api/v1/health
 curl -s localhost:8000/api/v1/meta | jq .nights
 curl -s "localhost:8000/api/v1/operator/grid?as_of=2023-09-25T16:00Z&amp;format=compact" | jq '.status | length'
 curl -s "localhost:8000/api/v1/operator/nights?month=2023-09" | jq length
@@ -870,37 +868,37 @@ curl -s "localhost:8000/api/v1/operator/clusters?as_of=2023-09-25T16:00Z" | jq l
       <p class="goal">The pipeline runs automatically on Cloud Run.</p>
       <div class="task-grid">
         <div><h4>Prerequisites</h4><ul><li>A2–A6, C1, C2, C3</li></ul></div>
-        <div><h4>Outputs</h4><ul><li>2 services + 5 jobs + 4 Scheduler schedules</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>3 services + 5 jobs + 5 Scheduler schedules + a Cloud Tasks queue</li></ul></div>
       </div>
-      <div><h4>Steps</h4><ol class="steps"><li>Create the <code>Dockerfile</code> and <code>.gcloudignore</code> at the repo root (Cloud setup 09), then deploy <code>asapify-agent</code> and <code>asapify-api</code> with the commands in the same section.</li><li>Deploy the five jobs and four schedules (Cloud setup 10): two ingests <code>*/10 20-23,0-4 * * *</code>, evaluate <code>5-59/10 20-23,0-4 * * *</code>, environment <code>0 12 * * *</code> (all Asia/Jakarta), build without a schedule.</li><li>Run build, then one replay cycle.<pre class="cmd">gcloud run jobs execute asapify-build --region $REGION --wait
+      <div><h4>Steps</h4><ol class="steps"><li>Create the <code>Dockerfile</code> and <code>.gcloudignore</code> at the repo root (Cloud setup 09), then deploy <code>asapify-agent</code>, <code>asapify-api</code> and <code>asapify-notify</code> (with its queue and sweep) using the commands in the same section.</li><li>Deploy the five jobs and four schedules (Cloud setup 10): two ingests <code>*/10 20-23,0-4 * * *</code>, evaluate <code>5-59/10 20-23,0-4 * * *</code>, environment <code>0 12 * * *</code> (all Asia/Jakarta), build without a schedule.</li><li>Run build, then one replay cycle.<pre class="cmd">gcloud run jobs execute asapify-build --region $REGION --wait
 for J in asapify-ingest-himawari asapify-ingest-gk2a; do
   gcloud run jobs execute $J --region $REGION --wait --update-env-vars AS_OF=2023-09-25T15:00:00Z
 done
 gcloud run jobs execute asapify-evaluate --region $REGION --wait --update-env-vars AS_OF=2023-09-25T15:10:00Z</pre></li></ol></div>
       <div class="check"><h4>Done check</h4><p>Check:</p><pre class="cmd">gcloud run jobs executions list --job asapify-evaluate --region $REGION --limit 3   # Succeeded
-gcloud scheduler jobs list --location $REGION                                    # 4 schedules ENABLED
-gcloud run services list --region $REGION                                        # asapify-agent, asapify-api</pre></div>
+gcloud scheduler jobs list --location $REGION                                    # 5 schedules ENABLED (4 jobs + notification sweep)
+gcloud run services list --region $REGION                                        # asapify-agent, asapify-api, asapify-notify</pre></div>
     </article></div>
   </section>
 
   <section id="s3">
     <div class="section-head">
       <span class="eyebrow">Sprint 3 · 10–13 Oct</span>
-      <h2>Web and Telegram</h2>
+      <h2>Web and notifications</h2>
       <p>Tasks: <a href="#d1">D1</a> · <a href="#d2">D2</a> · <a href="#d3">D3</a> · <a href="#d4">D4</a> · <a href="#c5">C5</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint done when:</strong> The end-to-end flow works at the public URL: replay → AWAS → verification → operator decision → Telegram message.</div>
+    <div class="sprint-done"><strong>Sprint done when:</strong> The end-to-end flow works at the public URL: replay → AWAS → verification → operator decision → subscriber Telegram DM + inbox.</div>
     <div class="rb-list">
     <article class="task" id="d1">
       <div class="task-head"><span class="tid">D1</span><span class="pill ai">Role D</span><h3>Operator map</h3></div>
       <p class="goal">The operator sees the status of every peat pixel in Sumatra and Kalimantan (15 provinces).</p>
       <div class="task-grid">
         <div><h4>Prerequisites</h4><ul><li>C3</li></ul></div>
-        <div><h4>Outputs</h4><ul><li><code>asapify-web</code> running in live mode against the API</li><li><code>src/auth.ts</code> using Firebase Auth</li></ul></div>
+        <div><h4>Outputs</h4><ul><li><code>ktp-asapify-fe</code> running in live mode against the API</li><li>Google sign-in (Firebase Auth) working on the team project</li></ul></div>
       </div>
-      <div><h4>Steps</h4><ol class="steps"><li>The operator web app is already built in a separate repo, <code>asapify-web</code> (React 19 + Vite + MapLibre 6). Run it in mock mode first (fictional Central Kalimantan backtest data for 24 Sep 2023, no backend).<pre class="cmd">git clone &lt;asapify-web-repo-url&gt; asapify-web &amp;&amp; cd asapify-web
+      <div><h4>Steps</h4><ol class="steps"><li>The web app is already built in the team repo <code>ktp-asapify-fe</code> (React 19 + Vite + MapLibre 6). Run it in mock mode first (fictional Central Kalimantan backtest data for 24 Sep 2023, no backend).<pre class="cmd">git clone https://github.com/KRL-TEAM-PROJECT/ktp-asapify-fe.git &amp;&amp; cd ktp-asapify-fe
 npm ci
-npm run dev</pre></li><li>Switch to live mode: copy <code>.env.example</code> to <code>.env.local</code> and set <code>VITE_API_MODE=live</code>, <code>VITE_API_BASE=http://localhost:8000</code> (the local C3 API), plus <code>VITE_PEAT_LAYER_URL</code> and <code>VITE_PROVINCES_LAYER_URL</code> (public bucket, Cloud setup 05). The map, slot player and archive calendar call the endpoints in the API Contract tab.</li><li>Replace the mock auth in <code>src/auth.ts</code> with Firebase Auth (Google sign-in); only the <code>role = operator</code> claim may sign in (<code>infra/set_role.py</code>). Send the ID token as <code>Authorization: Bearer</code>.</li></ol></div>
+npm run dev</pre></li><li>Switch to live mode: copy <code>.env.example</code> to <code>.env.local</code> and set <code>VITE_API_MODE=live</code>, <code>VITE_API_BASE=http://localhost:8000</code> (the local C3 API), plus <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code> (public bucket, Cloud setup 05) and <code>VITE_FIREBASE_*</code> (Cloud setup 11). The map, slot player and archive calendar call the endpoints in the API Contract tab.</li><li>Google sign-in through Firebase Auth is already in <code>src/auth.ts</code> (9 Oct). An account without a claim only opens the Notifications page; give the demo operator account the claim <code>role = operator</code> (<code>tools/set_operator.py</code> in <code>ktp-asapify-be</code>), then sign out and in again.</li></ol></div>
       <div class="check"><h4>Done check</h4><p>Live mode, night of 25 Sep 2023 picked from the calendar: four statuses show with icon + colour, NO_OBSERVATION is hatched, AWAS clusters have a dashed outline, and the province boundary is highlighted when one province is selected. API down → an error banner, not a blank screen.</p></div>
     </article>
     <article class="task" id="d2">
@@ -915,23 +913,23 @@ npm run dev</pre></li><li>Switch to live mode: copy <code>.env.example</code> to
     </article>
     <article class="task" id="d3">
       <div class="task-head"><span class="tid">D3</span><span class="pill ai">Role D</span><h3>Decision panel: publish / reject</h3></div>
-      <p class="goal">Only an operator sends to the alert group.</p>
+      <p class="goal">Only an operator can publish an alert to subscribers.</p>
       <div class="task-grid">
         <div><h4>Prerequisites</h4><ul><li>D2</li></ul></div>
         <div><h4>Outputs</h4><ul><li>Real decisions saved through <code>src/components/DecisionPanel.tsx</code> </li></ul></div>
       </div>
-      <div><h4>Steps</h4><ol class="steps"><li>The panel already exists: <em>Publish to group</em> (caption ≤ 1,024 characters, prefilled, editable) and <em>Reject</em> (reason required) → <code>POST /operator/clusters/{id}/decision</code>, response <code>DecisionResponse</code>. Test both in live mode.</li><li>Test the 409 path: open the same cluster in two tabs, decide in the first tab and then in the second. The second tab must show the <code>ALREADY_DECIDED</code> message and reload the detail.</li><li>Clusters without a decision stay in the list with the label "undecided".</li></ol></div>
+      <div><h4>Steps</h4><ol class="steps"><li>The panel already exists: <em>Publish</em> (message text ≤ 1,024 characters, prefilled, editable) and <em>Reject</em> (reason required) → <code>POST /operator/clusters/{id}/decision</code>, response <code>DecisionResponse</code>. Test both in live mode. After publishing, the panel shows the queue summary and the send status per channel.</li><li>Test the 409 path: open the same cluster in two tabs, decide in the first tab and then in the second. The second tab must show the <code>ALREADY_DECIDED</code> message and reload the detail.</li><li>Clusters without a decision stay in the list with the label "undecided".</li></ol></div>
       <div class="check"><h4>Done check</h4><p>The decision is stored in <code>alerts</code> and <code>audit_log</code>; a second decision gets 409 and the UI shows the existing decision.</p></div>
     </article>
     <article class="task" id="d4">
-      <div class="task-head"><span class="tid">D4</span><span class="pill ai">Role D</span><h3>Telegram sender</h3></div>
-      <p class="goal">One message per event to the right group, one way.</p>
+      <div class="task-head"><span class="tid">D4</span><span class="pill ai">Role D</span><h3>Subscriber notifications</h3></div>
+      <p class="goal">Subscribers who chose that province get one message per channel and can confirm it.</p>
       <div class="task-grid">
-        <div><h4>Prerequisites</h4><ul><li>S0-5, C1, D3</li></ul></div>
-        <div><h4>Outputs</h4><ul><li><code>shared/telegram.py</code> </li></ul></div>
+        <div><h4>Prerequisites</h4><ul><li>S0-5, C4, D3</li></ul></div>
+        <div><h4>Outputs</h4><ul><li>A demo subscriber account with Telegram linked</li><li>Send status shown at <code>/operator/alerts/{id}/deliveries</code></li></ul></div>
       </div>
-      <div><h4>Steps</h4><ol class="steps"><li><code>shared/telegram.py</code> (Backend 06b): <code>send(chat_id, photo_url, caption)</code> with <code>sendPhoto</code>, <code>edit(chat_id, message_id, caption)</code> with <code>editMessageCaption</code>. Used by <code>asapify-agent</code> (operator group) and <code>asapify-api</code> (alert group).</li><li>Caption from the template in <a href="ui.html#telegram">UI section 03b</a> (in Indonesian): AWAS, province, coordinates, pixel count, utility, neighbours, "Himawari + GK2A sepakat", verification result, WIB time. Photo = the VIIRS image when smoke is visible, otherwise the Himawari thermal crop.</li><li>Save <code>alerts/{id}.telegram = {chat_id, message_id, status}</code>. Send fails → <code>status = pending</code>, retry after <code>retry_after</code>. Cluster closed → <code>asapify-agent /cluster-closed</code> edits the caption with the prefix <strong>SELESAI</strong>.</li></ol></div>
-      <div class="check"><h4>Done check</h4><p>Publish in the UI → the message appears in the demo alert group in &lt; 10 seconds; close the cluster → the same message changes (same <code>message_id</code>) and starts with SELESAI.</p></div>
+      <div><h4>Steps</h4><ol class="steps"><li>The code exists: Notification Engine v1 in <code>ktp-asapify-be</code> (Backend 06b) and the <code>/notifikasi</code> page in <code>ktp-asapify-fe</code>. Make sure the worker, queue, sweep and webhook are deployed (Cloud setup 09).</li><li>Sign in with the demo subscriber's Google account (no role) → <em>Notifications</em>: pick Central Kalimantan, the Telegram channel, tick consent, save. Press <em>Link Telegram</em>, open the bot, press Start.</li><li>Message text from the template in <a href="ui.html#telegram">UI section 03b</a> (in Indonesian): AWAS, province, coordinates, pixel count, utility, neighbours, "Himawari + GK2A sepakat", verification result, WIB time. Sent as plain text without a photo, with an <em>Buka &amp; konfirmasi diterima</em> (open &amp; confirm) button.</li><li>Test in <code>dry_run</code> first (status <code>simulated</code>, nothing leaves), then set <code>NOTIFICATION_MODE=live</code> and <code>TELEGRAM_ENABLED=true</code> on api and the worker.</li></ol></div>
+      <div class="check"><h4>Done check</h4><p>Publish in the UI → a DM reaches the demo account's Telegram in &lt; 10 seconds and the message is in the web inbox; the decision panel shows status <code>accepted</code>. Press <em>Confirm receipt</em> → the status changes to confirmed. An account that chose another province receives nothing.</p></div>
     </article>
     <article class="task" id="c5">
       <div class="task-head"><span class="tid">C5</span><span class="pill ai">Role C</span><h3>End-to-end test</h3></div>
@@ -941,7 +939,7 @@ npm run dev</pre></li><li>Switch to live mode: copy <code>.env.example</code> to
         <div><h4>Outputs</h4><ul><li><code>scripts/e2e.sh</code> </li><li><code>docs/e2e_log.txt</code> </li></ul></div>
       </div>
       <div><h4>Steps</h4><ol class="steps"><li><code>scripts/e2e.sh</code>: run ingest + evaluate replay for three nights of a backtest cluster, wait for verification, then call <code>decision</code> with the demo operator token.<pre class="cmd">bash scripts/e2e.sh --cluster &lt;ID&gt; --start 2023-09-23 --end 2023-09-25</pre></li></ol></div>
-      <div class="check"><h4>Done check</h4><p>The cluster appears on the public map, the verification is stored, and the message appears in the operator group and then the alert group. The log is saved.</p></div>
+      <div class="check"><h4>Done check</h4><p>The cluster appears on the public map, the verification is stored, and the message appears in the operator group, then as a DM and in the inbox of the demo subscriber. The log is saved.</p></div>
     </article></div>
   </section>
   <section id="s4">
@@ -977,7 +975,7 @@ npm run dev</pre></li><li>Switch to live mode: copy <code>.env.example</code> to
       <p class="goal">Ready to show the judges from a phone.</p>
       <div class="task-grid">
         <div><h4>Prerequisites</h4><ul><li>D1–D4</li></ul></div>
-        <div><h4>Outputs</h4><ul><li>freeze commit tagged v1.0 in <code>asapify</code> and <code>asapify-web</code></li></ul></div>
+        <div><h4>Outputs</h4><ul><li>freeze commit tagged v1.0 in <code>ktp-asapify-be</code> and <code>ktp-asapify-fe</code></li></ul></div>
       </div>
       <div><h4>Steps</h4><ol class="steps"><li>Open the web app in Chrome DevTools at 360 × 740; fix clipped elements or buttons &lt; 44 px. Also check <em>Lite mode</em> (plain map, no motion) and the system <em>reduced motion</em> setting.</li><li>Build in live mode and deploy to Firebase Hosting (Cloud setup 11); this is the URL that gets judged. After 16 Oct 23:59 WIB, bug fixes only.</li></ol></div>
       <div class="check"><h4>Done check</h4><p>No horizontal scroll at 360 px; lite mode and reduced motion move nothing; the Firebase Hosting URL opens in an incognito window; tag <code>v1.0</code> exists in both repos.</p></div>

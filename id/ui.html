@@ -370,6 +370,7 @@
   .tg-img span { width: 44px; height: 34px; border: 2px dashed var(--ember); border-radius: 3px; }
   .tg-msg p { margin: 0; padding: 0 4px; font-size: 11.5px; line-height: 1.45; }
   .tg-time { justify-self: end; font-size: 9.5px; color: var(--ink-dim); padding: 0 4px; }
+  .tg-btn { border-top: 1px solid var(--line); padding: 6px 4px 2px; text-align: center; font-size: 11px; font-weight: 600; color: var(--sat); }
   .tg-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; max-width: 94%; }
   .tg-keys span { background: var(--surface); opacity: 0.9; color: var(--ink); border-radius: 8px; text-align: center; font-size: 11px; font-weight: 600; padding: 7px 2px; }
 
@@ -432,9 +433,9 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Spesifikasi UI · pegangan Peran D · disamakan dengan aplikasi 6 Okt</span>
-    <h1>Layar operator dan pesan bot Telegram</h1>
-    <p class="lede">Pengguna utama adalah <strong>operator</strong> yang memantau piksel gambut, membaca <em>kenapa</em> sebuah piksel berstatus <code>AWAS</code> (atribut MAUT dengan angka terukurnya, dan tetangga), membaca hasil verifikasi agen, lalu <strong>menerbitkan atau menolak</strong>. Pesan yang diterbitkan dikirim bot ke <strong>grup Telegram</strong>, satu arah. Web operator sudah berjalan di repo <code>asapify-web</code> dalam <strong>mode mock</strong> (data fiktif, login demo); semua data mode live lewat <a href="backend.html">API</a>. Bahasa default <strong>Inggris</strong>, tombol EN/ID di bilah atas, pilihan diingat per perangkat.</p>
+    <span class="eyebrow">Spesifikasi UI · pegangan Peran D · disamakan dengan aplikasi 6 Okt · notifikasi pelanggan 9 Okt</span>
+    <h1>Layar operator, halaman notifikasi, dan pesan Telegram</h1>
+    <p class="lede">Pengguna utama adalah <strong>operator</strong> yang memantau piksel gambut, membaca <em>kenapa</em> sebuah piksel berstatus <code>AWAS</code> (atribut MAUT dengan angka terukurnya, dan tetangga), membaca hasil verifikasi agen, lalu <strong>menerbitkan atau menolak</strong>. Pesan yang diterbitkan masuk ke <strong>inbox web dan DM Telegram pelanggan</strong> provinsi itu, dan pelanggan menekan <em>Konfirmasi diterima</em>. Web sudah berjalan di repo tim <code>ktp-asapify-fe</code> dalam <strong>mode mock</strong> (data fiktif, login demo) atau mode live (login Google); semua data mode live lewat <a href="backend.html">API</a>. Bahasa default <strong>Inggris</strong>, tombol EN/ID di bilah atas, pilihan diingat per perangkat.</p>
     <ul class="toc" aria-label="Isi halaman">
       <li><a href="#rute"><span>01</span>Rute</a></li>
       <li><a href="#alur-pengguna"><span>02</span>Alur</a></li>
@@ -452,19 +453,20 @@
   <section id="rute">
     <div class="section-head">
       <span class="eyebrow">01 · Rute</span>
-      <h2>Lima rute untuk operator, juri, dan tim BE</h2>
+      <h2>Enam rute untuk operator, pelanggan, juri, dan tim BE</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
         <thead><tr><th scope="col">Rute</th><th scope="col">Halaman</th><th scope="col">Pengguna</th><th scope="col">Isi utama</th><th scope="col">Data dari</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>/masuk</code></th><td>Masuk</td><td>operator</td><td>Login demo di mode mock; Firebase Auth (Google) di mode live. Sisi kiri menjelaskan kapan piksel menjadi AWAS dengan grid tetangga 3 × 3</td><td>Firebase Auth</td></tr>
+          <tr><th scope="row"><code>/masuk</code></th><td>Masuk</td><td>operator, pelanggan</td><td>Login demo di mode mock; login Google (Firebase Auth) di mode live. Akun tanpa klaim operator diarahkan ke <code>/notifikasi</code>. Sisi kiri menjelaskan kapan piksel menjadi AWAS dengan grid tetangga 3 × 3</td><td>Firebase Auth</td></tr>
           <tr><th scope="row"><code>/</code></th><td>Peta operator</td><td>operator</td><td>Status piksel gambut, daftar kelompok AWAS (bisa diurutkan), pencarian, filter status dan provinsi dengan sorotan provinsi, kontrol lapisan, pemutar slot dengan kalender malam arsip, inspektur piksel</td><td><code>/meta</code>, <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code>, <code>/operator/clusters</code>, <code>/operator/basemaps</code>, <code>layers/*.geojson</code></td></tr>
-          <tr><th scope="row"><code>/kelompok/:id</code></th><td>Detail kelompok</td><td>operator</td><td>Grafik utility 3 malam, tabel parameter MAUT (angka terukur, u, bobot, sumbangan), grid tetangga, verifikasi agen dengan tooltip suhu di citra, ToolTrace, panel keputusan</td><td><code>/operator/clusters/{id}</code></td></tr>
+          <tr><th scope="row"><code>/kelompok/:id</code></th><td>Detail kelompok</td><td>operator</td><td>Grafik utility 3 malam, tabel parameter MAUT (angka terukur, u, bobot, sumbangan), grid tetangga, verifikasi agen dengan tooltip suhu di citra, ToolTrace, panel keputusan</td><td><code>/operator/clusters/{id}</code>, <code>/operator/alerts/{id}/deliveries</code></td></tr>
+          <tr><th scope="row"><code>/notifikasi</code></th><td>Notifikasi</td><td>pelanggan, operator</td><td>Kotak masuk (konfirmasi diterima, simpan untuk dibaca offline), pilihan provinsi dan kanal, persetujuan dan simulasi, tautkan Telegram, daftarkan push browser</td><td><code>/notifications/*</code></td></tr>
           <tr><th scope="row"><code>/tentang</code></th><td>Tentang &amp; metode</td><td>semua, juri</td><td>Cara kerja (5 langkah), status piksel, bobot MAUT, dua satelit, keterbatasan, sumber data ("NOAA open data"; semua pemrosesan di Google Cloud)</td><td>statis</td></tr>
           <tr><th scope="row"><code>/kontrak-api</code></th><td>Kontrak API</td><td>tim BE, juri</td><td>Konvensi, kode galat, semua endpoint (parameter, body, respons, galat, layar pemakai), skema, file statis, endpoint internal agen. Contoh JSON diambil dari data mock yang sama dengan layar</td><td>statis</td></tr>
         </tbody>
-        <caption>Semua path API diawali <code>/api/v1</code>. Penerima peringatan tidak punya rute web; kanalnya grup Telegram (bagian 03b). Deep link seperti <code>/kelompok/C-0924-002</code> bisa dibuka langsung.</caption>
+        <caption>Semua path API diawali <code>/api/v1</code>. Pelanggan memakai <code>/notifikasi</code>; peta dan detail kelompok hanya untuk operator. Deep link seperti <code>/kelompok/C-0924-002</code> bisa dibuka langsung.</caption>
       </table>
     </div>
   </section>
@@ -486,9 +488,9 @@
         <p class="note" style="margin-top:4px">Peta, garis kelompok, dan daftar mengikuti malam yang dipilih.</p>
       </div>
       <div class="card">
-        <span class="pill ok">Grup Telegram peringatan</span>
-        <div class="flowline"><span>Operator menerbitkan</span><b>→</b><span>Bot kirim foto + caption</span><b>→</b><span>Kelompok ditutup: caption SELESAI</span></div>
-        <p class="note" style="margin-top:4px">Satu arah. Satu pesan per kejadian, diperbarui di tempat.</p>
+        <span class="pill ok">Pelanggan</span>
+        <div class="flowline"><span>Pilih provinsi + kanal, setuju</span><b>→</b><span>Operator menerbitkan</span><b>→</b><span>DM Telegram + inbox</span><b>→</b><span>Konfirmasi diterima</span></div>
+        <p class="note" style="margin-top:4px">Satu pesan per kanal per kejadian. Diterima penyedia belum berarti dibaca.</p>
       </div>
     </div>
   </section>
@@ -496,7 +498,7 @@
   <section id="layar">
     <div class="section-head">
       <span class="eyebrow">03 · Wireframe</span>
-      <h2>Lima layar web operator dan satu pesan Telegram, ukuran HP</h2>
+      <h2>Lima layar web operator dan satu DM Telegram, ukuran HP</h2>
       <p>Di layar 1024 px ke atas, daftar kelompok pindah ke panel kiri 360 px; di bawahnya daftar menjadi bottom sheet yang bisa diseret. Data dalam sketsa fiktif.</p>
     </div>
     <div class="phones">
@@ -591,30 +593,30 @@
           <div class="scr-top"><span>Keputusan C-0924-002</span><small>operator</small></div>
           <div class="scr-body">
             <div class="blk"><span class="lbl">Ringkasan</span><span>AWAS · U 0,73 · 3/8 tetangga · Himawari + GK2A sepakat · Bukti kuat</span></div>
-            <span class="lbl">Pesan Telegram (bahasa Indonesia) · 412/1024</span>
+            <span class="lbl">Teks pesan (bahasa Indonesia) · 412/1024</span>
             <div class="field">AWAS · Kalimantan Tengah · -2.21, 113.92 · 4 piksel …</div>
-            <div class="btns"><span class="btn primary">Terbitkan ke grup</span><span class="btn">Tolak</span></div>
+            <div class="btns"><span class="btn primary">Terbitkan</span><span class="btn">Tolak</span></div>
             <small style="color:var(--ink-dim)">Menolak butuh alasan. Kelompok yang belum diputuskan tetap dipantau.</small>
           </div>
         </div></div>
         <div class="spec"><h4>Panel keputusan</h4>
-          <ul><li>Dua tombol saja: Terbitkan, Tolak (alasan wajib); konfirmasi sebelum kirim</li><li>Caption terisi otomatis dari templat 03b, bisa disunting, maks 1.024 karakter</li><li>"Terbitkan ke grup" mengirim ke grup peringatan provinsi kelompok</li><li>Semua tercatat di <code>audit_log</code>; keputusan bersamaan → 409, keputusan yang tersimpan ditampilkan</li></ul></div>
+          <ul><li>Dua tombol saja: Terbitkan, Tolak (alasan wajib); konfirmasi sebelum kirim</li><li>Teks terisi otomatis dari templat 03b, bisa disunting, maks 1.024 karakter</li><li>"Terbitkan" menyimpan keputusan lalu mengantrekan pesan ke pelanggan provinsi kelompok; setelahnya panel menampilkan jumlah penerima dan status kirim per kanal</li><li>Semua tercatat di <code>audit_log</code>; keputusan bersamaan → 409, keputusan yang tersimpan ditampilkan</li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
-          <div class="scr-top"><span>ASAPify Peringatan · Kalteng</span><small>Telegram</small></div>
+          <div class="scr-top"><span>ASAPify Bot</span><small>Telegram · DM</small></div>
           <div class="scr-body tg">
             <div class="tg-msg">
               <span class="tg-from">ASAPify Bot</span>
-              <div class="tg-img" role="img" aria-label="Citra VIIRS dengan penanda koordinat"><span></span></div>
-              <p><b>AWAS · Dugaan gambut membara</b><br>📍 Kalimantan Tengah · -2.21, 113.92 · 4 piksel<br>🛰️ Himawari + GK2A sepakat · utility 0,73 · tetangga 3/8<br>🔎 Bukti kuat: asap terlihat (VIIRS 24 Sep), deteksi VIIRS 1,4 km<br>🕙 Slot 24 Sep 22.10 WIB</p>
+              <p>AWAS · Dugaan gambut membara<br>📍 Kalimantan Tengah · -2.21, 113.92 · 4 piksel<br>🛰️ Himawari + GK2A sepakat · utility 0,73 · tetangga 3/8<br>🔎 Bukti kuat: asap terlihat (VIIRS 24 Sep), deteksi VIIRS 1,4 km<br>🕙 Slot 24 Sep 22.10 WIB<br>AWAS adalah indikasi, bukan kebakaran terkonfirmasi.</p>
+              <span class="tg-btn">Buka &amp; konfirmasi diterima</span>
               <small class="tg-time">22.31</small>
             </div>
           </div>
         </div></div>
-        <div class="spec"><h4>Pesan bot di grup peringatan</h4>
-          <ul><li>Terkirim hanya setelah operator menerbitkan</li><li>Kelompok ditutup = pesan yang sama diedit, diawali SELESAI</li><li>Satu arah: tanpa tombol, tanpa laporan balik</li></ul></div>
+        <div class="spec"><h4>DM bot ke pelanggan</h4>
+          <ul><li>Terkirim hanya setelah operator menerbitkan, ke pelanggan yang memilih provinsi itu dan menautkan Telegram</li><li>Teks polos tanpa foto, supaya cepat di jaringan lemah</li><li>Satu tombol: buka inbox web dan konfirmasi diterima</li></ul></div>
       </div>
 
     </div>
@@ -623,21 +625,21 @@
   <section id="telegram">
     <div class="section-head">
       <span class="eyebrow">03b · Pesan bot Telegram ✅</span>
-      <h2>Dua grup, dua jenis pesan</h2>
+      <h2>Grup untuk operator, DM untuk pelanggan</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Grup</th><th scope="col">Pengirim</th><th scope="col">Kapan bot mengirim</th><th scope="col">Isi</th></tr></thead>
+        <thead><tr><th scope="col">Tujuan</th><th scope="col">Pengirim</th><th scope="col">Kapan bot mengirim</th><th scope="col">Isi</th></tr></thead>
         <tbody>
           <tr><th scope="row">Operator (internal)</th><td><code>asapify-agent</code></td><td>Otomatis, setelah verifikasi kelompok AWAS tersimpan</td><td>ID kelompok, provinsi, utility, tetangga, hasil verifikasi, link detail (khusus operator)</td></tr>
-          <tr><th scope="row">Peringatan (per provinsi)</th><td><code>asapify-api</code></td><td>Hanya setelah operator menekan <em>Terbitkan ke grup</em></td><td>Foto (citra VIIRS bila asap terlihat, selain itu crop termal Himawari) + caption templat di bawah</td></tr>
-          <tr><th scope="row">Peringatan, pesan yang sama</th><td><code>asapify-agent</code> / <code>asapify-api</code></td><td>Kelompok ditutup otomatis / operator menutup</td><td><code>editMessageCaption</code>, baris pertama diawali <strong>SELESAI</strong></td></tr>
+          <tr><th scope="row">Pelanggan (DM, per orang)</th><td><code>asapify-notify</code></td><td>Hanya setelah operator menekan <em>Terbitkan</em>, untuk pelanggan yang memilih provinsi itu</td><td>Teks templat di bawah (tanpa HTML dan foto) + tombol <em>Buka &amp; konfirmasi diterima</em>; salinannya ada di inbox web</td></tr>
+          <tr><th scope="row">Kelompok ditutup</th><td><code>asapify-agent</code> / <code>asapify-api</code></td><td>Kelompok ditutup otomatis / operator menutup</td><td>Inbox berlabel <strong>SELESAI</strong>, job yang belum terkirim batal (belum diimplementasikan)</td></tr>
         </tbody>
       </table>
     </div>
     <div class="grid-2">
       <div class="code">
-        <div class="code-head"><span>Templat caption (ID)</span><span>shared/caption.py</span></div>
+        <div class="code-head"><span>Templat teks (ID)</span><span>shared/caption.py</span></div>
 <pre>&lt;b&gt;AWAS · Dugaan gambut membara&lt;/b&gt;
 📍 {provinsi} · {lat:.2f}, {lon:.2f} · {n_pixels} piksel
 🛰️ Himawari + GK2A sepakat · utility {U:.2f} · tetangga {n_nbr}/8
@@ -651,7 +653,7 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
           <li>Caption maksimal 1.024 karakter; angka dari <code>clusters</code> dan <code>verifications</code>, tidak diketik ulang</li>
           <li>Tidak pernah menulis "kebakaran terkonfirmasi"</li>
           <li>Caption tetap Bahasa Indonesia (penerimanya petugas di Indonesia), juga saat layar web berbahasa Inggris; video demo memakai subtitle Inggris</li>
-          <li>Bot tidak menerima input: tanpa tombol, perintah, atau webhook; tidak menyimpan data pengguna</li>
+          <li>Bot hanya menerima <code>/start &lt;kode&gt;</code> lewat webhook untuk menautkan akun dan tidak membalas; yang disimpan hanya <code>chat_id</code> pelanggan yang menautkan sendiri. Tag HTML di teks dibuang untuk DM</li>
         </ul>
       </div>
     </div>
@@ -714,7 +716,7 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
   <section id="komponen">
     <div class="section-head">
       <span class="eyebrow">06 · Komponen</span>
-      <h2>Komponen di <code>asapify-web/src/components</code></h2>
+      <h2>Komponen di <code>ktp-asapify-fe/src/components</code></h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
@@ -733,7 +735,8 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
           <tr><th scope="row"><code>NeighbourGrid</code></th><td>detail, masuk</td><td>3 × 3: tetangga ≥ 0,5, normal, berawan, bukan gambut</td></tr>
           <tr><th scope="row"><code>EvidenceImage</code>, <code>ProbeTips</code>, <code>FloatingTip</code></th><td>detail</td><td>citra VIIRS dan Himawari berdampingan dengan penanda 5 km; tooltip suhu per sel (dari <code>images[].thermal</code>) dan titik FIRMS; tooltip dirender di <code>&lt;body&gt;</code> agar tidak terpotong</td></tr>
           <tr><th scope="row"><code>ViirsList</code>, <code>ToolTrace</code></th><td>detail</td><td>deteksi VIIRS (satelit, waktu WIB, jarak); langkah agen: nama tool, argumen, durasi</td></tr>
-          <tr><th scope="row"><code>DecisionPanel</code></th><td>detail</td><td>Terbitkan / Tolak (alasan wajib), konfirmasi, galat sesuai <code>code</code></td></tr>
+          <tr><th scope="row"><code>DecisionPanel</code></th><td>detail</td><td>Terbitkan / Tolak (alasan wajib), konfirmasi, galat sesuai <code>code</code>; setelah terbit: ringkasan antrean</td></tr>
+          <tr><th scope="row"><code>DeliveryStatus</code></th><td>detail (mode live)</td><td>status kirim per kanal dari <code>/deliveries</code>, diperbarui tiap 15 detik selama masa kirim 1 jam</td></tr>
         </tbody>
       </table>
     </div>
@@ -775,7 +778,7 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
           <li>Default bahasa Inggris; EN/ID di bilah atas, diingat per perangkat. Kamus <code>en.json</code> dan <code>id.json</code> harus berisi kunci yang sama</li>
           <li>Teks agen tampil sesuai bahasa layar (<code>finding</code>/<code>finding_en</code>, <code>summary_id</code>/<code>summary_en</code>); galat ditulis dari <code>code</code></li>
           <li><strong>AWAS</strong> tetap ditulis AWAS di kedua bahasa sebagai nama status (versi Inggris menjelaskan artinya sekali)</li>
-          <li>Caption Telegram tetap Bahasa Indonesia</li>
+          <li>Teks pesan peringatan (inbox, DM Telegram) tetap Bahasa Indonesia</li>
           <li>Kalimat aktif dan polos: tanpa jargon, tanpa tanda pisah panjang</li>
         </ul>
       </div>
@@ -788,7 +791,7 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
             <tr><th scope="row"><code>awas.note</code></th><td>AWAS calls the agent to verify. The status alone does not mean a fire.</td><td>AWAS memanggil agen untuk verifikasi. Status ini belum berarti ada kebakaran.</td></tr>
             <tr><th scope="row"><code>evidence.inconclusive</code></th><td>Inconclusive</td><td>Inkonklusif</td></tr>
             <tr><th scope="row"><code>sat.agree</code></th><td>Himawari + GK2A agree</td><td>Himawari + GK2A sepakat</td></tr>
-            <tr><th scope="row"><code>btn.publish</code></th><td>Publish to group</td><td>Terbitkan ke grup</td></tr>
+            <tr><th scope="row"><code>btn.publish</code></th><td>Publish</td><td>Terbitkan</td></tr>
           </tbody>
         </table>
       </div>
@@ -803,23 +806,24 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
     <div class="grid-2">
       <div class="card">
         <dl class="kv">
-          <dt>Build</dt><dd>React 19 + Vite + TypeScript (repo <code>asapify-web</code>)</dd>
+          <dt>Build</dt><dd>React 19 + Vite + TypeScript (repo tim <code>ktp-asapify-fe</code>)</dd>
           <dt>Peta</dt><dd>MapLibre GL JS 6; worker modul disajikan apa adanya di <code>/maplibre/</code></dd>
           <dt>Gerak</dt><dd><code>motion</code> (pegas), dimuat malas; mati di <em>reduced motion</em> dan mode ringan</dd>
           <dt>Grafik</dt><dd>SVG sendiri untuk <code>UtilityChart</code> dan tabel parameter</dd>
           <dt>Huruf</dt><dd>IBM Plex lewat <code>@fontsource</code> (tanpa Google Fonts)</dd>
           <dt>Mode</dt><dd><code>VITE_API_MODE=mock</code> (default, data fiktif + login demo) atau <code>live</code> (<code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code>)</dd>
-          <dt>Auth</dt><dd>login demo di mock; Firebase JS SDK (Auth) di live</dd>
+          <dt>Auth</dt><dd>login demo di mock; Firebase JS SDK (Auth, login Google) di live. Klaim <code>role = operator</code> membuka peta dan keputusan; akun lain hanya <code>/notifikasi</code></dd>
+          <dt>Push</dt><dd>Firebase Messaging + service worker <code>notification-sw.js</code>, hanya simulasi/non-darurat; juga menyimpan inbox untuk dibaca offline bila pengguna memilih</dd>
           <dt>Hosting</dt><dd>Firebase Hosting, <code>/api/**</code> ke Cloud Run <code>asapify-api</code> (URL prototipe yang dinilai). Pratinjau mode mock di Vercel untuk review internal</dd>
           <dt>Mode ringan</dt><dd>otomatis bila penghemat data aktif, RAM ≤ 2 GB, prosesor terbatas, atau <em>reduced motion</em>: peta dasar polos, tanpa pendar/garis kisi/animasi kamera, pixel ratio 1</dd>
         </dl>
       </div>
       <div class="code">
-        <div class="code-head"><span>Struktur folder</span><span>asapify-web/src/</span></div>
+        <div class="code-head"><span>Struktur folder</span><span>ktp-asapify-fe/src/</span></div>
 <pre>src/
-├─ api.ts, auth.ts, types.ts
+├─ api.ts, auth.ts, types.ts, notification-api.ts, notification-push.ts, notification-sw.ts
 ├─ map/ map.ts, layers.ts
-├─ pages/ Masuk, PetaOperator, Kelompok, Tentang, KontrakApi
+├─ pages/ Masuk, PetaOperator, Kelompok, Notifikasi, Tentang, KontrakApi
 ├─ components/      <span class="c"># bagian 06</span>
 ├─ contract/ spec.ts   <span class="c"># isi tab Kontrak API</span>
 ├─ mock/ fixtures.ts, thermal.ts, scenario.ts

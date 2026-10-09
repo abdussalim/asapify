@@ -311,7 +311,7 @@
   .m-job { background: var(--surface-2); color: var(--ink-dim); }
   td.path code { background: transparent; padding: 0; font-size: 12.5px; white-space: nowrap; }
   .auth { font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap; }
-  .auth.pub { color: var(--moss); } .auth.op { color: var(--amber); } .auth.int { color: var(--ember); }
+  .auth.pub { color: var(--moss); } .auth.op { color: var(--amber); } .auth.int { color: var(--ember); } .auth.usr { color: var(--sat); }
   .kv { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 14px; }
   .kv dt { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-dim); overflow-wrap: anywhere; }
   .kv dd { margin: 0; overflow-wrap: anywhere; }
@@ -432,9 +432,9 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Backend &amp; API · reference for roles A, B, C · architecture revised 29 Sep · API aligned with the web app 6 Oct</span>
+    <span class="eyebrow">Backend &amp; API · reference for roles A, B, C · architecture revised 29 Sep · API aligned with the web app 6 Oct · subscriber notifications 9 Oct</span>
     <h1>Five deterministic jobs, two services</h1>
-    <p class="lede">Observation (Himawari-9, GK2A), baselines (NASA POWER + thermal baseline) and the rule engine (MAUT + neighbour support) run as Cloud Run jobs. The ADK agent lives in the <code>asapify-agent</code> service and <strong>is called only for AWAS clusters</strong>; it fetches VIIRS at that moment (on demand). The <code>asapify-api</code> service serves the operator web app and posts to the alert group once an operator publishes. Code on this page is a 💡 starting point; ⚠️ parts are checked in Sprint 0.</p>
+    <p class="lede">Observation (Himawari-9, GK2A), baselines (NASA POWER + thermal baseline) and the rule engine (MAUT + neighbour support) run as Cloud Run jobs. The ADK agent lives in the <code>asapify-agent</code> service and <strong>is called only for AWAS clusters</strong>; it fetches VIIRS at that moment (on demand). The <code>asapify-api</code> service serves operators and subscribers; once an operator publishes, the message reaches the inbox and Telegram DMs of that province's subscribers through the <code>asapify-notify</code> worker. Code on this page is a 💡 starting point; ⚠️ parts are checked in Sprint 0.</p>
     <ul class="toc" aria-label="Page contents">
       <li><a href="#layanan"><span>01</span>Who reads/writes what</a></li>
       <li><a href="#konvensi"><span>02</span>Conventions</a></li>
@@ -468,8 +468,9 @@
           <tr><th scope="row"><code>asapify-ingest-gk2a</code> (job)</th><td>Scheduler <code>*/10 20-23,0-4</code></td><td>NOAA <code>noaa-gk2a-pds</code>, <code>peat/</code></td><td><code>gk2a/…/HHMM.parquet</code>, <code>raw/gk2a/manifest/</code>, <code>runs</code></td><td>—</td></tr>
           <tr><th scope="row"><code>asapify-environment</code> (job)</th><td>Scheduler <code>0 12 * * *</code></td><td>NASA POWER, <code>himawari/</code>, <code>gk2a/</code>, <code>score/</code> (frozen pixels)</td><td><code>environment/power/</code>, <code>environment/thermal/</code>, <code>environment/bias/</code>, <code>raw/power/</code></td><td>—</td></tr>
           <tr><th scope="row"><code>asapify-evaluate</code> (job)</th><td>Scheduler <code>5-59/10 20-23,0-4</code></td><td><code>himawari/</code>, <code>gk2a/</code>, <code>environment/</code>, <code>peat/</code>, <code>score/</code> 3 nights</td><td><code>score/…/HHMM.parquet</code>, Firestore <code>clusters</code>, <code>runs</code></td><td><code>asapify-agent</code>: <code>POST /verify</code> (AWAS only), <code>POST /cluster-closed</code></td></tr>
-          <tr><th scope="row"><code>asapify-agent</code> (service, private)</th><td>POST from evaluate or api</td><td><code>clusters</code>, <code>score/</code>, NASA FIRMS, NASA GIBS, NOAA Himawari</td><td><code>crops/</code>, <code>raw/firms/</code>, <code>verifications</code>, <code>alerts.status</code> (close), <code>audit_log</code></td><td>Gemini, Telegram (operator group; SELESAI edit in the alert group)</td></tr>
-          <tr><th scope="row"><code>asapify-api</code> (service)</th><td>operator web requests</td><td><code>score/</code> (grid), <code>clusters</code>, <code>verifications</code>, <code>tg_chats</code></td><td><code>alerts</code>, <code>audit_log</code></td><td>Telegram (alert group), <code>asapify-agent</code> (re-verification)</td></tr>
+          <tr><th scope="row"><code>asapify-agent</code> (service, private)</th><td>POST from evaluate or api</td><td><code>clusters</code>, <code>score/</code>, NASA FIRMS, NASA GIBS, NOAA Himawari</td><td><code>crops/</code>, <code>raw/firms/</code>, <code>verifications</code>, <code>alerts.status</code> (close), <code>audit_log</code></td><td>Gemini, Telegram (operator group)</td></tr>
+          <tr><th scope="row"><code>asapify-api</code> (service)</th><td>operator and subscriber web requests; Telegram webhook</td><td><code>score/</code> (grid), <code>clusters</code>, <code>verifications</code>, <code>notification_recipients</code></td><td><code>alerts</code>, <code>audit_log</code>, <code>notification_inbox</code>, <code>notification_jobs</code></td><td>Cloud Tasks (send queue), <code>asapify-agent</code> (re-verification)</td></tr>
+          <tr><th scope="row"><code>asapify-notify</code> (service, private)</th><td>Cloud Tasks (one task per job), Scheduler sweep every minute</td><td><code>notification_jobs</code>, <code>notification_inbox</code>, <code>notification_recipients</code></td><td>job status, <code>notification_inbox</code> (resumed fan-out)</td><td>Telegram (subscriber DMs), FCM (exercise push)</td></tr>
         </tbody>
       </table>
     </div>
@@ -491,7 +492,7 @@
         <dt>Internal auth</dt><dd>OIDC from <code>sa-jobs</code> or <code>sa-api</code> to <code>asapify-agent</code> (Cloud Run IAM <code>run.invoker</code>)</dd>
         <dt>Replay</dt><dd>jobs: <code>--as-of</code> or env <code>AS_OF</code>; endpoints: <code>as_of</code>; response header <code>X-Asapify-As-Of</code></dd>
         <dt>Errors</dt><dd><code>{"error": {"code": "...", "message": "..."}}</code>. <code>code</code> is stable; the web app writes its own message from <code>code</code> in the operator's language (EN/ID). <code>message</code> (Indonesian) shows only when the web app does not know the <code>code</code> yet.</dd>
-        <dt>Language</dt><dd>Agent text is sent in both languages (<code>finding</code> + <code>finding_en</code>, <code>summary_id</code> + <code>summary_en</code>) so a screen never mixes languages. Telegram captions stay in Indonesian.</dd>
+        <dt>Language</dt><dd>Agent text is sent in both languages (<code>finding</code> + <code>finding_en</code>, <code>summary_id</code> + <code>summary_en</code>) so a screen never mixes languages. Alert message text (inbox and Telegram DM) stays in Indonesian.</dd>
       </dl>
     </div>
   </section>
@@ -516,15 +517,27 @@
           <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters?state=active</code>, <code>?night=</code></td><td><span class="auth op">operator</span></td><td>AWAS clusters + latest verification + decision. With <code>night=YYYY-MM-DD</code> (archive night): clusters that were AWAS in any slot that night, active or closed (<code>first_awas_at</code> ≤ night end and <code>last_awas_at</code> ≥ night start); <code>state</code> is ignored</td></tr>
           <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters/{id}</code></td><td><span class="auth op">operator</span></td><td>3-night utility series, MAUT attributes at the trigger slot with their measured numbers (<code>attribute_details</code>), neighbour grid, verification + tool trace, signed image URLs with the crop <code>bbox</code>, and per-cell brightness temperatures behind the thermal image (<code>images[].thermal</code>)</td></tr>
           <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/verify</code></td><td><span class="auth op">operator</span></td><td>request re-verification; forwarded to the agent (respects the 6 h cooldown unless <code>force=true</code>)</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/decision</code></td><td><span class="auth op">operator</span></td><td><code>publish</code> (caption; the bot posts to the provincial alert group) / <code>reject</code> (reason required)</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts?status=</code></td><td><span class="auth op">operator</span></td><td>published alerts + Telegram send status</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/close</code></td><td><span class="auth op">operator</span></td><td>early close by an operator; the caption is edited to SELESAI (automatic through agent <code>/cluster-closed</code> when a cluster closes)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/decision</code></td><td><span class="auth op">operator</span></td><td><code>publish</code> (message text; the decision, audit entry and alert are saved first, then inbox entries and a queue are written for each subscriber of that province, 50 per batch; the subscriber count never fails a decision) / <code>reject</code> (reason required)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts?status=</code></td><td><span class="auth op">operator</span></td><td>published alerts + queue summary</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/close</code></td><td><span class="auth op">operator</span></td><td>early close by an operator: inbox entries get the SELESAI label, unsent jobs are cancelled (automatic through agent <code>/cluster-closed</code> when a cluster closes)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts/{id}/deliveries</code></td><td><span class="auth op">operator</span></td><td>send status per channel per subscriber (<code>pending</code>, <code>sending</code>, <code>accepted</code>, <code>failed</code>, <code>unknown</code>, <code>blocked</code>, <code>cancelled</code>, <code>simulated</code>) + the recipient's confirmation time. <code>accepted</code> = the provider took it, not that it was read ✅</td></tr>
+          <tr class="sub"><td colspan="4">asapify-api · subscribers (Google account with a verified email, no role)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/notifications/settings</code></td><td><span class="auth usr">user</span></td><td>preferences (provinces, channels, consent, exercises), linked Telegram / registered push device, channel list with on/off state, mode <code>dry_run</code> / <code>live</code> ✅</td></tr>
+          <tr><td><span class="m m-patch">PUT</span></td><td class="path"><code>/notifications/preferences</code></td><td><span class="auth usr">user</span></td><td>body <code>{provinces, channels, consent, exercises}</code>; <code>consent = true</code> needs at least one province; unsubscribing = <code>consent = false</code> ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/notifications/device</code>, <code>DELETE</code></td><td><span class="auth usr">user</span></td><td>register / remove one push token (FCM, including Web Push) per account ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/notifications/telegram-link</code></td><td><span class="auth usr">user</span></td><td>single-use deep link <code>t.me/&lt;bot&gt;?start=&lt;code&gt;</code>, valid for 10 minutes; only a hash of the code is stored ✅</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/notifications/inbox</code></td><td><span class="auth usr">user</span></td><td>the account's last 50 messages: text, province, <code>purpose</code> (<code>emergency</code> / <code>exercise</code>), <code>published_at</code>, <code>expires_at</code>, <code>acknowledged_at</code> ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/notifications/inbox/{id}/ack</code></td><td><span class="auth usr">user</span></td><td>confirm receipt; idempotent; another account's ID → 404. Opening the link alone does not count as a confirmation ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/notifications/telegram-webhook</code></td><td><span class="auth int">Telegram secret</span></td><td>called by Telegram, not the browser. Header <code>X-Telegram-Bot-Api-Secret-Token</code>; only accepts <code>/start &lt;code&gt;</code> from a private chat to link an account; never replies ✅</td></tr>
           <tr class="sub"><td colspan="4">public bucket · static files for map layers (not endpoints)</td></tr>
           <tr><td><span class="m m-job">FILE</span></td><td class="path"><code>layers/peat_pixels.geojson</code></td><td><span class="auth pub">public</span></td><td>processed peat boundary (KHG ∩ 15 provinces − built-up), simplified; written by <code>asapify-build</code></td></tr>
           <tr><td><span class="m m-job">FILE</span></td><td class="path"><code>layers/provinces.geojson</code></td><td><span class="auth pub">public</span></td><td>the 15 Sumatra + Kalimantan provinces (BPS code, name), simplified to ≈ 90 KB (≈ 30 KB gzip); used for province lines and the selected-province highlight. geoBoundaries IDN ADM1, ODbL</td></tr>
           <tr class="sub"><td colspan="4">asapify-agent · internal (private Cloud Run URL)</td></tr>
           <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/verify</code></td><td><span class="auth int">OIDC sa-jobs / sa-api</span></td><td>body <code>{"cluster_id", "trigger_slot", "force": false}</code>; runs the agent, saves <code>verifications</code>, posts to the operator group. Response 202 + <code>verification_id</code></td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/cluster-closed</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"cluster_id"}</code>; deterministic code (no Gemini): if an alert was published for that cluster, edit its caption to SELESAI and set <code>alerts.status = closed</code></td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/cluster-closed</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"cluster_id"}</code>; deterministic code (no Gemini): if an alert was published for that cluster, set <code>alerts.status = closed</code>, label the inbox entries SELESAI and cancel unsent jobs</td></tr>
+          <tr class="sub"><td colspan="4">asapify-notify · internal (private Cloud Run URL, same image as asapify-api)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/_internal/notifications/dispatch</code></td><td><span class="auth int">OIDC sa-task</span></td><td>body <code>{"job_id"}</code> from Cloud Tasks: claim one job, re-check consent, confirmation and expiry, send, save the status. A timeout = <code>unknown</code>, never resent automatically ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/_internal/notifications/sweep</code></td><td><span class="auth int">OIDC sa-task</span></td><td>Cloud Scheduler every minute: resume interrupted fan-outs (<code>alerts.fanout = pending</code>), re-queue <code>pending</code> jobs, mark <code>sending</code> &gt; 5 min as <code>unknown</code> ✅</td></tr>
         </tbody>
       </table>
     </div>
@@ -596,8 +609,10 @@
           <div class="code-head"><span>Response</span><span>201</span></div>
 <pre>{ "action": "publish", "by": "operator@contoh.id",
   "at": "2023-09-24T15:30:00Z", "reason": null,
-  "alert_id": "A-0924-001",
-  "telegram": {"status": "sent", "message_id": 812} }</pre>
+  "alert_id": "A-0924-001", "telegram": null,
+  "notifications": {"state": "outbox_saved",
+                    "recipients": 2, "jobs": 4},
+  "queue": {"state": "accepted", "count": 4} }</pre>
         </div>
         <div class="code">
           <div class="code-head"><span>Error · 409</span><span>response</span></div>
@@ -641,8 +656,11 @@
           <tbody>
             <tr><th scope="row"><code>clusters</code></th><td>pixels, rep_pixel, centroid, province, utility_max, neighbour_support, first_awas_at, last_awas_at, last_verified_at, state (active/closed)</td></tr>
             <tr><th scope="row"><code>verifications</code></th><td>schema-locked agent output, tool trace, model, validator_ok</td></tr>
-            <tr><th scope="row"><code>alerts</code></th><td>cluster_id, caption, published_by/at, status (published/closed), <code>telegram {chat_id, message_id, status}</code></td></tr>
-            <tr><th scope="row"><code>tg_chats</code></th><td><code>jenis</code> (operator / peringatan = alert), <code>provinsi</code>, chat_id</td></tr>
+            <tr><th scope="row"><code>alerts</code></th><td>cluster_id, caption, published_by/at, status (active/closed), <code>purpose</code> (emergency/exercise), <code>expires_at</code>, <code>fanout</code> (pending/done), <code>notifications {state, recipients, jobs}</code></td></tr>
+            <tr><th scope="row"><code>notification_recipients</code></th><td>per subscriber (ID = hash of the UID): provinces, channels, <code>consent</code>, <code>exercises</code>, Telegram <code>chat_id</code> and push token (never sent to the browser)</td></tr>
+            <tr><th scope="row"><code>notification_inbox</code></th><td>one document per alert × subscriber: text, province, <code>purpose</code>, <code>expires_at</code> (1 h), <code>acknowledged_at</code></td></tr>
+            <tr><th scope="row"><code>notification_jobs</code></th><td>per-channel outbox: <code>status</code>, <code>error</code>, <code>attempts</code>, <code>not_before</code>, <code>provider_id</code>; deterministic IDs, only ever <code>create</code>d</td></tr>
+            <tr><th scope="row"><code>notification_devices</code>, <code>notification_telegram_chats</code></th><td>owner of each push token / Telegram chat, so one device or chat cannot be linked to two accounts</td></tr>
             <tr><th scope="row"><code>runs</code></th><td>log of every job run: slot, n_sat, count per status, latency, missing files</td></tr>
             <tr><th scope="row"><code>audit_log</code></th><td>every operator action, agent call and bot message</td></tr>
           </tbody>
@@ -691,7 +709,7 @@ def pixel_id(row: int, col: int) -&gt; str:
         <ul>
           <li>The <code>MONITOR_BBOX</code> box also covers Peninsular Malaysia, Singapore, Sarawak, Sabah, Brunei, the western tip of Java and part of the West Sulawesi coast.</li>
           <li>KHG covers Indonesia only, so Malaysia, Singapore and Brunei drop out automatically. Java and Sulawesi are removed with the <strong>province filter</strong> (codes 11–19, 21, 61–65).</li>
-          <li>The per-pixel <code>province</code> column also selects the Telegram alert group (one group per province).</li>
+          <li>The per-pixel <code>province</code> column also decides which subscribers receive the alert (subscribers choose provinces).</li>
         </ul>
         <dl class="kv" style="margin-top:10px">
           <dt>Full grid</dt><dd>1,225 × 620 = ~760 thousand cells</dd>
@@ -1105,43 +1123,43 @@ def fetch_viirs_image(lat: float, lon: float, as_of: str,
 
   <section id="telegram">
     <div class="section-head">
-      <span class="eyebrow">06b · Telegram bot ✅</span>
-      <h2>Send once, edit afterwards, one way</h2>
-      <p>Plain HTTP to the Bot API (httpx), no bot framework and no webhook. The same module serves <code>asapify-agent</code> (operator group) and <code>asapify-api</code> (alert group).</p>
+      <span class="eyebrow">06b · Telegram bot and subscriber channels ✅</span>
+      <h2>A group for operators, DMs for subscribers</h2>
+      <p>Plain HTTP to the Bot API (httpx), no bot framework. <code>asapify-agent</code> sends the verification summary to the <strong>operator group</strong>. Published alerts no longer go to provincial groups: <code>asapify-api</code> writes an inbox entry for every subscriber who chose that province, and the <code>asapify-notify</code> worker sends a text <strong>Telegram DM</strong> (team decision of 9 Oct, code in <code>ktp-asapify-be</code>).</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
-        <div class="code-head"><span>Send and edit messages</span><span>shared/telegram.py</span></div>
+        <div class="code-head"><span>Subscriber DM (worker)</span><span>asapify_api/notification_delivery.py</span></div>
 <pre>TG = f"https://api.telegram.org/bot{TOKEN}"
 
-async def send(chat_id, photo_url, caption):
-    r = await http.post(f"{TG}/sendPhoto", json={
-        "chat_id": chat_id,
-        "photo": photo_url,          <span class="c"># signed crop URL</span>
-        "caption": caption,          <span class="c"># ≤ 1024 characters</span>
-        "parse_mode": "HTML"})
-    msg = r.json()["result"]
-    return {"chat_id": chat_id, "message_id": msg["message_id"]}
-
-async def edit(chat_id, message_id, caption):   <span class="c"># SELESAI</span>
-    await http.post(f"{TG}/editMessageCaption", json={
-        "chat_id": chat_id, "message_id": message_id,
-        "caption": caption, "parse_mode": "HTML"})</pre>
+r = client.post(f"{TG}/sendMessage", json={
+    "chat_id": profile["telegram_chat_id"],
+    "text": text_message(inbox),     <span class="c"># plain text, HTML stripped</span>
+    "link_preview_options": {"is_disabled": True},
+    "reply_markup": {"inline_keyboard": [[{
+        "text": "Buka &amp; konfirmasi diterima",
+        "url": f"{ORIGIN}/notifikasi?open={inbox['id']}"}]]}})
+<span class="c"># ok + message_id   → accepted (not "read")</span>
+<span class="c"># 4xx               → failed</span>
+<span class="c"># timeout / 5xx     → unknown, never resent automatically</span></pre>
       </div>
       <div class="code tall">
-        <div class="code-head"><span>Get a group's chat_id (once)</span><span>bash</span></div>
-<pre><span class="c"># 1. add the bot to the group, send /start@bot_name in the group</span>
-<span class="c"># 2. read chat.id from the latest update</span>
-curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
-  | jq '.result[].message.chat | {id, title}'
+        <div class="code-head"><span>Linking an account to Telegram</span><span>flow</span></div>
+<pre><span class="c"># 1. web: POST /notifications/telegram-link</span>
+<span class="c">#    → t.me/&lt;bot&gt;?start=&lt;code&gt; (10 min, single use)</span>
+<span class="c"># 2. the subscriber presses Start in the bot</span>
+<span class="c"># 3. Telegram → POST /notifications/telegram-webhook</span>
+<span class="c">#    secret token header; private chats only</span>
+<span class="c"># 4. the API stores chat_id on the subscriber profile</span>
 
-<span class="c"># 3. store it in Firestore</span>
-<span class="c">#    tg_chats/{id}: {jenis: "peringatan",</span>
-<span class="c">#                    provinsi: "62", chat_id: -100…}</span></pre>
-        <div class="callout info" style="margin-top:8px">No webhook: no public endpoint for Telegram, no secret token, and no Telegram user data stored.</div>
+curl -s "https://api.telegram.org/bot$TOKEN/setWebhook" \
+  -d url="https://&lt;HOSTING&gt;/api/v1/notifications/telegram-webhook" \
+  -d secret_token="$WEBHOOK_SECRET" \
+  -d allowed_updates='["message"]'</pre>
+        <div class="callout info" style="margin-top:8px">The webhook only links accounts: it never replies and never takes a chat target from the browser. The operator group still uses <code>sendPhoto</code> with a <code>chat_id</code> recorded once.</div>
       </div>
     </div>
-    <div class="callout" style="margin-top:12px">Telegram limits a bot to about 20 messages per minute per group. That is safe for this flow: the operator group gets one message per verification, the alert group only after an operator decision.</div>
+    <div class="callout" style="margin-top:12px">FCM / Web Push is for exercises and non-emergency messages only: FCM policy forbids emergency use, so real AWAS alerts are blocked at three layers (planning, claiming, adapter). WhatsApp, SMS, email, LoRa and Bluetooth are stored as choices and do not send yet.</div>
   </section>
 
   <section id="jobs">
@@ -1166,7 +1184,7 @@ curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
           <li>Pick the latest slot where both satellites are present; if one satellite is &gt; 40 minutes late, run with one satellite (<code>n_sat = 1</code>). Skip slots already in <code>runs</code>.</li>
           <li>Read the latest thermal baseline, LST bias and POWER from <code>environment/</code>.</li>
           <li>Compute z, ΔLST, ΔSAT, attributes, U0, u_N, U, status (05e). Write <code>score/</code>.</li>
-          <li>Label AWAS clusters (<code>cluster.label</code>), update <code>clusters</code>, close clusters without AWAS for 3 valid nights, then <code>POST $AGENT_URL/cluster-closed</code> so any published message is edited to SELESAI.</li>
+          <li>Label AWAS clusters (<code>cluster.label</code>), update <code>clusters</code>, close clusters without AWAS for 3 valid nights, then <code>POST $AGENT_URL/cluster-closed</code> so any published alert is marked SELESAI.</li>
           <li>For new clusters, or when the last verification is &gt; 6 h old: <code>POST $AGENT_URL/verify</code> with an OIDC token.</li>
         </ol>
       </div>
@@ -1220,10 +1238,11 @@ curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
 │            test_baseline.py, test_maut.py, test_status.py, test_cluster.py
 ├─ notebooks/ backtest.ipynb   <span class="c"># lead time: first VIIRS − first AWAS</span>
 ├─ scripts/ e2e.sh
-├─ data/ref/                   <span class="c"># KHG, provinces, built_frac, tg_chats (no secrets)</span>
+├─ data/ref/                   <span class="c"># KHG, provinces, built_frac (no secrets)</span>
 ├─ data/local/                 <span class="c"># raw, not committed</span>
 ├─ docs/                       <span class="c"># proof of done: png, csv, log</span>
-└─ (operator web app in the separate asapify-web repo: React 19 + Vite + MapLibre 6)</pre>
+└─ (web app in the ktp-asapify-fe repo: React 19 + Vite + MapLibre 6)</pre>
+      <p class="note">This is the planned monorepo. What is built so far lives in the team repo <code>ktp-asapify-be</code>: <code>asapify_api/</code> (operator API + Notification Engine), <code>gcp/</code> (deploy scripts), <code>tools/</code> (publish snapshot, set operator); the pipeline and agent are still experimental.</p>
     </div>
   </section>
 
@@ -1243,7 +1262,7 @@ curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
           <tr><th scope="row">Gemini fails or the tool limit is reached</th><td>The verification is saved as <code>inconclusive</code> with <code>validator_failed</code> / <code>tool_limit</code>; the operator can request re-verification.</td></tr>
           <tr><th scope="row">Two operators decide at the same time</th><td>Firestore transaction; the second gets 409 <code>ALREADY_DECIDED</code> and the web app shows the decision already saved.</td></tr>
           <tr><th scope="row">Archive night without data</th><td><code>/operator/nights</code> sends <code>has_data = false</code> (a faded date in the calendar); <code>/operator/grid/night</code> sends every slot as <code>null</code> and the web app shows every pixel as unobserved with a banner.</td></tr>
-          <tr><th scope="row">Telegram send fails (429 / network)</th><td>The alert is still saved with <code>telegram.status = pending</code>; resend after <code>retry_after</code>. The operator sees the send status in the alert list.</td></tr>
+          <tr><th scope="row">A send fails or is uncertain (429, network, worker died)</th><td>The decision and inbox stay saved. 4xx = <code>failed</code>; a timeout or a worker dying after the claim = <code>unknown</code>, never resent automatically. The operator sees per-channel status at <code>/deliveries</code>.</td></tr>
         </tbody>
       </table>
     </div>

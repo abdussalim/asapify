@@ -432,7 +432,7 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Runbook · langkah yang bisa langsung dijalankan · web disamakan 6 Okt</span>
+    <span class="eyebrow">Runbook · langkah yang bisa langsung dijalankan · web disamakan 6 Okt · notifikasi pelanggan 9 Okt</span>
     <h1>Runbook ASAPify</h1>
     <p class="lede">Setiap tugas punya <strong>prasyarat</strong>, <strong>langkah</strong> dengan perintah lengkap, <strong>keluaran</strong> (nama file atau resource), dan <strong>cek selesai</strong> yang bisa dibuktikan. Tugas dianggap selesai hanya bila cek selesai lulus dan buktinya ditulis di log WORKLOG.</p>
     <ul class="toc" aria-label="Isi halaman"><li><a href="#aturan-pakai"><span>00</span>Aturan pakai</a></li><li><a href="#s0"><span>S0</span>29 Sep – 1 Okt</a></li><li><a href="#s1"><span>S1</span>2–5 Okt</a></li><li><a href="#s2"><span>S2</span>6–9 Okt</a></li><li><a href="#s3"><span>S3</span>10–13 Okt</a></li><li><a href="#s4"><span>S4</span>14–16 Okt</a></li><li><a href="#s5"><span>S5</span>17–18 Okt</a></li></ul>
@@ -556,18 +556,16 @@ done</pre></li><li>Simpan ke Secret Manager.<pre class="cmd">printf &quot;%s&quo
       <div class="check"><h4>Cek selesai</h4><p>Tiap satelit mencetak header yang diawali <code>latitude,longitude,bright_ti4</code> dan memuat kolom <code>confidence</code> dan <code>daynight</code> (baris data boleh 0).</p><p>Secret terbaca:</p><pre class="cmd">gcloud secrets versions access latest --secret firms-map-key | wc -c   # &gt; 0</pre></div>
     </article>
     <article class="task" id="s0-5">
-      <div class="task-head"><span class="tid">S0-5</span><span class="pill ai">Peran D</span><h3>Bot Telegram, dua grup, chat_id</h3></div>
-      <p class="goal">Kanal kirim satu arah siap dipakai sebelum kode ditulis.</p>
+      <div class="task-head"><span class="tid">S0-5</span><span class="pill ai">Peran D</span><h3>Bot Telegram, grup operator, chat_id</h3></div>
+      <p class="goal">Bot siap: grup operator untuk ringkasan verifikasi, DM untuk pelanggan.</p>
       <div class="task-grid">
         <div><h4>Prasyarat</h4><ul><li>Akun Telegram</li><li>S0-2 selesai (Secret Manager)</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>Secret telegram-bot-token</li><li><code>data/ref/tg_chats.json</code> </li></ul></div>
+        <div><h4>Keluaran</h4><ul><li>Secret telegram-bot-token</li><li><code>TG_OPERATOR_CHAT_ID</code> dan <code>TG_BOT_USERNAME</code> di <code>infra/env.sh</code></li></ul></div>
       </div>
       <div><h4>Langkah</h4><ol class="steps"><li>Di Telegram buka <code>@BotFather</code> → kirim <code>/newbot</code> → nama <code>ASAPify Bot</code> → username diakhiri <code>bot</code>, misalnya <code>asapify_demo_bot</code>. Salin token.</li><li>Simpan token.<pre class="cmd">export TOKEN=&lt;token&gt;
-printf &quot;%s&quot; &quot;$TOKEN&quot; | gcloud secrets create telegram-bot-token --data-file=-</pre></li><li>Buat dua grup: <code>ASAPify Operator</code> dan <code>ASAPify Peringatan Kalteng (demo)</code>. Tambahkan bot ke keduanya.</li><li>Di tiap grup kirim <code>/start@asapify_demo_bot</code>. Bot dalam privacy mode hanya menerima perintah yang menyebut namanya, jadi pesan biasa tidak muncul di getUpdates.</li><li>Ambil <code>chat_id</code> kedua grup (nilai negatif, supergroup diawali <code>-100</code>).<pre class="cmd">curl -s &quot;https://api.telegram.org/bot$TOKEN/getUpdates&quot; | jq &#x27;.result[].message.chat | {id, title}&#x27;</pre></li><li>Uji kirim ke tiap grup.<pre class="cmd">curl -s &quot;https://api.telegram.org/bot$TOKEN/sendMessage&quot; -d chat_id=&lt;CHAT_ID&gt; -d text=&quot;Uji ASAPify&quot;</pre></li><li>Tulis <code>data/ref/tg_chats.json</code>; dipindah ke Firestore <code>tg_chats</code> setelah C1.<pre class="cmd">[
-  {&quot;jenis&quot;: &quot;operator&quot;,   &quot;provinsi&quot;: null, &quot;chat_id&quot;: -100...},
-  {&quot;jenis&quot;: &quot;peringatan&quot;, &quot;provinsi&quot;: &quot;62&quot;, &quot;chat_id&quot;: -100...}
-]</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Pesan <em>Uji ASAPify</em> muncul di kedua grup. Bila grup di-upgrade ke supergroup, <code>chat_id</code> berubah: ulangi langkah 5.</p></div>
+printf &quot;%s&quot; &quot;$TOKEN&quot; | gcloud secrets create telegram-bot-token --data-file=-</pre></li><li>Buat grup <code>ASAPify Operator</code> dan tambahkan bot. Peringatan untuk publik tidak memakai grup: pelanggan menautkan Telegram-nya sendiri dari halaman Notifikasi (D4).</li><li>Di grup itu kirim <code>/start@asapify_demo_bot</code>. Bot dalam privacy mode hanya menerima perintah yang menyebut namanya, jadi pesan biasa tidak muncul di getUpdates.</li><li>Ambil <code>chat_id</code> grup (nilai negatif, supergroup diawali <code>-100</code>).<pre class="cmd">curl -s &quot;https://api.telegram.org/bot$TOKEN/getUpdates&quot; | jq &#x27;.result[].message.chat | {id, title}&#x27;</pre></li><li>Uji kirim ke grup.<pre class="cmd">curl -s &quot;https://api.telegram.org/bot$TOKEN/sendMessage&quot; -d chat_id=&lt;CHAT_ID&gt; -d text=&quot;Uji ASAPify&quot;</pre></li><li>Catat di <code>infra/env.sh</code> (tidak rahasia).<pre class="cmd">export TG_OPERATOR_CHAT_ID=-100...
+export TG_BOT_USERNAME=asapify_demo_bot</pre></li></ol></div>
+      <div class="check"><h4>Cek selesai</h4><p>Pesan <em>Uji ASAPify</em> muncul di grup operator. Bila grup di-upgrade ke supergroup, <code>chat_id</code> berubah: ulangi langkah 5.</p></div>
     </article>
     <article class="task" id="s0-6">
       <div class="task-head"><span class="tid">S0-6</span><span class="pill ai">Peran A</span><h3>Repo, lingkungan Python, cek jendela backtest 2023</h3></div>
@@ -578,7 +576,7 @@ printf &quot;%s&quot; &quot;$TOKEN&quot; | gcloud secrets create telegram-bot-to
       </div>
       <div><h4>Langkah</h4><ol class="steps"><li>Buat repo GitHub privat <code>asapify</code>, clone, dan buat folder.<pre class="cmd">git clone &lt;url-repo&gt; asapify &amp;&amp; cd asapify
 mkdir -p jobs/lib jobs/tests agent api/routers shared infra data/ref data/local notebooks docs scripts
-# web operator ada di repo terpisah asapify-web</pre></li><li>Lingkungan Python 3.12 dan dependensi.<pre class="cmd">python3.12 -m venv .venv &amp;&amp; source .venv/bin/activate
+# web: repo tim ktp-asapify-fe; API + Notification Engine: repo tim ktp-asapify-be</pre></li><li>Lingkungan Python 3.12 dan dependensi.<pre class="cmd">python3.12 -m venv .venv &amp;&amp; source .venv/bin/activate
 pip install satpy pyresample s3fs xarray netCDF4 numpy pandas pyarrow geopandas rasterio \
   shapely scipy matplotlib pillow httpx earthengine-api google-adk google-genai fastapi uvicorn \
   google-cloud-firestore google-cloud-storage pytest
@@ -794,9 +792,9 @@ pytest jobs/tests/test_power.py jobs/tests/test_baseline.py -q</pre></li></ol></
       <p class="goal">Bucket, Firestore, service account, dan izin siap sebelum deploy.</p>
       <div class="task-grid">
         <div><h4>Prasyarat</h4><ul><li>S0-2 selesai</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>2 bucket, Firestore (Native), 4 service account, 2 secret, tg_chats</li></ul></div>
+        <div><h4>Keluaran</h4><ul><li>2 bucket, Firestore (Native) + index notifikasi, 6 service account, 3 secret</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Jalankan bagian 03 (IAM), 04 (Secret), 05 (Storage + Firestore) di halaman Konfigurasi Cloud, berurutan.</li><li>Pindahkan <code>data/ref/tg_chats.json</code> ke Firestore koleksi <code>tg_chats</code> (satu dokumen per grup).</li></ol></div>
+      <div><h4>Langkah</h4><ol class="steps"><li>Jalankan bagian 03 (IAM), 04 (Secret), 05 (Storage + Firestore) di halaman Konfigurasi Cloud, berurutan.</li><li>Deploy index Firestore notifikasi dari <code>ktp-asapify-be</code> (konfigurasinya menarget database bernama <code>asapify</code>; sesuaikan bila memakai <code>(default)</code>).<pre class="cmd">cd ktp-asapify-be/gcp &amp;&amp; npx firebase-tools deploy --only firestore --config firebase.notifications.json --project $PROJECT_ID</pre></li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Cek:</p><pre class="cmd">gcloud storage ls                      # 2 bucket asapify-*
 gcloud firestore databases list         # (default)
 gcloud iam service-accounts list | grep -c &#x27;sa-&#x27;   # 4</pre></div>
@@ -847,7 +845,7 @@ gcloud iam service-accounts list | grep -c &#x27;sa-&#x27;   # 4</pre></div>
         <div><h4>Prasyarat</h4><ul><li>B1, B2, B3, A6</li></ul></div>
         <div><h4>Keluaran</h4><ul><li><code>agent/agent.py,</code> schema.py, validator.py, main.py, run.py</li><li>Firestore verifications/{id}</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Salin kerangka <code>agent/agent.py</code> dan <code>agent/schema.py</code> dari Backend 06; model dari <code>GEMINI_MODEL</code>, lokasi <code>global</code>, <code>GOOGLE_GENAI_USE_VERTEXAI=True</code>.</li><li>Tool <code>get_pixel_context(cluster_id, as_of)</code>: baca <code>clusters/{id}</code> + 3 malam <code>score/</code> piksel perwakilan (utility, atribut, tetangga). Batas: maks 8 panggilan per verifikasi, dihitung di lapisan tool.</li><li><code>agent/validator.py</code>: tolak bila skema tidak cocok, bila <code>viirs_within_2km_48h &gt; 0</code> tetapi hasil <code>inconclusive</code>, atau bila angka di ringkasan tidak ada di hasil tool. Gagal 2× → simpan <code>inconclusive</code> dengan catatan <code>validator_failed</code>.</li><li><code>agent/main.py</code> (FastAPI): <code>POST /verify {cluster_id, trigger_slot}</code> (OIDC <code>sa-jobs</code>) → jalankan agen → simpan <code>verifications/{cluster_id}_{slot}</code> → kirim ringkasan ke grup operator. <code>POST /cluster-closed {cluster_id}</code> (tanpa Gemini): edit pesan grup peringatan jadi SELESAI bila pernah diterbitkan.</li><li>Uji lokal pada satu kelompok backtest.<pre class="cmd">python -m agent.run --cluster &lt;ID dari A7&gt; --as-of 2023-09-25T16:00Z</pre></li></ol></div>
+      <div><h4>Langkah</h4><ol class="steps"><li>Salin kerangka <code>agent/agent.py</code> dan <code>agent/schema.py</code> dari Backend 06; model dari <code>GEMINI_MODEL</code>, lokasi <code>global</code>, <code>GOOGLE_GENAI_USE_VERTEXAI=True</code>.</li><li>Tool <code>get_pixel_context(cluster_id, as_of)</code>: baca <code>clusters/{id}</code> + 3 malam <code>score/</code> piksel perwakilan (utility, atribut, tetangga). Batas: maks 8 panggilan per verifikasi, dihitung di lapisan tool.</li><li><code>agent/validator.py</code>: tolak bila skema tidak cocok, bila <code>viirs_within_2km_48h &gt; 0</code> tetapi hasil <code>inconclusive</code>, atau bila angka di ringkasan tidak ada di hasil tool. Gagal 2× → simpan <code>inconclusive</code> dengan catatan <code>validator_failed</code>.</li><li><code>agent/main.py</code> (FastAPI): <code>POST /verify {cluster_id, trigger_slot}</code> (OIDC <code>sa-jobs</code>) → jalankan agen → simpan <code>verifications/{cluster_id}_{slot}</code> → kirim ringkasan ke grup operator (<code>TELEGRAM_OPERATOR_CHAT_ID</code>). <code>POST /cluster-closed {cluster_id}</code> (tanpa Gemini): bila pernah diterbitkan, tutup alert, beri label SELESAI di inbox, batalkan job yang belum terkirim.</li><li>Uji lokal pada satu kelompok backtest.<pre class="cmd">python -m agent.run --cluster &lt;ID dari A7&gt; --as-of 2023-09-25T16:00Z</pre></li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Output berisi <code>result</code> ∈ {strong_evidence, inconclusive}, ≥ 1 <code>evidence</code>, ringkasan ID dan EN; jejak tool ≤ 8; validator lulus; tidak ada field status/level.</p></div>
     </article>
     <article class="task" id="c3">
@@ -857,7 +855,7 @@ gcloud iam service-accounts list | grep -c &#x27;sa-&#x27;   # 4</pre></div>
         <div><h4>Prasyarat</h4><ul><li>C2</li></ul></div>
         <div><h4>Keluaran</h4><ul><li><code>api/main.py,</code> api/routers/*.py</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Implementasi endpoint persis tabel Backend 03 (umum + operator), termasuk <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code>, dan <code>/operator/basemaps</code>. Bentuk JSON, contoh, dan kode galat persis tab Kontrak API di web (<code>/kontrak-api</code>); web sudah memakai semuanya.</li><li>Jalankan lokal. <code>AUTH_DISABLED=1</code> hanya untuk lokal, tidak pernah di Cloud Run.<pre class="cmd">AUTH_DISABLED=1 uvicorn api.main:app --reload --port 8000</pre></li><li>Uji.<pre class="cmd">curl -s localhost:8000/api/v1/health
+      <div><h4>Langkah</h4><ol class="steps"><li>Implementasi endpoint persis tabel Backend 03 (umum, operator, pelanggan), termasuk <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code>, dan <code>/operator/basemaps</code>. Bentuk JSON, contoh, dan kode galat persis tab Kontrak API di web (<code>/kontrak-api</code>); web sudah memakai semuanya. Endpoint pelanggan (<code>/notifications/*</code>), <code>/operator/alerts/{id}/deliveries</code>, dan worker notifikasi sudah jadi di <code>ktp-asapify-be</code> (<code>asapify_api/</code>).</li><li>Jalankan lokal. <code>AUTH_DISABLED=1</code> hanya untuk lokal, tidak pernah di Cloud Run.<pre class="cmd">AUTH_DISABLED=1 uvicorn api.main:app --reload --port 8000</pre></li><li>Uji.<pre class="cmd">curl -s localhost:8000/api/v1/health
 curl -s localhost:8000/api/v1/meta | jq .nights
 curl -s &quot;localhost:8000/api/v1/operator/grid?as_of=2023-09-25T16:00Z&amp;format=compact&quot; | jq &#x27;.status | length&#x27;
 curl -s &quot;localhost:8000/api/v1/operator/nights?month=2023-09&quot; | jq length
@@ -869,36 +867,36 @@ curl -s &quot;localhost:8000/api/v1/operator/clusters?as_of=2023-09-25T16:00Z&qu
       <p class="goal">Pipeline berjalan otomatis di Cloud Run.</p>
       <div class="task-grid">
         <div><h4>Prasyarat</h4><ul><li>A2–A6, C1, C2, C3</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>2 service + 5 job + 4 jadwal Scheduler</li></ul></div>
+        <div><h4>Keluaran</h4><ul><li>3 service + 5 job + 5 jadwal Scheduler + antrean Cloud Tasks</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Buat <code>Dockerfile</code> dan <code>.gcloudignore</code> di root repo (Konfigurasi Cloud 09), lalu deploy <code>asapify-agent</code> dan <code>asapify-api</code> dengan perintah di bagian yang sama.</li><li>Deploy lima job dan empat jadwal (Konfigurasi Cloud 10): dua ingest <code>*/10 20-23,0-4 * * *</code>, evaluate <code>5-59/10 20-23,0-4 * * *</code>, environment <code>0 12 * * *</code> (semua Asia/Jakarta), build tanpa jadwal.</li><li>Jalankan build, lalu satu siklus replay.<pre class="cmd">gcloud run jobs execute asapify-build --region $REGION --wait
+      <div><h4>Langkah</h4><ol class="steps"><li>Buat <code>Dockerfile</code> dan <code>.gcloudignore</code> di root repo (Konfigurasi Cloud 09), lalu deploy <code>asapify-agent</code>, <code>asapify-api</code>, dan <code>asapify-notify</code> (dengan antrean dan sweep) memakai perintah di bagian yang sama.</li><li>Deploy lima job dan empat jadwal (Konfigurasi Cloud 10): dua ingest <code>*/10 20-23,0-4 * * *</code>, evaluate <code>5-59/10 20-23,0-4 * * *</code>, environment <code>0 12 * * *</code> (semua Asia/Jakarta), build tanpa jadwal.</li><li>Jalankan build, lalu satu siklus replay.<pre class="cmd">gcloud run jobs execute asapify-build --region $REGION --wait
 for J in asapify-ingest-himawari asapify-ingest-gk2a; do
   gcloud run jobs execute $J --region $REGION --wait --update-env-vars AS_OF=2023-09-25T15:00:00Z
 done
 gcloud run jobs execute asapify-evaluate --region $REGION --wait --update-env-vars AS_OF=2023-09-25T15:10:00Z</pre></li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Cek:</p><pre class="cmd">gcloud run jobs executions list --job asapify-evaluate --region $REGION --limit 3   # Succeeded
-gcloud scheduler jobs list --location $REGION                                    # 4 jadwal ENABLED
-gcloud run services list --region $REGION                                        # asapify-agent, asapify-api</pre></div>
+gcloud scheduler jobs list --location $REGION                                    # 5 jadwal ENABLED (4 job + sweep notifikasi)
+gcloud run services list --region $REGION                                        # asapify-agent, asapify-api, asapify-notify</pre></div>
     </article></div>
   </section>
   <section id="s3">
     <div class="section-head">
       <span class="eyebrow">Sprint 3 · 10–13 Okt</span>
-      <h2>Web dan Telegram</h2>
+      <h2>Web dan notifikasi</h2>
       <p>Tugas: <a href="#d1">D1</a> · <a href="#d2">D2</a> · <a href="#d3">D3</a> · <a href="#d4">D4</a> · <a href="#c5">C5</a></p>
     </div>
-    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Alur ujung-ke-ujung di URL publik: replay → AWAS → verifikasi → keputusan operator → pesan Telegram.</div>
+    <div class="sprint-done"><strong>Sprint selesai jika:</strong> Alur ujung-ke-ujung di URL publik: replay → AWAS → verifikasi → keputusan operator → DM Telegram pelanggan + inbox.</div>
     <div class="rb-list">
     <article class="task" id="d1">
       <div class="task-head"><span class="tid">D1</span><span class="pill ai">Peran D</span><h3>Peta operator</h3></div>
       <p class="goal">Operator melihat status semua piksel gambut Sumatra dan Kalimantan (15 provinsi).</p>
       <div class="task-grid">
         <div><h4>Prasyarat</h4><ul><li>C3</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>asapify-web</code> berjalan dalam mode live terhadap API</li><li><code>src/auth.ts</code> memakai Firebase Auth</li></ul></div>
+        <div><h4>Keluaran</h4><ul><li><code>ktp-asapify-fe</code> berjalan dalam mode live terhadap API</li><li>Login Google (Firebase Auth) berjalan di project tim</li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Web operator sudah dibangun di repo terpisah <code>asapify-web</code> (React 19 + Vite + MapLibre 6). Jalankan dulu dalam mode mock (data fiktif backtest Kalteng 24 Sep 2023, tanpa backend).<pre class="cmd">git clone &lt;url-repo-asapify-web&gt; asapify-web &amp;&amp; cd asapify-web
+      <div><h4>Langkah</h4><ol class="steps"><li>Web sudah dibangun di repo tim <code>ktp-asapify-fe</code> (React 19 + Vite + MapLibre 6). Jalankan dulu dalam mode mock (data fiktif backtest Kalteng 24 Sep 2023, tanpa backend).<pre class="cmd">git clone https://github.com/KRL-TEAM-PROJECT/ktp-asapify-fe.git &amp;&amp; cd ktp-asapify-fe
 npm ci
-npm run dev</pre></li><li>Pindah ke mode live: salin <code>.env.example</code> ke <code>.env.local</code>, isi <code>VITE_API_MODE=live</code>, <code>VITE_API_BASE=http://localhost:8000</code> (API lokal C3), serta <code>VITE_PEAT_LAYER_URL</code> dan <code>VITE_PROVINCES_LAYER_URL</code> (bucket publik, Konfigurasi Cloud 05). Peta, pemutar slot, dan kalender arsip memanggil endpoint di tab Kontrak API.</li><li>Ganti auth tiruan di <code>src/auth.ts</code> dengan Firebase Auth (login Google); hanya klaim <code>role = operator</code> yang bisa masuk (<code>infra/set_role.py</code>). Kirim ID token sebagai <code>Authorization: Bearer</code>.</li></ol></div>
+npm run dev</pre></li><li>Pindah ke mode live: salin <code>.env.example</code> ke <code>.env.local</code>, isi <code>VITE_API_MODE=live</code>, <code>VITE_API_BASE=http://localhost:8000</code> (API lokal C3), serta <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code> (bucket publik, Konfigurasi Cloud 05) dan <code>VITE_FIREBASE_*</code> (Konfigurasi Cloud 11). Peta, pemutar slot, dan kalender arsip memanggil endpoint di tab Kontrak API.</li><li>Login Google lewat Firebase Auth sudah ada di <code>src/auth.ts</code> (9 Okt). Akun tanpa klaim hanya membuka halaman Notifikasi; beri akun operator demo klaim <code>role = operator</code> (<code>tools/set_operator.py</code> di <code>ktp-asapify-be</code>), lalu keluar dan masuk lagi.</li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Mode live, malam 25 Sep 2023 dipilih dari kalender: empat status tampil dengan ikon + warna, NO_OBSERVATION diarsir, kelompok AWAS bergaris putus, batas provinsi tersorot saat satu provinsi dipilih. API mati → banner galat, bukan layar kosong.</p></div>
     </article>
     <article class="task" id="d2">
@@ -913,23 +911,23 @@ npm run dev</pre></li><li>Pindah ke mode live: salin <code>.env.example</code> k
     </article>
     <article class="task" id="d3">
       <div class="task-head"><span class="tid">D3</span><span class="pill ai">Peran D</span><h3>Panel keputusan: terbitkan / tolak</h3></div>
-      <p class="goal">Hanya operator yang mengirim ke grup peringatan.</p>
+      <p class="goal">Hanya operator yang bisa menerbitkan peringatan ke pelanggan.</p>
       <div class="task-grid">
         <div><h4>Prasyarat</h4><ul><li>D2</li></ul></div>
         <div><h4>Keluaran</h4><ul><li>Keputusan nyata tersimpan lewat <code>src/components/DecisionPanel.tsx</code> </li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li>Panel sudah ada: <em>Terbitkan ke grup</em> (caption ≤ 1.024 karakter, terisi otomatis, bisa disunting) dan <em>Tolak</em> (alasan wajib) → <code>POST /operator/clusters/{id}/decision</code>, respons <code>DecisionResponse</code>. Uji keduanya dalam mode live.</li><li>Uji jalur 409: buka kelompok yang sama di dua tab, putuskan di tab pertama lalu di tab kedua. Tab kedua harus menampilkan pesan <code>ALREADY_DECIDED</code> lalu memuat ulang detail.</li><li>Kelompok tanpa keputusan tetap tampil di daftar dengan label "belum diputuskan".</li></ol></div>
+      <div><h4>Langkah</h4><ol class="steps"><li>Panel sudah ada: <em>Terbitkan</em> (teks pesan ≤ 1.024 karakter, terisi otomatis, bisa disunting) dan <em>Tolak</em> (alasan wajib) → <code>POST /operator/clusters/{id}/decision</code>, respons <code>DecisionResponse</code>. Uji keduanya dalam mode live. Setelah terbit, panel menampilkan ringkasan antrean dan status kirim per kanal.</li><li>Uji jalur 409: buka kelompok yang sama di dua tab, putuskan di tab pertama lalu di tab kedua. Tab kedua harus menampilkan pesan <code>ALREADY_DECIDED</code> lalu memuat ulang detail.</li><li>Kelompok tanpa keputusan tetap tampil di daftar dengan label "belum diputuskan".</li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Keputusan tersimpan di <code>alerts</code> dan <code>audit_log</code>; keputusan kedua mendapat 409 dan UI menampilkan keputusan yang sudah ada.</p></div>
     </article>
     <article class="task" id="d4">
-      <div class="task-head"><span class="tid">D4</span><span class="pill ai">Peran D</span><h3>Pengirim Telegram</h3></div>
-      <p class="goal">Satu pesan per kejadian ke grup yang benar, satu arah.</p>
+      <div class="task-head"><span class="tid">D4</span><span class="pill ai">Peran D</span><h3>Notifikasi pelanggan</h3></div>
+      <p class="goal">Pelanggan yang memilih provinsi itu menerima satu pesan per kanal dan bisa mengonfirmasi.</p>
       <div class="task-grid">
-        <div><h4>Prasyarat</h4><ul><li>S0-5, C1, D3</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li><code>shared/telegram.py</code> </li></ul></div>
+        <div><h4>Prasyarat</h4><ul><li>S0-5, C4, D3</li></ul></div>
+        <div><h4>Keluaran</h4><ul><li>Akun pelanggan demo dengan Telegram tertaut</li><li>Status kirim terbukti di <code>/operator/alerts/{id}/deliveries</code></li></ul></div>
       </div>
-      <div><h4>Langkah</h4><ol class="steps"><li><code>shared/telegram.py</code> (Backend 06b): <code>send(chat_id, photo_url, caption)</code> dengan <code>sendPhoto</code>, <code>edit(chat_id, message_id, caption)</code> dengan <code>editMessageCaption</code>. Dipakai <code>asapify-agent</code> (grup operator) dan <code>asapify-api</code> (grup peringatan).</li><li>Caption dari templat <a href="ui.html#telegram">UI bagian 03b</a>: AWAS, provinsi, koordinat, jumlah piksel, utility, tetangga, "Himawari + GK2A sepakat", hasil verifikasi, waktu WIB. Foto = citra VIIRS bila asap terlihat, selain itu crop termal Himawari.</li><li>Simpan <code>alerts/{id}.telegram = {chat_id, message_id, status}</code>. Gagal kirim → <code>status = pending</code>, ulangi sesuai <code>retry_after</code>. Kelompok ditutup → <code>asapify-agent /cluster-closed</code> mengedit caption dengan awalan <strong>SELESAI</strong>.</li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Terbitkan di UI → pesan muncul di grup peringatan demo &lt; 10 detik; tutup kelompok → pesan yang sama berubah (<code>message_id</code> tetap), diawali SELESAI.</p></div>
+      <div><h4>Langkah</h4><ol class="steps"><li>Kode sudah ada: Notification Engine v1 di <code>ktp-asapify-be</code> (Backend 06b) dan halaman <code>/notifikasi</code> di <code>ktp-asapify-fe</code>. Pastikan worker, antrean, sweep, dan webhook sudah di-deploy (Konfigurasi Cloud 09).</li><li>Masuk dengan akun Google pelanggan demo (tanpa role) → <em>Notifikasi</em>: pilih Kalimantan Tengah, kanal Telegram, centang persetujuan, simpan. Tekan <em>Hubungkan Telegram</em>, buka bot, tekan Start.</li><li>Teks pesan dari templat <a href="ui.html#telegram">UI bagian 03b</a>: AWAS, provinsi, koordinat, jumlah piksel, utility, tetangga, "Himawari + GK2A sepakat", hasil verifikasi, waktu WIB. Dikirim sebagai teks polos tanpa foto, dengan tombol <em>Buka &amp; konfirmasi diterima</em>.</li><li>Uji dulu dalam <code>dry_run</code> (status <code>simulated</code>, tidak ada pesan keluar), lalu set <code>NOTIFICATION_MODE=live</code> dan <code>TELEGRAM_ENABLED=true</code> di api dan worker.</li></ol></div>
+      <div class="check"><h4>Cek selesai</h4><p>Terbitkan di UI → DM muncul di Telegram akun demo &lt; 10 detik dan pesan ada di inbox web; panel keputusan menampilkan status <code>accepted</code>. Tekan <em>Konfirmasi diterima</em> → status berubah jadi dikonfirmasi. Akun yang memilih provinsi lain tidak menerima apa pun.</p></div>
     </article>
     <article class="task" id="c5">
       <div class="task-head"><span class="tid">C5</span><span class="pill ai">Peran C</span><h3>Uji ujung-ke-ujung</h3></div>
@@ -939,7 +937,7 @@ npm run dev</pre></li><li>Pindah ke mode live: salin <code>.env.example</code> k
         <div><h4>Keluaran</h4><ul><li><code>scripts/e2e.sh</code> </li><li><code>docs/e2e_log.txt</code> </li></ul></div>
       </div>
       <div><h4>Langkah</h4><ol class="steps"><li><code>scripts/e2e.sh</code>: jalankan ingest + evaluate replay untuk tiga malam kelompok backtest, tunggu verifikasi, lalu panggil <code>decision</code> dengan token operator demo.<pre class="cmd">bash scripts/e2e.sh --cluster &lt;ID&gt; --start 2023-09-23 --end 2023-09-25</pre></li></ol></div>
-      <div class="check"><h4>Cek selesai</h4><p>Kelompok muncul di peta publik, verifikasi tersimpan, pesan muncul di grup operator lalu grup peringatan. Log disimpan.</p></div>
+      <div class="check"><h4>Cek selesai</h4><p>Kelompok muncul di peta publik, verifikasi tersimpan, pesan muncul di grup operator, lalu DM dan inbox pelanggan demo. Log disimpan.</p></div>
     </article></div>
   </section>
   <section id="s4">
@@ -975,7 +973,7 @@ npm run dev</pre></li><li>Pindah ke mode live: salin <code>.env.example</code> k
       <p class="goal">Layak ditunjukkan ke juri dari HP.</p>
       <div class="task-grid">
         <div><h4>Prasyarat</h4><ul><li>D1–D4</li></ul></div>
-        <div><h4>Keluaran</h4><ul><li>commit freeze bertag v1.0 di <code>asapify</code> dan <code>asapify-web</code></li></ul></div>
+        <div><h4>Keluaran</h4><ul><li>commit freeze bertag v1.0 di <code>ktp-asapify-be</code> dan <code>ktp-asapify-fe</code></li></ul></div>
       </div>
       <div><h4>Langkah</h4><ol class="steps"><li>Buka web di Chrome DevTools 360 × 740; perbaiki elemen yang terpotong atau tombol &lt; 44 px. Cek juga <em>Mode ringan</em> (peta polos, tanpa gerak) dan setelan sistem <em>reduced motion</em>.</li><li>Build mode live dan deploy ke Firebase Hosting (Konfigurasi Cloud 11); URL inilah yang dinilai. Setelah 16 Okt 23.59 WIB hanya perbaikan bug.</li></ol></div>
       <div class="check"><h4>Cek selesai</h4><p>Tidak ada scroll horizontal di 360 px; mode ringan dan reduced motion tidak menggerakkan elemen; URL Firebase Hosting terbuka di jendela incognito; tag <code>v1.0</code> ada di kedua repo.</p></div>

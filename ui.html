@@ -370,6 +370,7 @@
   .tg-img span { width: 44px; height: 34px; border: 2px dashed var(--ember); border-radius: 3px; }
   .tg-msg p { margin: 0; padding: 0 4px; font-size: 11.5px; line-height: 1.45; }
   .tg-time { justify-self: end; font-size: 9.5px; color: var(--ink-dim); padding: 0 4px; }
+  .tg-btn { border-top: 1px solid var(--line); padding: 6px 4px 2px; text-align: center; font-size: 11px; font-weight: 600; color: var(--sat); }
   .tg-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; max-width: 94%; }
   .tg-keys span { background: var(--surface); opacity: 0.9; color: var(--ink); border-radius: 8px; text-align: center; font-size: 11px; font-weight: 600; padding: 7px 2px; }
 
@@ -432,9 +433,9 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">UI specification · reference for role D · aligned with the app 6 Oct</span>
-    <h1>Operator screens and Telegram bot messages</h1>
-    <p class="lede">The main user is the <strong>operator</strong>, who watches peat pixels, reads <em>why</em> a pixel is <code>AWAS</code> (MAUT attributes with their measured numbers, and neighbours), reads the agent's verification, then <strong>publishes or rejects</strong>. Published messages go out through the bot to a <strong>Telegram group</strong>, one way. The operator web app already runs in the <code>asapify-web</code> repo in <strong>mock mode</strong> (fictional data, demo sign-in); in live mode all data comes through the <a href="backend.html">API</a>. Default language is <strong>English</strong>, with an EN/ID switch in the top bar that the device remembers.</p>
+    <span class="eyebrow">UI specification · reference for role D · aligned with the app 6 Oct · subscriber notifications 9 Oct</span>
+    <h1>Operator screens, the notifications page and Telegram messages</h1>
+    <p class="lede">The main user is the <strong>operator</strong>, who watches peat pixels, reads <em>why</em> a pixel is <code>AWAS</code> (MAUT attributes with their measured numbers, and neighbours), reads the agent's verification, then <strong>publishes or rejects</strong>. Published messages reach the <strong>web inbox and Telegram DMs of that province's subscribers</strong>, who press <em>Confirm receipt</em>. The web app already runs in the team repo <code>ktp-asapify-fe</code> in <strong>mock mode</strong> (fictional data, demo sign-in) or live mode (Google sign-in); in live mode all data comes through the <a href="backend.html">API</a>. Default language is <strong>English</strong>, with an EN/ID switch in the top bar that the device remembers.</p>
     <ul class="toc" aria-label="Page contents">
       <li><a href="#rute"><span>01</span>Routes</a></li>
       <li><a href="#alur-pengguna"><span>02</span>Flows</a></li>
@@ -452,19 +453,20 @@
   <section id="rute">
     <div class="section-head">
       <span class="eyebrow">01 · Routes</span>
-      <h2>Five routes for operators, judges and the backend team</h2>
+      <h2>Six routes for operators, subscribers, judges and the backend team</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
         <thead><tr><th scope="col">Route</th><th scope="col">Page</th><th scope="col">User</th><th scope="col">Main content</th><th scope="col">Data from</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>/masuk</code></th><td>Sign-in</td><td>operator</td><td>Demo sign-in in mock mode; Firebase Auth (Google) in live mode. The left side explains when a pixel becomes AWAS with a 3 × 3 neighbour grid</td><td>Firebase Auth</td></tr>
+          <tr><th scope="row"><code>/masuk</code></th><td>Sign-in</td><td>operator, subscriber</td><td>Demo sign-in in mock mode; Google sign-in (Firebase Auth) in live mode. Accounts without the operator claim go to <code>/notifikasi</code>. The left side explains when a pixel becomes AWAS with a 3 × 3 neighbour grid</td><td>Firebase Auth</td></tr>
           <tr><th scope="row"><code>/</code></th><td>Operator map</td><td>operator</td><td>Peat pixel status, a sortable AWAS cluster list, search, status and province filters with a province highlight, layer control, slot player with an archive-night calendar, pixel inspector</td><td><code>/meta</code>, <code>/operator/pixels</code>, <code>/operator/grid?format=compact</code>, <code>/operator/grid/night</code>, <code>/operator/nights</code>, <code>/operator/clusters</code>, <code>/operator/basemaps</code>, <code>layers/*.geojson</code></td></tr>
-          <tr><th scope="row"><code>/kelompok/:id</code></th><td>Cluster detail</td><td>operator</td><td>3-night utility chart, MAUT parameter table (measured value, u, weight, contribution), neighbour grid, agent verification with temperature tooltips on the images, ToolTrace, decision panel</td><td><code>/operator/clusters/{id}</code></td></tr>
+          <tr><th scope="row"><code>/kelompok/:id</code></th><td>Cluster detail</td><td>operator</td><td>3-night utility chart, MAUT parameter table (measured value, u, weight, contribution), neighbour grid, agent verification with temperature tooltips on the images, ToolTrace, decision panel</td><td><code>/operator/clusters/{id}</code>, <code>/operator/alerts/{id}/deliveries</code></td></tr>
+          <tr><th scope="row"><code>/notifikasi</code></th><td>Notifications</td><td>subscriber, operator</td><td>Inbox (confirm receipt, keep for offline reading), province and channel choice, consent and exercises, link Telegram, register browser push</td><td><code>/notifications/*</code></td></tr>
           <tr><th scope="row"><code>/tentang</code></th><td>About &amp; method</td><td>everyone, judges</td><td>How it works (5 steps), pixel status, MAUT weights, two satellites, limitations, data sources ("NOAA open data"; all processing on Google Cloud)</td><td>static</td></tr>
           <tr><th scope="row"><code>/kontrak-api</code></th><td>API contract</td><td>backend team, judges</td><td>Conventions, error codes, every endpoint (parameters, body, responses, errors, screens that use it), schemas, static files, internal agent endpoints. JSON examples come from the same mock data as the screens</td><td>static</td></tr>
         </tbody>
-        <caption>Every API path starts with <code>/api/v1</code>. Alert recipients have no web route; their channel is the Telegram group (section 03b). Deep links such as <code>/kelompok/C-0924-002</code> open directly.</caption>
+        <caption>Every API path starts with <code>/api/v1</code>. Subscribers use <code>/notifikasi</code>; the map and cluster detail are for operators only. Deep links such as <code>/kelompok/C-0924-002</code> open directly.</caption>
       </table>
     </div>
   </section>
@@ -486,9 +488,9 @@
         <p class="note" style="margin-top:4px">The map, cluster outlines and list follow the chosen night.</p>
       </div>
       <div class="card">
-        <span class="pill ok">Telegram alert group</span>
-        <div class="flowline"><span>Operator publishes</span><b>→</b><span>Bot sends photo + caption</span><b>→</b><span>Cluster closes: caption SELESAI</span></div>
-        <p class="note" style="margin-top:4px">One way. One message per event, updated in place.</p>
+        <span class="pill ok">Subscriber</span>
+        <div class="flowline"><span>Pick provinces + channels, consent</span><b>→</b><span>Operator publishes</span><b>→</b><span>Telegram DM + inbox</span><b>→</b><span>Confirm receipt</span></div>
+        <p class="note" style="margin-top:4px">One message per channel per event. Accepted by the provider does not mean read.</p>
       </div>
     </div>
   </section>
@@ -496,7 +498,7 @@
   <section id="layar">
     <div class="section-head">
       <span class="eyebrow">03 · Wireframes</span>
-      <h2>Five operator web screens and one Telegram message, phone size</h2>
+      <h2>Five operator web screens and one Telegram DM, phone size</h2>
       <p>From 1024 px up, the cluster list moves to a 360 px left panel; below that, the list becomes a draggable bottom sheet. Sketch data is fictional.</p>
     </div>
     <div class="phones">
@@ -592,30 +594,30 @@
           <div class="scr-top"><span>Decision C-0924-002</span><small>operator</small></div>
           <div class="scr-body">
             <div class="blk"><span class="lbl">Summary</span><span>AWAS · U 0.73 · 3/8 neighbours · Himawari + GK2A agree · Strong evidence</span></div>
-            <span class="lbl">Telegram message (in Indonesian) · 412/1024</span>
+            <span class="lbl">Message text (in Indonesian) · 412/1024</span>
             <div class="field">AWAS · Kalimantan Tengah · -2.21, 113.92 · 4 piksel …</div>
-            <div class="btns"><span class="btn primary">Publish to group</span><span class="btn">Reject</span></div>
+            <div class="btns"><span class="btn primary">Publish</span><span class="btn">Reject</span></div>
             <small style="color:var(--ink-dim)">Rejecting needs a reason. Clusters without a decision stay monitored.</small>
           </div>
         </div></div>
         <div class="spec"><h4>Decision panel</h4>
-          <ul><li>Two buttons only: Publish, Reject (reason required); confirmation before sending</li><li>The caption is prefilled from the 03b template, editable, max 1,024 characters</li><li>"Publish to group" posts to the cluster's provincial alert group</li><li>Everything is logged in <code>audit_log</code>; simultaneous decisions → 409, and the saved decision is shown</li></ul></div>
+          <ul><li>Two buttons only: Publish, Reject (reason required); confirmation before sending</li><li>The text is prefilled from the 03b template, editable, max 1,024 characters</li><li>"Publish" saves the decision, then queues the message for subscribers of the cluster's province; afterwards the panel shows the recipient count and per-channel send status</li><li>Everything is logged in <code>audit_log</code>; simultaneous decisions → 409, and the saved decision is shown</li></ul></div>
       </div>
 
       <div class="phone-wrap">
         <div class="phone"><div class="scr">
-          <div class="scr-top"><span>ASAPify Peringatan · Kalteng</span><small>Telegram</small></div>
+          <div class="scr-top"><span>ASAPify Bot</span><small>Telegram · DM</small></div>
           <div class="scr-body tg">
             <div class="tg-msg">
               <span class="tg-from">ASAPify Bot</span>
-              <div class="tg-img" role="img" aria-label="VIIRS image with a coordinate marker"><span></span></div>
-              <p><b>AWAS · Dugaan gambut membara</b><br>📍 Kalimantan Tengah · -2.21, 113.92 · 4 piksel<br>🛰️ Himawari + GK2A sepakat · utility 0,73 · tetangga 3/8<br>🔎 Bukti kuat: asap terlihat (VIIRS 24 Sep), deteksi VIIRS 1,4 km<br>🕙 Slot 24 Sep 22.10 WIB</p>
+              <p>AWAS · Dugaan gambut membara<br>📍 Kalimantan Tengah · -2.21, 113.92 · 4 piksel<br>🛰️ Himawari + GK2A sepakat · utility 0,73 · tetangga 3/8<br>🔎 Bukti kuat: asap terlihat (VIIRS 24 Sep), deteksi VIIRS 1,4 km<br>🕙 Slot 24 Sep 22.10 WIB<br>AWAS adalah indikasi, bukan kebakaran terkonfirmasi.</p>
+              <span class="tg-btn">Buka &amp; konfirmasi diterima</span>
               <small class="tg-time">22.31</small>
             </div>
           </div>
         </div></div>
-        <div class="spec"><h4>Bot message in the alert group</h4>
-          <ul><li>Sent only after an operator publishes</li><li>The message stays in Indonesian for responders in Indonesia</li><li>Cluster closed = the same message is edited to start with SELESAI ("resolved")</li><li>One way: no buttons, no reports back</li></ul></div>
+        <div class="spec"><h4>Bot DM to a subscriber</h4>
+          <ul><li>Sent only after an operator publishes, to subscribers who chose that province and linked Telegram</li><li>The message stays in Indonesian for recipients in Indonesia</li><li>Plain text without a photo, so it arrives fast on weak networks</li><li>One button: open the web inbox and confirm receipt</li></ul></div>
       </div>
 
     </div>
@@ -624,21 +626,21 @@
   <section id="telegram">
     <div class="section-head">
       <span class="eyebrow">03b · Telegram bot messages ✅</span>
-      <h2>Two groups, two kinds of message</h2>
+      <h2>A group for operators, DMs for subscribers</h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Group</th><th scope="col">Sender</th><th scope="col">When the bot posts</th><th scope="col">Content</th></tr></thead>
+        <thead><tr><th scope="col">Target</th><th scope="col">Sender</th><th scope="col">When the bot posts</th><th scope="col">Content</th></tr></thead>
         <tbody>
           <tr><th scope="row">Operator (internal)</th><td><code>asapify-agent</code></td><td>Automatically, once an AWAS cluster's verification is saved</td><td>Cluster ID, province, utility, neighbours, verification result, detail link (operators only)</td></tr>
-          <tr><th scope="row">Alert (per province)</th><td><code>asapify-api</code></td><td>Only after an operator presses <em>Publish to group</em></td><td>Photo (VIIRS image if smoke is visible, otherwise the Himawari thermal crop) + the caption template below</td></tr>
-          <tr><th scope="row">Alert, same message</th><td><code>asapify-agent</code> / <code>asapify-api</code></td><td>Cluster closed automatically / operator closes it</td><td><code>editMessageCaption</code>, first line starts with <strong>SELESAI</strong></td></tr>
+          <tr><th scope="row">Subscriber (DM, per person)</th><td><code>asapify-notify</code></td><td>Only after an operator presses <em>Publish</em>, for subscribers who chose that province</td><td>The template text below (no HTML, no photo) + an <em>Buka &amp; konfirmasi diterima</em> (open &amp; confirm) button; a copy sits in the web inbox</td></tr>
+          <tr><th scope="row">Cluster closed</th><td><code>asapify-agent</code> / <code>asapify-api</code></td><td>Cluster closed automatically / operator closes it</td><td>Inbox entries get the <strong>SELESAI</strong> label, unsent jobs are cancelled (not implemented yet)</td></tr>
         </tbody>
       </table>
     </div>
     <div class="grid-2">
       <div class="code">
-        <div class="code-head"><span>Caption template (Indonesian)</span><span>shared/caption.py</span></div>
+        <div class="code-head"><span>Message template (Indonesian)</span><span>shared/caption.py</span></div>
 <pre>&lt;b&gt;AWAS · Dugaan gambut membara&lt;/b&gt;
 📍 {provinsi} · {lat:.2f}, {lon:.2f} · {n_pixels} piksel
 🛰️ Himawari + GK2A sepakat · utility {U:.2f} · tetangga {n_nbr}/8
@@ -652,7 +654,7 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
           <li>Caption at most 1,024 characters; numbers come from <code>clusters</code> and <code>verifications</code>, never retyped</li>
           <li>Never says "confirmed fire"; the last line reads "AWAS status comes from satellite rules; it is not a field confirmation"</li>
           <li>The caption stays in Indonesian (its recipients are responders in Indonesia), also when the web screen is in English; the demo video uses English subtitles</li>
-          <li>The bot accepts no input: no buttons, commands or webhook; it stores no user data</li>
+          <li>The bot only accepts <code>/start &lt;code&gt;</code> through the webhook to link an account and never replies; it stores only the <code>chat_id</code> of subscribers who linked themselves. HTML tags are stripped for DMs</li>
         </ul>
       </div>
     </div>
@@ -715,7 +717,7 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
   <section id="komponen">
     <div class="section-head">
       <span class="eyebrow">06 · Components</span>
-      <h2>Components in <code>asapify-web/src/components</code></h2>
+      <h2>Components in <code>ktp-asapify-fe/src/components</code></h2>
     </div>
     <div class="table-wrap">
       <table class="wide">
@@ -734,7 +736,8 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
           <tr><th scope="row"><code>NeighbourGrid</code></th><td>detail, sign-in</td><td>3 × 3: neighbours ≥ 0.5, normal, cloudy, not peat</td></tr>
           <tr><th scope="row"><code>EvidenceImage</code>, <code>ProbeTips</code>, <code>FloatingTip</code></th><td>detail</td><td>VIIRS and Himawari images side by side with a 5 km marker; per-cell temperature tooltip (from <code>images[].thermal</code>) and FIRMS points; tooltips render in <code>&lt;body&gt;</code> so they are never clipped</td></tr>
           <tr><th scope="row"><code>ViirsList</code>, <code>ToolTrace</code></th><td>detail</td><td>VIIRS detections (satellite, WIB time, distance); agent steps: tool name, arguments, duration</td></tr>
-          <tr><th scope="row"><code>DecisionPanel</code></th><td>detail</td><td>Publish / Reject (reason required), confirmation, errors written from <code>code</code></td></tr>
+          <tr><th scope="row"><code>DecisionPanel</code></th><td>detail</td><td>Publish / Reject (reason required), confirmation, errors written from <code>code</code>; after publishing: queue summary</td></tr>
+          <tr><th scope="row"><code>DeliveryStatus</code></th><td>detail (live mode)</td><td>per-channel send status from <code>/deliveries</code>, refreshed every 15 seconds during the one-hour delivery window</td></tr>
         </tbody>
       </table>
     </div>
@@ -776,7 +779,7 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
           <li>English by default; EN/ID in the top bar, remembered per device. <code>en.json</code> and <code>id.json</code> must hold the same keys</li>
           <li>Agent text follows the screen language (<code>finding</code>/<code>finding_en</code>, <code>summary_id</code>/<code>summary_en</code>); errors are written from <code>code</code></li>
           <li><strong>AWAS</strong> stays AWAS in both languages as the status name (the English version explains it once: Indonesian for "beware")</li>
-          <li>Telegram captions stay in Indonesian</li>
+          <li>Alert message text (inbox, Telegram DM) stays in Indonesian</li>
           <li>Plain, active sentences: no jargon, no em dashes</li>
         </ul>
       </div>
@@ -789,7 +792,7 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
             <tr><th scope="row"><code>awas.note</code></th><td>AWAS calls the agent to verify. The status alone does not mean a fire.</td><td>AWAS memanggil agen untuk verifikasi. Status ini belum berarti ada kebakaran.</td></tr>
             <tr><th scope="row"><code>evidence.inconclusive</code></th><td>Inconclusive</td><td>Inkonklusif</td></tr>
             <tr><th scope="row"><code>sat.agree</code></th><td>Himawari + GK2A agree</td><td>Himawari + GK2A sepakat</td></tr>
-            <tr><th scope="row"><code>btn.publish</code></th><td>Publish to group</td><td>Terbitkan ke grup</td></tr>
+            <tr><th scope="row"><code>btn.publish</code></th><td>Publish</td><td>Terbitkan</td></tr>
           </tbody>
         </table>
       </div>
@@ -804,23 +807,24 @@ Status AWAS dari aturan satelit; bukan konfirmasi lapangan.</pre>
     <div class="grid-2">
       <div class="card">
         <dl class="kv">
-          <dt>Build</dt><dd>React 19 + Vite + TypeScript (repo <code>asapify-web</code>)</dd>
+          <dt>Build</dt><dd>React 19 + Vite + TypeScript (team repo <code>ktp-asapify-fe</code>)</dd>
           <dt>Map</dt><dd>MapLibre GL JS 6; the module worker is served as-is from <code>/maplibre/</code></dd>
           <dt>Motion</dt><dd><code>motion</code> (springs), lazy-loaded; off under <em>reduced motion</em> and in lite mode</dd>
           <dt>Charts</dt><dd>hand-written SVG for <code>UtilityChart</code> and the parameter table</dd>
           <dt>Type</dt><dd>IBM Plex through <code>@fontsource</code> (no Google Fonts)</dd>
           <dt>Mode</dt><dd><code>VITE_API_MODE=mock</code> (default, fictional data + demo sign-in) or <code>live</code> (<code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code>)</dd>
-          <dt>Auth</dt><dd>demo sign-in in mock mode; Firebase JS SDK (Auth) in live mode</dd>
+          <dt>Auth</dt><dd>demo sign-in in mock mode; Firebase JS SDK (Auth, Google sign-in) in live mode. The <code>role = operator</code> claim opens the map and decisions; other accounts get <code>/notifikasi</code> only</dd>
+          <dt>Push</dt><dd>Firebase Messaging + the <code>notification-sw.js</code> service worker, exercises/non-emergency only; it also keeps the inbox for offline reading when the user opts in</dd>
           <dt>Hosting</dt><dd>Firebase Hosting, <code>/api/**</code> to Cloud Run <code>asapify-api</code> (the judged prototype URL). A mock-mode preview on Vercel serves internal review</dd>
           <dt>Lite mode</dt><dd>automatic when data saver is on, RAM ≤ 2 GB, the CPU is limited, or <em>reduced motion</em> is set: plain basemap, no glow/grid lines/camera animation, pixel ratio 1</dd>
         </dl>
       </div>
       <div class="code">
-        <div class="code-head"><span>Folder layout</span><span>asapify-web/src/</span></div>
+        <div class="code-head"><span>Folder layout</span><span>ktp-asapify-fe/src/</span></div>
 <pre>src/
-├─ api.ts, auth.ts, types.ts
+├─ api.ts, auth.ts, types.ts, notification-api.ts, notification-push.ts, notification-sw.ts
 ├─ map/ map.ts, layers.ts
-├─ pages/ Masuk, PetaOperator, Kelompok, Tentang, KontrakApi
+├─ pages/ Masuk, PetaOperator, Kelompok, Notifikasi, Tentang, KontrakApi
 ├─ components/      <span class="c"># section 06</span>
 ├─ contract/ spec.ts   <span class="c"># content of the API contract tab</span>
 ├─ mock/ fixtures.ts, thermal.ts, scenario.ts

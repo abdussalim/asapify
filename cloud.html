@@ -432,9 +432,9 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Cloud setup · reference for role C · architecture revised 29 Sep · web aligned 6 Oct</span>
+    <span class="eyebrow">Cloud setup · reference for role C · architecture revised 29 Sep · web aligned 6 Oct · subscriber notifications 9 Oct</span>
     <h1>Settings for every Google Cloud service</h1>
-    <p class="lede">Every command uses the variables from section 01. Run them in order in Cloud Shell. One Docker image is built once and used by five jobs and two services. CPU and memory sizes are a 💡 starting point.</p>
+    <p class="lede">Every command uses the variables from section 01. Run them in order in Cloud Shell. One Docker image is built once and used by five jobs and three services. CPU and memory sizes are a 💡 starting point.</p>
     <ul class="toc" aria-label="Page contents">
       <li><a href="#variabel"><span>01</span>Variables</a></li>
       <li><a href="#api-aktif"><span>02</span>APIs</a></li>
@@ -471,11 +471,15 @@ export BACKTEST_BBOX="113.5,-2.6,114.3,-1.9"      <span class="c"># Central Kali
 export BACKTEST_BBOX_SUMSEL="105.2,-3.7,106.0,-3.0"  <span class="c"># OKI, South Sumatra (planned)</span>
 export WARMUP_START="2023-08-01"; export BACKTEST_START="2023-09-01"; export BACKTEST_END="2023-10-15"
 export IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/asapify/app:latest"
+export TG_BOT_USERNAME="asapify_demo_bot"           <span class="c"># bot username from Runbook S0-5</span>
+export TG_OPERATOR_CHAT_ID="-100…"                 <span class="c"># operator group chat_id, Runbook S0-5</span>
 gcloud config set project $PROJECT_ID
 JOBS_SA="sa-jobs@$PROJECT_ID.iam.gserviceaccount.com"
 AGENT_SA="sa-agent@$PROJECT_ID.iam.gserviceaccount.com"
 API_SA="sa-api@$PROJECT_ID.iam.gserviceaccount.com"
-SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
+SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"
+NOTIFY_SA="sa-notify@$PROJECT_ID.iam.gserviceaccount.com"
+TASK_SA="sa-task@$PROJECT_ID.iam.gserviceaccount.com"</pre>
     </div>
   </section>
 
@@ -491,15 +495,16 @@ SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
   artifactregistry.googleapis.com firestore.googleapis.com storage.googleapis.com \
   secretmanager.googleapis.com aiplatform.googleapis.com earthengine.googleapis.com \
   iamcredentials.googleapis.com logging.googleapis.com monitoring.googleapis.com \
-  firebase.googleapis.com firebasehosting.googleapis.com identitytoolkit.googleapis.com</pre>
+  firebase.googleapis.com firebasehosting.googleapis.com identitytoolkit.googleapis.com \
+  cloudtasks.googleapis.com fcm.googleapis.com</pre>
     </div>
   </section>
 
   <section id="iam">
     <div class="section-head">
       <span class="eyebrow">03 · Service accounts</span>
-      <h2>Four accounts, each with only the permissions it uses</h2>
-      <p>Only <code>sa-agent</code> can call Gemini and read MAP_KEY. Jobs have neither Gemini access nor the bot token.</p>
+      <h2>Six accounts, each with only the permissions it uses</h2>
+      <p>Only <code>sa-agent</code> can call Gemini and read MAP_KEY. Jobs have neither Gemini access nor the bot token. For subscriber DMs the bot token is read only by the <code>asapify-notify</code> worker.</p>
     </div>
     <div class="table-wrap">
       <table class="wide">
@@ -507,14 +512,16 @@ SCHED_SA="sa-scheduler@$PROJECT_ID.iam.gserviceaccount.com"</pre>
         <tbody>
           <tr><th scope="row"><code>sa-jobs</code></th><td>ingest-himawari, ingest-gk2a, evaluate, environment, build</td><td><code>roles/datastore.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/storage.objectAdmin</code> (public bucket, for map layers), <code>roles/earthengine.writer</code> + <code>roles/serviceusage.serviceUsageConsumer</code> (build: WorldCover), <code>roles/run.invoker</code> on <code>asapify-agent</code></td></tr>
           <tr><th scope="row"><code>sa-agent</code></th><td><code>asapify-agent</code></td><td><code>roles/datastore.user</code>, <code>roles/aiplatform.user</code>, <code>roles/storage.objectAdmin</code> (data bucket), <code>roles/secretmanager.secretAccessor</code> (FIRMS, Telegram), <code>roles/iam.serviceAccountTokenCreator</code> on itself (signed crop URLs)</td></tr>
-          <tr><th scope="row"><code>sa-api</code></th><td><code>asapify-api</code></td><td><code>roles/datastore.user</code>, <code>roles/storage.objectViewer</code> (data bucket, reads <code>score/</code>), <code>roles/secretmanager.secretAccessor</code> (Telegram), <code>roles/iam.serviceAccountTokenCreator</code> on itself (signed URLs for the UI), <code>roles/run.invoker</code> on <code>asapify-agent</code> (re-verification)</td></tr>
+          <tr><th scope="row"><code>sa-api</code></th><td><code>asapify-api</code></td><td><code>roles/datastore.user</code>, <code>roles/storage.objectViewer</code> (data bucket, reads <code>score/</code>), <code>roles/secretmanager.secretAccessor</code> (Telegram webhook secret), <code>roles/iam.serviceAccountTokenCreator</code> on itself (signed URLs for the UI), <code>roles/run.invoker</code> on <code>asapify-agent</code> (re-verification), <code>roles/cloudtasks.enqueuer</code>, <code>roles/iam.serviceAccountUser</code> on <code>sa-task</code></td></tr>
           <tr><th scope="row"><code>sa-scheduler</code></th><td>Cloud Scheduler</td><td><code>roles/run.invoker</code> (runs the jobs)</td></tr>
+          <tr><th scope="row"><code>sa-notify</code></th><td><code>asapify-notify</code> (worker)</td><td><code>roles/datastore.user</code>, <code>roles/firebasecloudmessaging.admin</code>, <code>roles/secretmanager.secretAccessor</code> (bot token), <code>roles/cloudtasks.enqueuer</code> + <code>roles/iam.serviceAccountUser</code> on <code>sa-task</code> (sweep)</td></tr>
+          <tr><th scope="row"><code>sa-task</code></th><td>Cloud Tasks and the Scheduler sweep (OIDC token)</td><td><code>roles/run.invoker</code> on <code>asapify-notify</code> only; no data access</td></tr>
         </tbody>
       </table>
     </div>
     <div class="code" style="margin-top:12px">
       <div class="code-head"><span>Create accounts and project-level roles</span><span>bash</span></div>
-<pre>for SA in sa-jobs sa-agent sa-api sa-scheduler; do gcloud iam service-accounts create $SA; done
+<pre>for SA in sa-jobs sa-agent sa-api sa-scheduler sa-notify sa-task; do gcloud iam service-accounts create $SA; done
 
 for R in roles/datastore.user roles/earthengine.writer roles/serviceusage.serviceUsageConsumer; do
   gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$JOBS_SA" --role $R; done
@@ -522,28 +529,40 @@ for R in roles/datastore.user roles/aiplatform.user; do
   gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$AGENT_SA" --role $R; done
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$API_SA" --role roles/datastore.user
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SCHED_SA" --role roles/run.invoker
+for R in roles/datastore.user roles/firebasecloudmessaging.admin roles/cloudtasks.enqueuer; do
+  gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$NOTIFY_SA" --role $R; done
+gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$API_SA" --role roles/cloudtasks.enqueuer
+<span class="c"># api and worker create tasks as sa-task (OIDC token to the worker)</span>
+for SA in $API_SA $NOTIFY_SA; do
+  gcloud iam service-accounts add-iam-policy-binding $TASK_SA \
+    --member "serviceAccount:$SA" --role roles/iam.serviceAccountUser; done
 
 <span class="c"># signed URLs: each service signs as itself</span>
 for SA in $AGENT_SA $API_SA; do
   gcloud iam service-accounts add-iam-policy-binding $SA \
     --member "serviceAccount:$SA" --role roles/iam.serviceAccountTokenCreator; done
 
-<span class="c"># run.invoker on asapify-agent is granted after the service exists (section 09)</span></pre>
+<span class="c"># run.invoker on asapify-agent and asapify-notify is granted after the services exist (section 09)</span></pre>
     </div>
   </section>
 
   <section id="secret">
     <div class="section-head">
       <span class="eyebrow">04 · Secret Manager</span>
-      <h2>FIRMS MAP_KEY and the Telegram bot token</h2>
+      <h2>FIRMS MAP_KEY, the bot token and the Telegram webhook secret</h2>
     </div>
     <div class="code">
       <div class="code-head"><span>Store and grant access</span><span>bash</span></div>
 <pre><span class="c"># created in Runbook S0-4 and S0-5; this only grants access</span>
 gcloud secrets add-iam-policy-binding firms-map-key \
   --member "serviceAccount:$AGENT_SA" --role roles/secretmanager.secretAccessor
-for M in $AGENT_SA $API_SA; do gcloud secrets add-iam-policy-binding telegram-bot-token \
-  --member "serviceAccount:$M" --role roles/secretmanager.secretAccessor; done</pre>
+for M in $AGENT_SA $NOTIFY_SA; do gcloud secrets add-iam-policy-binding telegram-bot-token \
+  --member "serviceAccount:$M" --role roles/secretmanager.secretAccessor; done
+
+<span class="c"># webhook secret: random, read only by api to check the header from Telegram</span>
+openssl rand -hex 32 | gcloud secrets create telegram-webhook-secret --data-file=-
+gcloud secrets add-iam-policy-binding telegram-webhook-secret \
+  --member "serviceAccount:$API_SA" --role roles/secretmanager.secretAccessor</pre>
     </div>
     <p class="note">The backtest that uses FIRMS SP runs from a team member's laptop with <code>MAP_KEY</code> in a local environment variable, not from a job. Jobs never read MAP_KEY.</p>
   </section>
@@ -665,7 +684,7 @@ gcloud storage cp data/ref/provinces_web.geojson gs://$PUBLIC_BUCKET/layers/prov
   <section id="run-service">
     <div class="section-head">
       <span class="eyebrow">09 · Image and Cloud Run services</span>
-      <h2>Build once, use seven times</h2>
+      <h2>Build once, use eight times</h2>
     </div>
     <div class="grid-2">
       <div class="code">
@@ -691,7 +710,7 @@ docs/
       </div>
     </div>
     <div class="code" style="margin-top:12px">
-      <div class="code-head"><span>Build the image, deploy two services</span><span>bash</span></div>
+      <div class="code-head"><span>Build the image, deploy three services</span><span>bash</span></div>
 <pre>gcloud artifacts repositories create asapify --repository-format=docker --location=$REGION
 gcloud builds submit --tag $IMAGE .                  <span class="c"># repeat after every code change</span>
 
@@ -701,7 +720,8 @@ gcloud run deploy asapify-agent --image $IMAGE --region $REGION \
   --service-account $AGENT_SA --no-allow-unauthenticated \
   --cpu 1 --memory 2Gi --concurrency 4 --min-instances 0 --max-instances 3 --timeout 300 \
   --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$GEMINI_LOCATION,\
-GOOGLE_GENAI_USE_VERTEXAI=True,GEMINI_MODEL=$GEMINI_MODEL,DATA_BUCKET=$DATA_BUCKET" \
+GOOGLE_GENAI_USE_VERTEXAI=True,GEMINI_MODEL=$GEMINI_MODEL,DATA_BUCKET=$DATA_BUCKET,\
+TELEGRAM_OPERATOR_CHAT_ID=$TG_OPERATOR_CHAT_ID" \
   --set-secrets FIRMS_MAP_KEY=firms-map-key:latest,TELEGRAM_BOT_TOKEN=telegram-bot-token:latest
 for SA in $JOBS_SA $API_SA; do
   gcloud run services add-iam-policy-binding asapify-agent --region $REGION \
@@ -713,10 +733,41 @@ gcloud run deploy asapify-api --image $IMAGE --region $REGION \
   --command uvicorn --args=api.main:app,--host,0.0.0.0,--port,8080 \
   --service-account $API_SA --allow-unauthenticated \
   --cpu 1 --memory 1Gi --concurrency 40 --min-instances 0 --max-instances 3 --timeout 60 \
-  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,AGENT_URL=$AGENT_URL" \
-  --set-secrets TELEGRAM_BOT_TOKEN=telegram-bot-token:latest</pre>
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,DATA_BUCKET=$DATA_BUCKET,AGENT_URL=$AGENT_URL,\
+TELEGRAM_BOT_USERNAME=$TG_BOT_USERNAME,NOTIFICATION_MODE=dry_run" \
+  --set-secrets TELEGRAM_WEBHOOK_SECRET=telegram-webhook-secret:latest
+
+<span class="c"># 3) asapify-notify: private worker, same image and code as api; only sa-task may call it</span>
+gcloud run deploy asapify-notify --image $IMAGE --region $REGION \
+  --command uvicorn --args=api.main:app,--host,0.0.0.0,--port,8080 \
+  --service-account $NOTIFY_SA --no-allow-unauthenticated \
+  --cpu 1 --memory 512Mi --concurrency 4 --min-instances 0 --max-instances 2 --timeout 60 \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID,NOTIFICATION_MODE=dry_run,TELEGRAM_ENABLED=false,\
+FCM_ENABLED=false,ASAPIFY_PUBLIC_ORIGIN=https://$PROJECT_ID.web.app" \
+  --set-secrets TELEGRAM_BOT_TOKEN=telegram-bot-token:latest
+gcloud run services add-iam-policy-binding asapify-notify --region $REGION \
+  --member "serviceAccount:$TASK_SA" --role roles/run.invoker
+NOTIFY_URL=$(gcloud run services describe asapify-notify --region $REGION --format='value(status.url)')
+
+<span class="c"># Cloud Tasks queue and a sweep every minute; api and worker need the worker URL as the OIDC audience</span>
+gcloud tasks queues create asapify-notifications --location $REGION \
+  --max-dispatches-per-second 5 --max-concurrent-dispatches 2 --max-attempts 8 \
+  --min-backoff 10s --max-backoff 300s --max-retry-duration 3600s
+for S in asapify-api asapify-notify; do gcloud run services update $S --region $REGION \
+  --update-env-vars "NOTIFICATION_WORKER_URL=$NOTIFY_URL,NOTIFICATION_TASK_CALLER=$TASK_SA"; done
+gcloud scheduler jobs create http asapify-notification-recovery --location $REGION \
+  --schedule "* * * * *" --time-zone "Asia/Jakarta" --http-method POST \
+  --uri "$NOTIFY_URL/_internal/notifications/sweep" \
+  --oidc-service-account-email $TASK_SA --oidc-token-audience $NOTIFY_URL
+
+<span class="c"># Telegram webhook to link accounts (/start); run it once Hosting is live (section 11)</span>
+curl -s "https://api.telegram.org/bot$(gcloud secrets versions access latest --secret telegram-bot-token)/setWebhook" \
+  -d url="https://$PROJECT_ID.web.app/api/v1/notifications/telegram-webhook" \
+  -d secret_token="$(gcloud secrets versions access latest --secret telegram-webhook-secret)" \
+  -d allowed_updates='["message"]'</pre>
     </div>
-    <p class="note">⚠️ If <code>gcloud builds submit</code> fails because of Cloud Build service account permissions in a new project, give the build account <code>roles/artifactregistry.writer</code> and <code>roles/logging.logWriter</code>, then retry. ⚠️ If a <code>requirements.lock</code> made on Mac/Windows fails to install on Linux, regenerate the lock in Cloud Shell. Judging day: <code>--min-instances 1</code> for both services.</p>
+    <p class="note">⚠️ If <code>gcloud builds submit</code> fails because of Cloud Build service account permissions in a new project, give the build account <code>roles/artifactregistry.writer</code> and <code>roles/logging.logWriter</code>, then retry. ⚠️ If a <code>requirements.lock</code> made on Mac/Windows fails to install on Linux, regenerate the lock in Cloud Shell. Judging day: <code>--min-instances 1</code> for <code>asapify-agent</code> and <code>asapify-api</code>.</p>
+    <p class="note">The API and Notification Engine code already lives in the team repo <code>ktp-asapify-be</code>, with <code>python3 gcp/manage.py …</code> and <code>python3 -m gcp.notifications …</code> scripts (without <code>--apply</code> they only print the plan; they name accounts <code>asapify-*</code>). The default mode is <code>dry_run</code>: nothing is sent until <code>NOTIFICATION_MODE=live</code> and <code>TELEGRAM_ENABLED=true</code> are set on api and the worker, after a test with a demo subscriber account.</p>
   </section>
 
   <section id="run-jobs">
@@ -769,18 +820,20 @@ gcloud run jobs execute asapify-ingest-gk2a --region $REGION --tasks 8 --task-ti
     <div class="section-head">
       <span class="eyebrow">11 · Firebase</span>
       <h2>Hosting and user roles</h2>
-      <p>The operator web app lives in a separate repo, <code>asapify-web</code>. The judged prototype URL must be on Firebase Hosting or Cloud Run (competition rule); the mock-mode preview on Vercel is for internal review only.</p>
+      <p>The web app lives in the team repo <code>ktp-asapify-fe</code>, including the <code>firebase.json</code> below. The judged prototype URL must be on Firebase Hosting or Cloud Run (competition rule); the mock-mode preview on Vercel is for internal review only.</p>
     </div>
     <div class="grid-2">
       <div class="code">
-        <div class="code-head"><span>Rewrite to Cloud Run</span><span>asapify-web/firebase.json</span></div>
+        <div class="code-head"><span>Rewrite to Cloud Run</span><span>ktp-asapify-fe/firebase.json</span></div>
 <pre>{ "hosting": { "public": "dist", "rewrites": [
     { "source": "/api/**",
       "run": { "serviceId": "asapify-api", "region": "asia-southeast2" } },
     { "source": "**", "destination": "/index.html" } ],
   "headers": [
     { "source": "/maplibre/**",       <span class="c"># map worker = JS module</span>
-      "headers": [{ "key": "Content-Type", "value": "text/javascript" }] } ] } }</pre>
+      "headers": [{ "key": "Content-Type", "value": "text/javascript" }] },
+    { "source": "/notification-sw.js",   <span class="c"># push + offline service worker</span>
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }] } ] } }</pre>
       </div>
       <div class="code">
         <div class="code-head"><span>Set a role</span><span>infra/set_role.py</span></div>
@@ -793,11 +846,17 @@ auth.set_custom_user_claims(
       </div>
     </div>
     <div class="code" style="margin-top:12px">
-      <div class="code-head"><span>Live-mode build and deploy</span><span>asapify-web/.env.production</span></div>
+      <div class="code-head"><span>Live-mode build and deploy</span><span>ktp-asapify-fe/.env.production</span></div>
 <pre>VITE_API_MODE=live
 VITE_API_BASE=                <span class="c"># empty = same-origin /api through the Hosting rewrite</span>
 VITE_PEAT_LAYER_URL=https://storage.googleapis.com/&lt;PUBLIC_BUCKET&gt;/layers/peat_pixels.geojson
 VITE_PROVINCES_LAYER_URL=https://storage.googleapis.com/&lt;PUBLIC_BUCKET&gt;/layers/provinces.geojson
+VITE_FIREBASE_API_KEY=&lt;Firebase Web App&gt;      <span class="c"># public web config, not an admin key</span>
+VITE_FIREBASE_AUTH_DOMAIN=&lt;PROJECT_ID&gt;.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=&lt;PROJECT_ID&gt;
+VITE_FIREBASE_APP_ID=&lt;Firebase Web App&gt;
+VITE_FIREBASE_MESSAGING_SENDER_ID=&lt;Firebase&gt;  <span class="c"># exercise push (optional)</span>
+VITE_FIREBASE_VAPID_KEY=&lt;Web Push certificate&gt;
 
 <span class="c"># VITE_* variables are read at build time</span>
 npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
@@ -820,7 +879,8 @@ npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
           <tr><th scope="row">Environment (log <code>power_cells_ok</code>)</th><td>&lt; 90% of POWER cells succeed</td></tr>
           <tr><th scope="row">Agent verification fails</th><td>&gt; 2 times in a row</td></tr>
           <tr><th scope="row">Uptime of <code>/api/v1/health</code></th><td>2 failures in a row</td></tr>
-          <tr><th scope="row">Telegram send (log <code>tg_send_failed</code>)</th><td>&gt; 0 within 15 minutes</td></tr>
+          <tr><th scope="row">Notification jobs <code>failed</code> / <code>unknown</code> (collection <code>notification_jobs</code>)</th><td>&gt; 0 within 15 minutes</td></tr>
+          <tr><th scope="row">Alerts with <code>fanout = pending</code></th><td>for more than 5 minutes (the sweep is not running or fan-out keeps failing)</td></tr>
           <tr><th scope="row">Cost</th><td>50%, 90%, 100% of the team budget</td></tr>
         </tbody>
       </table>
@@ -834,19 +894,24 @@ npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
     </div>
     <div class="table-wrap">
       <table class="wide">
-        <thead><tr><th scope="col">Variable</th><th scope="col">agent</th><th scope="col">api</th><th scope="col">job (all)</th></tr></thead>
+        <thead><tr><th scope="col">Variable</th><th scope="col">agent</th><th scope="col">api</th><th scope="col">notify</th><th scope="col">job (all)</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><code>GOOGLE_CLOUD_PROJECT</code>, <code>DATA_BUCKET</code></th><td>✓</td><td>✓</td><td>✓</td></tr>
-          <tr><th scope="row"><code>GOOGLE_CLOUD_LOCATION</code>, <code>GOOGLE_GENAI_USE_VERTEXAI</code>, <code>GEMINI_MODEL</code></th><td>✓</td><td></td><td></td></tr>
-          <tr><th scope="row"><code>PUBLIC_BUCKET</code>, <code>BBOX</code></th><td></td><td></td><td>✓</td></tr>
-          <tr><th scope="row"><code>AGENT_URL</code></th><td></td><td>✓</td><td>✓ (evaluate)</td></tr>
-          <tr><th scope="row"><code>AS_OF</code> (optional, replay)</th><td></td><td></td><td>✓</td></tr>
-          <tr><th scope="row"><code>FIRMS_MAP_KEY</code> (secret)</th><td>✓</td><td></td><td></td></tr>
-          <tr><th scope="row"><code>TELEGRAM_BOT_TOKEN</code> (secret)</th><td>✓</td><td>✓</td><td></td></tr>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_PROJECT</code>, <code>DATA_BUCKET</code></th><td>✓</td><td>✓</td><td>✓ (project only)</td><td>✓</td></tr>
+          <tr><th scope="row"><code>GOOGLE_CLOUD_LOCATION</code>, <code>GOOGLE_GENAI_USE_VERTEXAI</code>, <code>GEMINI_MODEL</code></th><td>✓</td><td></td><td></td><td></td></tr>
+          <tr><th scope="row"><code>PUBLIC_BUCKET</code>, <code>BBOX</code></th><td></td><td></td><td></td><td>✓</td></tr>
+          <tr><th scope="row"><code>AGENT_URL</code></th><td></td><td>✓</td><td></td><td>✓ (evaluate)</td></tr>
+          <tr><th scope="row"><code>AS_OF</code> (optional, replay)</th><td></td><td></td><td></td><td>✓</td></tr>
+          <tr><th scope="row"><code>FIRMS_MAP_KEY</code> (secret)</th><td>✓</td><td></td><td></td><td></td></tr>
+          <tr><th scope="row"><code>TELEGRAM_BOT_TOKEN</code> (secret)</th><td>✓</td><td></td><td>✓</td><td></td></tr>
+          <tr><th scope="row"><code>TELEGRAM_OPERATOR_CHAT_ID</code></th><td>✓</td><td></td><td></td><td></td></tr>
+          <tr><th scope="row"><code>TELEGRAM_WEBHOOK_SECRET</code> (secret), <code>TELEGRAM_BOT_USERNAME</code></th><td></td><td>✓</td><td></td><td></td></tr>
+          <tr><th scope="row"><code>NOTIFICATION_MODE</code>, <code>TELEGRAM_ENABLED</code>, <code>FCM_ENABLED</code></th><td></td><td>✓</td><td>✓</td><td></td></tr>
+          <tr><th scope="row"><code>NOTIFICATION_WORKER_URL</code>, <code>NOTIFICATION_TASK_CALLER</code></th><td></td><td>✓</td><td>✓</td><td></td></tr>
+          <tr><th scope="row"><code>ASAPIFY_PUBLIC_ORIGIN</code></th><td></td><td></td><td>✓</td><td></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note">The web app (<code>asapify-web</code>) uses none of the variables above; it is built with <code>VITE_API_MODE</code>, <code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code> and <code>VITE_PROVINCES_LAYER_URL</code> (section 11).</p>
+    <p class="note">The web app (<code>ktp-asapify-fe</code>) uses none of the variables above; it is built with <code>VITE_API_MODE</code>, <code>VITE_API_BASE</code>, <code>VITE_PEAT_LAYER_URL</code>, <code>VITE_PROVINCES_LAYER_URL</code> and <code>VITE_FIREBASE_*</code> (section 11).</p>
   </section>
 
   <section id="urutan">
@@ -858,14 +923,15 @@ npm ci &amp;&amp; npm run build &amp;&amp; firebase deploy --only hosting</pre>
       <ol>
         <li>Project, billing, <code>env.sh</code>, enable APIs, register Earth Engine (Runbook S0-2, S0-3).</li>
         <li>Service accounts and roles (03), secret access (04).</li>
-        <li>Buckets and Firestore (05). Move <code>tg_chats</code> into Firestore.</li>
-        <li>Build the image, deploy <code>asapify-agent</code> then <code>asapify-api</code> (09); check <code>/api/v1/health</code>.</li>
+        <li>Buckets and Firestore (05); deploy the notification Firestore indexes from <code>ktp-asapify-be/gcp/firestore.indexes.json</code>.</li>
+        <li>Build the image, deploy <code>asapify-agent</code>, <code>asapify-api</code>, then <code>asapify-notify</code> with its queue and sweep (09); check <code>/api/v1/health</code>.</li>
         <li>Deploy the five jobs (10); run <code>asapify-build</code> once.</li>
         <li>Backfill Himawari and GK2A (August – 15 Oct 2023), then <code>asapify-environment --as-of</code> for each day of the backtest window.</li>
         <li>Replay evaluate over the backtest window; check that clusters appear in Firestore.</li>
         <li>Create the four Scheduler schedules.</li>
-        <li>Upload the static map layers and set CORS on the public bucket (05); build <code>asapify-web</code> in live mode and deploy to Firebase Hosting (11); enable Auth, set up the demo operator account.</li>
+        <li>Upload the static map layers and set CORS on the public bucket (05); build <code>ktp-asapify-fe</code> in live mode and deploy to Firebase Hosting (11); enable Auth, set up the demo operator account; set the Telegram webhook (09).</li>
         <li>Set up monitoring and budget alerts.</li>
+        <li>Test with a demo subscriber account while still in <code>dry_run</code>, then set <code>NOTIFICATION_MODE=live</code> and <code>TELEGRAM_ENABLED=true</code> on api and the worker.</li>
       </ol>
     </div>
   </section>

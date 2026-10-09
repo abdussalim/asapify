@@ -311,7 +311,7 @@
   .m-job { background: var(--surface-2); color: var(--ink-dim); }
   td.path code { background: transparent; padding: 0; font-size: 12.5px; white-space: nowrap; }
   .auth { font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap; }
-  .auth.pub { color: var(--moss); } .auth.op { color: var(--amber); } .auth.int { color: var(--ember); }
+  .auth.pub { color: var(--moss); } .auth.op { color: var(--amber); } .auth.int { color: var(--ember); } .auth.usr { color: var(--sat); }
   .kv { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 14px; }
   .kv dt { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-dim); overflow-wrap: anywhere; }
   .kv dd { margin: 0; overflow-wrap: anywhere; }
@@ -432,9 +432,9 @@
 <div class="wrap">
 
   <header>
-    <span class="eyebrow">Backend &amp; API · pegangan Peran A, B, C · arsitektur revisi 29 Sep · API disamakan dengan web 6 Okt</span>
+    <span class="eyebrow">Backend &amp; API · pegangan Peran A, B, C · arsitektur revisi 29 Sep · API disamakan dengan web 6 Okt · notifikasi pelanggan 9 Okt</span>
     <h1>Lima job deterministik, dua service</h1>
-    <p class="lede">Observasi (Himawari-9, GK2A), baseline (NASA POWER + baseline termal), dan rule engine (MAUT + neighbour support) berjalan sebagai Cloud Run job. Agen ADK tinggal di service <code>asapify-agent</code> dan <strong>hanya dipanggil untuk kelompok AWAS</strong>; ia mengambil VIIRS saat itu juga (on-demand). Service <code>asapify-api</code> melayani web operator dan mengirim ke grup peringatan setelah operator menerbitkan. Kode di halaman ini 💡 titik awal; bagian ⚠️ dicek di Sprint 0.</p>
+    <p class="lede">Observasi (Himawari-9, GK2A), baseline (NASA POWER + baseline termal), dan rule engine (MAUT + neighbour support) berjalan sebagai Cloud Run job. Agen ADK tinggal di service <code>asapify-agent</code> dan <strong>hanya dipanggil untuk kelompok AWAS</strong>; ia mengambil VIIRS saat itu juga (on-demand). Service <code>asapify-api</code> melayani web operator dan pelanggan; setelah operator menerbitkan, pesan masuk ke inbox dan DM Telegram pelanggan provinsi itu lewat worker <code>asapify-notify</code>. Kode di halaman ini 💡 titik awal; bagian ⚠️ dicek di Sprint 0.</p>
     <ul class="toc" aria-label="Isi halaman">
       <li><a href="#layanan"><span>01</span>Siapa baca/tulis apa</a></li>
       <li><a href="#konvensi"><span>02</span>Konvensi</a></li>
@@ -468,8 +468,9 @@
           <tr><th scope="row"><code>asapify-ingest-gk2a</code> (job)</th><td>Scheduler <code>*/10 20-23,0-4</code></td><td>NOAA <code>noaa-gk2a-pds</code>, <code>peat/</code></td><td><code>gk2a/…/HHMM.parquet</code>, <code>raw/gk2a/manifest/</code>, <code>runs</code></td><td>—</td></tr>
           <tr><th scope="row"><code>asapify-environment</code> (job)</th><td>Scheduler <code>0 12 * * *</code></td><td>NASA POWER, <code>himawari/</code>, <code>gk2a/</code>, <code>score/</code> (piksel beku)</td><td><code>environment/power/</code>, <code>environment/thermal/</code>, <code>environment/bias/</code>, <code>raw/power/</code></td><td>—</td></tr>
           <tr><th scope="row"><code>asapify-evaluate</code> (job)</th><td>Scheduler <code>5-59/10 20-23,0-4</code></td><td><code>himawari/</code>, <code>gk2a/</code>, <code>environment/</code>, <code>peat/</code>, <code>score/</code> 3 malam</td><td><code>score/…/HHMM.parquet</code>, Firestore <code>clusters</code>, <code>runs</code></td><td><code>asapify-agent</code>: <code>POST /verify</code> (hanya AWAS), <code>POST /cluster-closed</code></td></tr>
-          <tr><th scope="row"><code>asapify-agent</code> (service, privat)</th><td>POST dari evaluate atau api</td><td><code>clusters</code>, <code>score/</code>, NASA FIRMS, NASA GIBS, NOAA Himawari</td><td><code>crops/</code>, <code>raw/firms/</code>, <code>verifications</code>, <code>alerts.status</code> (tutup), <code>audit_log</code></td><td>Gemini, Telegram (grup operator; edit SELESAI di grup peringatan)</td></tr>
-          <tr><th scope="row"><code>asapify-api</code> (service)</th><td>request web operator</td><td><code>score/</code> (grid), <code>clusters</code>, <code>verifications</code>, <code>tg_chats</code></td><td><code>alerts</code>, <code>audit_log</code></td><td>Telegram (grup peringatan), <code>asapify-agent</code> (verifikasi ulang)</td></tr>
+          <tr><th scope="row"><code>asapify-agent</code> (service, privat)</th><td>POST dari evaluate atau api</td><td><code>clusters</code>, <code>score/</code>, NASA FIRMS, NASA GIBS, NOAA Himawari</td><td><code>crops/</code>, <code>raw/firms/</code>, <code>verifications</code>, <code>alerts.status</code> (tutup), <code>audit_log</code></td><td>Gemini, Telegram (grup operator)</td></tr>
+          <tr><th scope="row"><code>asapify-api</code> (service)</th><td>request web operator dan pelanggan; webhook Telegram</td><td><code>score/</code> (grid), <code>clusters</code>, <code>verifications</code>, <code>notification_recipients</code></td><td><code>alerts</code>, <code>audit_log</code>, <code>notification_inbox</code>, <code>notification_jobs</code></td><td>Cloud Tasks (antrean kirim), <code>asapify-agent</code> (verifikasi ulang)</td></tr>
+          <tr><th scope="row"><code>asapify-notify</code> (service, privat)</th><td>Cloud Tasks (satu task per job), Scheduler sweep tiap menit</td><td><code>notification_jobs</code>, <code>notification_inbox</code>, <code>notification_recipients</code></td><td>status job, <code>notification_inbox</code> (fan-out lanjutan)</td><td>Telegram (DM pelanggan), FCM (push simulasi)</td></tr>
         </tbody>
       </table>
     </div>
@@ -488,10 +489,11 @@
         <dt>ID</dt><dd>piksel <code>p{row}_{col}</code> di grid 0,02° Sumatra + Kalimantan (1.225 × 620, asal 94,9° BT / 6,2° LU, baris 0 di utara); kelompok <code>C-{MMDD}-{nnn}</code>; verifikasi <code>{cluster_id}_{slot:%Y%m%dT%H%M}</code></dd>
         <dt>Status</dt><dd><code>SAFE</code>, <code>NO_OBSERVATION</code>, <code>WATCH</code>, <code>AWAS</code> (huruf besar, persis)</dd>
         <dt>Auth operator</dt><dd>Firebase ID token, claim <code>role = "operator"</code></dd>
+        <dt>Auth pelanggan</dt><dd>Firebase ID token akun Google dengan email terverifikasi, tanpa role. Hanya untuk <code>/notifications/*</code>; tidak membuka peta atau keputusan</dd>
         <dt>Auth internal</dt><dd>OIDC dari <code>sa-jobs</code> atau <code>sa-api</code> ke <code>asapify-agent</code> (Cloud Run IAM <code>run.invoker</code>)</dd>
         <dt>Replay</dt><dd>job: <code>--as-of</code> atau env <code>AS_OF</code>; endpoint: <code>as_of</code>; header respons <code>X-Asapify-As-Of</code></dd>
         <dt>Galat</dt><dd><code>{"error": {"code": "...", "message": "..."}}</code>. <code>code</code> stabil; web menulis pesannya sendiri dari <code>code</code> dalam bahasa operator (EN/ID). <code>message</code> (Bahasa Indonesia) hanya tampil bila <code>code</code> belum dikenal web.</dd>
-        <dt>Bahasa</dt><dd>Teks agen dikirim dua bahasa (<code>finding</code> + <code>finding_en</code>, <code>summary_id</code> + <code>summary_en</code>) supaya layar tidak mencampur bahasa. Caption Telegram tetap Bahasa Indonesia.</dd>
+        <dt>Bahasa</dt><dd>Teks agen dikirim dua bahasa (<code>finding</code> + <code>finding_en</code>, <code>summary_id</code> + <code>summary_en</code>) supaya layar tidak mencampur bahasa. Teks pesan peringatan (inbox dan DM Telegram) tetap Bahasa Indonesia.</dd>
       </dl>
     </div>
   </section>
@@ -516,15 +518,27 @@
           <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters?state=active</code>, <code>?night=</code></td><td><span class="auth op">operator</span></td><td>daftar kelompok AWAS + hasil verifikasi terakhir + keputusan. Dengan <code>night=YYYY-MM-DD</code> (malam arsip): kelompok yang AWAS di salah satu slot malam itu, aktif maupun ditutup (<code>first_awas_at</code> ≤ akhir malam dan <code>last_awas_at</code> ≥ awal malam); <code>state</code> diabaikan</td></tr>
           <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/clusters/{id}</code></td><td><span class="auth op">operator</span></td><td>deret utility 3 malam, atribut MAUT slot pemicu beserta angka terukurnya (<code>attribute_details</code>), grid tetangga, verifikasi + jejak tool, signed URL citra dengan <code>bbox</code> crop, dan suhu kecerahan per sel di balik citra termal (<code>images[].thermal</code>)</td></tr>
           <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/verify</code></td><td><span class="auth op">operator</span></td><td>minta verifikasi ulang; diteruskan ke agen (hormati 6 jam kecuali <code>force=true</code>)</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/decision</code></td><td><span class="auth op">operator</span></td><td><code>publish</code> (caption; bot mengirim ke grup peringatan provinsi) / <code>reject</code> (alasan wajib)</td></tr>
-          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts?status=</code></td><td><span class="auth op">operator</span></td><td>peringatan terbit + status kirim Telegram</td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/close</code></td><td><span class="auth op">operator</span></td><td>tutup lebih awal oleh operator; caption diedit jadi SELESAI (otomatis lewat agent <code>/cluster-closed</code> saat kelompok ditutup)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/clusters/{id}/decision</code></td><td><span class="auth op">operator</span></td><td><code>publish</code> (teks pesan; keputusan, audit dan alert tersimpan dulu, lalu inbox dan antrean ditulis per pelanggan provinsi itu, 50 per batch; jumlah pelanggan tidak pernah menggagalkan keputusan) / <code>reject</code> (alasan wajib)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts?status=</code></td><td><span class="auth op">operator</span></td><td>peringatan terbit + ringkasan antrean</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/operator/alerts/{id}/close</code></td><td><span class="auth op">operator</span></td><td>tutup lebih awal oleh operator: inbox berlabel SELESAI, job yang belum terkirim batal (otomatis lewat agent <code>/cluster-closed</code> saat kelompok ditutup)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/operator/alerts/{id}/deliveries</code></td><td><span class="auth op">operator</span></td><td>status kirim per kanal per pelanggan (<code>pending</code>, <code>sending</code>, <code>accepted</code>, <code>failed</code>, <code>unknown</code>, <code>blocked</code>, <code>cancelled</code>, <code>simulated</code>) + waktu konfirmasi penerima. <code>accepted</code> = diterima penyedia, belum berarti dibaca ✅</td></tr>
+          <tr class="sub"><td colspan="4">asapify-api · pelanggan (akun Google dengan email terverifikasi, tanpa role)</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/notifications/settings</code></td><td><span class="auth usr">pengguna</span></td><td>preferensi (provinsi, kanal, persetujuan, simulasi), Telegram tertaut / perangkat push terdaftar, daftar kanal beserta status aktif, mode <code>dry_run</code> / <code>live</code> ✅</td></tr>
+          <tr><td><span class="m m-patch">PUT</span></td><td class="path"><code>/notifications/preferences</code></td><td><span class="auth usr">pengguna</span></td><td>body <code>{provinces, channels, consent, exercises}</code>; <code>consent = true</code> wajib minimal satu provinsi; berhenti berlangganan = <code>consent = false</code> ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/notifications/device</code>, <code>DELETE</code></td><td><span class="auth usr">pengguna</span></td><td>daftar / lepas satu token push (FCM, termasuk Web Push) per akun ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/notifications/telegram-link</code></td><td><span class="auth usr">pengguna</span></td><td>deep link <code>t.me/&lt;bot&gt;?start=&lt;kode&gt;</code> sekali pakai, berlaku 10 menit; hanya hash kode yang disimpan ✅</td></tr>
+          <tr><td><span class="m m-get">GET</span></td><td class="path"><code>/notifications/inbox</code></td><td><span class="auth usr">pengguna</span></td><td>50 pesan terakhir milik akun: teks, provinsi, <code>purpose</code> (<code>emergency</code> / <code>exercise</code>), <code>published_at</code>, <code>expires_at</code>, <code>acknowledged_at</code> ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/notifications/inbox/{id}/ack</code></td><td><span class="auth usr">pengguna</span></td><td>konfirmasi diterima; idempoten; ID milik akun lain → 404. Membuka tautan saja tidak dihitung konfirmasi ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/notifications/telegram-webhook</code></td><td><span class="auth int">secret Telegram</span></td><td>dipanggil Telegram, bukan browser. Header <code>X-Telegram-Bot-Api-Secret-Token</code>; hanya menerima <code>/start &lt;kode&gt;</code> dari chat privat untuk menautkan akun; tidak membalas ✅</td></tr>
           <tr class="sub"><td colspan="4">bucket publik · file statis untuk lapisan peta (bukan endpoint)</td></tr>
           <tr><td><span class="m m-job">FILE</span></td><td class="path"><code>layers/peat_pixels.geojson</code></td><td><span class="auth pub">publik</span></td><td>batas gambut yang diproses (KHG ∩ 15 provinsi − area terbangun), disederhanakan; ditulis <code>asapify-build</code></td></tr>
           <tr><td><span class="m m-job">FILE</span></td><td class="path"><code>layers/provinces.geojson</code></td><td><span class="auth pub">publik</span></td><td>15 provinsi Sumatra + Kalimantan (kode BPS, nama), disederhanakan ±90 KB (±30 KB gzip); dipakai garis provinsi dan sorotan provinsi terpilih. geoBoundaries IDN ADM1, ODbL</td></tr>
           <tr class="sub"><td colspan="4">asapify-agent · internal (URL Cloud Run privat)</td></tr>
           <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/verify</code></td><td><span class="auth int">OIDC sa-jobs / sa-api</span></td><td>body <code>{"cluster_id", "trigger_slot", "force": false}</code>; jalankan agen, simpan <code>verifications</code>, kirim ke grup operator. Respons 202 + <code>verification_id</code></td></tr>
-          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/cluster-closed</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"cluster_id"}</code>; kode deterministik (tanpa Gemini): bila ada alert terbit untuk kelompok itu, edit caption jadi SELESAI dan set <code>alerts.status = closed</code></td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/cluster-closed</code></td><td><span class="auth int">OIDC sa-jobs</span></td><td>body <code>{"cluster_id"}</code>; kode deterministik (tanpa Gemini): bila ada alert terbit untuk kelompok itu, set <code>alerts.status = closed</code>, beri label SELESAI di inbox, batalkan job yang belum terkirim</td></tr>
+          <tr class="sub"><td colspan="4">asapify-notify · internal (URL Cloud Run privat, image yang sama dengan asapify-api)</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/_internal/notifications/dispatch</code></td><td><span class="auth int">OIDC sa-task</span></td><td>body <code>{"job_id"}</code> dari Cloud Tasks: klaim satu job, cek ulang persetujuan, konfirmasi dan masa berlaku, kirim, simpan status. Timeout = <code>unknown</code>, tidak dikirim ulang otomatis ✅</td></tr>
+          <tr><td><span class="m m-post">POST</span></td><td class="path"><code>/_internal/notifications/sweep</code></td><td><span class="auth int">OIDC sa-task</span></td><td>Cloud Scheduler tiap menit: lanjutkan fan-out yang terputus (<code>alerts.fanout = pending</code>), antrekan ulang job <code>pending</code>, tandai <code>sending</code> &gt; 5 menit sebagai <code>unknown</code> ✅</td></tr>
         </tbody>
       </table>
     </div>
@@ -596,8 +610,10 @@
           <div class="code-head"><span>Respons</span><span>201</span></div>
 <pre>{ "action": "publish", "by": "operator@contoh.id",
   "at": "2023-09-24T15:30:00Z", "reason": null,
-  "alert_id": "A-0924-001",
-  "telegram": {"status": "sent", "message_id": 812} }</pre>
+  "alert_id": "A-0924-001", "telegram": null,
+  "notifications": {"state": "outbox_saved",
+                    "recipients": 2, "jobs": 4},
+  "queue": {"state": "accepted", "count": 4} }</pre>
         </div>
         <div class="code">
           <div class="code-head"><span>Galat · 409</span><span>response</span></div>
@@ -641,8 +657,11 @@
           <tbody>
             <tr><th scope="row"><code>clusters</code></th><td>pixels, rep_pixel, centroid, province, utility_max, neighbour_support, first_awas_at, last_awas_at, last_verified_at, state (active/closed)</td></tr>
             <tr><th scope="row"><code>verifications</code></th><td>output agen schema-locked, jejak tool, model, validator_ok</td></tr>
-            <tr><th scope="row"><code>alerts</code></th><td>cluster_id, caption, published_by/at, status (published/closed), <code>telegram {chat_id, message_id, status}</code></td></tr>
-            <tr><th scope="row"><code>tg_chats</code></th><td>jenis (operator/peringatan), provinsi, chat_id</td></tr>
+            <tr><th scope="row"><code>alerts</code></th><td>cluster_id, caption, published_by/at, status (active/closed), <code>purpose</code> (emergency/exercise), <code>expires_at</code>, <code>fanout</code> (pending/done), <code>notifications {state, recipients, jobs}</code></td></tr>
+            <tr><th scope="row"><code>notification_recipients</code></th><td>per pelanggan (ID = hash UID): provinsi, kanal, <code>consent</code>, <code>exercises</code>, Telegram <code>chat_id</code> dan token push (tidak pernah dikirim ke browser)</td></tr>
+            <tr><th scope="row"><code>notification_inbox</code></th><td>satu dokumen per alert × pelanggan: teks, provinsi, <code>purpose</code>, <code>expires_at</code> (1 jam), <code>acknowledged_at</code></td></tr>
+            <tr><th scope="row"><code>notification_jobs</code></th><td>outbox per kanal: <code>status</code>, <code>error</code>, <code>attempts</code>, <code>not_before</code>, <code>provider_id</code>; ID deterministik, hanya di-<code>create</code></td></tr>
+            <tr><th scope="row"><code>notification_devices</code>, <code>notification_telegram_chats</code></th><td>pemilik token push / chat Telegram, agar satu perangkat atau chat tidak tertaut ke dua akun</td></tr>
             <tr><th scope="row"><code>runs</code></th><td>log tiap eksekusi job: slot, n_sat, jumlah per status, latensi, file hilang</td></tr>
             <tr><th scope="row"><code>audit_log</code></th><td>setiap aksi operator, panggilan agen, dan pesan bot</td></tr>
           </tbody>
@@ -690,7 +709,7 @@ def pixel_id(row: int, col: int) -&gt; str:
         <ul>
           <li>Kotak <code>MONITOR_BBOX</code> ikut mencakup Semenanjung Malaysia, Singapura, Sarawak, Sabah, Brunei, ujung barat Jawa, dan sebagian pantai Sulawesi Barat.</li>
           <li>KHG hanya berisi Indonesia, jadi Malaysia, Singapura, dan Brunei otomatis keluar. Jawa dan Sulawesi dikeluarkan dengan <strong>filter provinsi</strong> (kode 11–19, 21, 61–65).</li>
-          <li>Kolom <code>province</code> per piksel juga dipakai untuk memilih grup Telegram peringatan (satu grup per provinsi).</li>
+          <li>Kolom <code>province</code> per piksel juga menentukan pelanggan yang menerima peringatan (pelanggan memilih provinsi).</li>
         </ul>
         <dl class="kv" style="margin-top:10px">
           <dt>Grid penuh</dt><dd>1.225 × 620 = ~760 ribu sel</dd>
@@ -1103,43 +1122,43 @@ def fetch_viirs_image(lat: float, lon: float, as_of: str,
 
   <section id="telegram">
     <div class="section-head">
-      <span class="eyebrow">06b · Bot Telegram ✅</span>
-      <h2>Kirim sekali, edit sesudahnya, satu arah</h2>
-      <p>HTTP langsung ke Bot API (httpx), tanpa framework bot dan tanpa webhook. Modul yang sama dipakai <code>asapify-agent</code> (grup operator) dan <code>asapify-api</code> (grup peringatan).</p>
+      <span class="eyebrow">06b · Bot Telegram dan kanal pelanggan ✅</span>
+      <h2>Grup untuk operator, DM untuk pelanggan</h2>
+      <p>HTTP langsung ke Bot API (httpx), tanpa framework bot. <code>asapify-agent</code> mengirim ringkasan verifikasi ke <strong>grup operator</strong>. Peringatan yang diterbitkan tidak lagi dikirim ke grup provinsi: <code>asapify-api</code> menulis inbox per pelanggan yang memilih provinsi itu, lalu worker <code>asapify-notify</code> mengirim <strong>DM Telegram</strong> teks (keputusan tim 9 Okt, kode di <code>ktp-asapify-be</code>).</p>
     </div>
     <div class="grid-2">
       <div class="code tall">
-        <div class="code-head"><span>Kirim dan edit pesan</span><span>shared/telegram.py</span></div>
+        <div class="code-head"><span>DM pelanggan (worker)</span><span>asapify_api/notification_delivery.py</span></div>
 <pre>TG = f"https://api.telegram.org/bot{TOKEN}"
 
-async def send(chat_id, photo_url, caption):
-    r = await http.post(f"{TG}/sendPhoto", json={
-        "chat_id": chat_id,
-        "photo": photo_url,          <span class="c"># signed URL crop</span>
-        "caption": caption,          <span class="c"># ≤ 1024 karakter</span>
-        "parse_mode": "HTML"})
-    msg = r.json()["result"]
-    return {"chat_id": chat_id, "message_id": msg["message_id"]}
-
-async def edit(chat_id, message_id, caption):   <span class="c"># SELESAI</span>
-    await http.post(f"{TG}/editMessageCaption", json={
-        "chat_id": chat_id, "message_id": message_id,
-        "caption": caption, "parse_mode": "HTML"})</pre>
+r = client.post(f"{TG}/sendMessage", json={
+    "chat_id": profile["telegram_chat_id"],
+    "text": text_message(inbox),     <span class="c"># teks polos, HTML dibuang</span>
+    "link_preview_options": {"is_disabled": True},
+    "reply_markup": {"inline_keyboard": [[{
+        "text": "Buka &amp; konfirmasi diterima",
+        "url": f"{ORIGIN}/notifikasi?open={inbox['id']}"}]]}})
+<span class="c"># ok + message_id   → accepted (bukan "dibaca")</span>
+<span class="c"># 4xx               → failed</span>
+<span class="c"># timeout / 5xx     → unknown, tidak dikirim ulang otomatis</span></pre>
       </div>
       <div class="code tall">
-        <div class="code-head"><span>Ambil chat_id grup (sekali)</span><span>bash</span></div>
-<pre><span class="c"># 1. tambahkan bot ke grup, kirim /start@nama_bot di grup</span>
-<span class="c"># 2. baca chat.id dari update terakhir</span>
-curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
-  | jq '.result[].message.chat | {id, title}'
+        <div class="code-head"><span>Menautkan akun ke Telegram</span><span>alur</span></div>
+<pre><span class="c"># 1. web: POST /notifications/telegram-link</span>
+<span class="c">#    → t.me/&lt;bot&gt;?start=&lt;kode&gt; (10 menit, sekali pakai)</span>
+<span class="c"># 2. pelanggan menekan Start di bot</span>
+<span class="c"># 3. Telegram → POST /notifications/telegram-webhook</span>
+<span class="c">#    header secret token; hanya chat privat</span>
+<span class="c"># 4. API menyimpan chat_id di profil pelanggan</span>
 
-<span class="c"># 3. simpan ke Firestore</span>
-<span class="c">#    tg_chats/{id}: {jenis: "peringatan",</span>
-<span class="c">#                    provinsi: "62", chat_id: -100…}</span></pre>
-        <div class="callout info" style="margin-top:8px">Tanpa webhook: tidak ada endpoint publik untuk Telegram, tidak ada secret token, dan tidak ada data pengguna Telegram yang tersimpan.</div>
+curl -s "https://api.telegram.org/bot$TOKEN/setWebhook" \
+  -d url="https://&lt;HOSTING&gt;/api/v1/notifications/telegram-webhook" \
+  -d secret_token="$WEBHOOK_SECRET" \
+  -d allowed_updates='["message"]'</pre>
+        <div class="callout info" style="margin-top:8px">Webhook hanya untuk menautkan akun: tidak membalas pesan dan tidak menerima tujuan chat dari browser. Grup operator tetap memakai <code>sendPhoto</code> dengan <code>chat_id</code> yang dicatat sekali.</div>
       </div>
     </div>
-    <div class="callout" style="margin-top:12px">Telegram membatasi kiriman bot sekitar 20 pesan per menit per grup. Aman untuk alur ini: grup operator hanya menerima satu pesan per verifikasi, grup peringatan hanya setelah keputusan operator.</div>
+    <div class="callout" style="margin-top:12px">FCM / Web Push hanya untuk simulasi dan pesan non-darurat: kebijakan FCM melarang pemakaian darurat, jadi peringatan AWAS sungguhan diblokir di tiga lapis (rencana, klaim, adapter). WhatsApp, SMS, email, LoRa, dan Bluetooth tersimpan sebagai pilihan dan belum mengirim.</div>
   </section>
 
   <section id="jobs">
@@ -1164,7 +1183,7 @@ curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
           <li>Pilih slot terbaru yang kedua satelitnya ada; bila satu satelit terlambat &gt; 40 menit, jalan dengan satu satelit (<code>n_sat = 1</code>). Lewati slot yang sudah ada di <code>runs</code>.</li>
           <li>Baca baseline termal, bias LST, dan POWER terbaru dari <code>environment/</code>.</li>
           <li>Hitung z, ΔLST, ΔSAT, atribut, U0, u_N, U, status (05e). Tulis <code>score/</code>.</li>
-          <li>Label kelompok AWAS (<code>cluster.label</code>), perbarui <code>clusters</code>, tutup kelompok tanpa AWAS 3 malam valid lalu <code>POST $AGENT_URL/cluster-closed</code> agar pesan yang pernah diterbitkan diedit jadi SELESAI.</li>
+          <li>Label kelompok AWAS (<code>cluster.label</code>), perbarui <code>clusters</code>, tutup kelompok tanpa AWAS 3 malam valid lalu <code>POST $AGENT_URL/cluster-closed</code> agar alert yang pernah diterbitkan ditandai SELESAI.</li>
           <li>Untuk kelompok baru atau verifikasi terakhir &gt; 6 jam: <code>POST $AGENT_URL/verify</code> dengan token OIDC.</li>
         </ol>
       </div>
@@ -1218,10 +1237,11 @@ curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
 │            test_baseline.py, test_maut.py, test_status.py, test_cluster.py
 ├─ notebooks/ backtest.ipynb   <span class="c"># lead time: VIIRS pertama − AWAS pertama</span>
 ├─ scripts/ e2e.sh
-├─ data/ref/                   <span class="c"># KHG, provinsi, built_frac, tg_chats (tanpa rahasia)</span>
+├─ data/ref/                   <span class="c"># KHG, provinsi, built_frac (tanpa rahasia)</span>
 ├─ data/local/                 <span class="c"># mentah, tidak di-commit</span>
 ├─ docs/                       <span class="c"># bukti selesai: png, csv, log</span>
-└─ (web operator di repo terpisah asapify-web: React 19 + Vite + MapLibre 6)</pre>
+└─ (web di repo ktp-asapify-fe: React 19 + Vite + MapLibre 6)</pre>
+      <p class="note">Rancangan monorepo. Yang sudah dibangun ada di repo tim <code>ktp-asapify-be</code>: <code>asapify_api/</code> (API operator + Notification Engine), <code>gcp/</code> (skrip deploy), <code>tools/</code> (publish snapshot, set operator); pipeline dan agen masih eksperimen.</p>
     </div>
   </section>
 
@@ -1241,7 +1261,7 @@ curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
           <tr><th scope="row">Gemini gagal atau batas tool tercapai</th><td>Verifikasi disimpan <code>inconclusive</code> dengan <code>validator_failed</code> / <code>tool_limit</code>; operator bisa minta verifikasi ulang.</td></tr>
           <tr><th scope="row">Dua operator memutuskan bersamaan</th><td>Transaksi Firestore; yang kedua mendapat 409 <code>ALREADY_DECIDED</code>, web menampilkan keputusan yang sudah tersimpan.</td></tr>
           <tr><th scope="row">Malam arsip tanpa data</th><td><code>/operator/nights</code> mengirim <code>has_data = false</code> (tanggal pudar di kalender); <code>/operator/grid/night</code> mengirim semua slot <code>null</code> dan web menampilkan semua piksel tidak teramati dengan banner.</td></tr>
-          <tr><th scope="row">Kirim Telegram gagal (429 / jaringan)</th><td>Alert tetap tersimpan dengan <code>telegram.status = pending</code>; kirim ulang dengan jeda sesuai <code>retry_after</code>. Operator melihat status kirim di daftar alert.</td></tr>
+          <tr><th scope="row">Kirim gagal atau tidak pasti (429, jaringan, worker mati)</th><td>Keputusan dan inbox tetap tersimpan. 4xx = <code>failed</code>; timeout atau worker mati setelah klaim = <code>unknown</code>, tidak dikirim ulang otomatis. Operator melihat status per kanal di <code>/deliveries</code>.</td></tr>
         </tbody>
       </table>
     </div>
